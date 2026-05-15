@@ -959,7 +959,9 @@ async function _sfetch(path, opts) {
     headers: {'apikey': _SKEY, 'Content-Type': 'application/json', ..._authHdr(), ...(opts.headers||{})}
   });
   if (r.status === 204) return {};
-  return r.json();
+  const data = await r.json();
+  if (!r.ok) throw new Error(data.message || data.hint || 'HTTP ' + r.status);
+  return data;
 }
 function _loggedIn() { return !!localStorage.getItem('supa_tok'); }
 function _uid()      { return localStorage.getItem('supa_uid') || ''; }
