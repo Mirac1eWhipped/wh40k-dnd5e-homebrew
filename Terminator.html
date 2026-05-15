@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terminator — WH40K D&D 5E Homebrew</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080a0c;--panel:#0d1018;--panel2:#101420;--gold:#c8a44a;--gold-light:#e8c96a;--gold-dim:#7a6128;--silver:#9aaabb;--silver-dim:#4a5a6a;--text:#ccd4e0;--text-dim:#6a7a8a;--border:#2a3a52;--font-head:'Cinzel Decorative','Cinzel',serif;--font-label:'Cinzel',serif;--font-body:'Crimson Text',Georgia,serif;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size:10.5pt;}
+.page{width:9in;margin:.4in auto .6in;padding:.45in .52in;background:var(--bg);border:1px solid var(--border);position:relative;overflow:hidden;}
+.page::before,.page::after{content:'';position:absolute;width:48px;height:48px;border-color:var(--gold-dim);border-style:solid;opacity:.5;pointer-events:none;}
+.page::before{top:8px;left:8px;border-width:2px 0 0 2px;}.page::after{bottom:8px;right:8px;border-width:0 2px 2px 0;}
+@media screen{.print-bar{text-align:center;padding:.15in 0 .08in;}.print-btn{display:inline-block;padding:7px 28px;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);font-family:var(--font-label);font-size:7.5pt;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;transition:all .2s;}.print-btn:hover{background:var(--gold-dim);color:#000;}}
+@media print{@page{size:letter landscape;margin:0;}body{background:white;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.page{width:11in;min-height:8.5in;margin:0;border:none;}.print-bar{display:none!important;}}
+.class-header{text-align:center;border-bottom:2px solid var(--gold-dim);padding-bottom:.15in;margin-bottom:.18in;}
+.class-header .aquila{font-size:13pt;color:var(--gold);letter-spacing:.5em;margin-bottom:6px;}
+.class-header h1{font-family:var(--font-head);font-size:26pt;color:var(--gold-light);letter-spacing:.04em;text-shadow:0 0 32px rgba(200,164,74,.3);line-height:1.1;margin-bottom:4px;}
+.class-header .subtitle{font-family:var(--font-label);font-size:6.5pt;color:var(--silver-dim);letter-spacing:.35em;text-transform:uppercase;}
+.lore{margin-bottom:.16in;}.lore p{font-size:11pt;line-height:1.68;color:var(--text);text-align:justify;margin-bottom:.1in;}
+.lore p:first-child::first-letter{font-family:var(--font-head);font-size:38pt;color:var(--gold-light);float:left;line-height:.72;margin-right:7px;margin-top:8px;text-shadow:0 0 12px rgba(200,164,74,.4);}
+.divider{display:flex;align-items:center;gap:10px;margin:.14in 0;}.divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);}.divider-gem{width:8px;height:8px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;opacity:.85;}
+.section-title{font-family:var(--font-head);font-size:16pt;color:var(--gold-light);letter-spacing:.04em;border-bottom:1px solid var(--gold-dim);padding-bottom:5px;margin-bottom:.12in;text-shadow:0 0 14px rgba(200,164,74,.2);}
+.sec-head{font-family:var(--font-label);font-size:7pt;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--gold-dim);padding-bottom:3px;margin-bottom:8px;}
+.info-grid{display:grid;grid-template-columns:.9fr 1.8fr 1fr;gap:.14in;margin-bottom:.18in;}
+.info-panel{background:var(--panel);border:1px solid var(--border);padding:.1in .12in;}
+.hp-box{background:var(--panel2);border:1px solid var(--border);padding:7px 10px;margin-bottom:7px;text-align:center;}.hp-label{font-family:var(--font-label);font-size:6pt;color:var(--text-dim);letter-spacing:.2em;text-transform:uppercase;}.hp-value{font-family:var(--font-label);font-size:18pt;color:var(--gold-light);font-weight:700;line-height:1.1;}
+.info-row{display:flex;gap:6px;margin-bottom:5px;align-items:flex-start;}.info-label{font-family:var(--font-label);font-size:7.5pt;color:var(--gold);white-space:nowrap;min-width:72px;flex-shrink:0;padding-top:1px;}.info-value{font-size:9pt;color:var(--text);line-height:1.45;}
+.equip-item{display:flex;align-items:flex-start;gap:6px;margin-bottom:5px;font-size:9pt;color:var(--text);line-height:1.4;}.equip-bullet{color:var(--gold);flex-shrink:0;margin-top:1px;}
+.level-table-wrap{margin-bottom:.18in;}
+table.lvl{width:100%;border-collapse:collapse;font-size:9.5pt;}
+table.lvl thead tr{background:var(--panel2);}
+table.lvl thead th{font-family:var(--font-label);font-size:6.5pt;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);padding:5px 10px;border-bottom:1px solid var(--gold-dim);text-align:center;white-space:nowrap;}
+table.lvl thead th:first-child{text-align:left;width:60px;}table.lvl thead th:last-child{text-align:left;}
+table.lvl tbody tr{border-bottom:1px solid rgba(42,58,82,.35);}table.lvl tbody tr:nth-child(even){background:rgba(16,20,32,.45);}table.lvl tbody tr.milestone{background:rgba(200,164,74,.05);}
+table.lvl tbody td{padding:4px 10px;text-align:center;vertical-align:middle;}
+table.lvl tbody td:first-child{font-family:var(--font-label);font-size:9.5pt;font-weight:600;color:var(--gold-light);text-align:left;}
+table.lvl tbody td.prof{font-family:var(--font-label);font-size:11pt;color:var(--silver);font-weight:600;}
+table.lvl tbody td:last-child{text-align:left;color:var(--text);font-size:9.5pt;}
+.feature{margin-bottom:.14in;padding-left:10px;border-left:2px solid var(--gold-dim);}
+.feature-header{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px;margin-bottom:5px;}
+.feature-level{font-family:var(--font-label);font-size:6.5pt;color:var(--silver-dim);letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;background:var(--panel2);border:1px solid var(--border);padding:1px 6px;}
+.feature-name{font-family:var(--font-label);font-size:11.5pt;font-weight:600;color:var(--gold-light);letter-spacing:.02em;}
+.feature p{font-size:10pt;line-height:1.62;color:var(--text);text-align:justify;margin-bottom:5px;}
+.feature ul{margin:4px 0 6px 14px;}.feature ul li{font-size:10pt;line-height:1.58;color:var(--text);margin-bottom:3px;}.feature ul li strong{color:var(--gold-light);font-family:var(--font-label);font-size:9pt;}
+.subclass-section{border:1px solid var(--border);border-top:3px solid var(--gold-dim);background:var(--panel);padding:.18in .2in;margin-bottom:.2in;}
+.subclass-tag{font-family:var(--font-label);font-size:6.5pt;letter-spacing:.35em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:3px;}
+.subclass-name{font-family:var(--font-head);font-size:18pt;color:var(--gold-light);letter-spacing:.03em;margin-bottom:8px;text-shadow:0 0 16px rgba(200,164,74,.25);}
+.subclass-lore{font-size:10.5pt;line-height:1.64;color:var(--text);font-style:italic;border-bottom:1px solid var(--border);padding-bottom:.1in;margin-bottom:.12in;text-align:justify;}
+.subclass-profs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:.14in;}
+.prof-item{background:var(--panel2);border:1px solid var(--border);padding:6px 9px;}.prof-item-label{font-family:var(--font-label);font-size:6pt;color:var(--gold);letter-spacing:.22em;text-transform:uppercase;margin-bottom:3px;}.prof-item-value{font-size:9pt;color:var(--text);line-height:1.4;}
+.page-footer{margin-top:.2in;border-top:1px solid var(--gold-dim);padding-top:.09in;font-family:var(--font-label);font-size:6pt;color:var(--text-dim);letter-spacing:.16em;text-align:center;text-transform:uppercase;}
+</style>
+</head>
+<body>
+<div class="print-bar"><button class="print-btn" onclick="window.print()">✠ &nbsp; Export to PDF / Print</button></div>
+<div class="page">
+
+<div class="class-header">
+  <div class="aquila">✠ &nbsp; ✠ &nbsp; ✠</div>
+  <h1>Terminator</h1>
+  <div class="subtitle">Deathwatch Specialty &nbsp;·&nbsp; D&amp;D 5e Homebrew Ruleset &nbsp;·&nbsp; Jericho Reach Campaign</div>
+</div>
+
+<div class="lore">
+  <p>Tactical Dreadnought Armour — Terminator plate — is the most advanced personal protection in the Imperium of Man. It is also a statement. When a Terminator walks onto a battlefield, the terrain changes. Lines of fire shift. Enemy commanders recalculate. The very ground seems to compress beneath each footfall, and the warriors arrayed against them begin to understand, with a clarity that transcends tactical assessment, that they are going to die.</p>
+  <p>To earn the right to wear Terminator plate is to stand among the finest of the already-finest. In the Deathwatch, this carries even greater weight — a Terminator among warriors already drawn from the elite of every Chapter is a singular figure, teleporting into the heart of the enemy's position and grinding forward with the relentless patience of a siege engine. Whether they hold the line as an Indomitus fortress or hunt their quarry as a Tartaros blade, the Terminator defines what it means to be truly, unconditionally unbreakable.</p>
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+<div class="info-grid">
+  <div class="info-panel">
+    <div class="sec-head">Hit Points</div>
+    <div class="hp-box"><div class="hp-label">Hit Dice</div><div class="hp-value">d12</div></div>
+    <div class="info-row"><div class="info-label">1st Level</div><div class="info-value">12 + CON modifier</div></div>
+    <div class="info-row"><div class="info-label">Higher Levels</div><div class="info-value">1d12 + CON modifier per level</div></div>
+  </div>
+  <div class="info-panel">
+    <div class="sec-head">Proficiencies</div>
+    <div class="info-row"><div class="info-label">Armour</div><div class="info-value">Terminator Armor</div></div>
+    <div class="info-row"><div class="info-label">Weapons</div><div class="info-value">All Terminator Weapons, Ranged Primary &amp; Secondary, Physical &amp; Power Melee</div></div>
+    <div class="info-row"><div class="info-label">Tools</div><div class="info-value">Auspex</div></div>
+    <div class="info-row"><div class="info-label">Saves</div><div class="info-value">Strength, Constitution</div></div>
+    <div class="info-row"><div class="info-label">Skills</div><div class="info-value">Choose 3: Athletics, Intimidation, History, Perception, Religion, Survival</div></div>
+  </div>
+  <div class="info-panel">
+    <div class="sec-head">Starting Equipment</div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Terminator Armor</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Terminator Ranged Weapon with 2 Full Crates of Ammo</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Terminator Melee Weapon</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Bolt Secondary Weapon with 1 Full Crate of Ammo</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>2× Medicae Stims</span></div>
+  </div>
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+<div class="section-title">Level Progression</div>
+<div class="level-table-wrap">
+<table class="lvl">
+  <thead><tr><th>Level</th><th>Prof</th><th>Features</th></tr></thead>
+  <tbody>
+    <tr class="milestone"><td>1</td><td class="prof">+2</td><td>Tactical Dreadnought, Class Proficiencies</td></tr>
+    <tr><td>2</td><td class="prof">+2</td><td>Unyielding Presence</td></tr>
+    <tr><td>3</td><td class="prof">+2</td><td>Subclass Assignment, Subclass Proficiencies</td></tr>
+    <tr><td>4</td><td class="prof">+2</td><td>Ability Score Improvement or Feat</td></tr>
+    <tr class="milestone"><td>5</td><td class="prof">+3</td><td>Extra Attack</td></tr>
+    <tr><td>6</td><td class="prof">+3</td><td>Subclass Feature</td></tr>
+    <tr><td>7</td><td class="prof">+3</td><td>Personal Deep Strike</td></tr>
+    <tr><td>8</td><td class="prof">+3</td><td>Ability Score Improvement or Feat</td></tr>
+    <tr><td>9</td><td class="prof">+4</td><td>—</td></tr>
+    <tr><td>10</td><td class="prof">+4</td><td>Subclass Feature</td></tr>
+    <tr class="milestone"><td>11</td><td class="prof">+4</td><td>Machine Spirit</td></tr>
+    <tr><td>12</td><td class="prof">+4</td><td>Ability Score Improvement or Feat</td></tr>
+    <tr><td>13</td><td class="prof">+5</td><td>—</td></tr>
+    <tr><td>14</td><td class="prof">+5</td><td>Subclass Feature</td></tr>
+    <tr class="milestone"><td>15</td><td class="prof">+5</td><td>Unstoppable</td></tr>
+    <tr><td>16</td><td class="prof">+5</td><td>Ability Score Improvement or Feat</td></tr>
+    <tr><td>17</td><td class="prof">+6</td><td>—</td></tr>
+    <tr><td>18</td><td class="prof">+6</td><td>Living Relic</td></tr>
+    <tr><td>19</td><td class="prof">+6</td><td>Ability Score Improvement or Feat</td></tr>
+    <tr class="milestone"><td>20</td><td class="prof">+6</td><td>Indomitable</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+<div class="section-title">Class Features</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 1</span><span class="feature-name">Tactical Dreadnought</span></div>
+  <p>Your Terminator Armor is not merely protection — it is a fortress. You gain the following permanent features while wearing Terminator Armor:</p>
+  <ul>
+    <li>You are immune to the Prone condition.</li>
+    <li>When you are reduced to 0 HP but not killed outright, you may make a CON saving throw (DC 15) to drop to 1 HP instead. This triggers once per resupply.</li>
+    <li><strong>Ceramite Wall:</strong> When you take damage you may use your reaction to reduce it by 1d10 + CON modifier. You may use this a number of times equal to your Proficiency Bonus per resupply.</li>
+  </ul>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 2</span><span class="feature-name">Unyielding Presence</span></div>
+  <p>Your sheer mass and grinding advance makes routing around you a dangerous proposition. When a creature within 10ft of you makes an attack against any target other than you, they make that attack roll with disadvantage. A creature may use their bonus action to steel themselves against your presence, suppressing this effect until the start of their next turn.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 5</span><span class="feature-name">Extra Attack</span></div>
+  <p>When you take the Attack action, you can make 2 ranged or melee attacks instead of 1.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 7</span><span class="feature-name">Personal Deep Strike</span></div>
+  <p>Your armor is fitted with a teleportation homer that locks onto specially coded deployment beacons. The Terminator or any ally may use their bonus action to place a Deployment Beacon at their current location. Up to 2 beacons may be active simultaneously — placing a third immediately deactivates the oldest.</p>
+  <p>As a bonus action on a subsequent turn, the Terminator may activate their teleportation homer to deep strike — teleporting instantly to an unoccupied space within 5ft of a chosen active beacon, regardless of distance or line of sight. Your arrival is devastating: all creatures within 5ft of your landing point must make a STR saving throw (DC = 8 + Proficiency Bonus + STR modifier) or be knocked Prone and pushed 5ft away.</p>
+  <p>A beacon remains active after a deep strike and can be retrieved by moving into its space. Each beacon has AC 10 and 1 HP. You may deep strike a number of times equal to your Proficiency Bonus per resupply.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 11</span><span class="feature-name">Machine Spirit</span></div>
+  <p>The machine spirit of your Terminator Armor has fully awakened, acting as a semi-independent guardian that anticipates threats before you consciously register them. You gain one additional reaction per round that operates independently of your normal reaction. This Machine Spirit reaction can only be used for: Ceramite Wall, opportunity attacks, or any class or subclass feature that requires a reaction. You cannot use your Machine Spirit reaction and your normal reaction for the same triggering event.</p>
+  <p>Additionally, your Ceramite Wall damage reduction increases from 1d10 + CON to 2d10 + CON.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 15</span><span class="feature-name">Unstoppable</span></div>
+  <p>Your momentum in battle becomes impossible to arrest. You are immune to being Stunned, Paralyzed, and Frightened. Your movement cannot be reduced below 15ft by any effect while wearing Terminator Armor.</p>
+  <p><strong>Iron Oath:</strong> Once per resupply as a bonus action, you issue a direct challenge to all enemies within 30ft. Each must make a WIS saving throw (DC = 8 + Proficiency Bonus + STR modifier) or be compelled to target only you on their next turn and be unable to willingly move more than 5ft away from you until the start of your next turn.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 18</span><span class="feature-name">Living Relic</span></div>
+  <p>You have transcended the limitations of mortal warriors. Your maximum HP increases by 30. Your Strength and Constitution scores each increase by 4 and their maximums increase to 24. Your Ceramite Wall damage reduction increases from 2d10 + CON to 3d10 + CON. Additionally, your Machine Spirit fully matures — its independent reaction can now also be used for any saving throw reroll, not just the listed features.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 20</span><span class="feature-name">Indomitable — Class Paragon</span></div>
+  <p>Once per resupply as a bonus action, for 1 minute you become the apex of the Emperor's wrath made ceramite. Your Unyielding Presence expands — the disadvantage range increases from 10ft to 30ft and enemies can no longer suppress it with their bonus action for the duration. Your Personal Deep Strike recharges and may be used once more. Your Ceramite Wall triggers automatically once per round without costing either of your reactions. Any creature that hits you with a melee attack takes 1d10 thunder damage as your machine spirit retaliates.</p>
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+<div class="section-title">Subclasses</div>
+
+<!-- INDOMITUS -->
+<div class="subclass-section">
+  <div class="subclass-tag">Terminator Subclass</div>
+  <div class="subclass-name">Indomitus</div>
+  <div class="subclass-lore">The Indomitus is the classic Terminator made manifest — immovable, inviolable, and absolutely committed to the protection of those who fight beside them. Where other warriors advance, the Indomitus holds. Where other warriors seek glory in individual kills, the Indomitus measures success in brothers who are still standing when the engagement ends. They are not a shield because they have to be. They are a shield because nothing else could survive what they endure.</div>
+  <div class="subclass-profs">
+    <div class="prof-item"><div class="prof-item-label">Subclass Role</div><div class="prof-item-value">Defensive Guardian</div></div>
+    <div class="prof-item"><div class="prof-item-label">Subclass Granted At</div><div class="prof-item-value">Level 3</div></div>
+    <div class="prof-item"><div class="prof-item-label">Features At</div><div class="prof-item-value">Levels 3, 6, 10, 14</div></div>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">Level 3</span><span class="feature-name">Bulwark of the Chapter</span></div>
+    <p>You become an immovable shield for your brothers. While you have not moved this turn, allies within 10ft of you gain +2 AC against all attacks. Additionally, once per turn when an ally within 10ft of you is hit by an attack, you may use your reaction to impose disadvantage on that attack roll — interposing yourself or your weapon between your ally and the incoming blow. You may use this reaction a number of times equal to your Proficiency Bonus per resupply.</p>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">Level 6</span><span class="feature-name">Retribution Protocols</span></div>
+    <p>When you use your reaction to impose disadvantage on an attack targeting an ally, you may immediately make one melee attack against the attacker if they are within your reach. Additionally, when an ally within 10ft of you is reduced to 0 HP, you may use your reaction to move up to your speed toward the source of the damage without provoking opportunity attacks.</p>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">Level 10</span><span class="feature-name">Indomitable Fortress</span></div>
+    <p>Your presence on the battlefield becomes a sacred oath of protection. Allies within 15ft of you gain advantage on saving throws against being Frightened or Charmed. Once per resupply as a bonus action, you may invoke <strong>Oathbound</strong> — designate up to 3 allies within 30ft. Until the start of your next turn, those allies cannot be reduced below 1 HP by any attack or effect. Any damage that would reduce them to 0 HP instead reduces them to 1 HP for the duration.</p>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">Level 14</span><span class="feature-name">Last Wall</span></div>
+    <p>Once per resupply as a bonus action, you may plant yourself as the Last Wall for 1 minute. For the duration, when an ally within 10ft of you takes damage from a single hit, you may use your reaction to absorb all of that damage — reducing the ally's damage taken to 0 and taking the full amount yourself instead. You cannot be moved, knocked Prone, or incapacitated while Last Wall is active. If you are reduced to 0 HP while Last Wall is active, the feature ends but the Level 1 Tactical Dreadnought CON save triggers automatically with advantage.</p>
+  </div>
+</div>
+
+<!-- TARTAROS -->
+<div class="subclass-section">
+  <div class="subclass-tag">Terminator Subclass</div>
+  <div class="subclass-name">Tartaros</div>
+  <div class="subclass-lore">Where the Indomitus pattern defines itself by what it will not yield, the Tartaros defines itself by what it pursues. The sleeker, more mobile Tartaros plate sacrifices a fraction of the Indomitus's raw defensive mass in exchange for something equally terrifying — speed. A Tartaros Terminator can close distances that should be impossible for a warrior in full plate, and once they have selected a target, survival for that target ceases to be a realistic outcome. They are apex predators wearing ancient ceramite, and they are faster than you think.</div>
+  <div class="subclass-profs">
+    <div class="prof-item"><div class="prof-item-label">Subclass Role</div><div class="prof-item-value">Hunter-Killer</div></div>
+    <div class="prof-item"><div class="prof-item-label">Subclass Granted At</div><div class="prof-item-value">Level 3</div></div>
+    <div class="prof-item"><div class="prof-item-label">Features At</div><div class="prof-item-value">Levels 3, 6, 10, 14</div></div>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">Level 3</span><span class="feature-name">Hunter's Stride</span></div>
+    <p>The sleeker Tartaros pattern armor allows for greater mobility than its Indomitus counterpart. You unlock the Dash action — you may Dash once per turn as a bonus action. Your movement speed penalty from Terminator Armor is reduced from −10ft to −5ft. Additionally, when you move at least 10ft toward a target before attacking, your first melee attack deals +2d6 damage representing the momentum of your charge.</p>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">Level 6</span><span class="feature-name">Kill Lock</span></div>
+    <p>You have been trained to identify and eliminate high-value targets with ruthless efficiency. As a bonus action, you may designate a creature you can see as your Marked Target. Against your Marked Target you gain +2 to hit and your attacks ignore their damage resistances. When you kill your Marked Target you may immediately designate a new one as a free action. You may have one Marked Target at a time.</p>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">Level 10</span><span class="feature-name">Apex Predator</span></div>
+    <p>Your hunter-killer training reaches its peak. When you hit your Marked Target, the target must make a WIS saving throw (DC = 8 + Proficiency Bonus + STR modifier) or become Frightened of you until the end of their next turn. Additionally, when your Marked Target attempts to move away from you, you may use your reaction to move up to your speed toward them without provoking opportunity attacks.</p>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">Level 14</span><span class="feature-name">Termination Order</span></div>
+    <p>Once per resupply as a bonus action, you may issue a Termination Order on a creature you can see within 60ft — a sacred oath of annihilation bound into the machine spirit of your armor. For 1 minute or until the target is dead, you gain the following against that target:</p>
+    <ul>
+      <li>Advantage on all attack rolls against them.</li>
+      <li>Your attacks deal an additional 3d8 damage on a hit.</li>
+      <li>Your attacks ignore their damage resistances and immunities.</li>
+      <li>You cannot be Frightened or Charmed while the Termination Order is active.</li>
+    </ul>
+    <p>If the target is still alive when the duration ends, you suffer one level of Exhaustion as the unfulfilled oath weighs on your machine spirit. If the target dies during the duration, you gain temporary HP equal to twice your level and may immediately issue a new Termination Order as a free action without expending another use.</p>
+  </div>
+</div>
+
+<div class="page-footer">Terminator &nbsp;·&nbsp; Deathwatch Kill Team &nbsp;·&nbsp; WH40K D&amp;D 5E Homebrew &nbsp;·&nbsp; Jericho Reach Campaign</div>
+</div>
+</body>
+</html>

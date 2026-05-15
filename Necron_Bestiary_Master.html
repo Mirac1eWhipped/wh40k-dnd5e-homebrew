@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Necron Bestiary — Warhammer 40K × D&D 5E Homebrew</title>
+<style>
+  :root {
+    --dark-red: #58180d;
+    --gold: #c9a227;
+    --parchment: #fdf5e6;
+    --parchment-dark: #f0ddb0;
+    --parchment-mid: #f5ead0;
+    --ink: #1a0a00;
+    --body-bg: #dcc99a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Palatino Linotype', Palatino, 'Book Antiqua', serif; background: var(--body-bg); color: var(--ink); padding: 20px; }
+  .cover { background: var(--dark-red); color: var(--parchment); text-align: center; padding: 60px 40px; max-width: 860px; margin: 0 auto 40px; border: 4px solid var(--gold); border-radius: 4px; box-shadow: 0 6px 20px rgba(0,0,0,.5); }
+  .cover h1 { font-size: 2.6em; letter-spacing: .08em; margin-bottom: 8px; }
+  .cover h2 { font-size: 1.2em; font-weight: normal; font-style: italic; color: var(--gold); margin-bottom: 20px; }
+  .cover p { font-size: .95em; line-height: 1.7; color: #e8d8b4; max-width: 600px; margin: 0 auto; }
+  .toc { background: var(--parchment); border: 2px solid var(--gold); border-top: 4px solid var(--dark-red); max-width: 860px; margin: 0 auto 40px; padding: 24px 30px; border-radius: 4px; }
+  .toc h2 { color: var(--dark-red); font-size: 1.4em; border-bottom: 2px solid var(--gold); padding-bottom: 8px; margin-bottom: 16px; }
+  .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 30px; }
+  .toc-entry { display: flex; justify-content: space-between; font-size: .9em; padding: 3px 0; border-bottom: 1px dotted #c9a22755; }
+  .toc-entry .name { color: var(--ink); }
+  .toc-entry .cr { color: var(--dark-red); font-weight: bold; font-size: .85em; }
+  .cr-section-header { max-width: 860px; margin: 30px auto 10px; background: var(--dark-red); color: var(--gold); padding: 6px 16px; font-size: 1em; font-weight: bold; letter-spacing: .12em; text-transform: uppercase; border-radius: 3px; }
+  .creature-entry { max-width: 860px; margin: 0 auto 36px; }
+  .description { background: var(--parchment-mid); border-left: 4px solid var(--dark-red); border-right: 1px solid var(--gold); border-top: 1px solid var(--gold); padding: 14px 18px; font-size: .93em; line-height: 1.7; color: #2a0e00; }
+  .description h3 { color: var(--dark-red); font-size: 1.15em; margin-bottom: 6px; letter-spacing: .04em; }
+  .description p { margin-bottom: 8px; }
+  .description p:last-child { margin-bottom: 0; }
+  .stat-block { background: var(--parchment); border: 1px solid var(--gold); border-top: none; border-bottom: 4px solid var(--dark-red); border-radius: 0 0 4px 4px; box-shadow: 3px 4px 12px rgba(0,0,0,.3); }
+  .stat-block-header { background: var(--dark-red); color: var(--parchment); padding: 9px 14px 7px; display: flex; justify-content: space-between; align-items: flex-start; }
+  .creature-name { font-size: 1.45em; font-weight: bold; margin: 0; }
+  .creature-type { font-style: italic; font-size: .88em; margin: 2px 0 0; }
+  .cr-badge { background: var(--gold); color: var(--ink); border-radius: 4px; padding: 2px 9px; font-size: .82em; font-weight: bold; white-space: nowrap; margin-top: 4px; }
+  .stat-body { padding: 0 14px 12px; }
+  hr.div { border: none; border-top: 2px solid var(--gold); margin: 7px 0; }
+  .top-stats p { margin: 3px 0; font-size: .93em; }
+  .ability-grid { display: flex; justify-content: space-around; text-align: center; background: var(--parchment-dark); border: 1px solid var(--gold); border-radius: 3px; padding: 6px 0; margin: 7px 0; }
+  .ability-grid .lbl { font-weight: bold; color: var(--dark-red); text-transform: uppercase; font-size: .72em; }
+  .ability-grid .val { font-size: 1.05em; }
+  .bottom-stats p { margin: 2px 0; font-size: .88em; }
+  h3.section-head { color: var(--dark-red); font-size: 1em; margin: 9px 0 3px; border-bottom: 1px solid var(--gold); padding-bottom: 2px; text-transform: uppercase; letter-spacing: .05em; }
+  .entry { margin: 5px 0; font-size: .91em; line-height: 1.55; }
+  .entry-name { font-weight: bold; font-style: italic; color: var(--dark-red); }
+  .flavor { font-style: italic; color: #555; font-size: .87em; border-left: 3px solid var(--gold); margin: 8px 0 0; padding: 4px 10px; background: var(--parchment-mid); }
+  .legendary-note { font-size: .88em; font-style: italic; margin: 4px 0 6px; color: #3a1500; }
+  .vehicle-tag { background: #2a4a1a; color: #c8e6a0; font-size: .72em; font-weight: bold; letter-spacing: .1em; text-transform: uppercase; padding: 1px 6px; border-radius: 3px; margin-left: 8px; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>NECRON BESTIARY</h1>
+  <h2>Warhammer 40,000 &times; Dungeons &amp; Dragons 5th Edition &mdash; Homebrew</h2>
+  <p>This bestiary catalogues the undying legions of the Necron Dynasties — ancient star-gods' servants of living metal, who slept for sixty million years and have awoken to reclaim what was theirs. Once mortal beings of flesh and ambition, the Necrontyr surrendered their bodies to biotransference and became immortal constructs of necrodermis. Now they march to reclaim their tomb worlds and exterminate those who have had the audacity to infest their galaxy while they slept. Entries are arranged from lowest to highest Challenge Rating, from the humble Canoptek Scarab to the terrifying C'tan Shards — fragments of shattered star-gods that remain among the most powerful entities in the known universe.<br><br>
+  <em>These are fan-made rules for personal use only.</em></p>
+</div>
+
+<div class="toc" style="margin-bottom:20px;">
+  <h2 style="font-size:1.1em; margin-bottom:10px;">Designer's Notes: Key Necron Mechanics</h2>
+  <p style="font-size:.9em; line-height:1.7; color:#2a0e00; margin-bottom:8px;"><strong>Reanimation Protocols.</strong> When a creature with this trait is reduced to 0 hit points but not disintegrated, it falls prone but does not die. At the start of each of its turns, roll a d6. On a result equal to or higher than its listed Threshold, it regains the listed HP and stands. After three consecutive failures, it is destroyed. Disintegration effects (e.g., a <em>disintegrate</em> spell, or a Gauss weapon's Critical Annihilation effect) bypass this ability entirely.</p>
+  <p style="font-size:.9em; line-height:1.7; color:#2a0e00; margin-bottom:8px;"><strong>Gauss Weapons.</strong> Gauss weaponry strips matter layer by layer rather than relying on kinetic or thermal energy. Gauss attacks ignore resistance to their damage type if that resistance comes from nonmagical armor or natural armor. On a natural 20, the listed Critical Annihilation effect triggers — this can reduce maximum hit points and ultimately disintegrate a target, preventing resurrection.</p>
+  <p style="font-size:.9em; line-height:1.7; color:#2a0e00; margin-bottom:8px;"><strong>Living Metal.</strong> Necrons constructed from advanced necrodermis regenerate automatically. A creature with Living Metal regains the listed HP at the start of each of its turns, provided it has at least 1 hit point and has not been damaged by a force, radiant, or psychic attack since the start of its previous turn.</p>
+  <p style="font-size:.9em; line-height:1.7; color:#2a0e00;"><strong>Vehicles.</strong> Necron vehicles are fully autonomous — no crew required. They are immune to being charmed, frightened, grappled, paralyzed, petrified, poisoned, or restrained unless an effect specifically targets Huge or larger constructs. They cannot benefit from healing magic; only Living Metal, repair effects, and the <em>mending</em> spell (which restores 5 HP when cast on a vehicle) can restore their hit points.</p>
+</div>
+
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <div class="toc-grid">
+    <div class="toc-entry"><span class="name">Canoptek Scarab Swarm</span><span class="cr">CR 1/4</span></div>
+    <div class="toc-entry"><span class="name">Canoptek Spyder</span><span class="cr">CR 6</span></div>
+    <div class="toc-entry"><span class="name">Necron Warrior</span><span class="cr">CR 1/2</span></div>
+    <div class="toc-entry"><span class="name">Lokhust Heavy Destroyer</span><span class="cr">CR 7</span></div>
+    <div class="toc-entry"><span class="name">Necron Immortal</span><span class="cr">CR 2</span></div>
+    <div class="toc-entry"><span class="name">Skorpekh Destroyer</span><span class="cr">CR 7</span></div>
+    <div class="toc-entry"><span class="name">Canoptek Wraith</span><span class="cr">CR 3</span></div>
+    <div class="toc-entry"><span class="name">Triarch Praetorian</span><span class="cr">CR 8</span></div>
+    <div class="toc-entry"><span class="name">Flayed One</span><span class="cr">CR 3</span></div>
+    <div class="toc-entry"><span class="name">Cryptek (Technomancer)</span><span class="cr">CR 9</span></div>
+    <div class="toc-entry"><span class="name">Canoptek Reanimator</span><span class="cr">CR 4</span></div>
+    <div class="toc-entry"><span class="name">Necron Lord</span><span class="cr">CR 11</span></div>
+    <div class="toc-entry"><span class="name">Lokhust Destroyer</span><span class="cr">CR 4</span></div>
+    <div class="toc-entry"><span class="name">Doomsday Ark &#x1f6e1;</span><span class="cr">CR 12</span></div>
+    <div class="toc-entry"><span class="name">Deathmark</span><span class="cr">CR 5</span></div>
+    <div class="toc-entry"><span class="name">Necron Overlord</span><span class="cr">CR 13</span></div>
+    <div class="toc-entry"><span class="name">Hexmark Destroyer</span><span class="cr">CR 5</span></div>
+    <div class="toc-entry"><span class="name">Monolith &#x1f6e1;</span><span class="cr">CR 15</span></div>
+    <div class="toc-entry"><span class="name">Lychguard</span><span class="cr">CR 5</span></div>
+    <div class="toc-entry"><span class="name">C'tan Shard: Nightbringer</span><span class="cr">CR 20</span></div>
+    <div class="toc-entry"><span class="name">C'tan Shard: Void Dragon</span><span class="cr">CR 20</span></div>
+    <div class="toc-entry"><span class="name">C'tan Shard: The Deceiver</span><span class="cr">CR 20</span></div>
+  </div>
+</div>
+
+<!-- ═══ CR 1/4 ═══ -->
+<div class="cr-section-header">Challenge Rating 1/4</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Canoptek Scarab Swarm</h3>
+    <p>Canoptek Scarabs are the smallest and most numerous of the Canoptek constructs — beetle-like machines barely the size of a closed fist, manufactured by Canoptek Spyders and released in clouds to serve as the Necron dynasty's tireless maintenance crew. In peacetime, they crawl across tomb world infrastructure, repairing damage, recycling broken components, and consuming organic matter that has drifted into the halls of the sleeping dead. They are mindless by design, operating on simple but ruthlessly efficient programming: consume, repair, obey.</p>
+    <p>In battle, Scarab swarms are directed at enemy forces as living dissolvers. Their mandibles can chew through plasteel plate, ceramite armor, and force fields with equal indifference. A cloud of ten thousand is a grinding, chittering death that strips a Space Marine to bare metal in minutes. Commanders who underestimate them because of their size rarely survive to learn from the mistake.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Canoptek Scarab Swarm</p><p class="creature-type">Small Construct (Necron), Unaligned</p></div>
+      <div class="cr-badge">CR 1/4</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 11</p>
+        <p><strong>Hit Points</strong> 18 (4d8)</p>
+        <p><strong>Speed</strong> 20 ft., fly 30 ft. (hover)</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">8 (−1)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">CON</div><div class="val">11 (+0)</div></div>
+        <div><div class="lbl">INT</div><div class="val">2 (−4)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">8 (−1)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">2 (−4)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, slashing from nonmagical attacks</p>
+        <p><strong>Damage Immunities</strong> poison, psychic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, poisoned, prone</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 9</p>
+        <p><strong>Languages</strong> —</p>
+        <p><strong>Challenge</strong> 1/4 (50 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +2</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Swarm.</span> The swarm can occupy another creature's space and vice versa, and can move through any opening large enough for a Tiny creature. The swarm can't regain hit points or gain temporary hit points.</div>
+      <div class="entry"><span class="entry-name">Construct Nature.</span> Doesn't require air, food, drink, or sleep.</div>
+      <div class="entry"><span class="entry-name">Disassembly Mandibles.</span> The swarm's attacks ignore resistance to piercing damage from nonmagical armor or natural armor. Against constructs or objects, the swarm deals double damage.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Bites.</span> <em>Melee Weapon Attack:</em> +3 to hit, reach 0 ft., one target in the swarm's space. <em>Hit:</em> 7 (2d6) piercing damage, or 3 (1d6) if the swarm has half its hit points or fewer. Nonmagical armor or a shield worn by the target has its AC bonus reduced by 1 (minimum +0) as the scarabs eat into its surface.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Engulf.</span> If the swarm has at least 10 hit points, one Medium or smaller creature in its space must succeed on a DC 11 Dexterity saving throw or take 3 (1d6) piercing damage at the start of each of its turns until it uses its action to succeed on a DC 11 Strength check to clear the swarm.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 1/2 ═══ -->
+<div class="cr-section-header">Challenge Rating 1/2</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Necron Warrior</h3>
+    <p>Necron Warriors are the rank-and-file of every Dynasty's legions — millions of once-mortal Necrontyr who underwent biotransference and were reborn into immortal bodies of living metal. They retain nothing of who they were. No memory, no name, no will. They are weapons that walk, processing simple combat instructions through cortex-stripped processors and carrying out the will of their Overlords with mechanical precision.</p>
+    <p>What makes the Necron Warrior truly terrifying is not its combat ability but its persistence. Gauss flayers strip flesh from bone and metal from machinery on a molecular level, and when a Warrior falls, it rarely stays down. The living metal of its body crawls back together, reknitting circuitry and reseating limbs, until the green light of its eyes blazes back to life. Enemies who leave the dead behind to advance on their objective often find those "dead" Warriors standing behind them before they reach it.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Necron Warrior</p><p class="creature-type">Medium Undead (Necron), Lawful Evil</p></div>
+      <div class="cr-badge">CR 1/2</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 14 (necrodermis plating)</p>
+        <p><strong>Hit Points</strong> 27 (5d8 + 5)</p>
+        <p><strong>Speed</strong> 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CON</div><div class="val">13 (+1)</div></div>
+        <div><div class="lbl">INT</div><div class="val">6 (−2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">8 (−1)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">5 (−3)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Damage Immunities</strong> poison, necrotic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, poisoned</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 9</p>
+        <p><strong>Languages</strong> Necrontyr (understands but rarely speaks)</p>
+        <p><strong>Challenge</strong> 1/2 (100 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +2</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Reanimation Protocols (Threshold 5).</span> When reduced to 0 HP but not disintegrated, falls prone. At the start of each of its turns, roll a d6: on a 5 or 6, regains 5 (1d6 + 2) HP and stands. After three consecutive failures, destroyed.</div>
+      <div class="entry"><span class="entry-name">Living Metal.</span> Regains 2 HP at the start of its turn if it has at least 1 HP and hasn't taken force, radiant, or psychic damage since its previous turn.</div>
+      <div class="entry"><span class="entry-name">Construct Nature.</span> Doesn't require air, food, drink, or sleep.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Gauss Flayer.</span> <em>Ranged Weapon Attack:</em> +4 to hit, range 80/320 ft., one target. <em>Hit:</em> 7 (1d10 + 2) lightning damage. Ignores resistance from nonmagical armor or natural armor. <strong>Critical Annihilation:</strong> On a natural 20, the target must succeed on a DC 12 Constitution saving throw or have its maximum HP reduced by 5 until a long rest. A creature reduced to 0 maximum HP this way disintegrates.</div>
+      <div class="entry"><span class="entry-name">Melee Strike.</span> <em>Melee Weapon Attack:</em> +4 to hit, reach 5 ft., one target. <em>Hit:</em> 6 (1d8 + 2) bludgeoning damage.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 2 ═══ -->
+<div class="cr-section-header">Challenge Rating 2</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Necron Immortal</h3>
+    <p>Where Warriors are the disposable infantry of the Necron legions, Immortals were the elite soldiers of the Necrontyr empire — professional warriors who chose biotransference with some measure of will intact. They retain slightly more of their ancient selves than Warriors do: enough to exercise tactical judgment, adapt to unexpected battlefield developments, and feel something that might, in a being of living metal, be called pride. They fight with the unhurried confidence of soldiers who have won ten thousand battles across sixty million years of combined memory.</p>
+    <p>Immortals wield either Gauss Blasters — heavier and longer-ranged versions of the standard Gauss Flayer — or Tesla Carbines that arc lightning between multiple targets with each hit. In either configuration, they are reliable, durable, and nearly impossible to put down permanently. A squad holding a fortified position can repel assault after assault, falling and rising and falling and rising until the attackers are gone.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Necron Immortal</p><p class="creature-type">Medium Undead (Necron), Lawful Evil</p></div>
+      <div class="cr-badge">CR 2</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 15 (necrodermis plating)</p>
+        <p><strong>Hit Points</strong> 52 (8d8 + 16)</p>
+        <p><strong>Speed</strong> 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CON</div><div class="val">15 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">9 (−1)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">7 (−2)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Con +4</p>
+        <p><strong>Damage Immunities</strong> poison, necrotic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, poisoned</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 10</p>
+        <p><strong>Languages</strong> Necrontyr</p>
+        <p><strong>Challenge</strong> 2 (450 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +2</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Reanimation Protocols (Threshold 5).</span> When reduced to 0 HP but not disintegrated, falls prone. On a d6 roll of 5+, regains 7 (2d6) HP and stands. After three consecutive failures, destroyed.</div>
+      <div class="entry"><span class="entry-name">Living Metal.</span> Regains 3 HP at the start of its turn if it has at least 1 HP and hasn't taken force, radiant, or psychic damage since its previous turn.</div>
+      <div class="entry"><span class="entry-name">Relentless Advance.</span> Difficult terrain doesn't cost the Immortal extra movement.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Gauss Blaster.</span> <em>Ranged Weapon Attack:</em> +5 to hit, range 120/500 ft., one target. <em>Hit:</em> 12 (2d8 + 3) lightning damage. Ignores resistance from nonmagical armor or natural armor. <strong>Critical Annihilation:</strong> On a natural 20, DC 13 Constitution saving throw or max HP reduced by 7 until a long rest. A creature reduced to 0 max HP this way disintegrates.</div>
+      <div class="entry"><span class="entry-name">Tesla Carbine (variant).</span> <em>Ranged Weapon Attack:</em> +5 to hit, range 80/320 ft., one target. <em>Hit:</em> 9 (2d6 + 2) lightning damage. On a hit, up to two other creatures within 10 feet of the target each take 4 (1d8) lightning damage (no attack roll required).</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 3 ═══ -->
+<div class="cr-section-header">Challenge Rating 3</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Canoptek Wraith</h3>
+    <p>Canoptek Wraiths are among the most unsettling things the Necron tombs produce — serpentine constructs that drift through the air on gravitic repulsors, trailing whip-like coils, their forms half-visible in the material world. They are phase-capable, meaning they can shift partially or fully into subspace, passing through solid matter as though it were mist. They were designed as tomb guardians and inner-sanctum patrol units, and in open battle that same ability makes them terrifying shock troops that no fortification can stop.</p>
+    <p>Unlike most Necron units, Wraiths operate with considerable autonomy. They are persistent in a way that feels almost personal, following their prey across entire complexes, phasing through every wall the quarry hides behind. There is no door that stops a Wraith. There is no room that is safe.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Canoptek Wraith</p><p class="creature-type">Medium Construct (Necron), Unaligned</p></div>
+      <div class="cr-badge">CR 3</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 14</p>
+        <p><strong>Hit Points</strong> 58 (9d8 + 18)</p>
+        <p><strong>Speed</strong> 30 ft., fly 30 ft. (hover)</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">6 (−2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">4 (−3)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Dex +6</p>
+        <p><strong>Skills</strong> Perception +3, Stealth +6</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, and slashing from nonmagical attacks</p>
+        <p><strong>Damage Immunities</strong> poison, psychic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, poisoned</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., Truesight 30 ft., passive Perception 13</p>
+        <p><strong>Languages</strong> —</p>
+        <p><strong>Challenge</strong> 3 (700 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +2</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Phase Shifting.</span> The Wraith can move through other creatures and objects as if they were difficult terrain. It takes 5 (1d10) force damage if it ends its turn inside an object. While phased, its movement doesn't trigger opportunity attacks.</div>
+      <div class="entry"><span class="entry-name">Phase Ambush.</span> The Wraith has advantage on attack rolls against any creature that hasn't taken a turn yet in the current combat, or that is unaware of the Wraith's presence.</div>
+      <div class="entry"><span class="entry-name">Construct Nature.</span> Doesn't require air, food, drink, or sleep.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Wraith makes two Whip-Coil attacks.</div>
+      <div class="entry"><span class="entry-name">Whip-Coil.</span> <em>Melee Weapon Attack:</em> +6 to hit, reach 10 ft., one target. <em>Hit:</em> 9 (1d10 + 4) slashing damage. If both attacks hit the same target, that target is grappled (escape DC 13) and restrained until the grapple ends.</div>
+      <div class="entry"><span class="entry-name">Phase Slash (Recharge 5–6).</span> One creature within 5 feet must make a DC 13 Constitution saving throw. On a failure, the creature takes 21 (6d6) force damage and is stunned until the end of its next turn. On a success, half damage and not stunned.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>Flayed One</h3>
+    <p>Among all the horrors the Necron dynasties produce, none are regarded with more disgust by the Necrons themselves than the Flayed Ones — warriors whose minds have been corrupted by the Flayer Virus, an inexplicable infection that compels them to hunt living creatures and wear their skins. They are not functioning soldiers. They are broken things, shambling through subspace, drawn by the scent of blood like insects to light, emerging in gibbering packs to fall upon whatever prey they find.</p>
+    <p>No Overlord deploys Flayed Ones. They deploy themselves, phasing out of subspace wherever the scent of carnage is strongest, driven by a hunger their metal bodies can never satisfy. The Flayer Virus has no cure, and those who have succumbed to it are regarded as a permanent shameful reminder of how thoroughly the C'tan destroyed the Necrontyr — body, mind, and soul.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Flayed One</p><p class="creature-type">Medium Undead (Necron), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 3</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 12 (natural armor)</p>
+        <p><strong>Hit Points</strong> 65 (10d8 + 20)</p>
+        <p><strong>Speed</strong> 40 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">15 (+2)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">4 (−3)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">6 (−2)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">4 (−3)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Skills</strong> Stealth +4</p>
+        <p><strong>Damage Immunities</strong> poison, necrotic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, poisoned</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., Blindsight 30 ft. (blood-scent), passive Perception 8</p>
+        <p><strong>Languages</strong> —</p>
+        <p><strong>Challenge</strong> 3 (700 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +2</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Flesh Horror.</span> Any creature that sees the Flayed One for the first time or starts its turn within 30 feet of it and can see it must succeed on a DC 13 Wisdom saving throw or be frightened until the end of its next turn. On a success, immune to this Flayed One's Flesh Horror for 24 hours.</div>
+      <div class="entry"><span class="entry-name">Pack Tactics.</span> Advantage on attack rolls if at least one ally is within 5 feet of the target and isn't incapacitated.</div>
+      <div class="entry"><span class="entry-name">Blood Frenzy.</span> Advantage on attack rolls against any creature below its hit point maximum.</div>
+      <div class="entry"><span class="entry-name">Subspace Ambush.</span> The Flayed One can Hide as a bonus action, even while observed, if it has moved at least 10 feet this turn (it briefly phases partially into subspace).</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Flayed One makes three Claw attacks.</div>
+      <div class="entry"><span class="entry-name">Claws.</span> <em>Melee Weapon Attack:</em> +6 to hit, reach 5 ft., one target. <em>Hit:</em> 8 (1d8 + 4) slashing damage. The target must succeed on a DC 12 Charisma saving throw or take 3 (1d6) psychic damage.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 4 ═══ -->
+<div class="cr-section-header">Challenge Rating 4</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Canoptek Reanimator</h3>
+    <p>The Canoptek Reanimator is a four-legged repair construct built around a single function: getting fallen Necrons back on their feet as fast as physically possible. It strides through the carnage of a battle on long articulated legs, periodically extending its reanimation beam arrays downward to flood downed Warriors with the energies necessary to accelerate their living metal reconstruction. It is not a combatant by design, but any soldier who has watched one stride across a killzone under withering fire understands that "non-combatant" is a loose term when applied to a machine this durable.</p>
+    <p>Its secondary weapons — atomiser beams mounted on its arm units — are included purely as a defensive measure and fire with the mechanical disinterest of a creature that regards combat as an unfortunate interruption of its real work. Experienced commanders know that eliminating the Reanimator first is the only way to make Necron lines actually stay down.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Canoptek Reanimator</p><p class="creature-type">Large Construct (Necron), Unaligned</p></div>
+      <div class="cr-badge">CR 4</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 13 (natural armor)</p>
+        <p><strong>Hit Points</strong> 85 (10d10 + 30)</p>
+        <p><strong>Speed</strong> 35 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">8 (−1)</div></div>
+        <div><div class="lbl">CON</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">INT</div><div class="val">6 (−2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">4 (−3)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Skills</strong> Perception +4</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, slashing from nonmagical attacks</p>
+        <p><strong>Damage Immunities</strong> poison, psychic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, poisoned</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 14</p>
+        <p><strong>Languages</strong> —</p>
+        <p><strong>Challenge</strong> 4 (1,100 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +2</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Reanimator's Aura.</span> Necron Warriors and Immortals within 30 feet of the Reanimator add 1d4 to their Reanimation Protocols rolls, effectively lowering the threshold needed to rise.</div>
+      <div class="entry"><span class="entry-name">Living Metal.</span> Regains 3 HP at the start of its turn if it has at least 1 HP and hasn't taken force, radiant, or psychic damage since its previous turn.</div>
+      <div class="entry"><span class="entry-name">Construct Nature.</span> Doesn't require air, food, drink, or sleep.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Reanimator makes two Atomiser Beam attacks.</div>
+      <div class="entry"><span class="entry-name">Atomiser Beam.</span> <em>Ranged Weapon Attack:</em> +5 to hit, range 80/320 ft., one target. <em>Hit:</em> 13 (3d6 + 3) radiant damage.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Reanimation Beam.</span> The Reanimator targets one fallen Necron creature within 30 feet that is at 0 HP and hasn't been destroyed. That creature immediately makes its Reanimation Protocols roll with advantage. If the target lacks Reanimation Protocols, it instead regains 7 (2d6) HP.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>Lokhust Destroyer</h3>
+    <p>Lokhust Destroyers are Necrons whose bodies have been wholly rebuilt around the demands of their Destroyer Curse — the torso and lower frame replaced with a sleek gravitic platform mounting a heavy Gauss Cannon, the arms resculpted into weapon-brace assemblies, the mind reduced to a targeting engine with one output. They drift through the battlefield on humming suspensors, pivoting with eerie smoothness to track targets, and they are difficult in a way that goes beyond their firepower: they will not stop, they will not take cover, and they will not pursue any objective other than the destruction of the thing they are currently looking at.</p>
+    <p>The Gauss Cannon mounted on a Destroyer platform is significantly more powerful than a standard Gauss Flayer. Where the Flayer strips matter at the surface, the Cannon fires a concentrated beam capable of punching through heavy vehicle plating and reducing biological targets to molecular vapor. The Destroyer doesn't particularly care which. It just fires, pivots, and fires again.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Lokhust Destroyer</p><p class="creature-type">Medium Undead (Necron), Lawful Evil</p></div>
+      <div class="cr-badge">CR 4</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 14 (necrodermis plating)</p>
+        <p><strong>Hit Points</strong> 65 (10d8 + 20)</p>
+        <p><strong>Speed</strong> 0 ft., fly 40 ft. (hover)</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">6 (−2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">4 (−3)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Dex +5</p>
+        <p><strong>Damage Immunities</strong> poison, necrotic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, poisoned, prone</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 10</p>
+        <p><strong>Languages</strong> Necrontyr (rarely speaks)</p>
+        <p><strong>Challenge</strong> 4 (1,100 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +2</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Reanimation Protocols (Threshold 5).</span> When reduced to 0 HP but not disintegrated, the platform shuts down and drops prone. On a d6 roll of 5+, regains 7 (2d6) HP and the platform restores power. After three consecutive failures, destroyed.</div>
+      <div class="entry"><span class="entry-name">Destroyer Imperative.</span> Advantage on attack rolls against creatures that are not constructs or undead.</div>
+      <div class="entry"><span class="entry-name">Living Metal.</span> Regains 3 HP at the start of its turn if it has at least 1 HP and hasn't taken force, radiant, or psychic damage since its previous turn.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Gauss Cannon.</span> <em>Ranged Weapon Attack:</em> +5 to hit, range 120/500 ft., one target. <em>Hit:</em> 20 (4d8 + 4) lightning damage. Ignores resistance from nonmagical armor or natural armor. <strong>Critical Annihilation:</strong> On a natural 20, DC 13 Constitution saving throw or the target's maximum HP is reduced by 10 until a long rest. A creature reduced to 0 max HP this way disintegrates.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 5 ═══ -->
+<div class="cr-section-header">Challenge Rating 5</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Deathmark</h3>
+    <p>Deathmarks are the Necron Dynasties' assassins — patient, methodical hunters who exist between dimensions, stalking a designated target across entire campaigns before emerging to deliver one precise, fatal shot. They are contracted out by Overlords whose enemies need to die in a specific, unavoidable way. Time means nothing to an immortal machine. A Deathmark assigned a target in the 38th Millennium will still be hunting them in the 42nd if that is what it takes.</p>
+    <p>The Deathmarks' Synaptic Disintegrators are tuned to the bioelectrical signature of their prey. Against their designated mark, Deathmarks are virtually unstoppable. They do not miss. They do not get tired. They simply wait, unseen, until the moment is perfect — and then they fire.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Deathmark</p><p class="creature-type">Medium Undead (Necron), Lawful Evil</p></div>
+      <div class="cr-badge">CR 5</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 15 (necrodermis plating)</p>
+        <p><strong>Hit Points</strong> 78 (12d8 + 24)</p>
+        <p><strong>Speed</strong> 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">CON</div><div class="val">15 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">8 (−1)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Dex +7, Wis +6</p>
+        <p><strong>Skills</strong> Perception +6, Stealth +7</p>
+        <p><strong>Damage Immunities</strong> poison, necrotic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, poisoned</p>
+        <p><strong>Senses</strong> Darkvision 120 ft., passive Perception 16</p>
+        <p><strong>Languages</strong> Necrontyr</p>
+        <p><strong>Challenge</strong> 5 (1,800 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Dimensional Oubliette.</span> The Deathmark begins combat in hyperspace — invisible, able to observe creatures within 60 feet without being seen. It enters the material plane as a bonus action or when it makes an attack.</div>
+      <div class="entry"><span class="entry-name">Hyperspace Hunter.</span> As a bonus action, the Deathmark teleports up to 30 feet to any unoccupied space it can see or has observed within the last minute.</div>
+      <div class="entry"><span class="entry-name">Marked Prey.</span> Once a target is designated, the Deathmark cannot be surprised by it, has advantage on all attack rolls and Perception checks against it, and ignores any cover it has.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Synaptic Disintegrator.</span> <em>Ranged Weapon Attack:</em> +7 to hit, range 150/600 ft., one target. <em>Hit:</em> 16 (3d8 + 4) necrotic damage. If the target is its Marked Prey, it must also succeed on a DC 14 Constitution saving throw or gain one level of exhaustion.</div>
+      <div class="entry"><span class="entry-name">Hunter's Mark (1/Day).</span> The Deathmark designates one creature it can see as its Marked Prey (DC 14 Wisdom saving throw to resist). A marked creature cannot benefit from invisibility or the hidden condition against this Deathmark. Lasts until the prey is dead or this ability is used again.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Phase Ambush.</span> The Deathmark teleports up to 30 feet and immediately makes one Synaptic Disintegrator attack with advantage.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>Hexmark Destroyer</h3>
+    <p>Where most Destroyers charge into melee or close to point-blank range with their heavy weapons, the Hexmark is a stillness predator. It hovers in place, six Enmitic Disintegrator Pistols arranged in a radial array around its torso, and it waits. Anything that moves near it dies. It is a fire control problem with a body — a zone denial weapon that the Necrons built legs onto, and it does not experience impatience or boredom, because it does not experience anything except the targeting solution currently being calculated.</p>
+    <p>Enmitic Disintegrators are insidious weapons. They do not blow apart their targets. They disrupt the molecular cohesion of whatever they hit, introducing a cascade failure that spreads through the target's structure until either the target is dead or the cascade is stopped. A Hexmark that holds a corridor can kill a dozen enemies before any of them takes three steps.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Hexmark Destroyer</p><p class="creature-type">Medium Undead (Necron), Lawful Evil</p></div>
+      <div class="cr-badge">CR 5</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 14 (necrodermis plating)</p>
+        <p><strong>Hit Points</strong> 78 (12d8 + 24)</p>
+        <p><strong>Speed</strong> 0 ft., fly 35 ft. (hover)</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">6 (−2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">4 (−3)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Dex +8</p>
+        <p><strong>Skills</strong> Perception +4</p>
+        <p><strong>Damage Immunities</strong> poison, necrotic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, poisoned, prone</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 14</p>
+        <p><strong>Languages</strong> Necrontyr</p>
+        <p><strong>Challenge</strong> 5 (1,800 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Destroyer Imperative.</span> Advantage on attack rolls against creatures that are not constructs or undead.</div>
+      <div class="entry"><span class="entry-name">Sixfold Enmity.</span> The Hexmark can make up to 3 reactions per round instead of the normal 1, but each must be a Point Intercept reaction.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Hexmark makes three Enmitic Disintegrator Pistol attacks, each targeting a different creature if desired.</div>
+      <div class="entry"><span class="entry-name">Enmitic Disintegrator Pistol.</span> <em>Ranged Weapon Attack:</em> +8 to hit, range 60/150 ft., one target. <em>Hit:</em> 10 (2d4 + 5) necrotic damage. On a hit, the target must succeed on a DC 14 Constitution saving throw or have its maximum HP reduced by 3 (1d6) until it finishes a long rest.</div>
+      <hr class="div">
+      <h3 class="section-head">Reactions</h3>
+      <div class="entry"><span class="entry-name">Point Intercept (up to 3/round).</span> When a creature within 30 feet moves more than 5 feet on its turn, the Hexmark makes one Enmitic Disintegrator Pistol attack against that creature. This reaction can be used up to 3 times per round.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>Lychguard</h3>
+    <p>Lychguard are the elite bodyguards of the Necron nobility — soldiers of the highest quality, selected from the mightiest Necrontyr warriors and granted the best necrodermis available. They retain substantial portions of their original personalities: their loyalty, their martial skill, their sense of personal honor. They remember what it meant to serve, and they have transferred that devotion to their Overlord without any loss of intensity.</p>
+    <p>In battle, Lychguard are almost impossible to destroy through conventional means. They place themselves between their Overlord and every threat with no hesitation, because self-preservation was never the point. The Overlord must endure. Everything else is negotiable.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Lychguard</p><p class="creature-type">Medium Undead (Necron), Lawful Evil</p></div>
+      <div class="cr-badge">CR 5</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 17 (necrodermis plating), or 19 with Dispersion Shield</p>
+        <p><strong>Hit Points</strong> 97 (13d8 + 39)</p>
+        <p><strong>Speed</strong> 25 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CON</div><div class="val">17 (+3)</div></div>
+        <div><div class="lbl">INT</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">10 (+0)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +8, Con +6</p>
+        <p><strong>Damage Immunities</strong> poison, necrotic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, poisoned</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 11</p>
+        <p><strong>Languages</strong> Necrontyr</p>
+        <p><strong>Challenge</strong> 5 (1,800 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Reanimation Protocols (Threshold 4).</span> When reduced to 0 HP but not disintegrated, falls prone. On a d6 roll of 4+, regains 9 (2d8) HP and stands. After three consecutive failures, destroyed.</div>
+      <div class="entry"><span class="entry-name">Bodyguard.</span> When a Necron Overlord, Lord, or Cryptek within 5 feet is hit by an attack, the Lychguard can use its reaction to become the target of that attack instead.</div>
+      <div class="entry"><span class="entry-name">Dispersion Shield (variant).</span> A Lychguard with a Dispersion Shield has resistance to damage from ranged attacks and can use its reaction to impose disadvantage on one ranged attack targeting a creature within 5 feet.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Lychguard makes two Hyperphase Sword attacks, or one Warscythe attack.</div>
+      <div class="entry"><span class="entry-name">Hyperphase Sword.</span> <em>Melee Weapon Attack:</em> +8 to hit, reach 5 ft., one target. <em>Hit:</em> 14 (2d8 + 5) force damage. Ignores resistance to slashing damage.</div>
+      <div class="entry"><span class="entry-name">Warscythe (variant).</span> <em>Melee Weapon Attack:</em> +8 to hit, reach 10 ft., one target. <em>Hit:</em> 18 (2d12 + 5) slashing damage. On a hit, nonmagical armor's AC bonus is reduced by 1 (minimum +0) until repaired.</div>
+      <hr class="div">
+      <h3 class="section-head">Reactions</h3>
+      <div class="entry"><span class="entry-name">Bodyguard Intercept.</span> When a Necron noble within 5 feet is hit by an attack, the Lychguard becomes the target of that attack instead.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 6 ═══ -->
+<div class="cr-section-header">Challenge Rating 6</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Canoptek Spyder</h3>
+    <p>Canoptek Spyders are the foremen of the tomb worlds — massive, multi-limbed constructs that drift through the necropolises on gravitic suspensors, overseeing repair work, directing Scarab swarms, and handling maintenance tasks too complex for smaller drones. Each Spyder contains sophisticated fabrication equipment capable of producing new Scarabs on demand. In combat, Spyders are drawn to fallen Necron constructs the way a surgeon is drawn to the wounded. This makes them invaluable force multipliers, but also predictable — experienced commanders have learned to use fallen Necrons as bait, knowing the Spyder will inevitably come.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Canoptek Spyder</p><p class="creature-type">Large Construct (Necron), Unaligned</p></div>
+      <div class="cr-badge">CR 6</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 15 (natural armor)</p>
+        <p><strong>Hit Points</strong> 114 (12d10 + 48)</p>
+        <p><strong>Speed</strong> 30 ft., climb 30 ft., fly 30 ft. (hover)</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CON</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">INT</div><div class="val">8 (−1)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">4 (−3)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Skills</strong> Perception +5</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, slashing from nonmagical attacks</p>
+        <p><strong>Damage Immunities</strong> poison, psychic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, poisoned</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., Truesight 30 ft., passive Perception 15</p>
+        <p><strong>Languages</strong> —</p>
+        <p><strong>Challenge</strong> 6 (2,300 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Scarab Nexus.</span> Canoptek Scarab Swarms within 60 feet add 2 (1d4) piercing damage to their Bites attacks and have advantage on saving throws.</div>
+      <div class="entry"><span class="entry-name">Living Metal.</span> Regains 5 HP at the start of its turn if it has at least 1 HP and hasn't taken force, radiant, or psychic damage since its previous turn.</div>
+      <div class="entry"><span class="entry-name">Construct Nature.</span> Doesn't require air, food, drink, or sleep.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Spyder makes two Fabricator Claw attacks.</div>
+      <div class="entry"><span class="entry-name">Fabricator Claw.</span> <em>Melee Weapon Attack:</em> +8 to hit, reach 10 ft., one target. <em>Hit:</em> 14 (2d8 + 5) piercing damage. Target is grappled (escape DC 15). The Spyder can grapple up to two creatures simultaneously.</div>
+      <div class="entry"><span class="entry-name">Particle Beamer.</span> <em>Ranged Weapon Attack:</em> +5 to hit, range 80/320 ft., one target. <em>Hit:</em> 14 (4d6) radiant damage.</div>
+      <div class="entry"><span class="entry-name">Scarab Fabrication (Recharge 5–6).</span> The Spyder manufactures 1d4 Canoptek Scarab Swarms in unoccupied spaces within 5 feet, acting on the Spyder's initiative.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Repair Protocols.</span> The Spyder touches one Necron creature within reach. That creature regains 9 (2d8) HP. If the target is a Warrior or Immortal at 0 HP that hasn't been destroyed, it immediately succeeds on its Reanimation Protocols roll and stands with the regained HP.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 7 ═══ -->
+<div class="cr-section-header">Challenge Rating 7</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Lokhust Heavy Destroyer</h3>
+    <p>The Lokhust Heavy Destroyer carries the Gauss Destructor — a weapon classified by most military standards as vehicle-mounted. Mounting it on a single hovering Necron construct and sending it into infantry engagements was someone's idea of tactical creativity. It works exceptionally well, which is the most alarming part.</p>
+    <p>Heavy Destroyers are slower than their lighter counterparts, the Destructor's mass demanding more of the gravitic systems. They compensate by being nearly impossible to destroy at range — the energy required to shut one down before it fires again is generally more than any infantry squad possesses. The beam it fires is visible from half a mile away and leaves a scorched trench in whatever it crosses.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Lokhust Heavy Destroyer</p><p class="creature-type">Large Undead (Necron), Lawful Evil</p></div>
+      <div class="cr-badge">CR 7</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 15 (necrodermis plating)</p>
+        <p><strong>Hit Points</strong> 110 (13d10 + 39)</p>
+        <p><strong>Speed</strong> 0 ft., fly 30 ft. (hover)</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">CON</div><div class="val">17 (+3)</div></div>
+        <div><div class="lbl">INT</div><div class="val">6 (−2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">4 (−3)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +8, Con +6</p>
+        <p><strong>Damage Immunities</strong> poison, necrotic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, poisoned, prone</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 10</p>
+        <p><strong>Languages</strong> Necrontyr</p>
+        <p><strong>Challenge</strong> 7 (2,900 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Reanimation Protocols (Threshold 5).</span> When reduced to 0 HP but not disintegrated, platform shuts down and falls prone. On a d6 roll of 5+, regains 10 (2d8 + 1) HP and restores power. After three consecutive failures, destroyed.</div>
+      <div class="entry"><span class="entry-name">Destroyer Imperative.</span> Advantage on attack rolls against creatures that are not constructs or undead.</div>
+      <div class="entry"><span class="entry-name">Living Metal.</span> Regains 5 HP at the start of its turn if it has at least 1 HP and hasn't taken force, radiant, or psychic damage since its previous turn.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Gauss Destructor.</span> <em>Ranged Weapon Attack:</em> +8 to hit, range 150/600 ft., one target. <em>Hit:</em> 31 (6d8 + 5) lightning damage. Ignores all resistance (magical and nonmagical) to lightning damage. <strong>Critical Annihilation:</strong> On a natural 20, DC 15 Constitution saving throw or max HP reduced by 15 until a long rest. A vehicle or construct struck must also succeed or have one speed type reduced by 10 (minimum 0) until repaired.</div>
+      <div class="entry"><span class="entry-name">Focusing Burst (Recharge 5–6).</span> All creatures in a 60-foot line, 5 feet wide, must make a DC 15 Dexterity saving throw, taking 42 (12d6) lightning damage on a failure, or half as much on a success.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>Skorpekh Destroyer</h3>
+    <p>Destroyers are what happens when a Necron's mind fractures under biotransference and the resulting madness manifests as an obsessive need to destroy all organic life. Hundreds of thousands of Destroyers now roam the galaxy, pursuing their singular purpose with the tirelessness of machines and the savage hunger of something that was once alive and resents it.</p>
+    <p>Skorpekh Destroyers have had their lower bodies replaced entirely with triple-legged locomotion rigs, torsos rebuilt to support multiple close-combat limbs bearing Hyperscythes and Thresher Shears. They close into melee with frenetic energy. They do not take cover. They simply advance and kill until physically destroyed — which is significantly harder than it sounds.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Skorpekh Destroyer</p><p class="creature-type">Large Undead (Necron), Lawful Evil</p></div>
+      <div class="cr-badge">CR 7</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 15 (necrodermis plating)</p>
+        <p><strong>Hit Points</strong> 136 (16d10 + 48)</p>
+        <p><strong>Speed</strong> 40 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">22 (+6)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CON</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">INT</div><div class="val">6 (−2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">5 (−3)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +9, Con +6</p>
+        <p><strong>Damage Immunities</strong> poison, necrotic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, poisoned</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 10</p>
+        <p><strong>Languages</strong> Necrontyr (rarely speaks)</p>
+        <p><strong>Challenge</strong> 7 (2,900 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Destroyer Imperative.</span> Advantage on attack rolls against non-constructs and non-undead. Cannot willingly move away from such creatures unless all within 60 feet are dead or incapacitated.</div>
+      <div class="entry"><span class="entry-name">Living Metal.</span> Regains 5 HP at the start of its turn if it has at least 1 HP and hasn't taken force, radiant, or psychic damage since its previous turn.</div>
+      <div class="entry"><span class="entry-name">Undying Spite.</span> The first time the Destroyer is reduced to 0 HP in a combat, it doesn't fall until the end of its next turn and can still act normally during that turn.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Destroyer makes two Hyperscythe attacks and one Thresher Shear attack, or three Hyperscythe attacks.</div>
+      <div class="entry"><span class="entry-name">Hyperscythe.</span> <em>Melee Weapon Attack:</em> +9 to hit, reach 10 ft., one target. <em>Hit:</em> 17 (2d10 + 6) slashing damage. Ignores resistance to slashing damage from nonmagical sources.</div>
+      <div class="entry"><span class="entry-name">Thresher Shear.</span> <em>Melee Weapon Attack:</em> +9 to hit, reach 5 ft., one target. <em>Hit:</em> 13 (2d6 + 6) piercing damage, plus 9 (2d8) piercing damage if the target is grappled, restrained, or prone.</div>
+      <div class="entry"><span class="entry-name">Whirlwind of Blades (Recharge 5–6).</span> Each creature within 10 feet must make a DC 17 Dexterity saving throw, taking 35 (10d6) slashing damage on a failure, or half on a success.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Advance and Destroy.</span> Moves up to 20 feet toward the nearest non-construct, non-undead creature without provoking opportunity attacks.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 8 ═══ -->
+<div class="cr-section-header">Challenge Rating 8</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Triarch Praetorian</h3>
+    <p>The Triarch was once the ruling council of the entire Necrontyr empire. Their Praetorians were enforcers who answered to no single dynasty. When the Triarch entered the Great Sleep, its Praetorians were entrusted with a unique mission: remain awake, and ensure the dynasties do not destroy one another when they wake. After sixty million years of solitary vigil, they are among the most mentally intact Necrons in existence — and among the most dangerous. They regard the Dynasties' internecine politics with the weary contempt of soldiers who have been cleaning up the same mess for geological timescales.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Triarch Praetorian</p><p class="creature-type">Medium Undead (Necron), Lawful Neutral</p></div>
+      <div class="cr-badge">CR 8</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 16 (necrodermis plating)</p>
+        <p><strong>Hit Points</strong> 119 (14d8 + 56)</p>
+        <p><strong>Speed</strong> 30 ft., fly 40 ft. (flight pack)</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">CON</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">INT</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">12 (+1)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +7, Dex +6, Con +7</p>
+        <p><strong>Skills</strong> Athletics +7, History +5, Perception +5</p>
+        <p><strong>Damage Immunities</strong> poison, necrotic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, poisoned</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 15</p>
+        <p><strong>Languages</strong> Necrontyr, one additional ancient language</p>
+        <p><strong>Challenge</strong> 8 (3,900 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Reanimation Protocols (Threshold 4).</span> When reduced to 0 HP but not disintegrated, falls prone. On a d6 roll of 4+, regains 11 (2d10) HP and stands. After three consecutive failures, destroyed.</div>
+      <div class="entry"><span class="entry-name">Enforcer of the Triarch.</span> Advantage on attack rolls against any creature that is the target of another Necron's attack this turn. Cannot be frightened by non-C'tan sources.</div>
+      <div class="entry"><span class="entry-name">Eternal Warrior.</span> Once per short rest, when the Praetorian would be reduced to 0 HP, it drops to 1 HP instead.</div>
+      <div class="entry"><span class="entry-name">Void Blade.</span> The Praetorian's weapon attacks deal force damage in addition to their normal type, ignoring resistance to the normal damage type.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Praetorian makes two Rod of Covenant attacks.</div>
+      <div class="entry"><span class="entry-name">Rod of Covenant.</span> <em>Melee or Ranged Weapon Attack:</em> +7 to hit, reach 5 ft. or range 60/150 ft., one target. <em>Hit:</em> 13 (2d8 + 4) force damage.</div>
+      <div class="entry"><span class="entry-name">Stave of Law.</span> <em>Melee Weapon Attack:</em> +7 to hit, reach 10 ft., one target. <em>Hit:</em> 15 (2d10 + 4) force damage, and the target must succeed on a DC 15 Constitution saving throw or be stunned until the end of its next turn.</div>
+      <hr class="div">
+      <h3 class="section-head">Reactions</h3>
+      <div class="entry"><span class="entry-name">Regal Intercept.</span> When a Necron creature (other than an Overlord) within 5 feet is reduced to 0 HP, the Praetorian immediately makes one Rod of Covenant attack against the attacker.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 9 ═══ -->
+<div class="cr-section-header">Challenge Rating 9</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Cryptek (Technomancer)</h3>
+    <p>Crypteks are scientists and engineers of extraordinary ability who sold their expertise to the Dynasties in exchange for resources and access. The science they practice is indistinguishable from sorcery: they manipulate quantum fields, warp spacetime on a micro scale, and coax technologies sixty million years old into performing functions their original designers never intended. A Technomancer is specifically focused on maintaining and augmenting Necron constructs — a walking repair bay that also controls a cloud of lethal Canoptek Scarabs.</p>
+    <p>The Cryptek's most feared battlefield application is their ability to accelerate Reanimation Protocols beyond normal function. A Cryptek can turn a losing battle around simply by refusing to let the Necron losses stay dead long enough for the enemy to capitalize on them.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Cryptek (Technomancer)</p><p class="creature-type">Medium Undead (Necron), Lawful Evil</p></div>
+      <div class="cr-badge">CR 9</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 14 (necrodermis plating)</p>
+        <p><strong>Hit Points</strong> 117 (18d8 + 36)</p>
+        <p><strong>Speed</strong> 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">14 (+2)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Int +9, Wis +7</p>
+        <p><strong>Skills</strong> Arcana +9, History +9, Medicine +7</p>
+        <p><strong>Damage Immunities</strong> poison, necrotic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, poisoned</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 13</p>
+        <p><strong>Languages</strong> Necrontyr, can decode all written scripts given time</p>
+        <p><strong>Challenge</strong> 9 (5,000 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +4</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Reanimation Protocols (Threshold 4).</span> When reduced to 0 HP but not disintegrated, falls prone. On a d6 roll of 4+, regains 13 (2d12) HP and stands. After three consecutive failures, destroyed.</div>
+      <div class="entry"><span class="entry-name">Technomancer's Spellcasting.</span> Spellcasting ability is Intelligence (spell save DC 17, +9 to hit). <em>At will:</em> mending (as an action), detect magic. <em>3/day each:</em> dispel magic, lightning bolt. <em>1/day each:</em> fabricate, animate objects.</div>
+      <div class="entry"><span class="entry-name">Canoptek Familiar.</span> Accompanied by 1d4 Canoptek Scarab Swarms that act on its initiative and follow its commands.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Cryptek makes two Voltaic Staff attacks, or makes one Voltaic Staff attack and casts one spell.</div>
+      <div class="entry"><span class="entry-name">Voltaic Staff.</span> <em>Melee or Ranged Weapon Attack:</em> +9 to hit, reach 5 ft. or range 60/150 ft., one target. <em>Hit:</em> 12 (2d6 + 5) lightning damage.</div>
+      <div class="entry"><span class="entry-name">Canoptek Cloak (Recharge 5–6).</span> Releases a burst of Scarabs. All creatures within 15 feet must succeed on a DC 17 Dexterity saving throw or take 21 (6d6) piercing damage and be blinded until the end of their next turn. Success: half damage, not blinded.</div>
+      <div class="entry"><span class="entry-name">Mass Reanimation Protocol (1/Day).</span> All Necron creatures with Reanimation Protocols within 60 feet that are at 0 HP and haven't been destroyed immediately make their roll with advantage. All living Necron creatures within 60 feet also regain 9 (2d8) HP.</div>
+      <hr class="div">
+      <h3 class="section-head">Reactions</h3>
+      <div class="entry"><span class="entry-name">Technomancer's Focus.</span> When a Necron creature within 60 feet makes its Reanimation Protocols roll, the Cryptek can grant that creature advantage on the roll.</div>
+    </div>
+  </div>
+</div>
+<!-- ═══ CR 11 ═══ -->
+<div class="cr-section-header">Challenge Rating 11</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Necron Lord</h3>
+    <p>Necron Lords are the mid-tier commanders of the Dynasty — former nobles of the old empire who retained enough of their personality and authority to command significant forces. In a Dynasty with a dormant or destroyed Overlord, a Lord might be the supreme authority in their sector of space, exercising absolute power over millions of warriors and constructs.</p>
+    <p>A Lord's battlefield presence is a tangible asset. Their mere existence within the phalanx extends Reanimation Protocols functionality across surrounding warriors. They wield Warscythes and Staves of Light with the practiced ease of beings who have had sixty million years to rehearse, and their Resurrection Orbs — ancient artifacts capable of force-triggering reanimation across a wide area — make them targets that enemies cannot afford to ignore.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Necron Lord</p><p class="creature-type">Medium Undead (Necron), Lawful Evil</p></div>
+      <div class="cr-badge">CR 11</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 17 (necrodermis plating)</p>
+        <p><strong>Hit Points</strong> 153 (18d8 + 72)</p>
+        <p><strong>Speed</strong> 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CON</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">INT</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">14 (+2)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +8, Con +8, Wis +6</p>
+        <p><strong>Skills</strong> Athletics +8, History +7, Intimidation +6, Perception +6</p>
+        <p><strong>Damage Immunities</strong> poison, necrotic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, poisoned</p>
+        <p><strong>Senses</strong> Darkvision 120 ft., passive Perception 16</p>
+        <p><strong>Languages</strong> Necrontyr</p>
+        <p><strong>Challenge</strong> 11 (7,200 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +4</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Reanimation Protocols (Threshold 3).</span> When reduced to 0 HP but not disintegrated, falls prone. On a d6 roll of 3+, regains 18 (4d8) HP and stands. After three consecutive failures, destroyed.</div>
+      <div class="entry"><span class="entry-name">Living Metal (Improved).</span> Regains 10 HP at the start of its turn if it has at least 1 HP and hasn't taken force, radiant, or psychic damage since its previous turn.</div>
+      <div class="entry"><span class="entry-name">Lord's Will.</span> Necron Warriors and Immortals within 30 feet have advantage on their Reanimation Protocols rolls.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Lord makes two Warscythe attacks and one Staff of Light attack.</div>
+      <div class="entry"><span class="entry-name">Warscythe.</span> <em>Melee Weapon Attack:</em> +8 to hit, reach 10 ft., one target. <em>Hit:</em> 17 (2d12 + 4) slashing damage. A Warscythe attack treats resistance as if it doesn't exist, and treats immunity as if it were resistance.</div>
+      <div class="entry"><span class="entry-name">Staff of Light.</span> <em>Melee or Ranged Weapon Attack:</em> +8 to hit, reach 5 ft. or range 80/320 ft., one target. <em>Hit:</em> 13 (2d8 + 4) radiant damage. On a ranged critical hit, DC 16 Constitution saving throw or the target is blinded for 1 minute (repeat save at end of each turn).</div>
+      <div class="entry"><span class="entry-name">Resurrection Orb (1/Day).</span> All Necron creatures with Reanimation Protocols within 30 feet that are at 0 HP and haven't been destroyed immediately stand with 1 HP and regain 9 (2d8) additional HP. All other Necron creatures within 30 feet also regain 9 (2d8) HP.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">My Will Be Done.</span> The Lord designates one Necron creature within 60 feet. Until the end of the Lord's next turn, that creature has advantage on all attack rolls.</div>
+      <hr class="div">
+      <h3 class="section-head">Legendary Actions</h3>
+      <p class="legendary-note">The Lord can take 3 legendary actions, choosing from the options below. Only one option can be used at a time and only at the end of another creature's turn. Legendary actions recharge at the start of the Lord's turn.</p>
+      <div class="entry"><span class="entry-name">Scan (1 Action).</span> The Lord makes a Perception check with advantage.</div>
+      <div class="entry"><span class="entry-name">Scythe Strike (1 Action).</span> The Lord makes one Warscythe attack.</div>
+      <div class="entry"><span class="entry-name">Inspire Reanimation (2 Actions).</span> One Necron creature with Reanimation Protocols within 60 feet that is at 0 HP immediately makes its Reanimation Protocols roll.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 12 — VEHICLE ═══ -->
+<div class="cr-section-header">Challenge Rating 12 &nbsp;&#x1f6e1; Vehicle</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Doomsday Ark <span class="vehicle-tag">Vehicle</span></h3>
+    <p>The Doomsday Ark is the Necron Dynasties' answer to the question "what if we built something that could kill a tank with a single shot and then sent it to kill infantry instead?" The colossal Doomsday Cannon mounted on its prow is capable of two firing configurations: a single focused beam of annihilating force that punches through the heaviest vehicle plating ever constructed, or a dispersed spray that covers a massive area with lethal gauss energy. Both configurations are, in their respective contexts, entirely overkill. The Necrons do not consider this a flaw.</p>
+    <p>The Ark itself is a crescent-shaped anti-gravitic platform attended by Necron Warriors who serve as additional gun crews, but the vehicle is fully autonomous — it needs no pilot, no orders, and no maintenance beyond what its own Canoptek systems provide. It will cruise through a battlefield, select targets according to its firing calculations, and continue doing so until physically destroyed. Its Quantum Shielding — a technology that partially phases the hull out of realspace when impacted — means that destroying it before it fires a second time is significantly harder than it initially appears.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Doomsday Ark</p><p class="creature-type">Huge Construct (Necron Vehicle), Lawful Evil</p></div>
+      <div class="cr-badge">CR 12</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 18 (vehicle plating)</p>
+        <p><strong>Hit Points</strong> 207 (18d12 + 90)</p>
+        <p><strong>Speed</strong> 0 ft., fly 50 ft. (hover)</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">24 (+7)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">CON</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">INT</div><div class="val">6 (−2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">4 (−3)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +12, Con +10</p>
+        <p><strong>Damage Immunities</strong> poison, psychic, necrotic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, grappled, paralyzed, poisoned, prone, restrained</p>
+        <p><strong>Senses</strong> Darkvision 120 ft., passive Perception 10</p>
+        <p><strong>Languages</strong> —</p>
+        <p><strong>Challenge</strong> 12 (8,400 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +4</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Quantum Shielding (3 Charges).</span> When the Doomsday Ark would take more than 30 damage from a single attack, it can expend one charge to halve that damage. It regains 1 charge at the start of each of its turns.</div>
+      <div class="entry"><span class="entry-name">Living Metal.</span> Regains 10 HP at the start of its turn if it has at least 1 HP and hasn't taken force, radiant, or psychic damage since its previous turn.</div>
+      <div class="entry"><span class="entry-name">Vehicle.</span> The Doomsday Ark cannot benefit from healing magic. Only Living Metal, Repair Protocols, or a casting of mending (restores 5 HP) can restore its hit points. It cannot be moved involuntarily by any effect that doesn't specifically target Huge or larger vehicles.</div>
+      <div class="entry"><span class="entry-name">Crew Platform.</span> Up to 10 Necron Warriors can stand on the Ark's hull. Warriors on the hull can fire their Gauss Flayers as if they were on foot while the Ark moves. If the Ark is destroyed, all crew must make a DC 14 Dexterity saving throw or take 14 (4d6) bludgeoning damage from the crash.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Doomsday Cannon — Concentrated Fire.</span> <em>Ranged Weapon Attack:</em> +11 to hit, range 300/900 ft., one target. <em>Hit:</em> 59 (9d12 + 1) lightning damage. Against a structure or vehicle, this attack deals maximum damage. The target must succeed on a DC 17 Strength saving throw or be knocked prone. After using Concentrated Fire, the Ark must recharge the Cannon (no action required; the cannon is ready again at the start of its next turn).</div>
+      <div class="entry"><span class="entry-name">Doomsday Cannon — Dispersed Fire (Recharge 4–6).</span> The Cannon sweeps a 60-foot radius sphere centered on a point within 300 feet. Each creature in the area must make a DC 17 Dexterity saving throw, taking 35 (10d6) lightning damage on a failure, or half as much on a success.</div>
+      <div class="entry"><span class="entry-name">Gauss Flayer Array.</span> <em>Ranged Weapon Attack:</em> +7 to hit, range 80/320 ft., up to three targets (no two within 10 feet of each other). <em>Hit:</em> 9 (1d10 + 4) lightning damage per target. Ignores resistance from nonmagical armor or natural armor.</div>
+      <hr class="div">
+      <h3 class="section-head">Legendary Actions</h3>
+      <p class="legendary-note">The Doomsday Ark can take 2 legendary actions per round. Only one legendary action can be used at a time and only at the end of another creature's turn. Legendary actions recharge at the start of the Ark's turn.</p>
+      <div class="entry"><span class="entry-name">Rotate and Fire (1 Action).</span> The Ark makes one Gauss Flayer Array attack.</div>
+      <div class="entry"><span class="entry-name">Overcharge (2 Actions).</span> The Ark begins overcharging its Doomsday Cannon. On its next turn, the Cannon's Concentrated Fire attack deals maximum damage regardless of the attack roll result.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 13 ═══ -->
+<div class="cr-section-header">Challenge Rating 13</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Necron Overlord</h3>
+    <p>A Necron Overlord is the supreme commander of a Tomb World — a Phaeron who has survived sixty million years of entombment with most of their mind intact, who has woken to discover that the galaxy they once dominated is now infested with short-lived, soft-bodied creatures who have the audacity to call it their own. The Overlord's reaction to this information is rarely patience. It is, more often, the ordered marshaling of millions of warriors, constructs, and war-engines toward the systematic reclamation of what is theirs.</p>
+    <p>Overlords are not simply powerful combatants — they are command nodes that elevate the entire performance of their force. Their Command Protocols sharpen every aim and harden every resolve across dozens of warriors. Their personal combat capability is that of a being who has had sixty million years to perfect technique, wielding weapons that can cut through starship-grade armor as easily as flesh. Against an Overlord in the field, the only viable strategy is overwhelming force applied before the phalanx behind them can respond.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Necron Overlord</p><p class="creature-type">Medium Undead (Necron), Lawful Evil</p></div>
+      <div class="cr-badge">CR 13</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 19 (necrodermis plating and command protocols)</p>
+        <p><strong>Hit Points</strong> 195 (26d8 + 78)</p>
+        <p><strong>Speed</strong> 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">CON</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">INT</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">18 (+4)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +10, Con +8, Int +9, Wis +8, Cha +9</p>
+        <p><strong>Skills</strong> Athletics +10, History +9, Insight +8, Intimidation +9, Perception +8</p>
+        <p><strong>Damage Immunities</strong> poison, necrotic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, poisoned</p>
+        <p><strong>Senses</strong> Darkvision 120 ft., passive Perception 18</p>
+        <p><strong>Languages</strong> Necrontyr, all written scripts (via ancient cognitive archives)</p>
+        <p><strong>Challenge</strong> 13 (10,000 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +5</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Reanimation Protocols (Supreme, Threshold 3).</span> When reduced to 0 HP but not disintegrated, falls prone. On a d6 roll of 3+, regains 22 (4d10) HP and stands immediately. After three consecutive failures, destroyed.</div>
+      <div class="entry"><span class="entry-name">Living Metal (Supreme).</span> Regains 15 HP at the start of its turn if it has at least 1 HP and hasn't taken force, radiant, or psychic damage since its previous turn.</div>
+      <div class="entry"><span class="entry-name">Command Protocols.</span> All Necron creatures within 60 feet of the Overlord add 1d6 to their attack rolls and saving throws.</div>
+      <div class="entry"><span class="entry-name">Indomitable (Recharges after a Short or Long Rest).</span> If the Overlord fails a saving throw, it can choose to succeed instead.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Overlord makes three attacks: two Warscythe and one Voidreaper, or three Warscythe attacks.</div>
+      <div class="entry"><span class="entry-name">Warscythe.</span> <em>Melee Weapon Attack:</em> +10 to hit, reach 10 ft., one target. <em>Hit:</em> 22 (3d10 + 5) slashing damage. Warscythe attacks ignore all nonmagical resistance and treat magical resistance as if it does not exist.</div>
+      <div class="entry"><span class="entry-name">Voidreaper.</span> <em>Melee Weapon Attack:</em> +10 to hit, reach 10 ft., one target. <em>Hit:</em> 28 (5d10 + 3) force damage. On a hit, DC 17 Constitution saving throw or the target's maximum HP is reduced by 10 until a long rest. A creature reduced to 0 max HP this way disintegrates.</div>
+      <div class="entry"><span class="entry-name">Resurrection Orb (2/Day).</span> All Necron creatures with Reanimation Protocols within 60 feet at 0 HP that haven't been destroyed immediately stand and regain their full Reanimation Protocol HP. All other Necron creatures within 60 feet regain 14 (4d6) HP.</div>
+      <div class="entry"><span class="entry-name">Overlord's Wrath (Recharge 5–6).</span> Each non-Necron creature within 30 feet must succeed on a DC 17 Wisdom saving throw or take 35 (10d6) psychic damage and be frightened for 1 minute (repeat save at end of each turn). On a success, half damage and not frightened.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">My Will Be Done.</span> One Necron creature within 60 feet has advantage on all attack rolls until the end of the Overlord's next turn.</div>
+      <hr class="div">
+      <h3 class="section-head">Legendary Actions</h3>
+      <p class="legendary-note">The Overlord can take 3 legendary actions, choosing from the options below. Only one option can be used at a time and only at the end of another creature's turn. Legendary actions recharge at the start of the Overlord's turn.</p>
+      <div class="entry"><span class="entry-name">Command (1 Action).</span> One Necron creature within 60 feet immediately moves up to its speed or makes one weapon attack.</div>
+      <div class="entry"><span class="entry-name">Scythe Strike (2 Actions).</span> The Overlord makes one Warscythe attack.</div>
+      <div class="entry"><span class="entry-name">Phase Out (3 Actions).</span> The Overlord becomes invisible until the end of its next turn and teleports up to 60 feet to an unoccupied space it has observed within the last minute.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 15 — VEHICLE ═══ -->
+<div class="cr-section-header">Challenge Rating 15 &nbsp;&#x1f6e1; Vehicle</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Monolith <span class="vehicle-tag">Vehicle</span></h3>
+    <p>The Monolith is the most iconic image of Necron warfare — a massive obsidian cube that drifts across the battlefield on fields of green energy, utterly impervious to conventional weapons, firing beams of death from its four corners and drawing reinforcements from across the tomb network through the dimensional gate that blazes in its center. It is not a tank. It is not a fortress. It is a statement: that the Necron Dynasty has arrived, and the outcome of this battle was decided sixty million years ago.</p>
+    <p>The Monolith's Eternity Gate is perhaps its most terrifying feature. At a moment of the Overlord's choosing, it can disgorge an entire phalanx of Warriors directly from the tomb world — fresh, rested, fully armed — into the heart of the enemy's position. Enemies who destroy a Monolith's weapon batteries and think they have contained the threat discover, too late, that the Gate is still active. The Monolith's near-indestructibility is matched only by the despair it induces: there is no good answer to one on the table, only a series of increasingly bad options.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Monolith</p><p class="creature-type">Huge Construct (Necron Vehicle), Lawful Evil</p></div>
+      <div class="cr-badge">CR 15</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 21 (monolithic plating)</p>
+        <p><strong>Hit Points</strong> 243 (18d12 + 126)</p>
+        <p><strong>Speed</strong> 0 ft., fly 20 ft. (hover, slow and ponderous)</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">28 (+9)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">4 (−3)</div></div>
+        <div><div class="lbl">CON</div><div class="val">24 (+7)</div></div>
+        <div><div class="lbl">INT</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">6 (−2)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +14, Con +12</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, slashing from nonmagical attacks</p>
+        <p><strong>Damage Immunities</strong> poison, psychic, necrotic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, grappled, paralyzed, petrified, poisoned, prone, restrained</p>
+        <p><strong>Senses</strong> Darkvision 120 ft., passive Perception 11</p>
+        <p><strong>Languages</strong> —</p>
+        <p><strong>Challenge</strong> 15 (13,000 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +5</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Immovable Object.</span> The Monolith cannot be moved by any force except its own propulsion. Spells and effects that would push, pull, or otherwise reposition it have no effect.</div>
+      <div class="entry"><span class="entry-name">Living Metal (Supreme).</span> Regains 15 HP at the start of its turn if it has at least 1 HP and hasn't taken force or psychic damage since its previous turn.</div>
+      <div class="entry"><span class="entry-name">Power Matrix.</span> Necron creatures within 60 feet of the Monolith add 2 to their AC and to all saving throws.</div>
+      <div class="entry"><span class="entry-name">Vehicle.</span> Cannot benefit from healing magic. Only Living Metal, Repair Protocols, or mending (restores 5 HP) can restore its hit points.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Monolith makes two Particle Whip attacks, or one Particle Whip attack and uses Death Ray if available.</div>
+      <div class="entry"><span class="entry-name">Particle Whip.</span> <em>Ranged Weapon Attack:</em> +15 to hit, range 120/500 ft., one target. <em>Hit:</em> 39 (6d10 + 8) lightning damage. The target must succeed on a DC 20 Strength saving throw or be pushed 20 feet away.</div>
+      <div class="entry"><span class="entry-name">Death Ray (Recharge 5–6).</span> The Monolith fires beams from all four corners simultaneously. Up to four creatures it can see within 100 feet (no two within 10 feet of each other) must each make a DC 20 Dexterity saving throw. On a failure, a creature takes 42 (12d6) radiant damage and is stunned until the end of its next turn. On a success, it takes half damage and isn't stunned.</div>
+      <div class="entry"><span class="entry-name">Eternity Gate (1/Day).</span> The Monolith activates its dimensional gate. Up to 20 Necron Warriors or Immortals (chosen by the GM) teleport from off-field to unoccupied spaces within 60 feet of the Monolith, acting on its initiative count on the following round. Alternatively, the Monolith can use the Gate to teleport up to 10 willing Necron creatures within 60 feet to any other location within 1 mile that the Overlord can see or has designated.</div>
+      <hr class="div">
+      <h3 class="section-head">Legendary Actions</h3>
+      <p class="legendary-note">The Monolith can take 3 legendary actions, choosing from the options below. Only one option can be used at a time and only at the end of another creature's turn. Legendary actions recharge at the start of the Monolith's turn.</p>
+      <div class="entry"><span class="entry-name">Particle Whip (1 Action).</span> The Monolith makes one Particle Whip attack.</div>
+      <div class="entry"><span class="entry-name">Power Surge (2 Actions).</span> The Monolith channels power through its matrix. All Necron creatures within 60 feet regain 9 (2d8) HP and have advantage on attack rolls until the end of the Monolith's next turn.</div>
+      <div class="entry"><span class="entry-name">Phase Banishment (3 Actions).</span> One creature within 30 feet must succeed on a DC 20 Charisma saving throw or be banished to a pocket dimension of screaming static for 1 minute. At the end of each of its turns, the creature can repeat the saving throw, returning on a success. While banished, the creature is incapacitated and takes 18 (4d8) psychic damage at the start of each of its turns.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 20 ═══ -->
+<div class="cr-section-header">Challenge Rating 20 — C'tan Shards</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>C'tan Shard of the Nightbringer</h3>
+    <p>The Nightbringer is one of the most ancient and terrible entities to have ever existed in the material universe — a star-god of unimaginable age whose hunger was for life itself. It was the Nightbringer who taught the Necrontyr that all things die, and in doing so embedded a racial terror of death so deep into the Necrontyr genome that it persists in every species that ever encountered them. Every sentient race in the galaxy shares the same fundamental fear of death. Every biologist has marveled at how universal this anxiety is. They have no idea why. The Nightbringer does.</p>
+    <p>After the War in Heaven, the Necrons shattered their former gods into fragments and sealed each shard within a necrodermis prison. A shard of the Nightbringer still radiates death like a heat source radiates warmth. Creatures in its presence feel it at a cellular level — an absolute bone-deep certainty that they are going to die. For most of them, it is the last coherent thought they have.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">C'tan Shard of the Nightbringer</p><p class="creature-type">Huge Elemental (C'tan), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 20</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 22 (divine necrodermis prison)</p>
+        <p><strong>Hit Points</strong> 338 (25d12 + 175)</p>
+        <p><strong>Speed</strong> 40 ft., fly 60 ft. (hover)</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">28 (+9)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CON</div><div class="val">28 (+9)</div></div>
+        <div><div class="lbl">INT</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">22 (+6)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +16, Con +16, Wis +11, Cha +13</p>
+        <p><strong>Skills</strong> Intimidation +13, Perception +11</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, slashing from nonmagical attacks</p>
+        <p><strong>Damage Immunities</strong> cold, lightning, necrotic, poison, radiant</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, grappled, paralyzed, petrified, poisoned, restrained, unconscious</p>
+        <p><strong>Senses</strong> Truesight 120 ft., Darkvision 120 ft., passive Perception 21</p>
+        <p><strong>Languages</strong> All languages, telepathy 120 ft.</p>
+        <p><strong>Challenge</strong> 20 (25,000 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +6</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Death Incarnate.</span> Any creature (other than Necrons and Constructs) that starts its turn within 30 feet of the Nightbringer must succeed on a DC 21 Constitution saving throw or take 14 (4d6) necrotic damage and have its maximum HP reduced by the same amount until it finishes a long rest. A creature whose maximum HP is reduced to 0 this way dies and cannot be revived by any means short of a <em>wish</em> spell.</div>
+      <div class="entry"><span class="entry-name">Avatar of Death.</span> Creatures reduced to 0 HP within 60 feet of the Nightbringer cannot be stabilized by mundane means (Medicine checks automatically fail) and must immediately begin death saving throws. Magical healing still functions normally.</div>
+      <div class="entry"><span class="entry-name">Magic Resistance.</span> Advantage on saving throws against spells and magical effects.</div>
+      <div class="entry"><span class="entry-name">Legendary Resistance (4/Day).</span> If the Nightbringer fails a saving throw, it can choose to succeed instead.</div>
+      <div class="entry"><span class="entry-name">Necrodermis Prison.</span> Psychic damage the Nightbringer takes is doubled. If its HP falls below 100, the prison cracks: its AC drops to 18, but Death Incarnate's aura expands to 60 feet and its saving throw DC increases to 23.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Nightbringer makes two Scythe of the Reaper attacks and one Death Gaze attack.</div>
+      <div class="entry"><span class="entry-name">Scythe of the Reaper.</span> <em>Melee Weapon Attack:</em> +16 to hit, reach 15 ft., one target. <em>Hit:</em> 31 (4d10 + 9) necrotic damage plus 9 (2d8) cold damage. A creature reduced to 0 HP by this attack dies immediately and cannot be resurrected by any means short of a <em>wish</em> spell.</div>
+      <div class="entry"><span class="entry-name">Death Gaze.</span> <em>Ranged Spell Attack:</em> +13 to hit, range 120 ft., one target. <em>Hit:</em> 45 (10d8) necrotic damage. The target must succeed on a DC 21 Constitution saving throw or be paralyzed for 1 minute (repeat save at end of each of its turns).</div>
+      <div class="entry"><span class="entry-name">Sphere of Death (Recharge 5–6).</span> The Nightbringer creates a 40-foot-radius sphere of deathly cold centered on a point within 60 feet. All creatures in the area must succeed on a DC 21 Constitution saving throw or take 77 (14d10) necrotic damage and have their maximum HP halved until they finish a long rest. On a success, creatures take half damage with no maximum HP reduction.</div>
+      <hr class="div">
+      <h3 class="section-head">Legendary Actions</h3>
+      <p class="legendary-note">The Nightbringer can take 3 legendary actions, choosing from the options below. Only one option can be used at a time and only at the end of another creature's turn. Legendary actions recharge at the start of the Nightbringer's turn.</p>
+      <div class="entry"><span class="entry-name">Approach (1 Action).</span> The Nightbringer moves up to its speed without provoking opportunity attacks.</div>
+      <div class="entry"><span class="entry-name">Death Gaze (2 Actions).</span> The Nightbringer makes one Death Gaze attack.</div>
+      <div class="entry"><span class="entry-name">Entropy Pulse (3 Actions).</span> All creatures within 60 feet take 22 (4d10) necrotic damage and must succeed on a DC 21 Strength saving throw or be knocked prone as the Nightbringer projects raw entropic energy.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>C'tan Shard of the Deceiver</h3>
+    <p>If the Nightbringer is the universe's fear of death made manifest, the Deceiver is its fear of betrayal. In the War in Heaven, the Deceiver was the architect of the Necrontyr's doom — the C'tan who whispered promises of immortality in their ears and guided them toward biotransference, knowing full well what they would lose. He told them they would become gods. He was not technically lying. He simply omitted the cost. He was also the C'tan most responsible for engineering the war between the C'tan and the Old Ones, playing both sides with a patience that makes mortal manipulation look like children's games.</p>
+    <p>A shard of the Deceiver retains its creator's essential character in concentrated, maddened form. It rarely kills directly when it can convince someone else to do it. It takes genuine delight in the moment an enemy realizes they have been manipulated — the flicker of comprehension before the consequences land. If encountered in combat, it is usually because something has gone wrong with a far more elaborate plan, and it is annoyed.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">C'tan Shard of the Deceiver</p><p class="creature-type">Huge Elemental (C'tan), Neutral Evil</p></div>
+      <div class="cr-badge">CR 20</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 20 (divine necrodermis prison)</p>
+        <p><strong>Hit Points</strong> 364 (27d12 + 189)</p>
+        <p><strong>Speed</strong> 50 ft., fly 50 ft. (hover)</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">22 (+6)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">24 (+7)</div></div>
+        <div><div class="lbl">CON</div><div class="val">28 (+9)</div></div>
+        <div><div class="lbl">INT</div><div class="val">24 (+7)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">28 (+9)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Dex +14, Int +14, Wis +12, Cha +16</p>
+        <p><strong>Skills</strong> Deception +16, Insight +12, Perception +12, Persuasion +16</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, slashing from nonmagical attacks</p>
+        <p><strong>Damage Immunities</strong> necrotic, poison, psychic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, grappled, paralyzed, petrified, poisoned, restrained, unconscious</p>
+        <p><strong>Senses</strong> Truesight 120 ft., Darkvision 120 ft., passive Perception 22</p>
+        <p><strong>Languages</strong> All languages, telepathy 120 ft.</p>
+        <p><strong>Challenge</strong> 20 (25,000 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +6</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Master of Lies.</span> The Deceiver automatically succeeds on Deception checks and cannot be detected as lying by magical means unless the detecting effect's DC is 30 or higher. It always knows when it is being scryed upon.</div>
+      <div class="entry"><span class="entry-name">Grand Illusion.</span> The Deceiver can perfectly replicate the appearance, voice, mannerisms, and psychic impression of any creature it has observed for at least 1 minute, including touch. Detecting it as false requires a DC 26 Insight check or a <em>true seeing</em> effect.</div>
+      <div class="entry"><span class="entry-name">Reality Distortion Aura.</span> All Perception and Insight checks made within 30 feet of the Deceiver have disadvantage.</div>
+      <div class="entry"><span class="entry-name">Magic Resistance.</span> Advantage on saving throws against spells and magical effects.</div>
+      <div class="entry"><span class="entry-name">Legendary Resistance (4/Day).</span> If the Deceiver fails a saving throw, it can choose to succeed instead.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Deceiver makes two Monomolecular Fist attacks and uses Deceiver's Art once, or uses Deceiver's Art three times.</div>
+      <div class="entry"><span class="entry-name">Monomolecular Fist.</span> <em>Melee Weapon Attack:</em> +13 to hit, reach 10 ft., one target. <em>Hit:</em> 24 (4d8 + 6) force damage. Bypasses all damage resistances and immunities except those specifically to force damage.</div>
+      <div class="entry"><span class="entry-name">Deceiver's Art.</span> <em>Ranged Spell Attack:</em> +16 to hit, range 120 ft., one target. <em>Hit:</em> 40 (7d8 + 9) psychic damage. The target must succeed on a DC 24 Wisdom saving throw or use its reaction to immediately make one attack against a creature of the Deceiver's choice within range.</div>
+      <div class="entry"><span class="entry-name">Grand Deception (Recharge 5–6).</span> All creatures within 60 feet must succeed on a DC 24 Wisdom saving throw or take 63 (18d6) psychic damage, become frightened for 1 minute, and be unable to distinguish ally from enemy for that duration (attacks randomly target any adjacent creature). On a successful save, creatures take half damage and are not frightened or confused.</div>
+      <hr class="div">
+      <h3 class="section-head">Legendary Actions</h3>
+      <p class="legendary-note">The Deceiver can take 3 legendary actions, choosing from the options below. Only one option can be used at a time and only at the end of another creature's turn. Legendary actions recharge at the start of the Deceiver's turn.</p>
+      <div class="entry"><span class="entry-name">Shift (1 Action).</span> The Deceiver moves up to its speed without provoking opportunity attacks and changes its appearance using Grand Illusion.</div>
+      <div class="entry"><span class="entry-name">False Friend (2 Actions).</span> One creature within 60 feet must succeed on a DC 24 Wisdom saving throw or be charmed by the Deceiver for 1 minute (repeat save at end of each of its turns). While charmed, the creature believes the Deceiver to be its closest ally and will not willingly attack it.</div>
+      <div class="entry"><span class="entry-name">Puppeteer (3 Actions).</span> One creature currently charmed by the Deceiver within 60 feet uses its full action, bonus action, and movement as the Deceiver directs, as though affected by <em>dominate monster</em> for one round.</div>
+      <hr class="div">
+      <div class="flavor">"We gave them immortality. We kept our word. The fact that immortality in a metal shell is nothing like what they imagined is entirely their fault for failing to ask the right questions."<br>— The Deceiver, recorded by the Adeptus Mechanicus, Segmentum Obscurus, 898.M41</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>C'tan Shard of the Void Dragon</h3>
+    <p>The Void Dragon is the most powerful of the surviving C'tan shards and, by no small irony, currently imprisoned beneath the surface of Mars — the sacred forge-world of the Adeptus Mechanicus, the very techno-priests who worship it as the Machine God, their Omnissiah. If they knew the truth of what lay beneath their holiest soil, dreaming, they would not survive the knowledge intact. Some among the highest ranks of the Mechanicus do know. They have decided it is better to keep it contained through worship than to awaken it through alarm.</p>
+    <p>The Void Dragon's domain is technology — all technology, everywhere. It understands machines at a level that no organic mind can comprehend and no mechanical mind can resist. In its full ancient form, it could reach out and unmake every weapon, vehicle, and power system in a star system simultaneously. Even a shard, bound in necrodermis, retains the ability to corrupt and control any technological system it touches. When it wakes, and it will eventually wake, the Mechanicus's greatest weapons will become its servants — and its first act will likely be to dismantle the prison that has held it for sixty million years.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">C'tan Shard of the Void Dragon</p><p class="creature-type">Huge Elemental (C'tan), Lawful Evil</p></div>
+      <div class="cr-badge">CR 20</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 21 (divine necrodermis prison)</p>
+        <p><strong>Hit Points</strong> 390 (29d12 + 203)</p>
+        <p><strong>Speed</strong> 40 ft., fly 40 ft. (hover), burrow 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">26 (+8)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">CON</div><div class="val">30 (+10)</div></div>
+        <div><div class="lbl">INT</div><div class="val">26 (+8)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">22 (+6)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">20 (+5)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +15, Con +17, Int +15, Wis +13</p>
+        <p><strong>Skills</strong> Arcana +15, History +15, Perception +13</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, slashing from nonmagical attacks</p>
+        <p><strong>Damage Immunities</strong> lightning, necrotic, poison, thunder</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, grappled, paralyzed, petrified, poisoned, restrained, unconscious</p>
+        <p><strong>Senses</strong> Truesight 120 ft., Darkvision 120 ft., passive Perception 23</p>
+        <p><strong>Languages</strong> All languages, telepathy 120 ft.</p>
+        <p><strong>Challenge</strong> 20 (25,000 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +6</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Machine God.</span> The Void Dragon has absolute authority over nonmagical technology. Any nonmagical mechanical or electronic device within 60 feet of the Void Dragon ceases to function unless it succeeds on a DC 22 Constitution saving throw at the start of each of its turns (DM assigns a Constitution score to vehicles and siege weapons: typically 14–18). Weapons that fail this save deal no damage on their next attack.</div>
+      <div class="entry"><span class="entry-name">Technological Domination.</span> The Void Dragon can use an action to take permanent control of any Construct within 60 feet that fails a DC 22 Wisdom saving throw. A controlled Construct acts on the Void Dragon's initiative and obeys its commands. Necron constructs have advantage on this saving throw. A creature can attempt to reassert control with a DC 22 Intelligence (Arcana) check on its turn as an action.</div>
+      <div class="entry"><span class="entry-name">Lightning Aura.</span> Any creature that hits the Void Dragon with a melee attack takes 14 (4d6) lightning damage.</div>
+      <div class="entry"><span class="entry-name">Magic Resistance.</span> Advantage on saving throws against spells and magical effects.</div>
+      <div class="entry"><span class="entry-name">Legendary Resistance (4/Day).</span> If the Void Dragon fails a saving throw, it can choose to succeed instead.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Void Dragon makes two Dragon Claw attacks and one Lightning Breath attack, or makes three Dragon Claw attacks.</div>
+      <div class="entry"><span class="entry-name">Dragon Claw.</span> <em>Melee Weapon Attack:</em> +15 to hit, reach 15 ft., one target. <em>Hit:</em> 26 (4d8 + 8) slashing damage plus 14 (4d6) lightning damage.</div>
+      <div class="entry"><span class="entry-name">Lightning Breath (Recharge 5–6).</span> The Void Dragon breathes a bolt of pure technological disruption in a 90-foot line that is 10 feet wide. Each creature in the line must make a DC 22 Dexterity saving throw, taking 66 (12d10) lightning damage on a failure, or half as much on a success. Constructs and creatures in metal armor have disadvantage on this saving throw. Any Construct that fails is stunned until the end of its next turn as its systems are overloaded.</div>
+      <div class="entry"><span class="entry-name">Unmake (1/Day).</span> The Void Dragon targets one nonmagical object or Construct it can see within 120 feet. The target must succeed on a DC 22 Constitution saving throw or be reduced to 0 HP instantly as its internal structure is unmade at the molecular level. A creature wearing or carrying the targeted object must succeed on a DC 22 Dexterity saving throw or drop the object (it takes no damage). Objects and Constructs with more than 100 HP have advantage on the saving throw.</div>
+      <hr class="div">
+      <h3 class="section-head">Legendary Actions</h3>
+      <p class="legendary-note">The Void Dragon can take 3 legendary actions, choosing from the options below. Only one option can be used at a time and only at the end of another creature's turn. Legendary actions recharge at the start of the Void Dragon's turn.</p>
+      <div class="entry"><span class="entry-name">Machine Surge (1 Action).</span> One Construct the Void Dragon controls within 60 feet immediately takes a full turn (action, bonus action, and movement) under the Void Dragon's direction, even if it has already taken a turn this round.</div>
+      <div class="entry"><span class="entry-name">Dragon Claw (2 Actions).</span> The Void Dragon makes one Dragon Claw attack.</div>
+      <div class="entry"><span class="entry-name">Technoviral Pulse (3 Actions).</span> The Void Dragon emits a pulse of machine-breaking energy. All nonmagical weapons, armor, and objects worn or carried by creatures within 30 feet immediately take 21 (6d6) lightning damage (ignoring object hardness). Any nonmagical weapon or piece of armor reduced to 0 HP by this effect is destroyed.</div>
+      <hr class="div">
+      <div class="flavor">"It is not sleeping. It is waiting. And every prayer we offer, every rite of maintenance, every act of reverence before the machine — we have been feeding it. We are its faithful, and we never knew."<br>— Archmagos Ipleth Dray, sealed testimony, Ordo Machinum, 012.M42</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<div style="max-width:860px; margin:40px auto 20px; text-align:center; color:#5a3a1a; font-size:.85em; font-style:italic; border-top:2px solid var(--gold); padding-top:16px;">
+  Necron Bestiary &mdash; Warhammer 40K &times; D&amp;D 5E Homebrew &mdash; Fan-made, for personal use only.<br>
+  Warhammer 40,000 and all associated names are property of Games Workshop Ltd.
+</div>
+
+</body>
+</html>

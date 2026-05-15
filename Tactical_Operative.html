@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tactical Operative — WH40K D&amp;D 5E Homebrew</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080a0c;--panel:#0d1018;--panel2:#101420;--gold:#c8a44a;--gold-light:#e8c96a;--gold-dim:#7a6128;--silver:#9aaabb;--silver-dim:#4a5a6a;--text:#ccd4e0;--text-dim:#6a7a8a;--border:#2a3a52;--font-head:'Cinzel Decorative','Cinzel',serif;--font-label:'Cinzel',serif;--font-body:'Crimson Text',Georgia,serif;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size:10.5pt;}
+.page{width:9in;margin:.4in auto .6in;padding:.45in .52in;background:var(--bg);border:1px solid var(--border);position:relative;overflow:hidden;}
+.page::before,.page::after{content:'';position:absolute;width:48px;height:48px;border-color:var(--gold-dim);border-style:solid;opacity:.5;pointer-events:none;}
+.page::before{top:8px;left:8px;border-width:2px 0 0 2px;}.page::after{bottom:8px;right:8px;border-width:0 2px 2px 0;}
+@media screen{.print-bar{text-align:center;padding:.15in 0 .08in;}.print-btn{display:inline-block;padding:7px 28px;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);font-family:var(--font-label);font-size:7.5pt;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;transition:all .2s;}.print-btn:hover{background:var(--gold-dim);color:#000;}}
+@media print{@page{size:letter landscape;margin:0;}body{background:white;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.page{width:11in;min-height:8.5in;margin:0;border:none;}.print-bar{display:none!important;}}
+.class-header{text-align:center;border-bottom:2px solid var(--gold-dim);padding-bottom:.15in;margin-bottom:.18in;}
+.class-header .aquila{font-size:13pt;color:var(--gold);letter-spacing:.5em;margin-bottom:6px;}
+.class-header h1{font-family:var(--font-head);font-size:26pt;color:var(--gold-light);letter-spacing:.04em;text-shadow:0 0 32px rgba(200,164,74,.3);line-height:1.1;margin-bottom:4px;}
+.class-header .subtitle{font-family:var(--font-label);font-size:6.5pt;color:var(--silver-dim);letter-spacing:.35em;text-transform:uppercase;}
+.lore{margin-bottom:.16in;}.lore p{font-size:11pt;line-height:1.68;color:var(--text);text-align:justify;margin-bottom:.1in;}
+.lore p:first-child::first-letter{font-family:var(--font-head);font-size:38pt;color:var(--gold-light);float:left;line-height:.72;margin-right:7px;margin-top:8px;text-shadow:0 0 12px rgba(200,164,74,.4);}
+.divider{display:flex;align-items:center;gap:10px;margin:.14in 0;}.divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);}.divider-gem{width:8px;height:8px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;opacity:.85;}
+.section-title{font-family:var(--font-head);font-size:16pt;color:var(--gold-light);letter-spacing:.04em;border-bottom:1px solid var(--gold-dim);padding-bottom:5px;margin-bottom:.12in;text-shadow:0 0 14px rgba(200,164,74,.2);}
+.sec-head{font-family:var(--font-label);font-size:7pt;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--gold-dim);padding-bottom:3px;margin-bottom:8px;}
+.info-grid{display:grid;grid-template-columns:.9fr 1.8fr 1fr;gap:.14in;margin-bottom:.18in;}
+.info-panel{background:var(--panel);border:1px solid var(--border);padding:.1in .12in;}
+.hp-box{background:var(--panel2);border:1px solid var(--border);padding:7px 10px;margin-bottom:7px;text-align:center;}.hp-label{font-family:var(--font-label);font-size:6pt;color:var(--text-dim);letter-spacing:.2em;text-transform:uppercase;}.hp-value{font-family:var(--font-label);font-size:18pt;color:var(--gold-light);font-weight:700;line-height:1.1;}
+.info-row{display:flex;gap:6px;margin-bottom:5px;align-items:flex-start;}.info-label{font-family:var(--font-label);font-size:7.5pt;color:var(--gold);white-space:nowrap;min-width:72px;flex-shrink:0;padding-top:1px;}.info-value{font-size:9pt;color:var(--text);line-height:1.45;}
+.equip-item{display:flex;align-items:flex-start;gap:6px;margin-bottom:5px;font-size:9pt;color:var(--text);line-height:1.4;}.equip-bullet{color:var(--gold);flex-shrink:0;margin-top:1px;}
+.level-table-wrap{margin-bottom:.18in;}
+table.lvl{width:100%;border-collapse:collapse;font-size:9.5pt;}
+table.lvl thead tr{background:var(--panel2);}
+table.lvl thead th{font-family:var(--font-label);font-size:6.5pt;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);padding:5px 10px;border-bottom:1px solid var(--gold-dim);text-align:center;white-space:nowrap;}
+table.lvl thead th:first-child{text-align:left;width:60px;}table.lvl thead th:last-child{text-align:left;}
+table.lvl tbody tr{border-bottom:1px solid rgba(42,58,82,.35);}table.lvl tbody tr:nth-child(even){background:rgba(16,20,32,.45);}table.lvl tbody tr.milestone{background:rgba(200,164,74,.05);}
+table.lvl tbody td{padding:4px 10px;text-align:center;vertical-align:middle;}
+table.lvl tbody td:first-child{font-family:var(--font-label);font-size:9.5pt;font-weight:600;color:var(--gold-light);text-align:left;}
+table.lvl tbody td.prof{font-family:var(--font-label);font-size:11pt;color:var(--silver);font-weight:600;}
+table.lvl tbody td:last-child{text-align:left;color:var(--text);font-size:9.5pt;}
+.feature{margin-bottom:.14in;padding-left:10px;border-left:2px solid var(--gold-dim);}
+.feature-header{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px;margin-bottom:5px;}
+.feature-level{font-family:var(--font-label);font-size:6.5pt;color:var(--silver-dim);letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;background:var(--panel2);border:1px solid var(--border);padding:1px 6px;}
+.feature-name{font-family:var(--font-label);font-size:11.5pt;font-weight:600;color:var(--gold-light);letter-spacing:.02em;}
+.feature p{font-size:10pt;line-height:1.62;color:var(--text);text-align:justify;margin-bottom:5px;}
+.feature ul{margin:4px 0 6px 14px;}.feature ul li{font-size:10pt;line-height:1.58;color:var(--text);margin-bottom:3px;}.feature ul li strong{color:var(--gold-light);font-family:var(--font-label);font-size:9pt;}
+.subclass-section{border:1px solid var(--border);border-top:3px solid var(--gold-dim);background:var(--panel);padding:.18in .2in;margin-bottom:.2in;}
+.subclass-tag{font-family:var(--font-label);font-size:6.5pt;letter-spacing:.35em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:3px;}
+.subclass-name{font-family:var(--font-head);font-size:18pt;color:var(--gold-light);letter-spacing:.03em;margin-bottom:8px;text-shadow:0 0 16px rgba(200,164,74,.25);}
+.subclass-lore{font-size:10.5pt;line-height:1.64;color:var(--text);font-style:italic;border-bottom:1px solid var(--border);padding-bottom:.1in;margin-bottom:.12in;text-align:justify;}
+.subclass-profs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:.14in;}
+.prof-item{background:var(--panel2);border:1px solid var(--border);padding:6px 9px;}.prof-item-label{font-family:var(--font-label);font-size:6pt;color:var(--gold);letter-spacing:.22em;text-transform:uppercase;margin-bottom:3px;}.prof-item-value{font-size:9pt;color:var(--text);line-height:1.4;}
+.page-footer{margin-top:.2in;border-top:1px solid var(--gold-dim);padding-top:.09in;font-family:var(--font-label);font-size:6pt;color:var(--text-dim);letter-spacing:.16em;text-align:center;text-transform:uppercase;}
+</style>
+</head>
+<body>
+<div class="print-bar"><button class="print-btn" onclick="window.print()">✠ &nbsp; Export to PDF / Print</button></div>
+<div class="page">
+
+<div class="class-header">
+  <div class="aquila">✠ &nbsp; ✠ &nbsp; ✠</div>
+  <h1>Tactical Operative</h1>
+  <div class="subtitle">Deathwatch Specialty &nbsp;·&nbsp; D&amp;D 5e Homebrew Ruleset &nbsp;·&nbsp; Jericho Reach Campaign</div>
+</div>
+
+<div class="lore">
+  <p>The backbone of any Deathwatch kill team, the Tactical Operative is the most versatile of the Adeptus Astartes specialists. Trained to excel with both ranged and close-combat weapons and to adapt their fighting doctrine to the demands of any given engagement, a Tactical Operative can fill almost any role the mission requires. They are not the most powerful in any single dimension — but in a kill team that depends on each warrior complementing the others, the Tactical Operative is often the piece that makes the whole greater than the sum of its parts.</p>
+  <p>Their Tactical Doctrines reflect centuries of refined Chapter combat wisdom — fluid frameworks that can be shifted between on the fly, giving them a battlefield adaptability that even the most specialised warriors must respect. When the mission calls for suppressive fire, precision strikes, or aggressive close-quarters action, the Tactical Operative answers without hesitation.</p>
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+<div class="info-grid">
+  <div class="info-panel">
+    <div class="sec-head">Hit Points</div>
+    <div class="hp-box"><div class="hp-label">Hit Dice</div><div class="hp-value">d8</div></div>
+    <div class="info-row"><div class="info-label">1st Level</div><div class="info-value">8 + CON modifier</div></div>
+    <div class="info-row"><div class="info-label">Higher Levels</div><div class="info-value">1d8 + CON modifier per level</div></div>
+  </div>
+  <div class="info-panel">
+    <div class="sec-head">Proficiencies</div>
+    <div class="info-row"><div class="info-label">Armor</div><div class="info-value">Phobos Armor, Tacticus Armor</div></div>
+    <div class="info-row"><div class="info-label">Weapons</div><div class="info-value">Ranged Primary Weapons, Ranged Secondary Weapons, Physical Melee Weapons</div></div>
+    <div class="info-row"><div class="info-label">Tools</div><div class="info-value">Auspex</div></div>
+    <div class="info-row"><div class="info-label">Saving Throws</div><div class="info-value">Dexterity (DEX), Wisdom (WIS)</div></div>
+    <div class="info-row"><div class="info-label">Skills</div><div class="info-value">Choose 4: Acrobatics, Deception, History, Perception, Religion, Survival, Stealth, Sleight of Hand</div></div>
+  </div>
+  <div class="info-panel">
+    <div class="sec-head">Starting Equipment</div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Phobos Armor</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Physical Melee Weapon (your choice)</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Bolt Primary Weapon with 1 Full Crate of Ammo</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Bolt Secondary Weapon with 1 Full Crate of Ammo</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Explosive Crate (excl. Melta Charge) &amp; Medicae Stim</span></div>
+  </div>
+</div>
+
+<div class="sec-head">Tactical Operative — Level Progression</div>
+<div class="level-table-wrap">
+  <table class="lvl">
+    <thead><tr><th>Level</th><th>Proficiency Bonus</th><th>Features</th></tr></thead>
+    <tbody>
+      <tr class="milestone"><td>1</td><td class="prof">+2</td><td>Tactical Doctrine, Class Proficiencies</td></tr>
+      <tr><td>2</td><td class="prof">+2</td><td>Fire and Advance</td></tr>
+      <tr><td>3</td><td class="prof">+2</td><td>Subclass Assignment, Subclass Proficiencies</td></tr>
+      <tr><td>4</td><td class="prof">+2</td><td>Ability Score Improvement or Feat</td></tr>
+      <tr class="milestone"><td>5</td><td class="prof">+3</td><td>Extra Attack</td></tr>
+      <tr><td>6</td><td class="prof">+3</td><td>Subclass Feature</td></tr>
+      <tr><td>7</td><td class="prof">+3</td><td>Tactical Flexibility</td></tr>
+      <tr><td>8</td><td class="prof">+3</td><td>Ability Score Improvement or Feat</td></tr>
+      <tr><td>9</td><td class="prof">+4</td><td>—</td></tr>
+      <tr class="milestone"><td>10</td><td class="prof">+4</td><td>Subclass Feature</td></tr>
+      <tr><td>11</td><td class="prof">+4</td><td>Sustained Fire</td></tr>
+      <tr><td>12</td><td class="prof">+4</td><td>Ability Score Improvement or Feat</td></tr>
+      <tr><td>13</td><td class="prof">+5</td><td>—</td></tr>
+      <tr class="milestone"><td>14</td><td class="prof">+5</td><td>Subclass Feature</td></tr>
+      <tr><td>15</td><td class="prof">+5</td><td>Combat Veteran</td></tr>
+      <tr><td>16</td><td class="prof">+5</td><td>Ability Score Improvement or Feat</td></tr>
+      <tr><td>17</td><td class="prof">+6</td><td>—</td></tr>
+      <tr><td>18</td><td class="prof">+6</td><td>Adaptive Supremacy</td></tr>
+      <tr><td>19</td><td class="prof">+6</td><td>Ability Score Improvement or Feat</td></tr>
+      <tr class="milestone"><td>20</td><td class="prof">+6</td><td>Paragon of the Primarch (Class Paragon)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+<div class="section-title">Class Features</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">1st Level</span><span class="feature-name">Tactical Doctrine</span></div>
+  <p>At the start of each combat, choose one doctrine that persists until combat ends or you change it as a bonus action:</p>
+  <ul>
+    <li><strong>Devastator Doctrine.</strong> +1 to hit with all ranged weapons.</li>
+    <li><strong>Tactical Doctrine.</strong> You suffer no penalty on ranged attacks when within melee range of a target. Your melee attacks deal +1d4 damage.</li>
+    <li><strong>Assault Doctrine.</strong> After moving at least 10 ft before attacking, your next attack (ranged or melee) deals +1d6 damage.</li>
+  </ul>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">2nd Level</span><span class="feature-name">Fire and Advance</span></div>
+  <p>Starting at 2nd level, you have mastered the art of fighting while on the move. When you use the Dash action on your turn, you may make one ranged weapon attack as a bonus action.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">5th Level</span><span class="feature-name">Extra Attack</span></div>
+  <p>Starting at 5th level, when you take the Attack action, you can make 2 ranged or melee attacks instead of 1.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">7th Level</span><span class="feature-name">Tactical Flexibility</span></div>
+  <p>Starting at 7th level, when you roll initiative, you may set your active Tactical Doctrine before the first round begins with no action required. Additionally, changing your active Doctrine now costs a free action once per turn rather than a bonus action.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">11th Level</span><span class="feature-name">Sustained Fire</span></div>
+  <p>Starting at 11th level, when your first ranged attack on your turn hits, each subsequent ranged attack you make on that same turn gains +1 to hit, stacking up to a maximum of +3.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">15th Level</span><span class="feature-name">Combat Veteran</span></div>
+  <p>Starting at 15th level, you have advantage on saving throws against being Frightened or Charmed. Additionally, once per turn when you miss an attack, you may reroll the attack die and take the new result.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">18th Level</span><span class="feature-name">Adaptive Supremacy</span></div>
+  <p>Starting at 18th level, your mastery of the battlefield allows you to draw on multiple doctrines simultaneously. You may now benefit from two Tactical Doctrines at the same time.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">20th Level — Paragon</span><span class="feature-name">Paragon of the Primarch</span></div>
+  <p>Starting at 20th level, once per resupply, for 1 minute you reach the apex of tactical mastery:</p>
+  <ul>
+    <li>All attack rolls of 15 or higher automatically hit regardless of the target's AC.</li>
+    <li>You ignore cover bonuses on all attack rolls.</li>
+    <li>Your Tactical Doctrines cannot be suppressed or removed by any effect for the duration.</li>
+  </ul>
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+<div class="section-title">Subclasses</div>
+<p style="font-size:10.5pt;color:var(--text);line-height:1.65;margin-bottom:.18in;text-align:justify;">At 3rd level, choose a Subclass reflecting your combat specialisation. Your subclass grants additional proficiencies and features at 3rd, 6th, 10th, and 14th level.</p>
+
+<div class="subclass-section">
+  <div class="subclass-tag">✠ Subclass</div>
+  <div class="subclass-name">Intercessor</div>
+  <div class="subclass-lore">Intercessors are the quintessential Astartes foot soldiers — bolt weapon experts whose mastery of fire positioning, squad coordination, and battlefield momentum turns even a standard bolt rifle into an instrument of devastating authority. They hold ground, establish fire corridors, and ensure that every brother in the team can move freely, knowing that an Intercessor has eyes on the threat and a suppression burst ready.</div>
+  <div class="sec-head">Intercessor — Additional Proficiencies</div>
+  <div class="subclass-profs">
+    <div class="prof-item"><div class="prof-item-label">Armor</div><div class="prof-item-value">Same as starting</div></div>
+    <div class="prof-item"><div class="prof-item-label">Weapons</div><div class="prof-item-value">Same as starting</div></div>
+    <div class="prof-item"><div class="prof-item-label">Tools</div><div class="prof-item-value">Same as starting</div></div>
+  </div>
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">3rd Level</span><span class="feature-name">Bolter Discipline</span></div>
+    <p>Starting at 3rd level, your bolter training goes beyond standard fire drills — you have learned to read enemy positioning and exploit momentary gaps in their defenses.</p>
+    <p>When you hit a target with a bolt weapon, you may use your bonus action to fire a Suppression Burst at that same target or any creature within 5 ft of it. The creature must make a CON save (DC = 8 + Proficiency Bonus + DEX modifier) or be knocked Prone and have their movement speed reduced by 10 ft until the end of their next turn.</p>
+    <p>Additionally, your ballistic training allows you to read angles and trajectories that others cannot — you ignore half cover with bolt weapons.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">6th Level</span><span class="feature-name">Combat Spacing</span></div>
+    <p>Starting at 6th level, you have drilled relentless fire-and-move patterns into muscle memory. You and allies who start their movement within 5 ft of you do not provoke opportunity attacks when disengaging.</p>
+    <p>Additionally, when an ally within 10 ft of you is hit by an attack, you may use your reaction to shout a warning — that ally may immediately move up to 5 ft without provoking opportunity attacks, potentially moving out of a blast radius or melee range before the damage resolves.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">10th Level</span><span class="feature-name">Bolter Mastery</span></div>
+    <p>Starting at 10th level, your bolt weapon attacks score a critical hit on a 19 or 20. On a critical hit with a bolt weapon, the explosive bolt detonates inside the target — they must make a CON save (DC = 8 + Proficiency Bonus + DEX modifier) or suffer 1 Mortal Wound in addition to normal critical damage. This save cannot be made with advantage.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">14th Level</span><span class="feature-name">Rites of Battle</span></div>
+    <p>Starting at 14th level, once per resupply as a bonus action, you invoke the oaths of your Chapter and steel the resolve of your brothers. All allies within 30 ft gain +1d6 to their next attack roll or saving throw. This bonus lasts until used or until the end of combat.</p>
+    <p>Additionally, allies who benefit from this bonus and score a hit on their triggering attack may immediately move up to 10 ft without provoking opportunity attacks as the momentum of the engagement shifts in your favor.</p>
+  </div>
+</div>
+
+<div class="subclass-section">
+  <div class="subclass-tag">✠ Subclass</div>
+  <div class="subclass-name">Hellblaster</div>
+  <div class="subclass-lore">Hellblasters carry the most powerful handheld weapons the Adeptus Astartes fields — plasma, melta, and flame in devastating combinations. Their battlefield role is straightforward: annihilate armored targets, monstrous creatures, and fortified positions that standard bolt fire cannot breach. The proximity to these weapons changes a warrior over time, and the Hellblaster who has mastered all three knows a kind of confidence in destruction that borders on the sacred.</div>
+  <div class="sec-head">Hellblaster — Additional Proficiencies</div>
+  <div class="subclass-profs">
+    <div class="prof-item"><div class="prof-item-label">Armor</div><div class="prof-item-value">Same as starting</div></div>
+    <div class="prof-item"><div class="prof-item-label">Weapons</div><div class="prof-item-value">All Flame, Melta, and Plasma weapons; Stationary variants of these</div></div>
+    <div class="prof-item"><div class="prof-item-label">Tools</div><div class="prof-item-value">Same as starting</div></div>
+  </div>
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">3rd Level</span><span class="feature-name">Instruments of Annihilation</span></div>
+    <p>Starting at 3rd level, you gain proficiency with all Flame, Melta, and Plasma weapons and ignore movement penalties of Stationary variants of these weapons. You also unlock a unique technique for each weapon type:</p>
+    <ul>
+      <li><strong>Flame — Purgation Wave.</strong> When you fire a Flame weapon, you may choose to sustain the burn on a single 5 ft square or creature rather than sweeping the standard area. That target takes the weapon's full damage with no saving throw, and must succeed on a CON save (DC = 8 + Proficiency Bonus + DEX modifier) or be set Ablaze — taking 1d6 fire damage at the start of each of their turns until they use an action to extinguish the flames. This technique consumes 2 fuel charges instead of 1.</li>
+      <li><strong>Melta — Bore Shot.</strong> When you fire a Melta weapon, you may concentrate the beam into a single focused point rather than a cone. The attack targets one creature only but deals +2d8 fire damage and ignores all damage resistances. This technique consumes 2 ammo charges and can only be declared if you are within the weapon's short range.</li>
+      <li><strong>Plasma — Supercharge.</strong> When you fire a Plasma weapon, you may Supercharge it before rolling to hit. A Supercharged shot deals +2d8 radiant damage. If your attack roll (before modifiers) is a 1 or 2, the weapon vents dangerously — you take 1d8 radiant damage and lose all remaining attacks this turn.</li>
+    </ul>
+  </div>
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">6th Level</span><span class="feature-name">Tempered by Fire</span></div>
+    <p>Starting at 6th level, constant proximity to extreme heat and radiation hardens your body and sharpens your instincts. You gain resistance to fire and radiant damage. Each technique also improves:</p>
+    <ul>
+      <li><strong>Purgation Wave.</strong> The Ablaze condition now also imposes disadvantage on DEX saving throws while the target burns.</li>
+      <li><strong>Bore Shot.</strong> On a kill with Bore Shot, the residual beam continues to the next creature in the firing line, dealing half the original damage with no saving throw.</li>
+      <li><strong>Supercharge.</strong> The misfire threshold tightens to a natural 1 only, and the bonus damage increases to +3d8.</li>
+    </ul>
+  </div>
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">10th Level</span><span class="feature-name">Master of Destruction</span></div>
+    <p>Starting at 10th level, your understanding of these weapons reaches a level few Astartes ever achieve. Each technique unlocks a further effect:</p>
+    <ul>
+      <li><strong>Purgation Wave.</strong> You may now apply Purgation Wave to up to 2 adjacent targets simultaneously, both suffering the full focused burn and CON save. Fuel cost increases to 3 charges total.</li>
+      <li><strong>Bore Shot.</strong> The beam now punches through any cover the target is using — Bore Shot attacks ignore all cover bonuses to AC.</li>
+      <li><strong>Supercharge.</strong> On a hit against a target with 50 HP or fewer remaining, the shot automatically becomes a critical hit regardless of the roll.</li>
+    </ul>
+  </div>
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">14th Level</span><span class="feature-name">Empyrean Conflagration</span></div>
+    <p>Starting at 14th level, once per resupply as an action, you push all three weapon systems to their absolute limit. Select one weapon of each type you are carrying — or apply all techniques to a single weapon if carrying only one type — and fire each in sequence as part of the same action. Each attack uses its respective technique automatically.</p>
+    <p>Combined, the attacks deal weapon damage + 4d6 fire + 4d8 radiant in total across all hits. Any creature struck by two or more of the attacks must make a CON save (DC = 8 + Proficiency Bonus + DEX modifier) or be Stunned until the end of their next turn.</p>
+    <p>If a plasma weapon misfires, you take 2d8 radiant and that weapon is unusable until resupply. Flame and melta weapons used in this action consume all remaining ammo charges.</p>
+  </div>
+</div>
+
+<div class="page-footer">Tactical Operative &nbsp;·&nbsp; Deathwatch Kill Team &nbsp;·&nbsp; Jericho Reach Campaign &nbsp;·&nbsp; D&amp;D 5e Homebrew &nbsp;·&nbsp; For Player Use</div>
+</div>
+</body>
+</html>

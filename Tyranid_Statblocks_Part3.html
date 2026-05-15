@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WH40K D&amp;D 5E — Tyranid Stat Blocks Part 3</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #f4efe6; font-family: "Palatino Linotype", Palatino, Georgia, serif; color: #1a1008; padding: 32px 24px; }
+  h1.page-title { text-align: center; font-size: 1.6rem; color: #58180d; letter-spacing: 0.06em; margin-bottom: 36px; border-bottom: 3px solid #c9a227; padding-bottom: 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 28px; max-width: 1300px; margin: 0 auto; }
+  .stat-block { background: #fdf5e6; border: 1px solid #c9a227; border-top: 3px solid #58180d; box-shadow: 2px 3px 8px rgba(0,0,0,0.25); padding: 14px 16px 16px; break-inside: avoid; }
+  .sb-name { font-size: 1.35rem; font-weight: 700; color: #58180d; margin-bottom: 1px; }
+  .sb-cr-badge { display: inline-block; background: #58180d; color: #fdf5e6; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; padding: 2px 8px; border-radius: 3px; margin-left: 8px; vertical-align: middle; position: relative; top: -2px; }
+  .sb-type { font-style: italic; font-size: 0.88rem; color: #3d200a; margin-bottom: 6px; }
+  .sb-rule { border: none; border-top: 2px solid #c9a227; margin: 6px 0; }
+  .sb-core { margin: 4px 0; font-size: 0.88rem; line-height: 1.55; }
+  .sb-core b { color: #58180d; }
+  .sb-abilities { display: grid; grid-template-columns: repeat(6, 1fr); text-align: center; font-size: 0.82rem; margin: 6px 0; gap: 2px; }
+  .ab-name { font-weight: 700; color: #58180d; font-size: 0.78rem; }
+  .ab-val { font-size: 0.84rem; }
+  .sb-stats { font-size: 0.82rem; line-height: 1.6; margin: 3px 0; }
+  .sb-stats b { color: #58180d; }
+  .sb-section { font-size: 1.05rem; font-weight: 700; font-variant: small-caps; color: #58180d; border-bottom: 1px solid #c9a227; margin: 10px 0 4px; padding-bottom: 2px; }
+  .sb-trait { font-size: 0.84rem; line-height: 1.55; margin-bottom: 5px; }
+  .trait-name { font-weight: 700; font-style: italic; color: #1a1008; }
+  .sb-note { font-size: 0.78rem; color: #6b4a1a; font-style: italic; background: #f5e8c8; border-left: 3px solid #c9a227; padding: 4px 8px; margin: 6px 0 4px; }
+  .sb-lore { font-size: 0.78rem; color: #4a3010; font-style: italic; background: #ede0c4; border: 1px solid #c9a227; padding: 5px 8px; margin-top: 8px; border-radius: 2px; }
+  @media print {
+    body { background: white; padding: 10px; }
+    .stat-block { box-shadow: none; border: 1px solid #aaa; page-break-inside: avoid; }
+    .grid { gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<h1 class="page-title">Warhammer 40K × D&amp;D 5E — Tyranid Stat Blocks Part 3</h1>
+
+<div class="grid">
+
+<!-- ══════════════════════════════════════════════════════════ SPORE MINE -->
+<div class="stat-block">
+  <div class="sb-name">Spore Mine <span class="sb-cr-badge">CR 1/8</span></div>
+  <div class="sb-type">Tiny Beast (Tyranid), Unaligned</div>
+  <hr class="sb-rule">
+  <div class="sb-core"><b>Armor Class</b> 5</div>
+  <div class="sb-core"><b>Hit Points</b> 5 (1d4 + 2)</div>
+  <div class="sb-core"><b>Speed</b> 0 ft., fly 10 ft. (hover, no control)</div>
+  <hr class="sb-rule">
+  <div class="sb-abilities">
+    <div class="ab-name">STR</div><div class="ab-name">DEX</div><div class="ab-name">CON</div>
+    <div class="ab-name">INT</div><div class="ab-name">WIS</div><div class="ab-name">CHA</div>
+    <div class="ab-val">3 (−4)</div><div class="ab-val">8 (−1)</div><div class="ab-val">14 (+2)</div>
+    <div class="ab-val">1 (−5)</div><div class="ab-val">5 (−3)</div><div class="ab-val">1 (−5)</div>
+  </div>
+  <hr class="sb-rule">
+  <div class="sb-stats"><b>Damage Immunities</b> poison</div>
+  <div class="sb-stats"><b>Condition Immunities</b> blinded, deafened, exhaustion, frightened, paralyzed, poisoned, prone</div>
+  <div class="sb-stats"><b>Senses</b> Blindsight 30 ft. (blind beyond), passive Perception 7</div>
+  <div class="sb-stats"><b>Languages</b> —</div>
+  <div class="sb-stats"><b>Challenge</b> 1/8 (25 XP) &nbsp;|&nbsp; <b>Prof. Bonus</b> +2</div>
+  <hr class="sb-rule">
+  <div class="sb-trait"><span class="trait-name">Drifting Menace.</span> At the start of each of its turns, the Spore Mine drifts up to 10 ft. toward the nearest creature it can sense. It cannot choose direction beyond this.</div>
+  <div class="sb-trait"><span class="trait-name">Detonation.</span> When the mine moves into a creature's space, touches a creature, or is reduced to 0 hp, it explodes. Each creature within 10 ft. makes a DC 12 Dex save: 7 (2d6) acid on fail, half on success. Then destroyed. Does not detonate if killed with no remains (e.g. disintegrate).</div>
+  <div class="sb-trait"><span class="trait-name">Volatile.</span> Vulnerability to fire. If it takes 5+ fire damage in one hit, it detonates immediately.</div>
+  <div class="sb-section">Actions</div>
+  <div class="sb-trait"><span class="trait-name">Drift.</span> Moves up to 10 ft. toward the nearest creature it senses. Does not provoke opportunity attacks.</div>
+  <div class="sb-note">Biovore-launched mines use these stats. If no creature is within 30 ft. of the landing point, the mine lies inert for 1 hour before dissolving.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ RIPPER SWARM -->
+<div class="stat-block">
+  <div class="sb-name">Ripper Swarm <span class="sb-cr-badge">CR 1/4</span></div>
+  <div class="sb-type">Medium Swarm of Tiny Beasts (Tyranid), Unaligned</div>
+  <hr class="sb-rule">
+  <div class="sb-core"><b>Armor Class</b> 12 (natural armor)</div>
+  <div class="sb-core"><b>Hit Points</b> 22 (5d8)</div>
+  <div class="sb-core"><b>Speed</b> 30 ft., climb 20 ft., burrow 10 ft.</div>
+  <hr class="sb-rule">
+  <div class="sb-abilities">
+    <div class="ab-name">STR</div><div class="ab-name">DEX</div><div class="ab-name">CON</div>
+    <div class="ab-name">INT</div><div class="ab-name">WIS</div><div class="ab-name">CHA</div>
+    <div class="ab-val">8 (−1)</div><div class="ab-val">14 (+2)</div><div class="ab-val">11 (+0)</div>
+    <div class="ab-val">1 (−5)</div><div class="ab-val">8 (−1)</div><div class="ab-val">2 (−4)</div>
+  </div>
+  <hr class="sb-rule">
+  <div class="sb-stats"><b>Skills</b> Perception +1</div>
+  <div class="sb-stats"><b>Damage Resistances</b> bludgeoning, piercing, slashing</div>
+  <div class="sb-stats"><b>Condition Immunities</b> charmed, exhaustion, frightened, grappled, paralyzed, petrified, prone, restrained, stunned</div>
+  <div class="sb-stats"><b>Senses</b> Blindsight 10 ft., Darkvision 30 ft., passive Perception 11</div>
+  <div class="sb-stats"><b>Languages</b> —</div>
+  <div class="sb-stats"><b>Challenge</b> 1/4 (50 XP) &nbsp;|&nbsp; <b>Prof. Bonus</b> +2</div>
+  <hr class="sb-rule">
+  <div class="sb-trait"><span class="trait-name">Swarm.</span> Can occupy another creature's space and move through openings large enough for a Tiny creature. Cannot regain or gain temporary hit points.</div>
+  <div class="sb-trait"><span class="trait-name">Synapse Dependency.</span> DC 12 Wis save or attack the nearest creature when no Synapse creature is within 30 ft.</div>
+  <div class="sb-trait"><span class="trait-name">Consume the Fallen.</span> Advantage on attacks against unconscious creatures or those at 0 hp; deals maximum damage to them. When it reduces a creature to 0 hp, regains 5 (2d4) hp.</div>
+  <div class="sb-trait"><span class="trait-name">Bio-Dissolution.</span> A creature that ends its turn in the swarm's space takes 3 (1d6) acid damage as the Rippers begin stripping flesh and equipment.</div>
+  <div class="sb-section">Actions</div>
+  <div class="sb-trait"><span class="trait-name">Bites.</span> <i>Melee Weapon Attack:</i> +4 to hit, reach 0 ft. (target must share space). <i>Hit:</i> 7 (2d6) piercing, or 3 (1d6) if swarm is at half hp or fewer. On a hit, target makes DC 10 Str save or its speed is reduced by 10 ft. until the end of its next turn.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ BIOVORE -->
+<div class="stat-block">
+  <div class="sb-name">Biovore <span class="sb-cr-badge">CR 2</span></div>
+  <div class="sb-type">Large Monstrosity (Tyranid), Unaligned</div>
+  <hr class="sb-rule">
+  <div class="sb-core"><b>Armor Class</b> 13 (natural armor)</div>
+  <div class="sb-core"><b>Hit Points</b> 85 (10d10 + 30)</div>
+  <div class="sb-core"><b>Speed</b> 20 ft.</div>
+  <hr class="sb-rule">
+  <div class="sb-abilities">
+    <div class="ab-name">STR</div><div class="ab-name">DEX</div><div class="ab-name">CON</div>
+    <div class="ab-name">INT</div><div class="ab-name">WIS</div><div class="ab-name">CHA</div>
+    <div class="ab-val">16 (+3)</div><div class="ab-val">8 (−1)</div><div class="ab-val">16 (+3)</div>
+    <div class="ab-val">4 (−3)</div><div class="ab-val">10 (+0)</div><div class="ab-val">3 (−4)</div>
+  </div>
+  <hr class="sb-rule">
+  <div class="sb-stats"><b>Skills</b> Perception +2</div>
+  <div class="sb-stats"><b>Senses</b> Darkvision 60 ft., passive Perception 12</div>
+  <div class="sb-stats"><b>Languages</b> —</div>
+  <div class="sb-stats"><b>Challenge</b> 2 (450 XP) &nbsp;|&nbsp; <b>Prof. Bonus</b> +2</div>
+  <hr class="sb-rule">
+  <div class="sb-trait"><span class="trait-name">Synapse Dependency.</span> DC 12 Wis save or attack the nearest creature when no Synapse creature is within 30 ft.</div>
+  <div class="sb-trait"><span class="trait-name">Living Artillery.</span> Ignores half and three-quarters cover when launching Spore Mines. Can target a point it cannot see if one of its own Spore Mines landed within 30 ft. of that point in the last minute.</div>
+  <div class="sb-trait"><span class="trait-name">Spawn Spore Mines.</span> Generates mines biologically. Maximum 6 active at a time; replenishes one at the start of each of its turns.</div>
+  <div class="sb-section">Actions</div>
+  <div class="sb-trait"><span class="trait-name">Multiattack.</span> Two Launch Spore Mine attacks, or one Launch Spore Mine and one Crushing Claws.</div>
+  <div class="sb-trait"><span class="trait-name">Launch Spore Mine.</span> Selects a point within 240 ft. A Spore Mine appears and drifts toward the nearest creature within 30 ft. If no creature is nearby, it lies inert until triggered or dissolves after 1 hour.</div>
+  <div class="sb-trait"><span class="trait-name">Crushing Claws.</span> <i>Melee Weapon Attack:</i> +5 to hit, reach 5 ft. <i>Hit:</i> 10 (2d6 + 3) bludgeoning. Defensive only — used when threatened in melee.</div>
+  <div class="sb-section">Reactions</div>
+  <div class="sb-trait"><span class="trait-name">Symbiotic Detonation.</span> When one of the Biovore's Spore Mines is within 30 ft. of a creature and the Biovore can see both, it can trigger the mine to detonate immediately as a reaction.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ HARPY -->
+<div class="stat-block">
+  <div class="sb-name">Harpy <span class="sb-cr-badge">CR 8</span></div>
+  <div class="sb-type">Large Monstrosity (Tyranid), Unaligned</div>
+  <hr class="sb-rule">
+  <div class="sb-core"><b>Armor Class</b> 15 (natural armor)</div>
+  <div class="sb-core"><b>Hit Points</b> 136 (16d10 + 48)</div>
+  <div class="sb-core"><b>Speed</b> 10 ft., fly 60 ft.</div>
+  <hr class="sb-rule">
+  <div class="sb-abilities">
+    <div class="ab-name">STR</div><div class="ab-name">DEX</div><div class="ab-name">CON</div>
+    <div class="ab-name">INT</div><div class="ab-name">WIS</div><div class="ab-name">CHA</div>
+    <div class="ab-val">21 (+5)</div><div class="ab-val">16 (+3)</div><div class="ab-val">16 (+3)</div>
+    <div class="ab-val">6 (−2)</div><div class="ab-val">12 (+1)</div><div class="ab-val">6 (−2)</div>
+  </div>
+  <hr class="sb-rule">
+  <div class="sb-stats"><b>Saving Throws</b> Dex +6, Con +6</div>
+  <div class="sb-stats"><b>Skills</b> Perception +4</div>
+  <div class="sb-stats"><b>Damage Resistances</b> poison</div>
+  <div class="sb-stats"><b>Senses</b> Darkvision 60 ft., passive Perception 14</div>
+  <div class="sb-stats"><b>Languages</b> —</div>
+  <div class="sb-stats"><b>Challenge</b> 8 (3,900 XP) &nbsp;|&nbsp; <b>Prof. Bonus</b> +3</div>
+  <hr class="sb-rule">
+  <div class="sb-trait"><span class="trait-name">Synapse Dependency.</span> DC 12 Wis save or attack nearest creature when no Synapse creature is within 30 ft.</div>
+  <div class="sb-trait"><span class="trait-name">Flyby.</span> Doesn't provoke opportunity attacks when flying out of reach.</div>
+  <div class="sb-trait"><span class="trait-name">Spore Mine Payload.</span> When the Harpy moves 20+ ft. while flying, it may drop one Spore Mine anywhere along its path (free action). Replenishes fully on a long rest.</div>
+  <div class="sb-trait"><span class="trait-name">Living Hurricane.</span> While flying, creatures that start their turn within 10 ft. make a DC 16 Str save or take 4 (1d8) bludgeoning and be pushed 5 ft. away.</div>
+  <div class="sb-section">Actions</div>
+  <div class="sb-trait"><span class="trait-name">Multiattack.</span> Two Clawed Talon attacks and one Stinger Salvo.</div>
+  <div class="sb-trait"><span class="trait-name">Clawed Talons.</span> <i>Melee Weapon Attack:</i> +8 to hit, reach 10 ft. <i>Hit:</i> 18 (3d8 + 5) slashing. If both Talon attacks hit the same target: grappled (escape DC 16) and carried up to 30 ft. upward per turn.</div>
+  <div class="sb-trait"><span class="trait-name">Stinger Salvo.</span> <i>Ranged Weapon Attack:</i> +6 to hit, range 40/80 ft. <i>Hit:</i> 13 (3d6 + 3) piercing. DC 15 Con save or poisoned until end of target's next turn.</div>
+  <div class="sb-trait"><span class="trait-name">Seed the Battlefield (Recharge 5–6).</span> Strafing run up to full fly speed. Creatures within 5 ft. of the flight path: DC 15 Dex save or 7 (2d6) acid, half on success. Also drops 1d4 intact Spore Mines at random points along the path.</div>
+  <div class="sb-section">Reactions</div>
+  <div class="sb-trait"><span class="trait-name">Evasive Banking.</span> When a ranged attack misses the Harpy while flying, it can move up to 15 ft. without provoking opportunity attacks.</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ TERVIGON -->
+<div class="stat-block">
+  <div class="sb-name">Tervigon <span class="sb-cr-badge">CR 11</span></div>
+  <div class="sb-type">Huge Monstrosity (Tyranid), Unaligned</div>
+  <hr class="sb-rule">
+  <div class="sb-core"><b>Armor Class</b> 18 (natural armor)</div>
+  <div class="sb-core"><b>Hit Points</b> 184 (16d12 + 80)</div>
+  <div class="sb-core"><b>Speed</b> 30 ft.</div>
+  <hr class="sb-rule">
+  <div class="sb-abilities">
+    <div class="ab-name">STR</div><div class="ab-name">DEX</div><div class="ab-name">CON</div>
+    <div class="ab-name">INT</div><div class="ab-name">WIS</div><div class="ab-name">CHA</div>
+    <div class="ab-val">23 (+6)</div><div class="ab-val">8 (−1)</div><div class="ab-val">20 (+5)</div>
+    <div class="ab-val">10 (+0)</div><div class="ab-val">14 (+2)</div><div class="ab-val">8 (−1)</div>
+  </div>
+  <hr class="sb-rule">
+  <div class="sb-stats"><b>Saving Throws</b> Str +10, Con +9</div>
+  <div class="sb-stats"><b>Skills</b> Athletics +10, Perception +6</div>
+  <div class="sb-stats"><b>Damage Resistances</b> acid, poison</div>
+  <div class="sb-stats"><b>Condition Immunities</b> frightened, poisoned</div>
+  <div class="sb-stats"><b>Senses</b> Darkvision 60 ft., passive Perception 16</div>
+  <div class="sb-stats"><b>Languages</b> —</div>
+  <div class="sb-stats"><b>Challenge</b> 11 (7,200 XP) &nbsp;|&nbsp; <b>Prof. Bonus</b> +4</div>
+  <hr class="sb-rule">
+  <div class="sb-trait"><span class="trait-name">Synapse Creature.</span> 30-ft. synapse field. Tyranid creatures in range auto-pass Synapse Dependency saves and gain advantage vs. frightened.</div>
+  <div class="sb-trait"><span class="trait-name">Brood-Mother Bond.</span> Termagants spawned by this Tervigon auto-pass Synapse Dependency saves within 60 ft. of it, regardless of other Synapse creatures.</div>
+  <div class="sb-trait"><span class="trait-name">Bio-Stim Cascade.</span> When a Termagant within 30 ft. is reduced to 0 hp, the Tervigon regains 3 (1d6) hp.</div>
+  <div class="sb-trait"><span class="trait-name">Exhausted Spawn Sac.</span> After using Spawn Brood, roll the spawn dice openly. If any two dice show the same number, the spawn sac is exhausted until a short rest.</div>
+  <div class="sb-section">Actions</div>
+  <div class="sb-trait"><span class="trait-name">Multiattack.</span> Two Crushing Scythes and one Birthing Slam.</div>
+  <div class="sb-trait"><span class="trait-name">Crushing Scythe.</span> <i>Melee Weapon Attack:</i> +10 to hit, reach 10 ft. <i>Hit:</i> 19 (3d8 + 6) slashing. DC 18 Str save or grappled (escape DC 18) and restrained.</div>
+  <div class="sb-trait"><span class="trait-name">Birthing Slam.</span> <i>Melee Weapon Attack:</i> +10 to hit, reach 10 ft. <i>Hit:</i> 23 (5d8 + 6) bludgeoning. DC 18 Str save or pushed 15 ft. and knocked prone.</div>
+  <div class="sb-section">Bonus Actions</div>
+  <div class="sb-trait"><span class="trait-name">Spawn Brood.</span> Spawns 1d4 + 1 Termagants in spaces within 5 ft. (see Exhausted Spawn Sac). Max 30 Termagants per day. Spawned Termagants act immediately after the Tervigon.</div>
+  <div class="sb-section">Legendary Actions</div>
+  <div class="sb-trait" style="font-style:italic;color:#666;font-size:0.8rem;">3/round, end of another creature's turn.</div>
+  <div class="sb-trait"><span class="trait-name">Claw Strike.</span> One Crushing Scythe attack.</div>
+  <div class="sb-trait"><span class="trait-name">Surge the Brood (Costs 2).</span> All Termagants within 30 ft. gain advantage on attack rolls and deal +2 (1d4) on their next attack before the Tervigon's next turn.</div>
+  <div class="sb-trait"><span class="trait-name">Emergency Spawn (Costs 2).</span> Immediately uses Spawn Brood (does not use bonus action).</div>
+  <div class="sb-trait"><span class="trait-name">Reclaim Biomass (Costs 3).</span> Targets up to three dead creatures within 30 ft. Each is disintegrated; the Tervigon regains 22 (4d10) hp.</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ NORN EMISSARY -->
+<div class="stat-block">
+  <div class="sb-name">Norn Emissary <span class="sb-cr-badge">CR 15</span></div>
+  <div class="sb-type">Huge Aberration (Tyranid), Unaligned</div>
+  <hr class="sb-rule">
+  <div class="sb-core"><b>Armor Class</b> 18 (natural armor + adaptive carapace)</div>
+  <div class="sb-core"><b>Hit Points</b> 253 (22d12 + 110)</div>
+  <div class="sb-core"><b>Speed</b> 40 ft., climb 40 ft., swim 40 ft.</div>
+  <hr class="sb-rule">
+  <div class="sb-abilities">
+    <div class="ab-name">STR</div><div class="ab-name">DEX</div><div class="ab-name">CON</div>
+    <div class="ab-name">INT</div><div class="ab-name">WIS</div><div class="ab-name">CHA</div>
+    <div class="ab-val">24 (+7)</div><div class="ab-val">16 (+3)</div><div class="ab-val">20 (+5)</div>
+    <div class="ab-val">20 (+5)</div><div class="ab-val">18 (+4)</div><div class="ab-val">14 (+2)</div>
+  </div>
+  <hr class="sb-rule">
+  <div class="sb-stats"><b>Saving Throws</b> Str +12, Con +10, Int +10, Wis +9</div>
+  <div class="sb-stats"><b>Skills</b> Athletics +12, Perception +9, Stealth +8</div>
+  <div class="sb-stats"><b>Damage Resistances</b> psychic; bludgeoning, piercing, and slashing from nonmagical attacks</div>
+  <div class="sb-stats"><b>Condition Immunities</b> charmed, exhaustion, frightened, poisoned</div>
+  <div class="sb-stats"><b>Senses</b> Darkvision 120 ft., truesight 60 ft., tremorsense 30 ft., passive Perception 19; telepathy 240 ft.</div>
+  <div class="sb-stats"><b>Languages</b> — (telepathy 240 ft.)</div>
+  <div class="sb-stats"><b>Challenge</b> 15 (13,000 XP) &nbsp;|&nbsp; <b>Prof. Bonus</b> +5</div>
+  <hr class="sb-rule">
+  <div class="sb-trait"><span class="trait-name">Apex Synapse Being.</span> 80-ft. synapse field. Tyranid creatures in range auto-pass Synapse Dependency saves, gain advantage vs. charmed and frightened, and add +5 to all damage rolls. Can communicate with any Tyranid on the same world through the Hive Mind instantly.</div>
+  <div class="sb-trait"><span class="trait-name">Adaptive Carapace.</span> The first time it takes each damage type in combat, it gains resistance to that type for the rest of the encounter (max 3 simultaneous). Resolves after the triggering hit — cannot prevent the first instance.</div>
+  <div class="sb-trait"><span class="trait-name">Legendary Resistance (3/Day).</span> If it fails a saving throw, it can choose to succeed instead.</div>
+  <div class="sb-trait"><span class="trait-name">Regeneration.</span> Regains 15 hp at the start of its turn. Suppressed for 1 round after taking fire or psychic damage.</div>
+  <div class="sb-trait"><span class="trait-name">Unnatural Silence.</span> Can hide while only lightly obscured; leaves no tracks or traces. Advantage on Stealth checks in natural environments.</div>
+  <div class="sb-trait"><span class="trait-name">The Norn Queen's Eye.</span> If destroyed, the Hive Mind logs the genetic and tactical data of every creature it observed this encounter. The next Tyranid force in this region gains advantage on checks and saves against abilities used by those creatures.</div>
+  <div class="sb-section">Actions</div>
+  <div class="sb-trait"><span class="trait-name">Multiattack.</span> Four attacks: any combination of Rending Talons and Cerebral Lash. May replace the full Multiattack with Synaptic Sunder or Assimilation Grasp when available.</div>
+  <div class="sb-trait"><span class="trait-name">Rending Talons.</span> <i>Melee Weapon Attack:</i> +12 to hit, reach 10 ft. <i>Hit:</i> 25 (4d8 + 7) slashing. DC 18 Con save or poisoned for 1 min (save ends).</div>
+  <div class="sb-trait"><span class="trait-name">Cerebral Lash.</span> <i>Ranged Spell Attack:</i> +10 to hit, range 90 ft. <i>Hit:</i> 27 (5d8 + 5) psychic. DC 18 Int save or lose access to highest available spell slot (long rest to recover). Creatures with no spell slots suffer disadvantage on Int checks and saves instead.</div>
+  <div class="sb-trait"><span class="trait-name">Synaptic Sunder (Recharge 5–6).</span> Each non-Tyranid within 60 ft.: DC 18 Int save or 49 (14d6) psychic + confused (as confusion spell, no concentration, 1 min). Half damage, not confused on success.</div>
+  <div class="sb-trait"><span class="trait-name">Assimilation Grasp (Recharge 6).</span> DC 20 Str save or grappled (escape DC 20) and restrained. While grappled: 21 (6d6) acid at start of Norn Emissary's turns + DC 18 Con save or hp maximum reduced by 5 (1d10). Reduction lasts until long rest.</div>
+  <div class="sb-section">Legendary Actions</div>
+  <div class="sb-trait" style="font-style:italic;color:#666;font-size:0.8rem;">3/round, end of another creature's turn. Regains all at start of its turn.</div>
+  <div class="sb-trait"><span class="trait-name">Lash.</span> One Cerebral Lash attack.</div>
+  <div class="sb-trait"><span class="trait-name">Adaptive Shift (Costs 2).</span> Gains resistance to one damage type of choice until start of its next turn (does not count against 3-resistance limit).</div>
+  <div class="sb-trait"><span class="trait-name">Synaptic Pulse (Costs 2).</span> All Tyranid creatures it can see regain 10 (3d6) hp.</div>
+  <div class="sb-trait"><span class="trait-name">Consume (Costs 3).</span> Makes one Rending Talons attack with advantage against a creature it has grappled.</div>
+  <div class="sb-lore"><b>The Norn Queen's gift:</b> The Emissary is never truly slain — the Hive Mind rebuilds it endlessly. Its death is merely a lesson learned, paid in blood by those foolish enough to think they have won.</div>
+</div>
+
+</div><!-- end .grid -->
+
+<p style="text-align:center;margin-top:36px;font-size:0.78rem;color:#777;font-style:italic;">
+  Warhammer 40K × D&amp;D 5E Homebrew — Fan-made content for personal use.
+</p>
+</body>
+</html>

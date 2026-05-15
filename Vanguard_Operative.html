@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vanguard Operative — WH40K D&amp;D 5E Homebrew</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080a0c; --panel: #0d1018; --panel2: #101420;
+  --gold: #c8a44a; --gold-light: #e8c96a; --gold-dim: #7a6128;
+  --silver: #9aaabb; --silver-dim: #4a5a6a;
+  --text: #ccd4e0; --text-dim: #6a7a8a; --border: #2a3a52;
+  --font-head: 'Cinzel Decorative','Cinzel',serif;
+  --font-label: 'Cinzel',serif; --font-body: 'Crimson Text',Georgia,serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size:10.5pt;}
+.page{width:9in;margin:.4in auto .6in;padding:.45in .52in;background:var(--bg);border:1px solid var(--border);position:relative;overflow:hidden;}
+.page::before,.page::after{content:'';position:absolute;width:48px;height:48px;border-color:var(--gold-dim);border-style:solid;opacity:.5;pointer-events:none;}
+.page::before{top:8px;left:8px;border-width:2px 0 0 2px;}
+.page::after{bottom:8px;right:8px;border-width:0 2px 2px 0;}
+@media screen{.print-bar{text-align:center;padding:.15in 0 .08in;}.print-btn{display:inline-block;padding:7px 28px;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);font-family:var(--font-label);font-size:7.5pt;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;transition:all .2s;}.print-btn:hover{background:var(--gold-dim);color:#000;}}
+@media print{@page{size:letter landscape;margin:0;}body{background:white;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.page{width:11in;min-height:8.5in;margin:0;border:none;}.print-bar{display:none!important;}}
+.class-header{text-align:center;border-bottom:2px solid var(--gold-dim);padding-bottom:.15in;margin-bottom:.18in;}
+.class-header .aquila{font-size:13pt;color:var(--gold);letter-spacing:.5em;margin-bottom:6px;}
+.class-header h1{font-family:var(--font-head);font-size:26pt;color:var(--gold-light);letter-spacing:.04em;text-shadow:0 0 32px rgba(200,164,74,.3);line-height:1.1;margin-bottom:4px;}
+.class-header .subtitle{font-family:var(--font-label);font-size:6.5pt;color:var(--silver-dim);letter-spacing:.35em;text-transform:uppercase;}
+.lore{margin-bottom:.16in;}
+.lore p{font-size:11pt;line-height:1.68;color:var(--text);text-align:justify;margin-bottom:.1in;}
+.lore p:first-child::first-letter{font-family:var(--font-head);font-size:38pt;color:var(--gold-light);float:left;line-height:.72;margin-right:7px;margin-top:8px;text-shadow:0 0 12px rgba(200,164,74,.4);}
+.divider{display:flex;align-items:center;gap:10px;margin:.14in 0;}
+.divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);}
+.divider-gem{width:8px;height:8px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;opacity:.85;}
+.section-title{font-family:var(--font-head);font-size:16pt;color:var(--gold-light);letter-spacing:.04em;border-bottom:1px solid var(--gold-dim);padding-bottom:5px;margin-bottom:.12in;text-shadow:0 0 14px rgba(200,164,74,.2);}
+.sec-head{font-family:var(--font-label);font-size:7pt;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--gold-dim);padding-bottom:3px;margin-bottom:8px;}
+.info-grid{display:grid;grid-template-columns:.9fr 1.8fr 1fr;gap:.14in;margin-bottom:.18in;}
+.info-panel{background:var(--panel);border:1px solid var(--border);padding:.1in .12in;}
+.hp-box{background:var(--panel2);border:1px solid var(--border);padding:7px 10px;margin-bottom:7px;text-align:center;}
+.hp-label{font-family:var(--font-label);font-size:6pt;color:var(--text-dim);letter-spacing:.2em;text-transform:uppercase;}
+.hp-value{font-family:var(--font-label);font-size:18pt;color:var(--gold-light);font-weight:700;line-height:1.1;}
+.info-row{display:flex;gap:6px;margin-bottom:5px;align-items:flex-start;}
+.info-label{font-family:var(--font-label);font-size:7.5pt;color:var(--gold);white-space:nowrap;min-width:72px;flex-shrink:0;padding-top:1px;}
+.info-value{font-size:9pt;color:var(--text);line-height:1.45;}
+.equip-item{display:flex;align-items:flex-start;gap:6px;margin-bottom:5px;font-size:9pt;color:var(--text);line-height:1.4;}
+.equip-bullet{color:var(--gold);flex-shrink:0;margin-top:1px;}
+.level-table-wrap{margin-bottom:.18in;}
+table.lvl{width:100%;border-collapse:collapse;font-size:9.5pt;}
+table.lvl thead tr{background:var(--panel2);}
+table.lvl thead th{font-family:var(--font-label);font-size:6.5pt;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);padding:5px 10px;border-bottom:1px solid var(--gold-dim);text-align:center;white-space:nowrap;}
+table.lvl thead th:first-child{text-align:left;width:60px;}
+table.lvl thead th:last-child{text-align:left;}
+table.lvl tbody tr{border-bottom:1px solid rgba(42,58,82,.35);}
+table.lvl tbody tr:nth-child(even){background:rgba(16,20,32,.45);}
+table.lvl tbody tr.milestone{background:rgba(200,164,74,.05);}
+table.lvl tbody td{padding:4px 10px;text-align:center;vertical-align:middle;}
+table.lvl tbody td:first-child{font-family:var(--font-label);font-size:9.5pt;font-weight:600;color:var(--gold-light);text-align:left;}
+table.lvl tbody td.prof{font-family:var(--font-label);font-size:11pt;color:var(--silver);font-weight:600;}
+table.lvl tbody td:last-child{text-align:left;color:var(--text);font-size:9.5pt;}
+.feature{margin-bottom:.14in;padding-left:10px;border-left:2px solid var(--gold-dim);}
+.feature-header{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px;margin-bottom:5px;}
+.feature-level{font-family:var(--font-label);font-size:6.5pt;color:var(--silver-dim);letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;background:var(--panel2);border:1px solid var(--border);padding:1px 6px;}
+.feature-name{font-family:var(--font-label);font-size:11.5pt;font-weight:600;color:var(--gold-light);letter-spacing:.02em;}
+.feature p{font-size:10pt;line-height:1.62;color:var(--text);text-align:justify;margin-bottom:5px;}
+.feature ul{margin:4px 0 6px 14px;}
+.feature ul li{font-size:10pt;line-height:1.58;color:var(--text);margin-bottom:3px;}
+.feature ul li strong{color:var(--gold-light);font-family:var(--font-label);font-size:9pt;}
+.subclass-section{border:1px solid var(--border);border-top:3px solid var(--gold-dim);background:var(--panel);padding:.18in .2in;margin-bottom:.2in;}
+.subclass-tag{font-family:var(--font-label);font-size:6.5pt;letter-spacing:.35em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:3px;}
+.subclass-name{font-family:var(--font-head);font-size:18pt;color:var(--gold-light);letter-spacing:.03em;margin-bottom:8px;text-shadow:0 0 16px rgba(200,164,74,.25);}
+.subclass-lore{font-size:10.5pt;line-height:1.64;color:var(--text);font-style:italic;border-bottom:1px solid var(--border);padding-bottom:.1in;margin-bottom:.12in;text-align:justify;}
+.subclass-profs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:.14in;}
+.prof-item{background:var(--panel2);border:1px solid var(--border);padding:6px 9px;}
+.prof-item-label{font-family:var(--font-label);font-size:6pt;color:var(--gold);letter-spacing:.22em;text-transform:uppercase;margin-bottom:3px;}
+.prof-item-value{font-size:9pt;color:var(--text);line-height:1.4;}
+.page-footer{margin-top:.2in;border-top:1px solid var(--gold-dim);padding-top:.09in;font-family:var(--font-label);font-size:6pt;color:var(--text-dim);letter-spacing:.16em;text-align:center;text-transform:uppercase;}
+</style>
+</head>
+<body>
+<div class="print-bar"><button class="print-btn" onclick="window.print()">✠ &nbsp; Export to PDF / Print</button></div>
+<div class="page">
+
+<div class="class-header">
+  <div class="aquila">✠ &nbsp; ✠ &nbsp; ✠</div>
+  <h1>Vanguard Operative</h1>
+  <div class="subtitle">Deathwatch Specialty &nbsp;·&nbsp; D&amp;D 5e Homebrew Ruleset &nbsp;·&nbsp; Jericho Reach Campaign</div>
+</div>
+
+<div class="lore">
+  <p>These Phobos-armored specialists are the shadow-warriors of the kill team — experts in concealment, infiltration, and precision strikes from positions the enemy believes to be inaccessible. Where the Close Combat Operative meets the foe blade-to-blade and the Tactical Operative commands the open battlefield, the Vanguard Operative is often unseen until it is too late to respond. Behind enemy lines before the battle has formally begun, they disrupt communications, eliminate high-value targets, and gather intelligence that shapes the engagement for their brothers.</p>
+  <p>The camelioline technology woven into Phobos armor is more than a tactical tool — in the hands of a Vanguard Operative it is a philosophy. Every element of their training reinforces a single truth: the ideal battle is one where the enemy never realised the Vanguard was there at all.</p>
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+<div class="info-grid">
+  <div class="info-panel">
+    <div class="sec-head">Hit Points</div>
+    <div class="hp-box"><div class="hp-label">Hit Dice</div><div class="hp-value">d6</div></div>
+    <div class="info-row"><div class="info-label">1st Level</div><div class="info-value">6 + CON modifier</div></div>
+    <div class="info-row"><div class="info-label">Higher Levels</div><div class="info-value">1d6 + CON modifier per level</div></div>
+  </div>
+  <div class="info-panel">
+    <div class="sec-head">Proficiencies</div>
+    <div class="info-row"><div class="info-label">Armor</div><div class="info-value">Phobos Armor</div></div>
+    <div class="info-row"><div class="info-label">Weapons</div><div class="info-value">Ranged Primary Weapons, Ranged Secondary Weapons, Physical Melee Weapons</div></div>
+    <div class="info-row"><div class="info-label">Tools</div><div class="info-value">Auspex</div></div>
+    <div class="info-row"><div class="info-label">Saving Throws</div><div class="info-value">Dexterity (DEX), Wisdom (WIS)</div></div>
+    <div class="info-row"><div class="info-label">Skills</div><div class="info-value">Choose 4: Acrobatics, Deception, History, Perception, Religion, Survival, Stealth, Sleight of Hand</div></div>
+  </div>
+  <div class="info-panel">
+    <div class="sec-head">Starting Equipment</div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Phobos Armor</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Physical Melee Weapon (your choice)</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Bolt Primary Weapon with 1 Full Crate of Ammo</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Bolt Secondary Weapon with 1 Full Crate of Ammo</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Explosive Crate (excl. Melta Charge) &amp; Medicae Stim</span></div>
+  </div>
+</div>
+
+<div class="sec-head">Vanguard Operative — Level Progression</div>
+<div class="level-table-wrap">
+  <table class="lvl">
+    <thead><tr><th>Level</th><th>Proficiency Bonus</th><th>Features</th></tr></thead>
+    <tbody>
+      <tr class="milestone"><td>1</td><td class="prof">+2</td><td>Vanguard Expertise, Class Proficiencies</td></tr>
+      <tr><td>2</td><td class="prof">+2</td><td>Adaptive Camelioline Cloak</td></tr>
+      <tr><td>3</td><td class="prof">+2</td><td>Subclass Assignment, Subclass Proficiencies</td></tr>
+      <tr><td>4</td><td class="prof">+2</td><td>Ability Score Improvement or Feat</td></tr>
+      <tr class="milestone"><td>5</td><td class="prof">+3</td><td>Extra Attack</td></tr>
+      <tr><td>6</td><td class="prof">+3</td><td>Subclass Feature</td></tr>
+      <tr><td>7</td><td class="prof">+3</td><td>Recon Directive</td></tr>
+      <tr><td>8</td><td class="prof">+3</td><td>Ability Score Improvement or Feat</td></tr>
+      <tr><td>9</td><td class="prof">+4</td><td>—</td></tr>
+      <tr class="milestone"><td>10</td><td class="prof">+4</td><td>Subclass Feature</td></tr>
+      <tr><td>11</td><td class="prof">+4</td><td>Improved Chameleoline Cloak</td></tr>
+      <tr><td>12</td><td class="prof">+4</td><td>Ability Score Improvement or Feat</td></tr>
+      <tr><td>13</td><td class="prof">+5</td><td>—</td></tr>
+      <tr class="milestone"><td>14</td><td class="prof">+5</td><td>Subclass Feature</td></tr>
+      <tr><td>15</td><td class="prof">+5</td><td>Specter Protocol</td></tr>
+      <tr><td>16</td><td class="prof">+5</td><td>Ability Score Improvement or Feat</td></tr>
+      <tr><td>17</td><td class="prof">+6</td><td>—</td></tr>
+      <tr><td>18</td><td class="prof">+6</td><td>Vanguard Supremacy</td></tr>
+      <tr><td>19</td><td class="prof">+6</td><td>Ability Score Improvement or Feat</td></tr>
+      <tr class="milestone"><td>20</td><td class="prof">+6</td><td>The Emperor's Shadow (Class Paragon)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+<div class="section-title">Class Features</div>
+<p style="font-size:10.5pt;color:var(--text);line-height:1.65;margin-bottom:.15in;text-align:justify;">As a Vanguard Operative, you gain the following class features representing your mastery of concealment, infiltration, and the art of striking where the enemy least expects.</p>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">1st Level</span><span class="feature-name">Vanguard Expertise</span></div>
+  <p>At 1st level, as part of your specialized training, choose two skills that you are proficient in — you gain expertise in those skills, doubling your proficiency bonus for any ability check you make that uses either of the chosen proficiencies.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">2nd Level</span><span class="feature-name">Adaptive Camelioline Cloak</span></div>
+  <p>Starting at 2nd level, your armor is equipped with an advanced camelioline cloak, capable of bending light, distorting outlines, and masking motion when properly engaged.</p>
+  <p>As an action, you may activate your camelioline cloak to become invisible for 1 minute. You also gain the ability to Hide even when only lightly obscured, such as by shadows, foliage, smoke, or battlefield debris.</p>
+  <p>When you successfully Hide or use your camelioline cloak, you remain hidden until you move more than half your speed, make an attack, interact with an object, or take a clearly hostile action.</p>
+  <p>You can use this feature a number of times equal to your Proficiency Bonus per Resupply.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">5th Level</span><span class="feature-name">Extra Attack</span></div>
+  <p>Starting at 5th level, when you take the Attack action, you can make 2 ranged or melee attacks instead of 1.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">7th Level</span><span class="feature-name">Recon Directive</span></div>
+  <p>Starting at 7th level, your armor and camelioline cloak are modified to allow for a better range of movement to help gain the advantage in battle and to provide reconnaissance for your team.</p>
+  <p>You gain the ability to climb at your full movement speed and your movement sounds are dampened.</p>
+  <p>While using your camelioline cloak, you are now allowed to move up to your full movement speed without losing your invisibility — this includes when you take the Dash action.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">11th Level</span><span class="feature-name">Improved Chameleoline Cloak</span></div>
+  <p>Starting at 11th level, your camelioline cloak is upgraded to allow for more efficient operations.</p>
+  <p>Your invisibility can now last up to 10 minutes outside of combat, and you may now interact with objects, open doors, or manipulate equipment without ending invisibility, provided the action is subtle and non-hostile.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">15th Level</span><span class="feature-name">Specter Protocol</span></div>
+  <p>Starting at 15th level, your presence becomes increasingly difficult to perceive even while operating.</p>
+  <p>While invisible via your camelioline cloak, you leave no tracks, sound, or obvious physical disturbances that would allow hostile entities to track your location.</p>
+  <p>Creatures relying on non-magical senses such as hearing, smell, or vibration have disadvantage on detecting you unless you take a hostile action. Magical senses are not affected by this feature.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">18th Level</span><span class="feature-name">Vanguard Supremacy</span></div>
+  <p>Starting at 18th level, once per resupply, at the start of combat or at the start of your turn, you may activate Vanguard Supremacy (no action required). For the next 1 minute:</p>
+  <ul>
+    <li>Allies you can see may reposition up to 30 feet immediately without provoking opportunity attacks.</li>
+    <li>Enemies you can see cannot take reactions during this time.</li>
+    <li>You may use the Help action to provide advantage to your allies' attacks, provided the ally is within your vision.</li>
+  </ul>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">20th Level — Paragon</span><span class="feature-name">The Emperor's Shadow</span></div>
+  <p>Starting at 20th level, you become the unseen hand of the Emperor, orchestrating the battlefield through perfect concealment, flawless timing, and absolute dominance of the shadows. Once per Resupply, you may invoke the Emperor's Shadow as an action. For 1 minute:</p>
+  <ul>
+    <li>You are invisible, even while attacking or taking hostile actions. This invisibility cannot be broken by non-magical means. Magical effects that reveal invisibility still detect you but do not negate the other benefits of this feature.</li>
+    <li>You have advantage on all attack rolls against creatures that cannot see you. Attacks against creatures unaware of you deal maximum weapon damage on the first hit each turn.</li>
+    <li>You may use your Help action as a bonus action on allies who can see or hear you to grant advantage on their first attack each round. Those allies may also move up to 10 feet and make a single attack after the Help action is used on them.</li>
+  </ul>
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+<div class="section-title">Subclasses</div>
+<p style="font-size:10.5pt;color:var(--text);line-height:1.65;margin-bottom:.18in;text-align:justify;">At 3rd level, you choose a Subclass reflecting your operational specialisation. Your subclass grants additional proficiencies and features at 3rd, 6th, 10th, and 14th level.</p>
+
+<div class="subclass-section">
+  <div class="subclass-tag">✠ Subclass</div>
+  <div class="subclass-name">Infiltrator</div>
+  <div class="subclass-lore">Operating at close range behind enemy lines, Infiltrators sow confusion and disarray throughout hostile formations. Their scrambler arrays jam vox communications, deny the enemy the ability to call for aid, and force them to fight blind and isolated. Where the Eliminator kills from afar with cold patience, the Infiltrator is a blade pressed against the throat — unseen, undeniable, and already in position before the enemy knew the engagement had begun.</div>
+  <div class="sec-head">Infiltrator — Additional Proficiencies</div>
+  <div class="subclass-profs">
+    <div class="prof-item"><div class="prof-item-label">Armor</div><div class="prof-item-value">Same as starting</div></div>
+    <div class="prof-item"><div class="prof-item-label">Weapons</div><div class="prof-item-value">Same as starting</div></div>
+    <div class="prof-item"><div class="prof-item-label">Tools</div><div class="prof-item-value">Same as starting</div></div>
+  </div>
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">3rd Level</span><span class="feature-name">Scrambler Array</span></div>
+    <p>Your vox is modified to scramble nearby communications. Your presence jams all vox arrays within 20 ft. Enemies cannot call for aid while within 20 ft of you, and all allies within the field gain +1d6 to Stealth rolls.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">6th Level</span><span class="feature-name">Silent Advance</span></div>
+    <p>You gain an extra 10 ft of movement. Similar to Cunning Action, you may use your bonus action to Dash, Hide, or Use an Object. After hiding, your first attack deals +1d8 damage.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">10th Level</span><span class="feature-name">Flanking Protocol</span></div>
+    <p>When you and an ally flank the same target, both your first attacks each turn have advantage against the flanked target. You may move 10 ft after attacking the flanked target without provoking opportunity attacks. If you are within melee range of the target you are flanking, you may also use your bonus action to make an additional melee attack against the flanked enemy.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">14th Level</span><span class="feature-name">Shadow Takedown</span></div>
+    <p>When you drop a creature to 0 HP, you may use your reaction to hide and move half your speed. If you stay hidden until your next turn, you gain +2 AC until the start of the following turn and an additional 1d8 damage on your next attack.</p>
+  </div>
+</div>
+
+<div class="subclass-section">
+  <div class="subclass-tag">✠ Subclass</div>
+  <div class="subclass-name">Eliminator</div>
+  <div class="subclass-lore">Where the Infiltrator thrives in the chaos they create at close quarters, the Eliminator brings cold precision from a position of distance. Patience, elevated terrain, and a single perfect shot — this is the Eliminator's doctrine. They do not reveal themselves unless they choose to. They do not miss. A well-positioned Eliminator is one of the most force-multiplying assets a kill team can field, their Targeting Lattice turning every ally's attack into a guided strike against a compromised foe.</div>
+  <div class="sec-head">Eliminator — Additional Proficiencies</div>
+  <div class="subclass-profs">
+    <div class="prof-item"><div class="prof-item-label">Armor</div><div class="prof-item-value">Same as starting</div></div>
+    <div class="prof-item"><div class="prof-item-label">Weapons</div><div class="prof-item-value">Sniper &amp; Scoped weapons</div></div>
+    <div class="prof-item"><div class="prof-item-label">Tools</div><div class="prof-item-value">Same as starting</div></div>
+  </div>
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">3rd Level</span><span class="feature-name">The Long Watch</span></div>
+    <p>Starting at 3rd level, you gain proficiency with Sniper and Scoped weapons. Additionally, if you move no more than half your speed on your turn, your first ranged attack that turn gains +2 to hit and deals one additional die of weapon damage (e.g. a Bolt Sniper Rifle deals an extra 1d12). This bonus applies regardless of whether you moved before or after the attack, as long as your total movement for the turn does not exceed half your speed. Forced movement from external sources does not count against this limit.</p>
+    <p>The Long Watch scales at later levels as your other subclass features unlock:</p>
+    <ul>
+      <li><strong>Level 6 (Targeting Lattice):</strong> The additional damage die increases to 2 dice.</li>
+      <li><strong>Level 10 (Ghostwalk):</strong> The additional damage die increases to 3 dice, and your Long Watch attacks ignore half and three-quarters cover.</li>
+      <li><strong>Level 14 (Upgraded Targeting Lattice):</strong> The additional damage die increases to 4 dice. If your Long Watch attack is also benefiting from Targeting Lattice, the target's damage resistances are suppressed until the end of your next turn.</li>
+    </ul>
+  </div>
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">6th Level</span><span class="feature-name">Targeting Lattice</span></div>
+    <p>You may utilize your armor's targeting relay to point out weak spots on enemy combatants. As a bonus action, you may apply a mark to a specific enemy within 600 ft. You and all allies gain +1d4 to hit that target until the start of your next turn. This feature can be used a number of times equal to your proficiency modifier per resupply.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">10th Level</span><span class="feature-name">Ghostwalk</span></div>
+    <p>When you are targeted by an attack, detected by enemy sensors, or revealed from stealth, you may use your reaction to activate Ghost Walk. Until the start of your next turn:</p>
+    <ul>
+      <li>Your position cannot be marked, tracked, or locked by auspex, scopes, or targeting arrays.</li>
+      <li>You become heavily obscured to all enemies more than 15 feet away, and enemy attacks against you are made with disadvantage.</li>
+      <li>You may immediately move up to half your speed without provoking opportunity attacks.</li>
+      <li>If you end this movement in cover, shadow, or prone, you may immediately attempt a Stealth check to become hidden.</li>
+    </ul>
+    <p>You can use Ghost Walk a number of times equal to your proficiency bonus per resupply.</p>
+  </div>
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">14th Level</span><span class="feature-name">Upgraded Targeting Lattice</span></div>
+    <p>You gain an additional 1d8 damage against enemies marked by your Targeting Lattice.</p>
+    <p>Once per Resupply, you may utilize your Targeting Lattice to increase your accuracy against your marked target even further. Your next ranged attack against the marked target auto-hits, auto-crits, ignores damage resistances, and creates no audible report. If this shot successfully kills the target, you regain 1 expended use of your Targeting Lattice.</p>
+  </div>
+</div>
+
+<div class="page-footer">Vanguard Operative &nbsp;·&nbsp; Deathwatch Kill Team &nbsp;·&nbsp; Jericho Reach Campaign &nbsp;·&nbsp; D&amp;D 5e Homebrew &nbsp;·&nbsp; For Player Use</div>
+</div>
+</body>
+</html>

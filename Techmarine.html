@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Techmarine — WH40K D&D 5E Homebrew</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080a0c;--panel:#0d1018;--panel2:#101420;--gold:#c8a44a;--gold-light:#e8c96a;--gold-dim:#7a6128;--silver:#9aaabb;--silver-dim:#4a5a6a;--text:#ccd4e0;--text-dim:#6a7a8a;--border:#2a3a52;--font-head:'Cinzel Decorative','Cinzel',serif;--font-label:'Cinzel',serif;--font-body:'Crimson Text',Georgia,serif;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size:10.5pt;}
+.page{width:9in;margin:.4in auto .6in;padding:.45in .52in;background:var(--bg);border:1px solid var(--border);position:relative;overflow:hidden;}
+.page::before,.page::after{content:'';position:absolute;width:48px;height:48px;border-color:var(--gold-dim);border-style:solid;opacity:.5;pointer-events:none;}
+.page::before{top:8px;left:8px;border-width:2px 0 0 2px;}.page::after{bottom:8px;right:8px;border-width:0 2px 2px 0;}
+@media screen{.print-bar{text-align:center;padding:.15in 0 .08in;}.print-btn{display:inline-block;padding:7px 28px;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);font-family:var(--font-label);font-size:7.5pt;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;transition:all .2s;}.print-btn:hover{background:var(--gold-dim);color:#000;}}
+@media print{@page{size:letter landscape;margin:0;}body{background:white;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.page{width:11in;min-height:8.5in;margin:0;border:none;}.print-bar{display:none!important;}}
+.class-header{text-align:center;border-bottom:2px solid var(--gold-dim);padding-bottom:.15in;margin-bottom:.18in;}
+.class-header .aquila{font-size:13pt;color:var(--gold);letter-spacing:.5em;margin-bottom:6px;}
+.class-header h1{font-family:var(--font-head);font-size:26pt;color:var(--gold-light);letter-spacing:.04em;text-shadow:0 0 32px rgba(200,164,74,.3);line-height:1.1;margin-bottom:4px;}
+.class-header .subtitle{font-family:var(--font-label);font-size:6.5pt;color:var(--silver-dim);letter-spacing:.35em;text-transform:uppercase;}
+.lore{margin-bottom:.16in;}.lore p{font-size:11pt;line-height:1.68;color:var(--text);text-align:justify;margin-bottom:.1in;}
+.lore p:first-child::first-letter{font-family:var(--font-head);font-size:38pt;color:var(--gold-light);float:left;line-height:.72;margin-right:7px;margin-top:8px;text-shadow:0 0 12px rgba(200,164,74,.4);}
+.divider{display:flex;align-items:center;gap:10px;margin:.14in 0;}.divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);}.divider-gem{width:8px;height:8px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;opacity:.85;}
+.section-title{font-family:var(--font-head);font-size:16pt;color:var(--gold-light);letter-spacing:.04em;border-bottom:1px solid var(--gold-dim);padding-bottom:5px;margin-bottom:.12in;text-shadow:0 0 14px rgba(200,164,74,.2);}
+.sec-head{font-family:var(--font-label);font-size:7pt;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--gold-dim);padding-bottom:3px;margin-bottom:8px;}
+.info-grid{display:grid;grid-template-columns:.9fr 1.8fr 1fr;gap:.14in;margin-bottom:.18in;}
+.info-panel{background:var(--panel);border:1px solid var(--border);padding:.1in .12in;}
+.hp-box{background:var(--panel2);border:1px solid var(--border);padding:7px 10px;margin-bottom:7px;text-align:center;}.hp-label{font-family:var(--font-label);font-size:6pt;color:var(--text-dim);letter-spacing:.2em;text-transform:uppercase;}.hp-value{font-family:var(--font-label);font-size:18pt;color:var(--gold-light);font-weight:700;line-height:1.1;}
+.info-row{display:flex;gap:6px;margin-bottom:5px;align-items:flex-start;}.info-label{font-family:var(--font-label);font-size:7.5pt;color:var(--gold);white-space:nowrap;min-width:72px;flex-shrink:0;padding-top:1px;}.info-value{font-size:9pt;color:var(--text);line-height:1.45;}
+.equip-item{display:flex;align-items:flex-start;gap:6px;margin-bottom:5px;font-size:9pt;color:var(--text);line-height:1.4;}.equip-bullet{color:var(--gold);flex-shrink:0;margin-top:1px;}
+.level-table-wrap{margin-bottom:.18in;}
+table.lvl{width:100%;border-collapse:collapse;font-size:9.5pt;}
+table.lvl thead tr{background:var(--panel2);}
+table.lvl thead th{font-family:var(--font-label);font-size:6.5pt;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);padding:5px 10px;border-bottom:1px solid var(--gold-dim);text-align:center;white-space:nowrap;}
+table.lvl thead th:first-child{text-align:left;width:60px;}table.lvl thead th:last-child{text-align:left;}
+table.lvl tbody tr{border-bottom:1px solid rgba(42,58,82,.35);}table.lvl tbody tr:nth-child(even){background:rgba(16,20,32,.45);}table.lvl tbody tr.milestone{background:rgba(200,164,74,.05);}
+table.lvl tbody td{padding:4px 10px;text-align:center;vertical-align:middle;}
+table.lvl tbody td:first-child{font-family:var(--font-label);font-size:9.5pt;font-weight:600;color:var(--gold-light);text-align:left;}
+table.lvl tbody td.prof{font-family:var(--font-label);font-size:11pt;color:var(--silver);font-weight:600;}
+table.lvl tbody td:last-child{text-align:left;color:var(--text);font-size:9.5pt;}
+.feature{margin-bottom:.14in;padding-left:10px;border-left:2px solid var(--gold-dim);}
+.feature-header{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px;margin-bottom:5px;}
+.feature-level{font-family:var(--font-label);font-size:6.5pt;color:var(--silver-dim);letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;background:var(--panel2);border:1px solid var(--border);padding:1px 6px;}
+.feature-name{font-family:var(--font-label);font-size:11.5pt;font-weight:600;color:var(--gold-light);letter-spacing:.02em;}
+.feature p{font-size:10pt;line-height:1.62;color:var(--text);text-align:justify;margin-bottom:5px;}
+.feature ul{margin:4px 0 6px 14px;}.feature ul li{font-size:10pt;line-height:1.58;color:var(--text);margin-bottom:3px;}.feature ul li strong{color:var(--gold-light);font-family:var(--font-label);font-size:9pt;}
+.page-footer{margin-top:.2in;border-top:1px solid var(--gold-dim);padding-top:.09in;font-family:var(--font-label);font-size:6pt;color:var(--text-dim);letter-spacing:.16em;text-align:center;text-transform:uppercase;}
+</style>
+</head>
+<body>
+<div class="print-bar"><button class="print-btn" onclick="window.print()">✠ &nbsp; Export to PDF / Print</button></div>
+<div class="page">
+
+<div class="class-header">
+  <div class="aquila">✠ &nbsp; ✠ &nbsp; ✠</div>
+  <h1>Techmarine</h1>
+  <div class="subtitle">Deathwatch Specialty &nbsp;·&nbsp; D&amp;D 5e Homebrew Ruleset &nbsp;·&nbsp; Jericho Reach Campaign</div>
+</div>
+
+<div class="lore">
+  <p>A Techmarine straddles two worlds — the martial brotherhood of the Adeptus Astartes and the sacred mysteries of the Adeptus Mechanicus. Sent to Mars for years of arcane instruction before returning to their Chapter, a Techmarine returns changed: part warrior, part priest, part engineer, wholly devoted to the machine spirits that animate the instruments of war. Their Omnissian Power Axe is as much a ritual object as a weapon, and the soft litanies they intone over malfunctioning armour are as battle-hardened as any bolter round.</p>
+  <p>In the field, the Techmarine's value is impossible to overstate. Where other warriors curse a jammed weapon or struggle beneath cracked ceramite, the Techmarine moves with calm purpose, laying hands upon machine and flesh alike. Their servo-harness whirrs and extends; their Mechadendrites reach where human hands cannot; their turrets hold ground that no warrior could hold alone. The Omnissiah's gifts are many, and the Techmarine carries them all to war.</p>
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+<div class="info-grid">
+  <div class="info-panel">
+    <div class="sec-head">Hit Points</div>
+    <div class="hp-box"><div class="hp-label">Hit Dice</div><div class="hp-value">d8</div></div>
+    <div class="info-row"><div class="info-label">1st Level</div><div class="info-value">8 + CON modifier</div></div>
+    <div class="info-row"><div class="info-label">Higher Levels</div><div class="info-value">1d8 + CON modifier per level</div></div>
+  </div>
+  <div class="info-panel">
+    <div class="sec-head">Proficiencies</div>
+    <div class="info-row"><div class="info-label">Armour</div><div class="info-value">Tacticus Armor, Gravis Armor</div></div>
+    <div class="info-row"><div class="info-label">Weapons</div><div class="info-value">Ranged Primary &amp; Secondary, Physical &amp; Power Melee, Omnissian Power Axe, Servo-Arm, Mechadendrites</div></div>
+    <div class="info-row"><div class="info-label">Tools</div><div class="info-value">Artificer's Tools, Auspex</div></div>
+    <div class="info-row"><div class="info-label">Saves</div><div class="info-value">Intelligence, Constitution</div></div>
+    <div class="info-row"><div class="info-label">Skills</div><div class="info-value">Choose 3: Athletics, History, Investigation, Medicine, Perception, Technology</div></div>
+  </div>
+  <div class="info-panel">
+    <div class="sec-head">Starting Equipment</div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Tacticus Armor</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Omnissian Power Axe</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Servo-Arm (self-constructed)</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Bolt Secondary Weapon with 1 Full Crate of Ammo</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Artificer's Tools Kit</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>2× Medicae Stims</span></div>
+  </div>
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+<div class="section-title">Level Progression</div>
+<div class="level-table-wrap">
+<table class="lvl">
+  <thead><tr><th>Level</th><th>Prof</th><th>Features</th></tr></thead>
+  <tbody>
+    <tr class="milestone"><td>1</td><td class="prof">+2</td><td>Machine Communion, Class Proficiencies</td></tr>
+    <tr><td>2</td><td class="prof">+2</td><td>Field Repairs</td></tr>
+    <tr><td>3</td><td class="prof">+2</td><td>Servo-Arm Mastery</td></tr>
+    <tr><td>4</td><td class="prof">+2</td><td>Ability Score Improvement or Feat</td></tr>
+    <tr class="milestone"><td>5</td><td class="prof">+3</td><td>Extra Attack</td></tr>
+    <tr><td>6</td><td class="prof">+3</td><td>Mechanicus Enhancement</td></tr>
+    <tr><td>7</td><td class="prof">+3</td><td>Turret Emplacement</td></tr>
+    <tr><td>8</td><td class="prof">+3</td><td>Ability Score Improvement or Feat</td></tr>
+    <tr><td>9</td><td class="prof">+4</td><td>System Override</td></tr>
+    <tr><td>10</td><td class="prof">+4</td><td>—</td></tr>
+    <tr class="milestone"><td>11</td><td class="prof">+4</td><td>Field Repairs Improvement</td></tr>
+    <tr><td>12</td><td class="prof">+4</td><td>Ability Score Improvement or Feat</td></tr>
+    <tr><td>13</td><td class="prof">+5</td><td>Mechadendrite Interface</td></tr>
+    <tr><td>14</td><td class="prof">+5</td><td>Omnissiah's Sight</td></tr>
+    <tr><td>15</td><td class="prof">+5</td><td>—</td></tr>
+    <tr><td>16</td><td class="prof">+5</td><td>Ability Score Improvement or Feat</td></tr>
+    <tr><td>17</td><td class="prof">+6</td><td>Master of the Forge</td></tr>
+    <tr><td>18</td><td class="prof">+6</td><td>Living Machine</td></tr>
+    <tr><td>19</td><td class="prof">+6</td><td>Ability Score Improvement or Feat</td></tr>
+    <tr class="milestone"><td>20</td><td class="prof">+6</td><td>Omnissiah's Avatar</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+<div class="section-title">Class Features</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 1</span><span class="feature-name">Machine Communion</span></div>
+  <p>Your training in the ways of the Omnissiah allows you to commune with machine spirits and interface with technology on an instinctive level. You can sense the operational status of any mechanical device within 30ft as a free action — including damage level, fuel, ammunition, and any malfunctions present. You have advantage on all checks made to repair, operate, or disable mechanical devices, vehicles, and weapons.</p>
+  <p>When you wield the Omnissian Power Axe, it acts as a conduit for your mechanicus abilities. A number of times equal to your Proficiency Bonus per resupply, after hitting with the axe you may channel a burst of machine spirit energy through the strike, dealing an additional 2d6 lightning damage.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 2</span><span class="feature-name">Field Repairs</span></div>
+  <p>As a bonus action, you may perform a Field Repair on yourself or an ally within 5ft. Choose one effect:</p>
+  <ul>
+    <li><strong>Armour Patch:</strong> The target regains 1d8 + INT modifier HP as you seal breaches in their armour plating. This improves to 2d8 + INT at level 11.</li>
+    <li><strong>Weapon Maintenance:</strong> Until the start of your next turn, the target's next attack roll is made with advantage and deals +1d6 damage.</li>
+    <li><strong>Jam Clear:</strong> Instantly clear a weapon malfunction or jam at no cost, restoring full function.</li>
+  </ul>
+  <p>You may use Field Repairs a number of times equal to your Proficiency Bonus per resupply.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 3</span><span class="feature-name">Servo-Arm Mastery</span></div>
+  <p>Your servo-harness becomes a fully integrated weapons and utility platform. You may construct or rebuild a Servo-Arm in the field given basic materials and 1 hour of work. Your Servo-Arm damage increases to 1d8 + INT modifier. On your turn, you may make one attack with your Servo-Arm as a bonus action. Your Servo-Arm can grapple creatures up to Large size while allowing you to attack normally with your other weapons.</p>
+  <p><strong>Servo-Harness Weapon Mount:</strong> You may mount any Bolt or Plasma ranged weapon onto your servo-harness shoulder mount (not Gravis or Heavy Ordinance). A weapon mounted this way is fired as part of your Attack action — it counts as one of your attacks for the turn but requires no hands to operate. The mounted weapon uses your INT modifier for attack and damage rolls. You may swap a mounted weapon during a resupply.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 5</span><span class="feature-name">Extra Attack</span></div>
+  <p>When you take the Attack action you can make 2 attacks instead of 1. The shoulder mount weapon counts as one of these attacks if fired on the same turn.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 6</span><span class="feature-name">Mechanicus Enhancement</span></div>
+  <p>Your mastery of wargear allows you to enhance a weapon or piece of armour during a resupply or between missions. You may apply one of the following enhancements to a single item — one enhancement may be active per item at a time:</p>
+  <ul>
+    <li><strong>Blessed Ammunition:</strong> A ranged weapon's damage increases by 1 die (e.g. 1d8 becomes 2d8) for the duration.</li>
+    <li><strong>Reinforced Plating:</strong> A suit of armour gains +1 AC for the duration.</li>
+    <li><strong>Machine Spirit Awakening:</strong> A weapon gains the Disruption Field modifier — its attacks ignore non-magical weapon resistance.</li>
+    <li><strong>Overcharged Power Cell:</strong> A power or energy weapon deals +1d6 lightning damage on each hit for the duration.</li>
+  </ul>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 7</span><span class="feature-name">Turret Emplacement</span></div>
+  <p>You may spend 10 minutes constructing a Tarantula Turret from available materials. The turret is a stationary construct with AC 14 and HP equal to 5 × your Proficiency Bonus. It occupies a 5ft space and cannot move. On initiative count 20 each round, the turret fires at the nearest enemy within 60ft — dealing 2d8 piercing damage on a hit (attack roll = your INT modifier + Proficiency Bonus). You may have one active turret at a time. Constructing a new one deactivates the previous. The turret is destroyed when reduced to 0 HP or at the end of the mission.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 9</span><span class="feature-name">System Override</span></div>
+  <p>Your communion with machine spirits extends to enemy technology. As an action, you may attempt to override a mechanical system you can see within 30ft — a vehicle, turret, automated weapon, door, or any other mechanical device. Make an INT check (DC set by the GM based on complexity). On a success you gain control of the system for 1 minute. On a failure you cannot attempt the same system again until the next resupply. You may use this feature a number of times equal to your Proficiency Bonus per resupply.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 11</span><span class="feature-name">Field Repairs Improvement</span></div>
+  <p>Your Armour Patch healing increases from 1d8 + INT to 2d8 + INT. Additionally, Field Repairs gains a new option:</p>
+  <ul>
+    <li><strong>Emergency Augmetic:</strong> You install a temporary bionic replacement for a damaged limb or organ, removing one Mortal Wound from the target immediately. The augmetic lasts until the next resupply, at which point it can be made permanent during downtime at no additional cost.</li>
+  </ul>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 13</span><span class="feature-name">Mechadendrite Interface</span></div>
+  <p>Your Mechadendrites become fully integrated combat and utility tools. You may construct and equip up to 3 Mechadendrite arms simultaneously. Each Mechadendrite can independently perform one of the following on your turn without consuming your action or bonus action:</p>
+  <ul>
+    <li>Interact with an object within 5ft.</li>
+    <li>Make a single attack (1d4 + INT piercing damage).</li>
+    <li>Perform a Field Repair.</li>
+    <li>Carry or manipulate an item up to 10 lbs.</li>
+  </ul>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 14</span><span class="feature-name">Omnissiah's Sight</span></div>
+  <p>Your Machine Communion deepens. The lightning burst from your Machine Communion feature increases from 2d6 to 3d6. Additionally, once per resupply as an action, you may project your consciousness into a mechanical system within 60ft. For up to 1 minute you perceive through the machine's sensors and can operate it remotely. While projecting you are unaware of your physical surroundings.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 17</span><span class="feature-name">Master of the Forge</span></div>
+  <p>Your Mechanicus Enhancements reach master craftsman level. You may now apply two Mechanicus Enhancements simultaneously to the same item. Additionally, once per resupply during a short rest, you may perform a full weapon or armour overhaul on one item — the target item gains all four Mechanicus Enhancement effects simultaneously until the next resupply.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 18</span><span class="feature-name">Living Machine</span></div>
+  <p>Years of self-modification have blurred the line between warrior and machine. You gain resistance to lightning and psychic damage. Your INT score increases by 2 and its maximum increases to 22. You are immune to the Poisoned condition and disease.</p>
+  <p>Your maintenance trance now counts as both a short rest and a long rest for the purpose of recovering class features and abilities — in 1 hour of trance you recover everything a full resupply of rest would normally provide. This does not replace the need for a resupply to restock ammunition and equipment.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 20</span><span class="feature-name">Omnissiah's Avatar — Class Paragon</span></div>
+  <p>Once per resupply as an action, for 1 minute you become a vessel of the Machine God's will. All mechanical devices within 30ft of you come under your direct control — enemy vehicles, turrets, automated weapons, and drones cease functioning or turn against their operators at the GM's discretion.</p>
+  <p>Your Machine Communion lightning burst triggers automatically on every attack without consuming a use. Your Servo-Arm gains the Shatter modifier for the duration. All allies within 15ft gain +2 AC as their armour responds to your machine spirit's protective field.</p>
+</div>
+
+<div class="page-footer">Techmarine &nbsp;·&nbsp; Deathwatch Kill Team &nbsp;·&nbsp; WH40K D&amp;D 5E Homebrew &nbsp;·&nbsp; Jericho Reach Campaign</div>
+</div>
+</body>
+</html>

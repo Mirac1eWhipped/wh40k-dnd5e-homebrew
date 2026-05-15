@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Close Combat Operative — WH40K D&amp;D 5E Homebrew</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+
+:root {
+  --bg:         #080a0c;
+  --panel:      #0d1018;
+  --panel2:     #101420;
+  --gold:       #c8a44a;
+  --gold-light: #e8c96a;
+  --gold-dim:   #7a6128;
+  --silver:     #9aaabb;
+  --silver-dim: #4a5a6a;
+  --text:       #ccd4e0;
+  --text-dim:   #6a7a8a;
+  --border:     #2a3a52;
+  --red:        #8b1a1a;
+  --red-bright: #c0392b;
+  --font-head:  'Cinzel Decorative', 'Cinzel', serif;
+  --font-label: 'Cinzel', serif;
+  --font-body:  'Crimson Text', Georgia, serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #06080a;
+  font-family: var(--font-body);
+  color: var(--text);
+  font-size: 10.5pt;
+}
+
+/* ── PAGE ── */
+.page {
+  width: 9in;
+  margin: 0.4in auto 0.6in;
+  padding: 0.45in 0.52in;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.page::before, .page::after {
+  content: '';
+  position: absolute;
+  width: 48px; height: 48px;
+  border-color: var(--gold-dim);
+  border-style: solid;
+  opacity: 0.5;
+  pointer-events: none;
+}
+.page::before { top: 8px; left: 8px; border-width: 2px 0 0 2px; }
+.page::after  { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
+
+/* ── PRINT CONTROLS ── */
+@media screen {
+  .print-bar {
+    text-align: center;
+    padding: 0.15in 0 0.08in;
+  }
+  .print-btn {
+    display: inline-block;
+    padding: 7px 28px;
+    background: transparent;
+    border: 1px solid var(--gold-dim);
+    color: var(--gold);
+    font-family: var(--font-label);
+    font-size: 7.5pt;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .print-btn:hover { background: var(--gold-dim); color: #000; }
+}
+
+@media print {
+  @page { size: letter landscape; margin: 0; }
+  body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { width: 11in; min-height: 8.5in; margin: 0; border: none; }
+  .print-bar { display: none !important; }
+}
+
+/* ── CLASS HEADER ── */
+.class-header {
+  text-align: center;
+  border-bottom: 2px solid var(--gold-dim);
+  padding-bottom: 0.15in;
+  margin-bottom: 0.18in;
+  position: relative;
+}
+
+.class-header .aquila {
+  font-size: 13pt;
+  color: var(--gold);
+  letter-spacing: 0.5em;
+  margin-bottom: 6px;
+}
+
+.class-header h1 {
+  font-family: var(--font-head);
+  font-size: 26pt;
+  color: var(--gold-light);
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 32px rgba(200,164,74,0.3);
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.class-header .subtitle {
+  font-family: var(--font-label);
+  font-size: 6.5pt;
+  color: var(--silver-dim);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+}
+
+/* ── LORE ── */
+.lore {
+  margin-bottom: 0.16in;
+}
+
+.lore p {
+  font-size: 11pt;
+  line-height: 1.68;
+  color: var(--text);
+  text-align: justify;
+  margin-bottom: 0.1in;
+}
+
+.lore p:first-child::first-letter {
+  font-family: var(--font-head);
+  font-size: 38pt;
+  color: var(--gold-light);
+  float: left;
+  line-height: 0.72;
+  margin-right: 7px;
+  margin-top: 8px;
+  text-shadow: 0 0 12px rgba(200,164,74,0.4);
+}
+
+/* ── DIVIDER ── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0.14in 0;
+}
+.divider-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-dim), transparent); }
+.divider-gem {
+  width: 8px; height: 8px;
+  background: var(--gold);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+/* ── SECTION TITLE ── */
+.section-title {
+  font-family: var(--font-head);
+  font-size: 16pt;
+  color: var(--gold-light);
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--gold-dim);
+  padding-bottom: 5px;
+  margin-bottom: 0.12in;
+  text-shadow: 0 0 14px rgba(200,164,74,0.2);
+}
+
+.sec-head {
+  font-family: var(--font-label);
+  font-size: 7pt;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border-bottom: 1px solid var(--gold-dim);
+  padding-bottom: 3px;
+  margin-bottom: 8px;
+}
+
+/* ── INFO PANELS ── */
+.info-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.8fr 1fr;
+  gap: 0.14in;
+  margin-bottom: 0.18in;
+}
+
+.info-panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 0.1in 0.12in;
+}
+
+.hp-box {
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  padding: 7px 10px;
+  margin-bottom: 7px;
+  text-align: center;
+}
+.hp-label {
+  font-family: var(--font-label);
+  font-size: 6pt;
+  color: var(--text-dim);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.hp-value {
+  font-family: var(--font-label);
+  font-size: 18pt;
+  color: var(--gold-light);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.info-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 5px;
+  align-items: flex-start;
+}
+.info-label {
+  font-family: var(--font-label);
+  font-size: 7.5pt;
+  color: var(--gold);
+  white-space: nowrap;
+  min-width: 72px;
+  flex-shrink: 0;
+  padding-top: 1px;
+}
+.info-value {
+  font-size: 9pt;
+  color: var(--text);
+  line-height: 1.45;
+}
+
+.equip-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 5px;
+  font-size: 9pt;
+  color: var(--text);
+  line-height: 1.4;
+}
+.equip-bullet { color: var(--gold); flex-shrink: 0; margin-top: 1px; }
+
+/* ── LEVEL TABLE ── */
+.level-table-wrap {
+  margin-bottom: 0.18in;
+}
+
+table.lvl {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9.5pt;
+}
+
+table.lvl thead tr { background: var(--panel2); }
+
+table.lvl thead th {
+  font-family: var(--font-label);
+  font-size: 6.5pt;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  padding: 5px 10px;
+  border-bottom: 1px solid var(--gold-dim);
+  text-align: center;
+  white-space: nowrap;
+}
+table.lvl thead th:first-child { text-align: left; width: 60px; }
+table.lvl thead th:nth-child(2) { width: 120px; }
+table.lvl thead th:last-child { text-align: left; }
+
+table.lvl tbody tr { border-bottom: 1px solid rgba(42,58,82,0.35); }
+table.lvl tbody tr:nth-child(even) { background: rgba(16,20,32,0.45); }
+table.lvl tbody tr.milestone { background: rgba(200,164,74,0.05); }
+
+table.lvl tbody td {
+  padding: 4px 10px;
+  text-align: center;
+  vertical-align: middle;
+}
+table.lvl tbody td:first-child {
+  font-family: var(--font-label);
+  font-size: 9.5pt;
+  font-weight: 600;
+  color: var(--gold-light);
+  text-align: left;
+}
+table.lvl tbody td.prof {
+  font-family: var(--font-label);
+  font-size: 11pt;
+  color: var(--silver);
+  font-weight: 600;
+}
+table.lvl tbody td:last-child {
+  text-align: left;
+  color: var(--text);
+  font-size: 9.5pt;
+}
+
+/* ── TWO COLUMNS ── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.three-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+/* ── FEATURE BLOCK ── */
+.feature {
+  margin-bottom: 0.14in;
+  padding-left: 10px;
+  border-left: 2px solid var(--gold-dim);
+}
+
+.feature-header {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 5px;
+}
+
+.feature-level {
+  font-family: var(--font-label);
+  font-size: 6.5pt;
+  color: var(--silver-dim);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  padding: 1px 6px;
+}
+
+.feature-name {
+  font-family: var(--font-label);
+  font-size: 11.5pt;
+  font-weight: 600;
+  color: var(--gold-light);
+  letter-spacing: 0.02em;
+}
+
+.feature p {
+  font-size: 10pt;
+  line-height: 1.62;
+  color: var(--text);
+  text-align: justify;
+  margin-bottom: 5px;
+}
+
+.feature ul {
+  margin: 4px 0 6px 14px;
+}
+.feature ul li {
+  font-size: 10pt;
+  line-height: 1.58;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+.feature ul li strong {
+  color: var(--gold-light);
+  font-family: var(--font-label);
+  font-size: 9pt;
+}
+
+/* ── SUBCLASS SECTION ── */
+.subclass-section {
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--gold-dim);
+  background: var(--panel);
+  padding: 0.18in 0.2in;
+  margin-bottom: 0.2in;
+  position: relative;
+}
+
+.subclass-tag {
+  font-family: var(--font-label);
+  font-size: 6.5pt;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--silver-dim);
+  margin-bottom: 3px;
+}
+
+.subclass-name {
+  font-family: var(--font-head);
+  font-size: 18pt;
+  color: var(--gold-light);
+  letter-spacing: 0.03em;
+  margin-bottom: 8px;
+  text-shadow: 0 0 16px rgba(200,164,74,0.25);
+}
+
+.subclass-lore {
+  font-size: 10.5pt;
+  line-height: 1.64;
+  color: var(--text);
+  font-style: italic;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.1in;
+  margin-bottom: 0.12in;
+  text-align: justify;
+}
+
+.subclass-profs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 0.14in;
+}
+
+.prof-item {
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  padding: 6px 9px;
+}
+.prof-item-label {
+  font-family: var(--font-label);
+  font-size: 6pt;
+  color: var(--gold);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+.prof-item-value {
+  font-size: 9pt;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+/* ── FOOTER ── */
+.page-footer {
+  margin-top: 0.2in;
+  border-top: 1px solid var(--gold-dim);
+  padding-top: 0.09in;
+  font-family: var(--font-label);
+  font-size: 6pt;
+  color: var(--text-dim);
+  letter-spacing: 0.16em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+</style>
+</head>
+<body>
+
+<div class="print-bar">
+  <button class="print-btn" onclick="window.print()">✠ &nbsp; Export to PDF / Print</button>
+</div>
+
+<div class="page">
+
+  <!-- ════ HEADER ════ -->
+  <div class="class-header">
+    <div class="aquila">✠ &nbsp; ✠ &nbsp; ✠</div>
+    <h1>Close Combat Operative</h1>
+    <div class="subtitle">Deathwatch Specialty &nbsp;·&nbsp; D&amp;D 5e Homebrew Ruleset &nbsp;·&nbsp; Jericho Reach Campaign</div>
+  </div>
+
+  <!-- ════ LORE ════ -->
+  <div class="lore">
+    <p>The warriors of the Adeptus Astartes who dedicate themselves to close-quarters battle are among the most terrifying combatants in the galaxy. A Close Combat Operative does not stand at range and trade fire — they close with the enemy at speed, relying on ceramite plate, practiced technique, and absolute aggression to overwhelm opposition before it can react. They are the Emperor's fist, the death that arrives screaming.</p>
+    <p>Where other Specialists bring analytical precision or devastating ranged firepower, the Close Combat Operative brings something simpler and more primal: the promise of violence at arm's length, delivered without mercy and without hesitation. Through rigorous combat drills, decades of battle experience, and the genetic enhancement that makes their muscles coil like industrial servos, these warriors are engines of destruction in the killing ground of melee.</p>
+  </div>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+  <!-- ════ INFO PANELS ════ -->
+  <div class="info-grid">
+
+    <div class="info-panel">
+      <div class="sec-head">Hit Points</div>
+      <div class="hp-box">
+        <div class="hp-label">Hit Dice</div>
+        <div class="hp-value">d10</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">1st Level</div>
+        <div class="info-value">10 + CON modifier</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Higher Levels</div>
+        <div class="info-value">1d10 + CON modifier per level</div>
+      </div>
+    </div>
+
+    <div class="info-panel">
+      <div class="sec-head">Proficiencies</div>
+      <div class="info-row">
+        <div class="info-label">Armor</div>
+        <div class="info-value">Phobos Armor, Tacticus Armor, Gravis Armor</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Weapons</div>
+        <div class="info-value">Ranged Secondary Weapons, Physical Melee Weapons, Power Melee Weapons (excluding Thunder Hammer)</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Tools</div>
+        <div class="info-value">Auspex</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Saving Throws</div>
+        <div class="info-value">Strength (STR), Constitution (CON)</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">Skills</div>
+        <div class="info-value">Choose 4: Athletics, Acrobatics, History, Intimidation, Perception, Religion, Stealth</div>
+      </div>
+    </div>
+
+    <div class="info-panel">
+      <div class="sec-head">Starting Equipment</div>
+      <div class="equip-item"><span class="equip-bullet">✦</span><span>Tacticus Armor</span></div>
+      <div class="equip-item"><span class="equip-bullet">✦</span><span>Physical Melee Weapon (your choice)</span></div>
+      <div class="equip-item"><span class="equip-bullet">✦</span><span>Bolt Secondary Weapon with 1 Full Crate of Ammo</span></div>
+      <div class="equip-item"><span class="equip-bullet">✦</span><span>Explosive Crate (excl. Melta Charge) &amp; Medicae Stim</span></div>
+    </div>
+
+  </div>
+
+  <!-- ════ LEVEL TABLE ════ -->
+  <div class="sec-head">Close Combat Operative — Level Progression</div>
+  <div class="level-table-wrap">
+    <table class="lvl">
+      <thead>
+        <tr>
+          <th>Level</th>
+          <th>Proficiency Bonus</th>
+          <th>Features</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="milestone"><td>1</td><td class="prof">+2</td><td>Combat Stances, Class Proficiencies</td></tr>
+        <tr><td>2</td><td class="prof">+2</td><td>Adrenaline Surge</td></tr>
+        <tr><td>3</td><td class="prof">+2</td><td>Subclass Assignment, Subclass Proficiencies</td></tr>
+        <tr><td>4</td><td class="prof">+2</td><td>Ability Score Improvement or Feat</td></tr>
+        <tr class="milestone"><td>5</td><td class="prof">+3</td><td>Extra Attack (2 attacks)</td></tr>
+        <tr><td>6</td><td class="prof">+3</td><td>Subclass Feature</td></tr>
+        <tr><td>7</td><td class="prof">+3</td><td>Parry</td></tr>
+        <tr><td>8</td><td class="prof">+3</td><td>Ability Score Improvement or Feat</td></tr>
+        <tr><td>9</td><td class="prof">+4</td><td>—</td></tr>
+        <tr class="milestone"><td>10</td><td class="prof">+4</td><td>Subclass Feature</td></tr>
+        <tr><td>11</td><td class="prof">+4</td><td>Extra Melee Attack (3 attacks), Additional Combat Stance</td></tr>
+        <tr><td>12</td><td class="prof">+4</td><td>Ability Score Improvement or Feat</td></tr>
+        <tr><td>13</td><td class="prof">+5</td><td>—</td></tr>
+        <tr class="milestone"><td>14</td><td class="prof">+5</td><td>Subclass Feature</td></tr>
+        <tr><td>15</td><td class="prof">+5</td><td>Emperor's Strike</td></tr>
+        <tr><td>16</td><td class="prof">+5</td><td>Ability Score Improvement or Feat</td></tr>
+        <tr><td>17</td><td class="prof">+6</td><td>—</td></tr>
+        <tr><td>18</td><td class="prof">+6</td><td>Adrenaline Surge Improvement</td></tr>
+        <tr><td>19</td><td class="prof">+6</td><td>Ability Score Improvement or Feat</td></tr>
+        <tr class="milestone"><td>20</td><td class="prof">+6</td><td>Angel of Vengeance (Class Paragon)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+  <!-- ════ CLASS FEATURES ════ -->
+  <div class="section-title">Class Features</div>
+  <p style="font-size:10.5pt; color:var(--text); line-height:1.65; margin-bottom:0.15in; text-align:justify;">As a Close Combat Operative, you gain the following class features. These represent the martial discipline and relentless aggression instilled through decades of Astartes training and the gene-forging of the Emperor's finest warriors.</p>
+
+  <div class="two-col">
+    <div>
+
+      <div class="feature">
+        <div class="feature-header">
+          <span class="feature-level">1st Level</span>
+          <span class="feature-name">Combat Stances</span>
+        </div>
+        <p>At 1st level, you learn to channel your martial discipline through distinct Combat Stances. When you first gain this feature, choose one stance from the list below. You may learn an additional stance at 11th level. You can only benefit from one stance at a time, and you can change your active stance as a bonus action.</p>
+        <ul>
+          <li><strong>Onslaught Stance.</strong> When you move at least 10 feet before making a melee attack, you gain +2 to damage rolls for the remainder of your turn.</li>
+          <li><strong>Duelist Stance.</strong> When you are engaged in melee with only one creature, you gain +2 to damage rolls against that creature.</li>
+          <li><strong>Executioner Stance.</strong> You gain +1d4 to all melee damage rolls, but suffer –1 AC.</li>
+          <li><strong>Bastion Stance.</strong> While you are within 5 feet of an ally, both you and that ally gain +1 AC.</li>
+          <li><strong>Phantom Stance.</strong> You gain advantage on the first attack made from stealth, and that attack can critically strike on a roll of 19 or 20.</li>
+        </ul>
+      </div>
+
+      <div class="feature">
+        <div class="feature-header">
+          <span class="feature-level">2nd Level</span>
+          <span class="feature-name">Adrenaline Surge</span>
+        </div>
+        <p>Starting at 2nd level, you can push yourself beyond your normal limits for a moment. On your turn, you can take one additional action.</p>
+        <p>Once you use this feature, you must finish a short rest or resupply before you can use it again. Starting at 18th level, you can use it twice before a rest or resupply, but only once on the same turn.</p>
+      </div>
+
+      <div class="feature">
+        <div class="feature-header">
+          <span class="feature-level">5th Level</span>
+          <span class="feature-name">Extra Attack</span>
+        </div>
+        <p>Starting at 5th level, when you take the Attack action, you can make 2 ranged or melee attacks instead of 1. The number of melee attacks increases to 3 when you reach 11th level in this class.</p>
+      </div>
+
+      <div class="feature">
+        <div class="feature-header">
+          <span class="feature-level">7th Level</span>
+          <span class="feature-name">Parry</span>
+        </div>
+        <p>Starting at 7th level, when hit by a melee attack, you may use your reaction to reduce the incoming damage by 1d8 + your Strength modifier.</p>
+        <p>This feature can be used a number of times equal to your proficiency bonus and resets on a short rest or resupply.</p>
+      </div>
+
+    </div>
+    <div>
+
+      <div class="feature">
+        <div class="feature-header">
+          <span class="feature-level">11th Level</span>
+          <span class="feature-name">Extra Melee Attack</span>
+        </div>
+        <p>Starting at 11th level, when you take the Attack action and have a melee weapon equipped, you can make 3 attacks with a melee weapon instead of 2.</p>
+        <p>If you choose to attack with a ranged weapon, you can still attack up to 2 times with it before utilizing the 3rd melee attack. You also learn an additional Combat Stance at this level.</p>
+      </div>
+
+      <div class="feature">
+        <div class="feature-header">
+          <span class="feature-level">15th Level</span>
+          <span class="feature-name">Emperor's Strike</span>
+        </div>
+        <p>Starting at 15th level, you have learned to focus the entirety of your martial discipline into a single, annihilating blow. When you take the Attack action on your turn, you may forgo all of your attacks to make one Emperor's Strike. Declare the strike before rolling. The strike has the following properties:</p>
+        <ul>
+          <li>The attack automatically ignores any damage resistances the target has. If the target has damage immunity to the weapon's damage type, it instead treats it as resistance.</li>
+          <li>On a hit, the attack deals weapon damage plus an additional 4d10 radiant damage, representing the divine wrath of the Emperor channeled through your blow.</li>
+          <li>If the attack roll meets or exceeds the target's AC by 5 or more, the target must succeed on a Constitution saving throw (DC = 8 + Proficiency Bonus + STR modifier) or become Stunned until the end of their next turn.</li>
+        </ul>
+        <p>You may use this feature a number of times equal to your Proficiency Bonus per resupply.</p>
+      </div>
+
+      <div class="feature">
+        <div class="feature-header">
+          <span class="feature-level">18th Level</span>
+          <span class="feature-name">Adrenaline Surge Improvement</span>
+        </div>
+        <p>Starting at 18th level, you gain an additional use of your Adrenaline Surge. Additionally, when you activate your Adrenaline Surge, you may move up to your full movement speed as part of that action.</p>
+      </div>
+
+      <div class="feature">
+        <div class="feature-header">
+          <span class="feature-level">20th Level — Paragon</span>
+          <span class="feature-name">Angel of Vengeance</span>
+        </div>
+        <p>Starting at 20th level, you become the Emperor's wrath incarnate. Once per resupply, for 1 minute (or until you are incapacitated), you gain all of the following:</p>
+        <ul>
+          <li>Advantage on all attack rolls.</li>
+          <li>Melee hits deal an additional 2d8 radiant damage.</li>
+          <li>Enemies within 15 feet of you must succeed on a Wisdom saving throw (DC = 8 + Proficiency Bonus + CHA modifier) or be frightened of you until the end of their next turn.</li>
+          <li>You gain temporary hit points equal to your level.</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+  <!-- ════ SUBCLASSES ════ -->
+  <div class="section-title">Subclasses</div>
+  <p style="font-size:10.5pt; color:var(--text); line-height:1.65; margin-bottom:0.18in; text-align:justify;">At 3rd level, you choose a Subclass that reflects your combat specialisation within the Deathwatch Kill Team. Your subclass grants additional proficiencies immediately, along with features at 3rd, 6th, 10th, and 14th level.</p>
+
+  <!-- ── ASSAULT ── -->
+  <div class="subclass-section">
+    <div class="subclass-tag">✠ Subclass</div>
+    <div class="subclass-name">Assault</div>
+    <div class="subclass-lore">Assault Marines are the shock troops of the Adeptus Astartes — warriors carried on pillars of fire who crash into the enemy in a cataclysm of ceramite and blades. Where others maneuver around resistance, the Assault Marine falls from the sky, shattering formations, crushing armor, and leaving ruin in their wake. Speed and overwhelming violence are their doctrine. The enemy does not know they are coming until the earth shakes beneath the weight of their descent.</div>
+
+    <div class="sec-head">Assault — Additional Proficiencies</div>
+    <div class="subclass-profs">
+      <div class="prof-item">
+        <div class="prof-item-label">Armor</div>
+        <div class="prof-item-value">Same as starting</div>
+      </div>
+      <div class="prof-item">
+        <div class="prof-item-label">Weapons</div>
+        <div class="prof-item-value">Thunder Hammer, Lightning Claws (Dual)</div>
+      </div>
+      <div class="prof-item">
+        <div class="prof-item-label">Tools</div>
+        <div class="prof-item-value">Jump Pack</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <div class="feature">
+          <div class="feature-header">
+            <span class="feature-level">3rd Level</span>
+            <span class="feature-name">Aerial Assault</span>
+          </div>
+          <p>Starting at 3rd level, you gain proficiency with the Thunder Hammer and Lightning Claws. You also gain access to the standard Astartes Jump Pack for world traversal and combat.</p>
+          <p>You gain a vertical jump height and long jump distance equal to your movement speed.</p>
+          <p>While in combat, you can use your Bonus Action to launch into the air and perform a Ground Pound. You may move up to your movement speed in any direction and slam a point within range. All creatures within a 5 ft radius of your landing point must make a DEX saving throw (DC = 8 + Proficiency Bonus + STR). Creatures that fail the save take melee damage based on your equipped weapon.</p>
+          <p>This feature can be used a number of times equal to your proficiency modifier.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-header">
+            <span class="feature-level">6th Level</span>
+            <span class="feature-name">Angelic Ascension</span>
+          </div>
+          <p>Starting at 6th level, when you perform a Ground Pound, your Jump Pack flares up and disperses an area of flame around you as you take off. All creatures within a 5 ft radius of your takeoff point must make a DEX saving throw (DC = 8 + Proficiency Bonus + STR). Creatures that fail take 1d8 fire damage.</p>
+        </div>
+      </div>
+      <div>
+        <div class="feature">
+          <div class="feature-header">
+            <span class="feature-level">10th Level</span>
+            <span class="feature-name">Thunderous Impact</span>
+          </div>
+          <p>Starting at 10th level, when you perform a Ground Pound, your landing point radius increases from 5 ft to 10 ft.</p>
+          <p>Your Ground Pound also deals an extra 2d6 thunder damage on impact.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-header">
+            <span class="feature-level">14th Level</span>
+            <span class="feature-name">Angel of Fury</span>
+          </div>
+          <p>Starting at 14th level, your Jump Pack movement speed and Ground Pound range are now equal to double your movement speed.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BLADEGUARD ── -->
+  <div class="subclass-section">
+    <div class="subclass-tag">✠ Subclass</div>
+    <div class="subclass-name">Bladeguard</div>
+    <div class="subclass-lore">The Bladeguard Veterans are among the oldest and most honoured close-combat specialists in any Chapter's ranks. Armed with master-crafted blades and the nigh-indestructible Storm Shield, they fight with a discipline that borders on the divine. Where others charge, they hold the line. Where others falter, they advance. They are walls of ceramite and faith, immovable by any force the galaxy can bring to bear, their shields the final barrier between their brothers and annihilation.</div>
+
+    <div class="sec-head">Bladeguard — Additional Proficiencies</div>
+    <div class="subclass-profs">
+      <div class="prof-item">
+        <div class="prof-item-label">Armor</div>
+        <div class="prof-item-value">Storm Shield</div>
+      </div>
+      <div class="prof-item">
+        <div class="prof-item-label">Weapons</div>
+        <div class="prof-item-value">Same as starting</div>
+      </div>
+      <div class="prof-item">
+        <div class="prof-item-label">Tools</div>
+        <div class="prof-item-value">Same as starting</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <div class="feature">
+          <div class="feature-header">
+            <span class="feature-level">3rd Level</span>
+            <span class="feature-name">Shield of the Emperor</span>
+          </div>
+          <p>Starting at 3rd level, you gain proficiency with the Storm Shield. If you take the Attack action on your turn and land a melee attack successfully, you can use your bonus action to perform a Shield Bash, shoving the target 10 ft away from you.</p>
+          <p>Additionally, if you are wielding a Storm Shield and are subjected to an effect that allows you to make a DEX saving throw to take only half damage, you can use your reaction to take no damage instead if you succeed on the saving throw, interposing your shield between yourself and the source of the effect.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-header">
+            <span class="feature-level">6th Level</span>
+            <span class="feature-name">Vow of Defiance</span>
+          </div>
+          <p>Starting at 6th level, you gain the ability to issue a divine challenge to all hostile creatures within range. All enemies within 15 ft of you must make a Wisdom saving throw (DC = 8 + Proficiency Bonus + CHA modifier). All targets that fail are compelled to focus their attacks on you until they succeed on a saving throw, which can only be made at the end of their turn. This effect lasts for 1 minute, until saved against, or until you are incapacitated.</p>
+          <p>If a compelled creature attempts to attack any target besides you, they have disadvantage on the attack, and you may use your reaction to make an attack against them, provided they are within range.</p>
+        </div>
+      </div>
+      <div>
+        <div class="feature">
+          <div class="feature-header">
+            <span class="feature-level">10th Level</span>
+            <span class="feature-name">Ceramite Bulwark</span>
+          </div>
+          <p>Starting at 10th level, as an action, you can enter the Bulwark Stance for 1 minute. While in this stance, you gain the following features:</p>
+          <ul>
+            <li>You gain resistance to bludgeoning, piercing, and slashing damage.</li>
+            <li>Allies within 10 feet of you gain half cover (+2 AC) against ranged attacks.</li>
+            <li>You cannot move more than 10 feet per turn while maintaining this stance.</li>
+            <li>You can end this stance at any time (no action required).</li>
+          </ul>
+          <p>Once you use this feature, you must complete a resupply before using it again.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-header">
+            <span class="feature-level">14th Level</span>
+            <span class="feature-name">Vigilant Sentinel</span>
+          </div>
+          <p>Starting at 14th level, your vigilance becomes absolute. You gain the following features:</p>
+          <ul>
+            <li>You can no longer be surprised while conscious.</li>
+            <li>Creatures within 10 ft of you cannot gain advantage on attacks against you or your allies within range.</li>
+            <li>Creatures that start their turn within melee range of you have their total movement speed reduced by 10 ft until the end of their turn.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ FOOTER ════ -->
+  <div class="page-footer">
+    Close Combat Operative &nbsp;·&nbsp; Deathwatch Kill Team &nbsp;·&nbsp; Jericho Reach Campaign &nbsp;·&nbsp; D&amp;D 5e Homebrew &nbsp;·&nbsp; For Player Use
+  </div>
+
+</div><!-- /page -->
+
+</body>
+</html>

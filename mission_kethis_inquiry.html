@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mission I — The Kethis Inquiry</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cinzel+Decorative:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── RESET & BASE ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #080a0c;
+      --bg2:        #0e1014;
+      --bg3:        #141720;
+      --panel:      #0f1118;
+      --gold:       #c8a44a;
+      --gold-light: #e8c96a;
+      --gold-dim:   #7a6128;
+      --silver:     #9aaabb;
+      --silver-dim: #4a5a6a;
+      --red:        #8b1a1a;
+      --red-bright: #c0392b;
+      --text:       #ccd4e0;
+      --text-dim:   #5a6a7a;
+      --border:     #1e2840;
+      --border2:    #2e3e58;
+      --dw-black:   #0a0c10;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Crimson Text', Georgia, serif;
+      font-size: 17px;
+      line-height: 1.65;
+      min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse at 50% 0%, rgba(100,140,200,0.05) 0%, transparent 60%),
+        url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23c8a44a' fill-opacity='0.018'%3E%3Ccircle cx='40' cy='40' r='1'/%3E%3Ccircle cx='0' cy='0' r='1'/%3E%3Ccircle cx='80' cy='0' r='1'/%3E%3Ccircle cx='0' cy='80' r='1'/%3E%3Ccircle cx='80' cy='80' r='1'/%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    /* ─── HEADER ───────────────────────────────────────────────────────── */
+    header {
+      position: relative;
+      text-align: center;
+      padding: 48px 20px 36px;
+      border-bottom: 1px solid var(--border2);
+      background: linear-gradient(180deg, rgba(60,80,140,0.10) 0%, transparent 100%);
+      overflow: hidden;
+    }
+
+    header::before, header::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, transparent, var(--silver-dim), transparent);
+    }
+    header::before { left: 20px; }
+    header::after  { right: 20px; }
+
+    .header-icon {
+      font-size: 52px;
+      line-height: 1;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 0 14px rgba(155,180,220,0.4));
+    }
+
+    .header-subtitle {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--silver-dim);
+      margin-bottom: 10px;
+    }
+
+    .header-title {
+      font-family: 'Cinzel Decorative', serif;
+      font-size: clamp(22px, 4vw, 40px);
+      font-weight: 700;
+      color: #dde8f8;
+      text-shadow:
+        0 0 24px rgba(120,160,220,0.5),
+        0 0 48px rgba(100,140,200,0.25),
+        2px 2px 0 rgba(0,0,0,0.9);
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+    }
+
+    .header-campaign-label {
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      color: var(--red-bright);
+      margin-bottom: 14px;
+    }
+
+    .header-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .header-divider-line {
+      height: 1px;
+      width: 120px;
+      background: linear-gradient(90deg, transparent, var(--silver-dim));
+    }
+    .header-divider-line:last-child {
+      background: linear-gradient(90deg, var(--silver-dim), transparent);
+    }
+
+    .header-divider-diamond {
+      width: 8px; height: 8px;
+      background: var(--silver);
+      transform: rotate(45deg);
+    }
+
+    .header-meta {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--text-dim);
+      margin-top: 14px;
+    }
+
+    /* ─── NAVIGATION ───────────────────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(8,10,12,0.97);
+      border-bottom: 1px solid var(--border2);
+      backdrop-filter: blur(6px);
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .nav-btn {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      padding: 16px 24px 13px;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .nav-btn:hover { color: var(--silver); }
+    .nav-btn.active {
+      color: #dde8f8;
+      border-bottom-color: var(--silver);
+    }
+    .nav-btn.disabled {
+      color: var(--text-dim);
+      opacity: 0.45;
+      cursor: default;
+    }
+
+    /* ─── MAIN LAYOUT ──────────────────────────────────────────────────── */
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+    }
+
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* ─── SECTION HEADER ───────────────────────────────────────────────── */
+    .section-heading {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    .section-heading-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border2), transparent);
+    }
+
+    .section-heading h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: var(--silver);
+      white-space: nowrap;
+    }
+
+    /* ─── CARD ─────────────────────────────────────────────────────────── */
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-top: 2px solid var(--border2);
+      padding: 24px 28px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 20px; right: 20px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(155,180,220,0.2), transparent);
+    }
+
+    .card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: #dde8f8;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .card-meta {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 14px;
+    }
+
+    .card p { color: var(--text); margin-bottom: 10px; }
+    .card p:last-child { margin-bottom: 0; }
+
+    /* ─── STATUS STRIP ─────────────────────────────────────────────────── */
+    .status-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      margin-bottom: 32px;
+    }
+
+    .status-stat {
+      background: var(--panel);
+      text-align: center;
+      padding: 16px 10px;
+    }
+
+    .status-stat-num {
+      font-family: 'Cinzel', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--silver);
+      line-height: 1;
+    }
+
+    .status-stat-label {
+      font-family: 'Cinzel', serif;
+      font-size: 8px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-top: 6px;
+    }
+
+    /* ─── LORE TIMELINE ────────────────────────────────────────────────── */
+    .lore-entry {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 0 20px;
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    .lore-entry::after {
+      content: '';
+      position: absolute;
+      left: 80px;
+      top: 0; bottom: -28px;
+      width: 1px;
+      background: var(--border2);
+    }
+    .lore-entry:last-child::after { display: none; }
+
+    .lore-date {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--silver-dim);
+      text-align: right;
+      padding-top: 4px;
+      line-height: 1.4;
+    }
+
+    .lore-dot {
+      position: absolute;
+      left: calc(80px + 10px);
+      top: 6px;
+      width: 10px; height: 10px;
+      background: var(--silver);
+      transform: rotate(45deg);
+      border: 1px solid #dde8f8;
+    }
+
+    .lore-body { padding-left: 30px; }
+
+    .lore-body h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #dde8f8;
+      margin-bottom: 8px;
+    }
+
+    .lore-tag {
+      display: inline-block;
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      margin-right: 6px;
+      margin-bottom: 10px;
+      border: 1px solid;
+    }
+
+    .tag-deathwatch { color: #9aaabb; border-color: #2e3e58; background: rgba(100,140,200,0.08); }
+    .tag-xenos      { color: #27ae60; border-color: #1a6640; background: rgba(39,174,96,0.08); }
+    .tag-classified { color: var(--red-bright); border-color: var(--red); background: rgba(139,26,26,0.08); }
+    .tag-intel      { color: var(--gold); border-color: var(--gold-dim); background: rgba(200,164,74,0.08); }
+
+    /* ─── THREAT LEVEL INDICATORS ──────────────────────────────────────── */
+    .threat-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .threat-label {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      width: 80px;
+    }
+
+    .threat-pips {
+      display: flex;
+      gap: 4px;
+    }
+
+    .pip {
+      width: 14px; height: 6px;
+    }
+
+    .pip-filled-low    { background: #27ae60; }
+    .pip-filled-mid    { background: var(--gold); }
+    .pip-filled-high   { background: var(--red-bright); }
+    .pip-empty         { background: var(--border2); }
+    .threat-text {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--red-bright);
+    }
+
+    /* ─── MISSION BRIEFINGS ────────────────────────────────────────────── */
+    .mission-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .mission-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 0;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .mission-card:hover { border-color: var(--border2); }
+
+    .mission-status-bar { height: 4px; }
+    .status-upcoming  { background: linear-gradient(90deg, #9aaabb, #dde8f8); }
+    .status-active    { background: linear-gradient(90deg, #c8a44a, #e8c96a); }
+    .status-complete  { background: linear-gradient(90deg, #2c2c2c, #444); }
+    .status-classified{ background: linear-gradient(90deg, #8b1a1a, #c0392b); }
+
+    .mission-inner { padding: 20px 22px; }
+
+    .mission-number {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+
+    .mission-title {
+      font-family: 'Cinzel', serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: #dde8f8;
+      margin-bottom: 10px;
+    }
+
+    .mission-badge {
+      display: inline-block;
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      margin-bottom: 12px;
+      border: 1px solid;
+    }
+
+    .badge-upcoming    { color: var(--silver); border-color: var(--silver-dim); background: rgba(100,140,200,0.1); }
+    .badge-active      { color: var(--gold); border-color: var(--gold-dim); background: rgba(200,164,74,0.1); }
+    .badge-complete    { color: var(--text-dim); border-color: #333; background: rgba(60,60,60,0.2); }
+    .badge-classified  { color: var(--red-bright); border-color: var(--red); background: rgba(139,26,26,0.15); }
+
+    .mission-desc { font-size: 15px; color: var(--text); margin-bottom: 14px; }
+
+    .mission-objectives {
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+      margin-top: 12px;
+    }
+
+    .mission-objectives-label {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--silver-dim);
+      margin-bottom: 8px;
+    }
+
+    .objective {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: var(--text);
+    }
+    .obj-icon { color: var(--silver-dim); font-size: 10px; margin-top: 4px; }
+    .obj-done { color: var(--text-dim); text-decoration: line-through; }
+    .obj-done .obj-icon { color: #27ae60; }
+
+    /* ─── INTEL BOX ────────────────────────────────────────────────────── */
+    .intel-box {
+      background: rgba(139,26,26,0.08);
+      border: 1px solid var(--red);
+      border-left: 3px solid var(--red-bright);
+      padding: 14px 18px;
+      margin: 14px 0;
+    }
+
+    .intel-box-label {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--red-bright);
+      margin-bottom: 6px;
+    }
+
+    .intel-box p { color: var(--text); font-size: 15px; }
+
+    /* ─── MAP ──────────────────────────────────────────────────────────── */
+    .map-wrapper {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-top: 2px solid var(--border2);
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+
+    .map-title {
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--silver);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .map-svg-container {
+      width: 100%;
+      overflow: hidden;
+      border: 1px solid var(--border2);
+    }
+
+    .territory-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      margin-top: 20px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .legend-dot { width: 12px; height: 12px; }
+
+    .territory-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+    }
+
+    .territory-table th {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--silver-dim);
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border2);
+    }
+
+    .territory-table td {
+      padding: 10px 14px;
+      font-size: 15px;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .territory-table tr:last-child td { border-bottom: none; }
+    .territory-table tr:hover td { background: rgba(100,140,200,0.04); }
+
+    .status-active-txt  { color: var(--gold); }
+    .status-secure      { color: #27ae60; }
+    .status-compromised { color: var(--red-bright); }
+    .status-unknown     { color: var(--text-dim); }
+
+    /* ─── CHARACTER DOSSIERS PLACEHOLDER ───────────────────────────────── */
+    .coming-soon {
+      text-align: center;
+      padding: 80px 20px;
+      border: 1px dashed var(--border2);
+      background: var(--panel);
+      margin-bottom: 20px;
+    }
+
+    .coming-soon-icon {
+      font-size: 48px;
+      opacity: 0.3;
+      margin-bottom: 20px;
+    }
+
+    .coming-soon h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 14px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--silver-dim);
+      margin-bottom: 12px;
+    }
+
+    .coming-soon p {
+      font-size: 15px;
+      color: var(--text-dim);
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    /* ─── SEARCH BAR ───────────────────────────────────────────────────── */
+    .search-wrap {
+      background: rgba(8,10,12,0.97);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+    .search-input-el {
+      width: 100%;
+      max-width: 560px;
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      color: var(--text);
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      padding: 9px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-input-el::placeholder { color: var(--text-dim); }
+    .search-input-el:focus { border-color: var(--silver-dim); }
+
+    /* ─── LINK CARD GRID ────────────────────────────────────────────────── */
+    .link-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .link-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--border2);
+      padding: 20px 22px 18px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.2s, background 0.2s;
+      cursor: pointer;
+    }
+    .link-card:hover { background: #111318; }
+    .link-card:hover .lc-title { color: var(--gold-light); }
+
+    .lc-icon  { display: block; width: 38px; height: 38px; margin-bottom: 12px; }
+    .lc-icon svg { display: block; width: 100%; height: 100%; }
+
+    .lc-title {
+      font-family: 'Cinzel', serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: #dde8f8;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+      transition: color 0.2s;
+    }
+    .lc-meta {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+    .lc-desc {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.55;
+      flex: 1;
+      margin-bottom: 14px;
+    }
+    .lc-cta {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--silver-dim);
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+      transition: color 0.2s;
+    }
+    .link-card:hover .lc-cta { color: var(--silver); }
+
+    /* Accent top-border colours */
+    .ac-gold   { border-top-color: var(--gold); }
+    .ac-blue   { border-top-color: #4a7ec0; }
+    .ac-red    { border-top-color: var(--red-bright); }
+    .ac-green  { border-top-color: #27ae60; }
+    .ac-purple { border-top-color: #7a4ea8; }
+    .ac-teal   { border-top-color: #2a9898; }
+    .ac-silver { border-top-color: var(--silver); }
+    .ac-orange { border-top-color: #c06030; }
+    .ac-bone   { border-top-color: #c8b870; }
+
+    /* ─── SEARCH NO RESULTS ─────────────────────────────────────────────── */
+    .no-results-msg {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-dim);
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      border: 1px dashed var(--border2);
+      background: var(--panel);
+    }
+
+    /* ─── SCROLLBAR ────────────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--silver-dim); }
+
+    /* ─── FOOTER ───────────────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 20px;
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    /* ─── RESPONSIVE ───────────────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .lore-entry { grid-template-columns: 60px 1fr; }
+      .mission-grid { grid-template-columns: 1fr; }
+      .nav-btn { padding: 14px 14px 11px; font-size: 10px; letter-spacing: 2px; }
+    }
+
+    /* ─── KILL TEAM ROSTER v2 ──────────────────────────────────── */
+    .roster-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    .roster-add-btn { background: linear-gradient(135deg, #1a2438 0%, #0f1118 100%); border: 1px solid var(--gold-dim); color: var(--gold); font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; padding: 9px 20px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
+    .roster-add-btn:hover { border-color: var(--gold); color: var(--gold-light); background: linear-gradient(135deg, #1e2c44 0%, #141720 100%); }
+    .roster-add-btn svg { width: 14px; height: 14px; }
+    .gist-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .gist-toggle { background: transparent; border: 1px solid var(--border2); color: var(--silver-dim); font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 2px; padding: 6px 12px; cursor: pointer; transition: all 0.2s; }
+    .gist-toggle:hover { border-color: var(--border2); color: var(--silver); }
+    .sync-pill { display: flex; align-items: center; gap: 5px; font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 1px; color: var(--text-dim); }
+    .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text-dim); }
+    .sync-dot.synced  { background: #3c8a4a; }
+    .sync-dot.saving  { background: var(--gold-dim); animation: pulse 1s infinite; }
+    .sync-dot.error   { background: var(--red-bright); }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    .gist-panel { background: var(--bg2); border: 1px solid var(--border); padding: 14px 18px; margin-bottom: 16px; display: none; gap: 12px; flex-direction: column; }
+    .gist-panel.open { display: flex; }
+    .gist-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .gist-label { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 2px; color: var(--silver-dim); text-transform: uppercase; white-space: nowrap; min-width: 80px; }
+    .gist-input { flex: 1; background: #080a0c; border: 1px solid var(--border); color: var(--text); font-family: 'Crimson Text', serif; font-size: 14px; padding: 5px 8px; outline: none; min-width: 200px; }
+    .gist-input:focus { border-color: var(--border2); }
+    .gist-btn { background: var(--border); border: none; color: var(--silver); font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 1px; padding: 6px 14px; cursor: pointer; }
+    .gist-btn:hover { background: var(--border2); color: var(--gold); }
+    .gist-note { font-size: 12px; color: var(--text-dim); }
+    /* ─── Operative summary cards ─── */
+    .roster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .op-card { background: var(--panel); border: 1px solid var(--border); border-top: 3px solid var(--gold-dim); padding: 16px; display: flex; flex-direction: column; gap: 12px; position: relative; transition: border-color 0.2s; }
+    .op-card:hover { border-color: var(--border2); border-top-color: var(--gold); }
+    .op-card-top { display: flex; align-items: center; gap: 12px; }
+    .op-card-emblem { width: 48px; height: 48px; flex-shrink: 0; color: var(--gold); display: flex; align-items: center; justify-content: center; border: 1px solid var(--gold-dim); background: #080a0c; padding: 5px; filter: drop-shadow(0 0 4px rgba(200,164,74,0.35)); }
+    .op-card-emblem svg { width: 100%; height: 100%; }
+    .op-card-meta { flex: 1; min-width: 0; }
+    .op-card-name { font-family: 'Cinzel', serif; font-size: 13px; font-weight: 700; color: #dde8f8; letter-spacing: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .op-card-sub  { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 1px; color: var(--silver-dim); margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .op-card-stats { display: flex; gap: 8px; align-items: center; }
+    .op-stat-chip { background: #080a0c; border: 1px solid var(--border); padding: 3px 7px; display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 38px; }
+    .op-stat-val  { font-family: 'Cinzel', serif; font-size: 13px; font-weight: 700; color: var(--text); }
+    .op-stat-lbl  { font-family: 'Cinzel', serif; font-size: 8px; letter-spacing: 1px; color: var(--text-dim); text-transform: uppercase; }
+    .op-hp-bar    { flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+    .op-hp-fill   { height: 100%; background: var(--red-bright); border-radius: 2px; transition: width 0.3s; }
+    .op-card-sheet-tag { font-family: 'Cinzel', serif; font-size: 8px; letter-spacing: 1px; color: var(--text-dim); background: #080a0c; border: 1px solid var(--border); padding: 2px 7px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+    .op-card-actions { display: flex; gap: 8px; align-items: center; }
+    .op-view-btn { flex: 1; background: transparent; border: 1px solid var(--border2); color: var(--silver); font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 2px; padding: 6px 10px; cursor: pointer; transition: all 0.2s; }
+    .op-view-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
+    .op-del-btn { background: transparent; border: 1px solid var(--border); color: var(--text-dim); font-size: 13px; width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+    .op-del-btn:hover { border-color: var(--red-bright); color: var(--red-bright); }
+    .op-empty-state { grid-column: 1 / -1; text-align: center; padding: 48px 20px; color: var(--text-dim); font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 3px; border: 1px dashed var(--border); }
+    /* ─── Add Operative Modal ─── */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 900; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s; overflow-y: auto; padding: 20px; }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .add-modal { background: var(--bg2); border: 1px solid var(--border2); border-top: 3px solid var(--gold-dim); padding: 28px 32px; width: 500px; max-width: 95vw; }
+    .add-modal-title { font-family: 'Cinzel', serif; font-size: 14px; font-weight: 700; color: var(--gold); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 20px; }
+    .add-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; }
+    .add-field label { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 2px; color: var(--silver-dim); text-transform: uppercase; }
+    .add-field input, .add-field select { background: #080a0c; border: 1px solid var(--border); color: var(--text); font-family: 'Cinzel', serif; font-size: 12px; padding: 8px 10px; outline: none; width: 100%; }
+    .add-field input:focus, .add-field select:focus { border-color: var(--gold-dim); }
+    .add-field select option { background: #0e1014; }
+    /* ─── Sheet picker ─── */
+    .sheet-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 2px; }
+    .sheet-pick-card { background: #080a0c; border: 1px solid var(--border); padding: 10px 12px; cursor: pointer; transition: all 0.2s; }
+    .sheet-pick-card:hover { border-color: var(--border2); }
+    .sheet-pick-card.selected { border-color: var(--gold-dim); background: #0d1020; }
+    .sheet-pick-name { font-family: 'Cinzel', serif; font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--gold); margin-bottom: 4px; }
+    .sheet-pick-card.selected .sheet-pick-name { color: var(--gold-light); }
+    .sheet-pick-desc { font-size: 11px; color: var(--text-dim); line-height: 1.4; }
+    .add-modal-btns { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
+    .add-cancel-btn { background: transparent; border: 1px solid var(--border); color: var(--silver-dim); font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 2px; padding: 8px 18px; cursor: pointer; }
+    .add-cancel-btn:hover { border-color: var(--border2); color: var(--silver); }
+    .add-create-btn { background: linear-gradient(135deg, #1e2c44, #141720); border: 1px solid var(--gold-dim); color: var(--gold); font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 2px; padding: 8px 18px; cursor: pointer; }
+    .add-create-btn:hover { border-color: var(--gold); color: var(--gold-light); }
+    /* ─── Sheet iframe overlay ─── */
+    .sheet-overlay { position: fixed; inset: 0; background: #040609; z-index: 1000; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+    .sheet-overlay.open { opacity: 1; pointer-events: all; }
+    .iframe-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0 16px; height: 44px; background: #080a0e; border-bottom: 1px solid var(--border2); flex-shrink: 0; gap: 12px; }
+    .iframe-op-name { font-family: 'Cinzel', serif; font-size: 12px; font-weight: 700; letter-spacing: 2px; color: var(--gold); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .iframe-toolbar-right { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+    .iframe-hint { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 1px; color: var(--text-dim); }
+    .sheet-close-btn { background: transparent; border: 1px solid var(--border2); color: var(--silver-dim); font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 1px; padding: 6px 14px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .sheet-close-btn:hover { color: var(--gold); border-color: var(--gold-dim); }
+    #sheet-iframe { flex: 1; width: 100%; border: none; background: #fff; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-icon">✠</div>
+  <div class="header-subtitle">Kill Team: Jericho &nbsp;·&nbsp; Operational Briefing</div>
+  <div class="header-title">The Kethis Inquiry</div>
+  <div class="header-campaign-label">++ Mission I &nbsp;·&nbsp; Mataras II &nbsp;·&nbsp; Genestealer Cult Threat — Extremis ++</div>
+  <div class="header-divider">
+    <div class="header-divider-line"></div>
+    <div class="header-divider-diamond"></div>
+    <div class="header-divider-line"></div>
+  </div>
+  <div class="header-meta">
+    <a href="warhammer_portal.html" style="color:var(--gold-dim);font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;text-decoration:none;border-bottom:1px solid var(--gold-dim);padding-bottom:1px;"
+       onmouseover="this.style.color='var(--gold)';this.style.borderColor='var(--gold)'"
+       onmouseout="this.style.color='var(--gold-dim)';this.style.borderColor='var(--gold-dim)'">&#8592; Campaign Portal</a>
+    &nbsp;&nbsp;·&nbsp;&nbsp; Watch Fortress Erioch &nbsp;·&nbsp; Ordo Xenos &nbsp;·&nbsp;
+    <span style="color:var(--gold);letter-spacing:1px;">● ACTIVE — DEPLOYING</span>
+  </div>
+</header>
+
+<main style="max-width:900px;margin:0 auto;padding:32px 20px 80px;">
+
+  <!-- ══ MISSION STATUS BAR ══ -->
+  <div style="background:var(--panel);border:1px solid var(--border2);border-top:3px solid var(--gold);border-radius:4px;padding:20px 28px;margin-bottom:32px;display:flex;flex-wrap:wrap;gap:20px;align-items:center;">
+    <div>
+      <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:4px;color:var(--text-dim);margin-bottom:4px;">MISSION REF</div>
+      <div style="font-family:'Cinzel',serif;font-size:14px;color:var(--gold);font-weight:700;letter-spacing:2px;">MISSION I — MATARAS II</div>
+    </div>
+    <div style="width:1px;height:40px;background:var(--border2);"></div>
+    <div>
+      <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:4px;color:var(--text-dim);margin-bottom:4px;">STATUS</div>
+      <span class="mission-badge badge-active">Active — Deploying</span>
+    </div>
+    <div style="width:1px;height:40px;background:var(--border2);"></div>
+    <div>
+      <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:4px;color:var(--text-dim);margin-bottom:4px;">THEATRE</div>
+      <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--silver);letter-spacing:1px;">Jericho Reach &nbsp;·&nbsp; Agri-World Mataras II</div>
+    </div>
+    <div style="width:1px;height:40px;background:var(--border2);"></div>
+    <div>
+      <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:4px;color:var(--text-dim);margin-bottom:4px;">THREAT CLASS</div>
+      <div style="font-family:'Cinzel',serif;font-size:12px;color:var(--red-bright);letter-spacing:1px;">Genestealer Cult — EXTREMIS</div>
+    </div>
+  </div>
+
+  <!-- ══ OBJECTIVES ══ -->
+  <div class="section-heading">
+    <h2>Mission Objectives</h2>
+    <div class="section-heading-line"></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px;">
+    <div class="card">
+      <div class="card-title">Primary Objectives</div>
+      <div class="card-meta">Mandatory — Inquisitorial Authority</div>
+      <div class="mission-objectives" style="margin-top:12px;">
+        <div class="objective"><span class="obj-icon">◇</span> Make contact with Planetary Governor Theris Malt</div>
+        <div class="objective"><span class="obj-icon">◇</span> Investigate Kethis Pater-Hold — identify cult activity</div>
+        <div class="objective"><span class="obj-icon">◇</span> Locate and assess the Patriarch or Magus (if present)</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Secondary Objectives</div>
+      <div class="card-meta">Discretionary — Watch Commander Mordigael</div>
+      <div class="mission-objectives" style="margin-top:12px;">
+        <div class="objective"><span class="obj-icon">◇</span> Recover the census arbiter's records</div>
+        <div class="objective"><span class="obj-icon">◇</span> Minimise casualties to uninfected civilians</div>
+        <div class="objective"><span class="obj-icon">◇</span> Secure evidence for Inquisitorial record</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ WORLD PROFILE ══ -->
+  <div class="section-heading">
+    <h2>Theatre — Mataras II</h2>
+    <div class="section-heading-line"></div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-title">Mataras II — World Profile</div>
+    <div class="card-meta">Jericho Reach &nbsp;·&nbsp; Sub-Sector Cellebos &nbsp;·&nbsp; Agri-World &nbsp;·&nbsp; Pop. Est. 320,000</div>
+    <p>Mataras II is a modest agri-world that was resettled early in the Achilus Crusade's push into the Jericho Reach. Its wide, flat plains and temperate climate made it an ideal candidate for rapid agricultural recovery — within two decades of resettlement it was providing grain shipments to sustain Crusade forces deeper in the Reach.</p>
+    <p>The population is spread thin across vast farming collectives called <em>Pater-Holds</em>, each governed by a hereditary overseer family. Communication between the Pater-Holds is irregular; it is not unusual for weeks to pass between reports to the planetary governor. This isolation, the Inquisition now suspects, has been a feature — not a flaw — of whoever has been patient enough to exploit it.</p>
+    <div class="intel-box">
+      <div class="intel-box-label">++ Intelligence Assessment — Watch Fortress Erioch ++</div>
+      <p>Three cycles ago, resupply vessels arriving at Mataras II reported anomalous behaviour among the local population. Labourers at the Kethis Pater-Hold refused standard medicae screening. An Administratum census arbiter was found dead under circumstances the local Arbites recorded as "misadventure." The planetary tithe — always delivered on time — has been delayed twice without explanation.</p>
+    </div>
+    <p>On its own, any of these details might be dismissed. Together, they form a pattern the Ordo Xenos has seen before. Watch Commander Mordigael has authorised the deployment of a Kill Team to investigate and, if the threat is confirmed, purge it. Collateral damage to the agricultural infrastructure is to be minimized, but it is a secondary priority over the absolute extermination of the xenos threat if one is confirmed to be present.</p>
+  </div>
+
+  <!-- ══ THREAT ASSESSMENT ══ -->
+  <div class="section-heading" style="margin-top:40px;">
+    <h2>Threat Assessment</h2>
+    <div class="section-heading-line"></div>
+  </div>
+
+  <div class="card" style="margin-bottom:32px;">
+    <div class="card-title">Genestealer Cults — Enemy Profile</div>
+    <div class="card-meta">Ordo Xenos Ref: GS-VII &nbsp;·&nbsp; Tyranid Vanguard Classification</div>
+    <p>A Genestealer Cult is among the most insidious weapons in the Tyranid arsenal — a slow infection that does not announce itself with claws and ichor, but with a handshake, a marriage, a child born bearing the mark of the xenos buried beneath human skin. It begins with a single Genestealer, or a small brood, making contact with an isolated human population. What follows is generational.</p>
+    <p>The infected become devoted, their minds bound to the Patriarch — the eldest and most powerful of the brood — through a psychic gestalt the Inquisition calls the <em>Broodmind</em>. They do not feel enslaved. They feel chosen. Called. Part of something ancient and inevitable. They pass this gift to their children. And their children to theirs.</p>
+    <div class="intel-box">
+      <div class="intel-box-label">++ Warning — Deathwatch Standing Protocol ++</div>
+      <p>Do not negotiate. Do not accept surrender that cannot be independently verified as genetically clean. Do not allow infected individuals to leave the operational zone. The Broodmind communicates across distance. If a single host escapes to warn the Patriarch, the cult will go to ground and disperse. Thoroughness is not cruelty. It is necessity.</p>
+    </div>
+    <p>By the time a cult is visible enough to detect, it is almost always already deeply embedded. The faithful who appear human — <em>Neophytes and Acolytes</em>, their xenos heritage suppressed but present — will outnumber the obviously aberrant. The Kill Team should assume that any individual on Mataras II may be compromised until proven otherwise by medicae screening.</p>
+  </div>
+
+  <!-- ══ OPERATIONAL CHRONICLE ══ -->
+  <div class="section-heading">
+    <h2>Operational Chronicle</h2>
+    <div class="section-heading-line"></div>
+  </div>
+
+  <div class="lore-entry">
+    <div class="lore-date">+++ Pre-<br/>Deployment +++</div>
+    <div class="lore-dot"></div>
+    <div class="lore-body">
+      <h3>Kill Team Assembled at Watch Fortress Erioch</h3>
+      <span class="lore-tag tag-deathwatch">Deathwatch</span>
+      <p>Watch Commander Mordigael has called the Kill Team to the fortress's Strategium. Each Battle-Brother has been drawn from their Chapter by the black ships of the Deathwatch and brought to Erioch to swear the Long Vigil. Their first deployment together will be Mataras II. They are strangers to one another. They will not remain so.</p>
+    </div>
+  </div>
+
+  <div class="lore-entry">
+    <div class="lore-date">+++ Future<br/>Entries +++</div>
+    <div class="lore-dot" style="background: var(--border2);"></div>
+    <div class="lore-body">
+      <h3>Chronicle Continues In-Session</h3>
+      <span class="lore-tag tag-classified">Pending</span>
+      <p>Subsequent entries will be recorded here as the mission progresses. The Watch Commander's orders are clear: gather intelligence first. Then, if the threat is confirmed — cleanse.</p>
+    </div>
+  </div>
+
+  <!-- ══ OPERATIONAL MAP ══ -->
+  <div class="section-heading" style="margin-top:40px;">
+    <h2>Mataras II — Operational Zone</h2>
+    <div class="section-heading-line"></div>
+  </div>
+
+  <div class="map-wrapper">
+    <div class="map-title">++ Mataras II — Pater-Hold Disposition Map — Mission I ++</div>
+    <div class="map-svg-container">
+      <svg viewBox="0 0 800 460" xmlns="http://www.w3.org/2000/svg" width="100%" style="display:block; background: #1a2414;">
+        <rect width="800" height="460" fill="#1c2716"/>
+        <defs>
+          <pattern id="farmgrid" width="50" height="50" patternUnits="userSpaceOnUse">
+            <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#243020" stroke-width="0.8"/>
+          </pattern>
+        </defs>
+        <rect width="800" height="460" fill="url(#farmgrid)"/>
+        <path d="M 0,180 Q 150,190 280,210 Q 360,225 480,218 Q 580,212 700,240 L 800,248" fill="none" stroke="#3a6898" stroke-width="7" opacity="0.9"/>
+        <path d="M 0,182 Q 150,192 280,212 Q 360,228 480,220 Q 580,215 700,243 L 800,251" fill="none" stroke="#5a88b8" stroke-width="3" opacity="0.5"/>
+        <text x="350" y="202" font-family="Cinzel, serif" font-size="10" fill="#7aaad8" letter-spacing="2" font-weight="600">KETHIS RIVER</text>
+        <path d="M 100,50 L 140,230 L 280,360 L 480,400 L 680,380" fill="none" stroke="#5a5030" stroke-width="3" stroke-dasharray="8,4"/>
+        <path d="M 400,50 L 380,210 L 330,350" fill="none" stroke="#4a4428" stroke-width="2" stroke-dasharray="6,3"/>
+        <path d="M 600,50 L 580,215 L 500,340" fill="none" stroke="#4a4428" stroke-width="2" stroke-dasharray="6,3"/>
+        <text x="255" y="148" font-family="Cinzel, serif" font-size="8" fill="#7a7050" letter-spacing="1" transform="rotate(-72, 255, 148)">IMPERIAL ROAD</text>
+        <rect x="50" y="60" width="72" height="52" fill="#1e3020" stroke="#5a8050" stroke-width="2" rx="2"/>
+        <line x1="50" y1="86" x2="122" y2="86" stroke="#5a8050" stroke-width="0.8"/>
+        <line x1="86" y1="60" x2="86" y2="112" stroke="#5a8050" stroke-width="0.8"/>
+        <text x="86" y="81" text-anchor="middle" font-family="Cinzel, serif" font-size="8" fill="#8ab890" letter-spacing="0">LANDING PAD ✈</text>
+        <text x="86" y="126" text-anchor="middle" font-family="Cinzel, serif" font-size="10" fill="#8ab890" letter-spacing="1" font-weight="600">SPACEPORT</text>
+        <text x="86" y="140" text-anchor="middle" font-family="Cinzel, serif" font-size="9" fill="#6a9070" letter-spacing="1">MATARAS PRIME</text>
+        <polygon points="340,58 382,58 392,102 330,102" fill="#1e3020" stroke="#5a8050" stroke-width="2"/>
+        <text x="361" y="84" text-anchor="middle" font-family="Cinzel, serif" font-size="9" fill="#8ab890" letter-spacing="0">GOV. PALACE</text>
+        <text x="361" y="118" text-anchor="middle" font-family="Cinzel, serif" font-size="11" fill="#8ab890" letter-spacing="1" font-weight="600">GOVERNOR'S SEAT</text>
+        <text x="361" y="132" text-anchor="middle" font-family="Cinzel, serif" font-size="9" fill="#6a9070" letter-spacing="1">MATARAS PRIME</text>
+        <circle cx="400" cy="300" r="46" fill="rgba(200,164,74,0.10)" stroke="rgba(200,164,74,0.3)" stroke-width="1"/>
+        <rect x="358" y="268" width="84" height="62" fill="#28240a" stroke="#e8c96a" stroke-width="2.5" rx="2"/>
+        <text x="400" y="295" text-anchor="middle" font-family="Cinzel, serif" font-size="10" fill="#e8c96a" letter-spacing="1" font-weight="600">⚠ KETHIS</text>
+        <text x="400" y="312" text-anchor="middle" font-family="Cinzel, serif" font-size="9" fill="#e8c96a" letter-spacing="1">PATER-HOLD</text>
+        <text x="400" y="352" text-anchor="middle" font-family="Cinzel, serif" font-size="10" fill="#e8c96a" letter-spacing="1" font-weight="600">⚠ INVESTIGATION SITE</text>
+        <rect x="118" y="268" width="64" height="46" fill="#1e2e18" stroke="#6a9060" stroke-width="1.5" rx="1"/>
+        <text x="150" y="289" text-anchor="middle" font-family="Cinzel, serif" font-size="10" fill="#90b880" letter-spacing="0" font-weight="600">ALDRIC</text>
+        <text x="150" y="305" text-anchor="middle" font-family="Cinzel, serif" font-size="9" fill="#78a068" letter-spacing="0">HOLD</text>
+        <text x="150" y="328" text-anchor="middle" font-family="Cinzel, serif" font-size="9" fill="#78a068" letter-spacing="1">PATER-HOLD</text>
+        <rect x="578" y="178" width="64" height="46" fill="#1e2e18" stroke="#6a9060" stroke-width="1.5" rx="1"/>
+        <text x="610" y="199" text-anchor="middle" font-family="Cinzel, serif" font-size="10" fill="#90b880" letter-spacing="0" font-weight="600">VARATH</text>
+        <text x="610" y="215" text-anchor="middle" font-family="Cinzel, serif" font-size="9" fill="#78a068" letter-spacing="0">HOLD</text>
+        <text x="610" y="238" text-anchor="middle" font-family="Cinzel, serif" font-size="9" fill="#78a068" letter-spacing="1">PATER-HOLD</text>
+        <rect x="558" y="338" width="64" height="46" fill="#1e2e18" stroke="#6a9060" stroke-width="1.5" rx="1"/>
+        <text x="590" y="359" text-anchor="middle" font-family="Cinzel, serif" font-size="10" fill="#90b880" letter-spacing="0" font-weight="600">OSSIAN</text>
+        <text x="590" y="375" text-anchor="middle" font-family="Cinzel, serif" font-size="9" fill="#78a068" letter-spacing="0">HOLD</text>
+        <text x="590" y="398" text-anchor="middle" font-family="Cinzel, serif" font-size="9" fill="#78a068" letter-spacing="1">PATER-HOLD</text>
+        <rect x="218" y="368" width="64" height="46" fill="#1e2e18" stroke="#6a9060" stroke-width="1.5" rx="1"/>
+        <text x="250" y="389" text-anchor="middle" font-family="Cinzel, serif" font-size="10" fill="#90b880" letter-spacing="0" font-weight="600">THERON</text>
+        <text x="250" y="405" text-anchor="middle" font-family="Cinzel, serif" font-size="9" fill="#78a068" letter-spacing="0">HOLD</text>
+        <text x="250" y="428" text-anchor="middle" font-family="Cinzel, serif" font-size="9" fill="#78a068" letter-spacing="1">PATER-HOLD</text>
+        <circle cx="210" cy="150" r="13" fill="#18203a" stroke="#5a78b0" stroke-width="2"/>
+        <text x="210" y="155" text-anchor="middle" font-family="Cinzel, serif" font-size="11" fill="#7a9ad8">⚖</text>
+        <text x="210" y="176" text-anchor="middle" font-family="Cinzel, serif" font-size="10" fill="#7a9ad8" letter-spacing="1" font-weight="600">ARBITES POST</text>
+        <g transform="translate(755,50)">
+          <line x1="0" y1="-16" x2="0" y2="16" stroke="#4a6040" stroke-width="1.5"/>
+          <line x1="-16" y1="0" x2="16" y2="0" stroke="#4a6040" stroke-width="1.5"/>
+          <text x="0" y="-20" text-anchor="middle" font-family="Cinzel, serif" font-size="12" fill="#7aaa60" font-weight="600">N</text>
+        </g>
+        <rect x="28" y="370" width="188" height="72" fill="rgba(14,18,32,0.92)" stroke="#3a4a28" stroke-width="1.5"/>
+        <text x="122" y="388" text-anchor="middle" font-family="Cinzel, serif" font-size="9" fill="#6a9a60" letter-spacing="2">CHART LEGEND</text>
+        <rect x="42" y="396" width="10" height="10" fill="#28240a" stroke="#e8c96a" stroke-width="1.5"/>
+        <text x="58" y="405" font-family="Cinzel, serif" font-size="9" fill="#c0b080" letter-spacing="1">Investigation Site</text>
+        <rect x="42" y="414" width="10" height="10" fill="#1e2e18" stroke="#6a9060" stroke-width="1.5"/>
+        <text x="58" y="423" font-family="Cinzel, serif" font-size="9" fill="#c0b080" letter-spacing="1">Pater-Hold</text>
+        <circle cx="48" cy="432" r="6" fill="#18203a" stroke="#5a78b0" stroke-width="1.5"/>
+        <text x="58" y="436" font-family="Cinzel, serif" font-size="9" fill="#c0b080" letter-spacing="1">Arbites Outpost</text>
+      </svg>
+    </div>
+    <div class="territory-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#c8a44a;"></div>Kethis Pater-Hold (Investigation Site)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#2a4020;"></div>Pater-Holds (Status Unknown)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#1a3050;border-radius:2px;"></div>Kethis River</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#2a3050;border-radius:50%;"></div>Arbites Outpost</div>
+    </div>
+  </div>
+
+  <!-- ══ SITE STATUS LOG ══ -->
+  <div class="section-heading" style="margin-top:36px;">
+    <h2>Site Status Log</h2>
+    <div class="section-heading-line"></div>
+  </div>
+
+  <div class="card" style="padding:0;overflow:hidden;">
+    <table class="territory-table">
+      <thead>
+        <tr><th>Location</th><th>Type</th><th>Status</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Mataras Prime — Governor's Seat</td><td>Administrative Centre</td><td class="status-unknown">Unverified</td><td>Kill Team contact point. Governor Malt's loyalty unconfirmed.</td></tr>
+        <tr><td>Kethis Pater-Hold</td><td>Agricultural Collective</td><td class="status-active-txt">⚠ Under Investigation</td><td>Primary anomaly source. Medicae screening refused. Arbiter KIA.</td></tr>
+        <tr><td>Arbites Outpost — Kethis River</td><td>Law Enforcement</td><td class="status-unknown">Non-Responsive</td><td>Last vox contact 14 days ago. Investigate on approach.</td></tr>
+        <tr><td>Aldric Pater-Hold</td><td>Agricultural Collective</td><td class="status-unknown">Unknown</td><td>No anomalies reported. May be uninfected or simply uninvestigated.</td></tr>
+        <tr><td>Varath Pater-Hold</td><td>Agricultural Collective</td><td class="status-unknown">Unknown</td><td>Tithe delayed alongside Kethis. May warrant secondary investigation.</td></tr>
+        <tr><td>Theron Pater-Hold</td><td>Agricultural Collective</td><td class="status-secure">Unaffected (Unconfirmed)</td><td>No anomalies. Tithe delivered on schedule.</td></tr>
+        <tr><td>Ossian Pater-Hold</td><td>Agricultural Collective</td><td class="status-unknown">Unknown</td><td>Remote. No contact attempted yet.</td></tr>
+        <tr><td>Mataras Prime Spaceport</td><td>Transit Infrastructure</td><td class="status-active-txt">Kill Team Insertion Point</td><td>Arrival cover: Administratum inspection party. Maintain until blown.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<footer>
+  ++ Mission I — The Kethis Inquiry &nbsp;·&nbsp; Mataras II &nbsp;·&nbsp; Ordo Xenos — Watch Fortress Erioch &nbsp;·&nbsp; Inquisitorial Clearance Required ++
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Genestealer Cult Bestiary — Warhammer 40K × D&D 5E Homebrew</title>
+<style>
+  :root {
+    --dark-red: #58180d;
+    --gold: #c9a227;
+    --parchment: #fdf5e6;
+    --parchment-dark: #f0ddb0;
+    --parchment-mid: #f5ead0;
+    --ink: #1a0a00;
+    --body-bg: #dcc99a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Palatino Linotype', Palatino, 'Book Antiqua', serif;
+    background: var(--body-bg);
+    color: var(--ink);
+    padding: 20px;
+  }
+
+  /* ── Cover ── */
+  .cover {
+    background: var(--dark-red);
+    color: var(--parchment);
+    text-align: center;
+    padding: 60px 40px;
+    max-width: 860px;
+    margin: 0 auto 40px;
+    border: 4px solid var(--gold);
+    border-radius: 4px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.5);
+  }
+  .cover h1 { font-size: 2.6em; letter-spacing: .08em; margin-bottom: 8px; }
+  .cover h2 { font-size: 1.2em; font-weight: normal; font-style: italic; color: var(--gold); margin-bottom: 20px; }
+  .cover p  { font-size: .95em; line-height: 1.7; color: #e8d8b4; max-width: 600px; margin: 0 auto; }
+
+  /* ── Table of Contents ── */
+  .toc {
+    background: var(--parchment);
+    border: 2px solid var(--gold);
+    border-top: 4px solid var(--dark-red);
+    max-width: 860px;
+    margin: 0 auto 40px;
+    padding: 24px 30px;
+    border-radius: 4px;
+  }
+  .toc h2 { color: var(--dark-red); font-size: 1.4em; border-bottom: 2px solid var(--gold); padding-bottom: 8px; margin-bottom: 16px; }
+  .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 30px; }
+  .toc-entry { display: flex; justify-content: space-between; font-size: .9em; padding: 3px 0; border-bottom: 1px dotted #c9a22755; }
+  .toc-entry .name { color: var(--ink); }
+  .toc-entry .cr   { color: var(--dark-red); font-weight: bold; font-size: .85em; }
+
+  /* ── Section dividers ── */
+  .cr-section-header {
+    max-width: 860px;
+    margin: 30px auto 10px;
+    background: var(--dark-red);
+    color: var(--gold);
+    padding: 6px 16px;
+    font-size: 1em;
+    font-weight: bold;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    border-radius: 3px;
+  }
+
+  /* ── Creature entry ── */
+  .creature-entry {
+    max-width: 860px;
+    margin: 0 auto 36px;
+  }
+
+  /* Description block */
+  .description {
+    background: var(--parchment-mid);
+    border-left: 4px solid var(--dark-red);
+    border-right: 1px solid var(--gold);
+    border-top: 1px solid var(--gold);
+    padding: 14px 18px;
+    font-size: .93em;
+    line-height: 1.7;
+    color: #2a0e00;
+  }
+  .description h3 {
+    color: var(--dark-red);
+    font-size: 1.15em;
+    margin-bottom: 6px;
+    letter-spacing: .04em;
+  }
+  .description p { margin-bottom: 8px; }
+  .description p:last-child { margin-bottom: 0; }
+
+  /* Stat block */
+  .stat-block {
+    background: var(--parchment);
+    border: 1px solid var(--gold);
+    border-top: none;
+    border-bottom: 4px solid var(--dark-red);
+    border-radius: 0 0 4px 4px;
+    box-shadow: 3px 4px 12px rgba(0,0,0,.3);
+  }
+  .stat-block-header {
+    background: var(--dark-red);
+    color: var(--parchment);
+    padding: 9px 14px 7px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .creature-name { font-size: 1.45em; font-weight: bold; margin: 0; }
+  .creature-type { font-style: italic; font-size: .88em; margin: 2px 0 0; }
+  .cr-badge {
+    background: var(--gold);
+    color: var(--ink);
+    border-radius: 4px;
+    padding: 2px 9px;
+    font-size: .82em;
+    font-weight: bold;
+    white-space: nowrap;
+    margin-top: 4px;
+  }
+  .stat-body { padding: 0 14px 12px; }
+  hr.div { border: none; border-top: 2px solid var(--gold); margin: 7px 0; }
+  .top-stats p { margin: 3px 0; font-size: .93em; }
+
+  .ability-grid {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    background: var(--parchment-dark);
+    border: 1px solid var(--gold);
+    border-radius: 3px;
+    padding: 6px 0;
+    margin: 7px 0;
+  }
+  .ability-grid .lbl  { font-weight: bold; color: var(--dark-red); text-transform: uppercase; font-size: .72em; }
+  .ability-grid .val  { font-size: 1.05em; }
+
+  .bottom-stats p { margin: 2px 0; font-size: .88em; }
+  h3.section-head {
+    color: var(--dark-red);
+    font-size: 1em;
+    margin: 9px 0 3px;
+    border-bottom: 1px solid var(--gold);
+    padding-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+  }
+  .entry { margin: 5px 0; font-size: .91em; line-height: 1.55; }
+  .entry-name { font-weight: bold; font-style: italic; color: var(--dark-red); }
+  .flavor { font-style: italic; color: #555; font-size: .87em; border-left: 3px solid var(--gold); margin: 8px 0 0; padding: 4px 10px; background: var(--parchment-mid); }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════ COVER ═══════════════════════════════════ -->
+<div class="cover">
+  <h1>GENESTEALER CULT BESTIARY</h1>
+  <h2>Warhammer 40,000 &times; Dungeons &amp; Dragons 5th Edition &mdash; Homebrew</h2>
+  <p>This bestiary catalogues the hidden hierarchy of the Genestealer Cult — the xenos infection that precedes the Hive Fleet, growing in the dark for generations before the Rising is called. Unlike the overt bioforms of the Tyranid swarm, the Genestealer Cult is a weapon of shadow and patience: hybrids bred across generations, indoctrinated minds, and ancient alien hunters lurking within the very civilizations they are destined to consume. Entries are arranged from lowest to highest Challenge Rating, from the most common Neophyte foot soldier to the ancient horror of the Patriarch itself. Pure Tyranid bioforms are catalogued in the Tyranid Bestiary.<br><br>
+  <em>These are fan-made rules for personal use only.</em></p>
+</div>
+
+<!-- ═══════════════════════════════════ TOC ═══════════════════════════════════ -->
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <div class="toc-grid">
+    <div class="toc-entry"><span class="name">Neophyte Hybrid</span><span class="cr">CR 1/4</span></div>
+    <div class="toc-entry"><span class="name">Kelermorph</span><span class="cr">CR 5</span></div>
+    <div class="toc-entry"><span class="name">Acolyte Hybrid</span><span class="cr">CR 1</span></div>
+    <div class="toc-entry"><span class="name">Locus</span><span class="cr">CR 5</span></div>
+    <div class="toc-entry"><span class="name">Hybrid Metamorph</span><span class="cr">CR 2</span></div>
+    <div class="toc-entry"><span class="name">Sanctus</span><span class="cr">CR 6</span></div>
+    <div class="toc-entry"><span class="name">Aberrant</span><span class="cr">CR 3</span></div>
+    <div class="toc-entry"><span class="name">Jackal Alphus</span><span class="cr">CR 6</span></div>
+    <div class="toc-entry"><span class="name">Purestrain Genestealer</span><span class="cr">CR 3</span></div>
+    <div class="toc-entry"><span class="name">Primus</span><span class="cr">CR 7</span></div>
+    <div class="toc-entry"><span class="name">Biophagus</span><span class="cr">CR 4</span></div>
+    <div class="toc-entry"><span class="name">Magus</span><span class="cr">CR 9</span></div>
+    <div class="toc-entry"><span class="name">Nexos</span><span class="cr">CR 4</span></div>
+    <div class="toc-entry"><span class="name">Broodlord</span><span class="cr">CR 11</span></div>
+    <div class="toc-entry"><span class="name">Abominant</span><span class="cr">CR 5</span></div>
+    <div class="toc-entry"><span class="name">Genestealer Patriarch</span><span class="cr">CR 16</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ CR 1/4 ═══════════════════════════════ -->
+<div class="cr-section-header">Challenge Rating 1/4</div>
+
+<!-- NEOPHYTE HYBRID -->
+<div class="creature-entry">
+  <div class="description">
+    <h3>Neophyte Hybrid</h3>
+    <p>Neophyte Hybrids are among the most human-looking members of the Genestealer Cult — indistinguishable from ordinary citizens until the dormant alien genome begins to assert itself. They hold legitimate jobs in mines, manufactorums, and docking crews, quietly building the cult's power base for years or decades before the Rising is called. Armed with autoguns and autopistols scavenged or purchased through the cult's hidden networks, they form the rank-and-file infantry of the uprising.</p>
+    <p>What makes the Neophyte truly dangerous is not individual fighting ability but the sheer scale of infiltration. An Imperial city hosting a mature Genestealer Cult may have thousands of Neophytes occupying positions throughout every level of society — PDF troopers, administratum clerks, Arbites officers. When the Patriarch issues the call through the brood's psychic bond, they all rise simultaneously. Planetary defenses crumble in hours, not because Neophytes are exceptional warriors, but because the defenders never realized the war was already inside the walls.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Neophyte Hybrid</p><p class="creature-type">Medium Humanoid (Genestealer Hybrid), Neutral Evil</p></div>
+      <div class="cr-badge">CR 1/4</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 12 (light armor)</p>
+        <p><strong>Hit Points</strong> 11 (2d8 + 2)</p>
+        <p><strong>Speed</strong> 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">13 (+1)</div></div>
+        <div><div class="lbl">CON</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">INT</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">9 (−1)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">8 (−1)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Skills</strong> Deception +1, Stealth +3</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 9</p>
+        <p><strong>Languages</strong> Any one language, Deep Speech</p>
+        <p><strong>Challenge</strong> 1/4 (50 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +2</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Cult Indoctrination.</span> The Neophyte has advantage on saving throws against being charmed or frightened by non-Genestealer creatures.</div>
+      <div class="entry"><span class="entry-name">Brood Telepathy.</span> The Neophyte can communicate telepathically with any Genestealer or Genestealer Hybrid within 60 feet.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Autogun.</span> <em>Ranged Weapon Attack:</em> +3 to hit, range 80/320 ft., one target. <em>Hit:</em> 6 (1d8 + 1) piercing damage.</div>
+      <div class="entry"><span class="entry-name">Autopistol.</span> <em>Ranged Weapon Attack:</em> +3 to hit, range 40/100 ft., one target. <em>Hit:</em> 5 (1d6 + 1) piercing damage.</div>
+      <div class="entry"><span class="entry-name">Combat Knife.</span> <em>Melee Weapon Attack:</em> +3 to hit, reach 5 ft., one target. <em>Hit:</em> 4 (1d4 + 1) slashing damage.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ CR 1 ═══════════════════════════════ -->
+<div class="cr-section-header">Challenge Rating 1</div>
+
+<!-- ACOLYTE HYBRID -->
+<div class="creature-entry">
+  <div class="description">
+    <h3>Acolyte Hybrid</h3>
+    <p>Acolyte Hybrids stand several generations closer to the Genestealer bloodline than their Neophyte kin, and it shows. Their alien heritage is unmistakable — too-wide mouths, additional limbs, eyes that catch light in the dark — and they no longer pass in polite society. They live in the hidden depths of the cult, training in the shadows of sub-levels and underhive warrens, waiting for the uprising they know is inevitable.</p>
+    <p>Despite their monstrous appearance, Acolyte Hybrids are fanatically devoted — not merely conditioned, but genuinely loving toward the Patriarch whose gene-seed flows in their veins. They form the assault core of Genestealer Cult forces, closing with enemies in tight melee where their alien physiology becomes lethal advantage. Pack tactics come naturally to creatures linked by psychic bond, and Acolyte squads fight with uncanny coordination, each reacting to threats as if sharing a single mind.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Acolyte Hybrid</p><p class="creature-type">Medium Humanoid (Genestealer Hybrid), Neutral Evil</p></div>
+      <div class="cr-badge">CR 1</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 13 (natural armor)</p>
+        <p><strong>Hit Points</strong> 22 (4d8 + 4)</p>
+        <p><strong>Speed</strong> 35 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CON</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">INT</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">10 (+0)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Skills</strong> Athletics +4, Stealth +4</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 10</p>
+        <p><strong>Languages</strong> Any one language, Deep Speech</p>
+        <p><strong>Challenge</strong> 1 (200 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +2</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Brood Telepathy.</span> The Acolyte can communicate telepathically with any Genestealer or Genestealer Hybrid within 60 feet.</div>
+      <div class="entry"><span class="entry-name">Pack Tactics.</span> The Acolyte has advantage on attack rolls against a creature if at least one of its allies is within 5 feet of that creature and the ally isn't incapacitated.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Acolyte makes two Rending Claws attacks.</div>
+      <div class="entry"><span class="entry-name">Rending Claws.</span> <em>Melee Weapon Attack:</em> +4 to hit, reach 5 ft., one target. <em>Hit:</em> 5 (1d6 + 2) slashing damage.</div>
+      <div class="entry"><span class="entry-name">Hand Flamer.</span> <em>Ranged Weapon Attack:</em> +4 to hit, range 15/30 ft., one target. <em>Hit:</em> 7 (2d6) fire damage.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Scrabbling Advance.</span> The Acolyte moves up to 10 feet toward a creature it can see without provoking opportunity attacks.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ CR 2 ═══════════════════════════════ -->
+<div class="cr-section-header">Challenge Rating 2</div>
+
+<!-- HYBRID METAMORPH -->
+<div class="creature-entry">
+  <div class="description">
+    <h3>Hybrid Metamorph</h3>
+    <p>Hybrid Metamorphs represent the pinnacle of controlled Genestealer mutation — hybrids whose alien genes have expressed in strange and formidable ways. Extra limbs have grown and hardened into weapon-like appendages; the body has twisted into configurations that defy human expectation while being supremely suited for violence. Unlike the uncontrolled Aberrant, the Metamorph's mutations are purposeful, guided by the Biophagus's expertise in mutagenic compounds.</p>
+    <p>Metamorphs are used as shock assault units — dropped into the midst of enemy formations to create chaos. Their additional limbs allow them to attack from unexpected angles, striking with a bludgeoning appendage from one side while raking with blades from another. The prehensile tendrils that writhe from their shoulders can disarm opponents, tangle weapons, or pin a struggling enemy while the primary limbs do the actual killing. Veteran soldiers who survive Metamorph charges typically advise one thing: "Don't watch the claws — it's the thing you don't see coming that kills you."</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Hybrid Metamorph</p><p class="creature-type">Medium Monstrosity (Genestealer Hybrid), Neutral Evil</p></div>
+      <div class="cr-badge">CR 2</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 14 (natural armor)</p>
+        <p><strong>Hit Points</strong> 39 (6d8 + 12)</p>
+        <p><strong>Speed</strong> 35 ft., climb 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">8 (−1)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">8 (−1)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Skills</strong> Athletics +5, Stealth +4</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 10</p>
+        <p><strong>Languages</strong> Deep Speech</p>
+        <p><strong>Challenge</strong> 2 (450 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +2</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Brood Telepathy.</span> The Metamorph can communicate telepathically with any Genestealer or Genestealer Hybrid within 60 feet.</div>
+      <div class="entry"><span class="entry-name">Unstoppable Charge.</span> If the Metamorph moves at least 15 feet straight toward a target and hits it with a Metamorphic Limb on the same turn, the target must succeed on a DC 13 Strength saving throw or be knocked prone.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Metamorph makes two Metamorphic Limb attacks.</div>
+      <div class="entry"><span class="entry-name">Metamorphic Limb.</span> <em>Melee Weapon Attack:</em> +5 to hit, reach 5 ft., one target. <em>Hit:</em> 8 (1d10 + 3) slashing or bludgeoning damage (the Metamorph chooses before each attack).</div>
+      <div class="entry"><span class="entry-name">Toxin Syringe.</span> <em>Melee Weapon Attack:</em> +5 to hit, reach 5 ft., one target. <em>Hit:</em> 5 (1d4 + 3) piercing damage, and the target must succeed on a DC 13 Constitution saving throw or be poisoned for 1 minute. The target can repeat the saving throw at the end of each of its turns, ending the effect on a success.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Prehensile Tendril.</span> The Metamorph attempts to grapple one creature within 10 feet (escape DC 13). This grapple attempt does not provoke opportunity attacks.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ CR 3 ═══════════════════════════════ -->
+<div class="cr-section-header">Challenge Rating 3</div>
+
+<!-- ABERRANT -->
+<div class="creature-entry">
+  <div class="description">
+    <h3>Aberrant</h3>
+    <p>Aberrants are what happens when the Genestealer gene-seed overwhelms the human host's biology without the benefit of the Biophagus's stabilizing compounds. The resulting creature is enormous, massively over-muscled, and barely capable of higher thought — a killing machine of prodigious size and fury that the cult keeps kenneled until battle is joined. They are the blunt instrument: walls of muscle hurled at fortified positions and armored vehicles with equal enthusiasm.</p>
+    <p>Despite their apparent lack of intellect, Aberrants are bound to the Patriarch by the same psychic brood-bond that links all cult members. Through this connection they receive crude impressions of will — fight, protect, destroy — that guide them where they are most needed. The cult's leadership has learned to use Aberrants like siege weapons: point them at an obstacle and release them. A pair of Aberrants can topple a Leman Russ tank through sheer applied force, tearing sponson guns free and hammering the hull until the crew inside are killed by concussive trauma alone.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Aberrant</p><p class="creature-type">Large Monstrosity (Genestealer Hybrid), Neutral Evil</p></div>
+      <div class="cr-badge">CR 3</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 14 (natural armor)</p>
+        <p><strong>Hit Points</strong> 65 (10d10 + 10)</p>
+        <p><strong>Speed</strong> 40 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">8 (−1)</div></div>
+        <div><div class="lbl">CON</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">INT</div><div class="val">4 (−3)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">8 (−1)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">5 (−3)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Skills</strong> Athletics +7</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, and slashing from nonmagical attacks</p>
+        <p><strong>Condition Immunities</strong> frightened</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 9</p>
+        <p><strong>Languages</strong> Deep Speech (understands but rarely speaks)</p>
+        <p><strong>Challenge</strong> 3 (700 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +2</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Brood Telepathy.</span> The Aberrant can communicate telepathically with any Genestealer or Genestealer Hybrid within 60 feet.</div>
+      <div class="entry"><span class="entry-name">Aberrant Resilience (Recharges after a Short or Long Rest).</span> When the Aberrant is reduced to 0 hit points, it can make a DC 15 Constitution saving throw. On a success, it drops to 1 hit point instead.</div>
+      <div class="entry"><span class="entry-name">Crushing Grip.</span> A creature grappled by the Aberrant takes 7 (2d6) bludgeoning damage at the start of each of its turns.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Aberrant makes two Massive Arm attacks, or one Massive Arm attack and one Hypertrophied Fist.</div>
+      <div class="entry"><span class="entry-name">Massive Arm.</span> <em>Melee Weapon Attack:</em> +7 to hit, reach 10 ft., one target. <em>Hit:</em> 14 (2d8 + 5) bludgeoning damage. If the target is a creature, it must succeed on a DC 15 Strength saving throw or be grappled (escape DC 15). While grappled this way, the target is also restrained.</div>
+      <div class="entry"><span class="entry-name">Hypertrophied Fist.</span> <em>Melee Weapon Attack:</em> +7 to hit, reach 5 ft., one target. <em>Hit:</em> 18 (3d8 + 5) bludgeoning damage. On a critical hit, the target must succeed on a DC 15 Constitution saving throw or be stunned until the end of its next turn.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PURESTRAIN GENESTEALER -->
+<div class="creature-entry">
+  <div class="description">
+    <h3>Purestrain Genestealer</h3>
+    <p>The Purestrain Genestealer is the original horror — the creature from which all hybrid bloodlines ultimately descend, carrying no human genetics whatsoever. These ancient predators are deployed by Hive Fleets as advance infiltrators, capable of surviving in vacuum, extreme cold, and hostile atmospheres for extended periods. Their armored carapace deflects small-arms fire while their rending claws can tear through combat plate like paper, and a single successful gene-seed implant can begin a chain reaction capable of bringing down a planetary civilization within a few generations.</p>
+    <p>A Purestrain is not a beast operating on simple instinct — it is a predator of alien intelligence, capable of concealing itself in a starship's darkened vents for months, choosing precisely when to hunt and when to remain perfectly still as armed search teams pass within arm's reach. The creature that infects a mine overseer this season may, through that overseer's infected children and grandchildren, command a planet-wide uprising a century hence. Every Genestealer Patriarch began as one of these: patient, purposeful, and utterly without mercy.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Purestrain Genestealer</p><p class="creature-type">Medium Aberration (Tyranid), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 3</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 15 (natural armor)</p>
+        <p><strong>Hit Points</strong> 52 (8d8 + 16)</p>
+        <p><strong>Speed</strong> 40 ft., climb 40 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">16 (+3)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Dex +6, Str +5</p>
+        <p><strong>Skills</strong> Athletics +5, Perception +3, Stealth +6</p>
+        <p><strong>Condition Immunities</strong> frightened</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., blindsight 10 ft., passive Perception 13</p>
+        <p><strong>Languages</strong> Deep Speech (understands; rarely speaks)</p>
+        <p><strong>Challenge</strong> 3 (700 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +2</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Ambush Predator.</span> If the Genestealer surprises a creature and hits it with an attack during the first round of combat, the attack deals an extra 14 (4d6) damage.</div>
+      <div class="entry"><span class="entry-name">Spider Climb.</span> The Genestealer can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</div>
+      <div class="entry"><span class="entry-name">Brood Telepathy.</span> The Genestealer can communicate telepathically with any Genestealer or Tyranid creature within 60 feet.</div>
+      <div class="entry"><span class="entry-name">Gene-seed Implant (1/Day).</span> When the Genestealer hits a creature with its Rending Claws, it can choose to implant a gene-seed instead of dealing normal damage. The target must succeed on a DC 13 Constitution saving throw or become infected. The infection remains dormant for 1d4 weeks before manifesting as alien physical traits. It can be cured by <em>remove curse</em> or similar magic before it fully manifests.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Genestealer makes two Rending Claws attacks and one Bite.</div>
+      <div class="entry"><span class="entry-name">Rending Claws.</span> <em>Melee Weapon Attack:</em> +6 to hit, reach 5 ft., one target. <em>Hit:</em> 9 (2d4 + 4) slashing damage. On a critical hit, the target's AC is reduced by 1 (minimum 0) until the armor is repaired during a long rest.</div>
+      <div class="entry"><span class="entry-name">Bite.</span> <em>Melee Weapon Attack:</em> +5 to hit, reach 5 ft., one target. <em>Hit:</em> 7 (1d8 + 3) piercing damage. Deals 12 (2d8 + 3) damage instead if the target is grappled by the Genestealer.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Pounce.</span> The Genestealer moves up to its speed toward a visible creature without provoking opportunity attacks. If it ends this movement within 5 feet of the target, it can make one Rending Claws attack.</div>
+      <hr class="div">
+      <h3 class="section-head">Reactions</h3>
+      <div class="entry"><span class="entry-name">Dodge and Weave.</span> When a creature makes a melee attack against the Genestealer, it can use its reaction to make a Dexterity saving throw (DC = 8 + the attacker's attack bonus). On a success, the attack misses.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════ CR 4 ═══════════════════════════════ -->
+<div class="cr-section-header">Challenge Rating 4</div>
+
+<!-- BIOPHAGUS -->
+<div class="creature-entry">
+  <div class="description">
+    <h3>Biophagus</h3>
+    <p>The Biophagus is the Genestealer Cult's alchemist-savant — a hybrid whose alien intellect has been turned toward the science of mutation. Through years of careful experimentation with synthetic mutagenic compounds derived from the Patriarch's gene-fluid, the Biophagus refines and stabilizes the hybrids it treats, coaxing out useful mutations rather than the uncontrolled aberrations that arise in their absence. Its hidden laboratory is filled with vials of amber fluid, experimental specimens, and the occasional failed subject that never quite reached completion.</p>
+    <p>In battle the Biophagus fulfills a support role, administering combat stimulants to nearby hybrids while deploying acidic toxins against enemies. But it is most valued for what it does between battles: the Biophagus determines which hybrids receive mutagenic treatment and in what dose, effectively selecting who becomes an Acolyte, who becomes a Metamorph, and who is sacrificed in experimental procedures. This power makes the Biophagus second in influence only to the Magus and Primus in most cults, despite its limited combat capability. Few cult members dare defy someone who decides what they will become.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Biophagus</p><p class="creature-type">Medium Humanoid (Genestealer Hybrid), Neutral Evil</p></div>
+      <div class="cr-badge">CR 4</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 13 (aberrant hide)</p>
+        <p><strong>Hit Points</strong> 58 (9d8 + 18)</p>
+        <p><strong>Speed</strong> 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">13 (+1)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">12 (+1)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Int +6, Wis +4</p>
+        <p><strong>Skills</strong> Arcana +6, Medicine +4, Persuasion +3</p>
+        <p><strong>Condition Immunities</strong> poisoned</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 12</p>
+        <p><strong>Languages</strong> Any two languages, Deep Speech</p>
+        <p><strong>Challenge</strong> 4 (1,100 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +2</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Brood Telepathy.</span> The Biophagus can communicate telepathically with any Genestealer or Genestealer Hybrid within 60 feet.</div>
+      <div class="entry"><span class="entry-name">Mutagenic Expertise.</span> Genestealer Cult creatures that start their turn within 30 feet of the Biophagus can add 1d4 to one attack roll or saving throw each turn (chosen before the roll).</div>
+      <div class="entry"><span class="entry-name">Alchemical Resilience.</span> The Biophagus has advantage on saving throws against poison and disease, and is immune to the poisoned condition.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Biophagus makes two Injector Staff attacks, or one Injector Staff attack and uses Toxin Grenade.</div>
+      <div class="entry"><span class="entry-name">Injector Staff.</span> <em>Melee Weapon Attack:</em> +3 to hit, reach 5 ft., one target. <em>Hit:</em> 6 (1d10 + 1) piercing damage. The target must succeed on a DC 14 Constitution saving throw or be poisoned for 1 minute and take 5 (2d4) poison damage at the start of each of its turns (save ends at end of each turn).</div>
+      <div class="entry"><span class="entry-name">Toxin Grenade (3/Day).</span> The Biophagus hurls a grenade at a point within 60 feet. Each creature in a 20-foot-radius sphere must succeed on a DC 14 Constitution saving throw or take 14 (4d6) poison damage and be poisoned until the end of its next turn. On a success, the creature takes half damage and is not poisoned.</div>
+      <div class="entry"><span class="entry-name">Enhance Brood (1/Day).</span> All Genestealer Cult creatures within 30 feet regain 10 (3d6) hit points and have advantage on attack rolls until the end of the Biophagus's next turn.</div>
+    </div>
+  </div>
+</div>
+
+<!-- NEXOS -->
+<div class="creature-entry">
+  <div class="description">
+    <h3>Nexos</h3>
+    <p>The Nexos is not a warrior — it is a brain. This hyper-evolved hybrid possesses a compound mind capable of processing dozens of incoming data streams simultaneously: pheromone signals from nearby brood-kin, tactical assessments, structural scans of terrain, probabilistic calculations of enemy response times. It serves as the cult's living command-and-control system, transforming the Patriarch's broad psychic imperatives into precise tactical instructions that every hybrid in the field can act upon.</p>
+    <p>The Nexos carries crystalline data-looms that interface directly with its alien nervous system, allowing it to model battlefield scenarios in real time. A cult with an active Nexos fights with terrifying efficiency — squads arriving at precisely the right moment, ambushes triggered with perfect timing, reinforcements flowing through routes the enemy hasn't thought to cover. Imperial tacticians who have faced cults with Nexos support describe a disturbing sensation: the feeling that every decision they make has already been anticipated, that they are not choosing their responses so much as walking a path that was laid for them months in advance.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Nexos</p><p class="creature-type">Medium Humanoid (Genestealer Hybrid), Lawful Evil</p></div>
+      <div class="cr-badge">CR 4</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 13 (natural armor)</p>
+        <p><strong>Hit Points</strong> 65 (10d8 + 20)</p>
+        <p><strong>Speed</strong> 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">13 (+1)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">14 (+2)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Int +6, Wis +5</p>
+        <p><strong>Skills</strong> History +6, Insight +5, Perception +5</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 15</p>
+        <p><strong>Languages</strong> Any three languages, Deep Speech; telepathy 60 ft.</p>
+        <p><strong>Challenge</strong> 4 (1,100 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +2</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Tactical Cortex.</span> The Nexos cannot be surprised. At the start of combat, one ally the Nexos can see may immediately move up to its speed as a free action.</div>
+      <div class="entry"><span class="entry-name">Coordinated Assault.</span> On initiative count 20 (losing ties), the Nexos can grant one allied Genestealer Cult creature within 60 feet an additional action on its next turn. This additional action cannot be used to make more than one weapon attack.</div>
+      <div class="entry"><span class="entry-name">Pheromone Intelligence.</span> The Nexos knows the current position of all friendly Genestealer Cult creatures within 120 feet, even through walls and obstacles.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Nexos makes two Rending Claw attacks.</div>
+      <div class="entry"><span class="entry-name">Rending Claw.</span> <em>Melee Weapon Attack:</em> +3 to hit, reach 5 ft., one target. <em>Hit:</em> 6 (2d4 + 1) slashing damage.</div>
+      <div class="entry"><span class="entry-name">Prioritize Target.</span> The Nexos designates one creature it can see within 60 feet as a Priority Target until the start of the Nexos's next turn. All Genestealer Cult creatures have advantage on attack rolls against the Priority Target.</div>
+      <hr class="div">
+      <h3 class="section-head">Reactions</h3>
+      <div class="entry"><span class="entry-name">Tactical Override.</span> When a Genestealer Cult creature the Nexos can see within 30 feet is hit by an attack, the Nexos calls out a warning, giving the creature +2 AC against that attack (potentially causing it to miss).</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ CR 5 ═══════════════════════════════ -->
+<div class="cr-section-header">Challenge Rating 5</div>
+
+<!-- ABOMINANT -->
+<div class="creature-entry">
+  <div class="description">
+    <h3>Abominant</h3>
+    <p>The Abominant is what the Biophagus achieves when it finds an Aberrant with sufficient genetic potential and applies the full suite of mutagenic enhancement to it. The result is even larger and more powerful than a standard Aberrant, and crucially — slightly more tractable. The Abominant carries a massive power hammer that it swings with bone-crushing enthusiasm, and even heavy vehicles have learned to fear it. A single Abominant can raze a fortified blockhouse before the defenders have time to call for reinforcements.</p>
+    <p>Creating an Abominant is a significant resource investment, and there are rarely more than one or two per brood. They are treated with something approaching reverence by other cult members — creatures of primal awe to the hybrids who witness what unconstrained Genestealer genetics can become. In battle they march at the front of Aberrant formations, their power hammers clearing lanes through barricades, blast doors, and whatever else stands between the cult and its objective. When an Abominant charges a fortified line, the question is not whether the line will break — only how long it takes.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Abominant</p><p class="creature-type">Large Monstrosity (Genestealer Hybrid), Neutral Evil</p></div>
+      <div class="cr-badge">CR 5</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 16 (natural armor)</p>
+        <p><strong>Hit Points</strong> 102 (12d10 + 36)</p>
+        <p><strong>Speed</strong> 40 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">22 (+6)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">8 (−1)</div></div>
+        <div><div class="lbl">CON</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">INT</div><div class="val">5 (−3)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">8 (−1)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">6 (−2)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +9, Con +6</p>
+        <p><strong>Skills</strong> Athletics +9</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, and slashing from nonmagical attacks</p>
+        <p><strong>Condition Immunities</strong> frightened, poisoned</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 9</p>
+        <p><strong>Languages</strong> Deep Speech (understands; cannot speak)</p>
+        <p><strong>Challenge</strong> 5 (1,800 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Brood Telepathy.</span> The Abominant can communicate telepathically with any Genestealer or Genestealer Hybrid within 60 feet.</div>
+      <div class="entry"><span class="entry-name">Wrecking Ball.</span> The Abominant deals double damage to objects and structures.</div>
+      <div class="entry"><span class="entry-name">Juggernaut.</span> The Abominant cannot be grappled or knocked prone by creatures of Medium size or smaller. It also ignores difficult terrain created by debris, rubble, or destroyed structures.</div>
+      <div class="entry"><span class="entry-name">Unstoppable.</span> The Abominant can move through the spaces of Medium and smaller creatures. A creature whose space the Abominant enters must succeed on a DC 17 Strength saving throw or be knocked prone and pushed 5 feet to the nearest unoccupied space.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Abominant makes two Power Hammer attacks.</div>
+      <div class="entry"><span class="entry-name">Power Hammer.</span> <em>Melee Weapon Attack:</em> +9 to hit, reach 10 ft., one target. <em>Hit:</em> 19 (3d8 + 6) bludgeoning damage. On a critical hit, the target must succeed on a DC 17 Constitution saving throw or be stunned until the end of its next turn.</div>
+      <div class="entry"><span class="entry-name">Ground Slam.</span> The Abominant slams both fists into the ground. Each creature standing within 15 feet must succeed on a DC 17 Strength saving throw or take 18 (4d8) bludgeoning damage and be knocked prone. On a success, the creature takes half damage and is not knocked prone.</div>
+    </div>
+  </div>
+</div>
+
+<!-- KELERMORPH -->
+<div class="creature-entry">
+  <div class="description">
+    <h3>Kelermorph</h3>
+    <p>The Kelermorph is a legend given flesh — a three-gunned killer of extraordinary speed and precision whose deeds are whispered with reverence throughout the brood. Part assassin, part icon, the Kelermorph exists to remove high-value targets and inspire the cult's rank-and-file through acts of impossible marksmanship. Three liberator autopistols hang at its sides; when the fighting starts, all three fire in a blur almost too fast for the eye to follow, each finding a separate target across the room before the first shell casing hits the floor.</p>
+    <p>Kelermorphs are not simply fast draws. They have studied their targets — studied routes, habits, preferences — and by the time they fire the first shot, the outcome has already been decided by hours of preparation. To witness a Kelermorph in action is to watch something that appears almost supernatural: ducking through crossfire that should be lethal, firing backward over one shoulder while vaulting a barricade, ventilating three separate targets before any of them registers the threat. The cult's enemies call this luck. The Kelermorph's brood-kin know it to be the product of alien senses and decades of ruthless training.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Kelermorph</p><p class="creature-type">Medium Humanoid (Genestealer Hybrid), Chaotic Neutral</p></div>
+      <div class="cr-badge">CR 5</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 15 (natural armor)</p>
+        <p><strong>Hit Points</strong> 78 (12d8 + 24)</p>
+        <p><strong>Speed</strong> 40 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">16 (+3)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Dex +8, Cha +6</p>
+        <p><strong>Skills</strong> Acrobatics +8, Perception +5, Persuasion +6, Sleight of Hand +8</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 15</p>
+        <p><strong>Languages</strong> Any two languages, Deep Speech</p>
+        <p><strong>Challenge</strong> 5 (1,800 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Cult Hero.</span> Allied Genestealer Cult creatures within 30 feet of the Kelermorph that can see it have advantage on saving throws against being frightened.</div>
+      <div class="entry"><span class="entry-name">Gunfighter's Instinct.</span> The Kelermorph can draw or stow weapons as a free action and never provokes opportunity attacks while making ranged weapon attacks.</div>
+      <div class="entry"><span class="entry-name">Deadly Precision.</span> The Kelermorph scores a critical hit on a roll of 19 or 20 with ranged weapon attacks.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Kelermorph makes three Liberator Autopistol attacks. Each attack can target a different creature.</div>
+      <div class="entry"><span class="entry-name">Liberator Autopistol.</span> <em>Ranged Weapon Attack:</em> +8 to hit, range 40/100 ft., one target. <em>Hit:</em> 9 (1d8 + 5) piercing damage. On a critical hit, the target also takes 14 (4d6) additional piercing damage.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Lightning Draw.</span> The Kelermorph makes one additional Liberator Autopistol attack.</div>
+      <hr class="div">
+      <h3 class="section-head">Reactions</h3>
+      <div class="entry"><span class="entry-name">Dodge Roll.</span> When targeted by a ranged attack, the Kelermorph moves up to 10 feet in any direction without provoking opportunity attacks. If this movement causes the attacker to lack line of sight or the Kelermorph to gain cover it didn't have before, the attack misses automatically.</div>
+    </div>
+  </div>
+</div>
+
+<!-- LOCUS -->
+<div class="creature-entry">
+  <div class="description">
+    <h3>Locus</h3>
+    <p>The Locus is the Magus's shadow — a personal bodyguard of such speed and reflexes that it makes dedicated close protection look effortless. It is always within five paces of its charge, scanning for threats with senses heightened far beyond human baseline, ready to interpose itself between the Magus and any incoming violence in an eyeblink. It cannot be ordered away, bribed, deceived, or frightened from its post. To reach the Magus, one must first go through the Locus.</p>
+    <p>The bond between Locus and Magus is more than professional duty — it is psychic imprinting as deep as the brood-bond itself. The Locus knows the Magus's heartbeat, can sense a shift in its biorhythms that signals distress, and will cross a battlefield in seconds in response to a threat the Magus itself hasn't consciously registered. Enemies who eliminate the Magus while the Locus is nearby rarely survive the experience; the creature's response to its principal's death is an uncontrolled explosion of lethal precision that even seasoned warriors describe as less a fight and more a massacre.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Locus</p><p class="creature-type">Medium Humanoid (Genestealer Hybrid), Lawful Evil</p></div>
+      <div class="cr-badge">CR 5</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 17 (natural armor)</p>
+        <p><strong>Hit Points</strong> 90 (12d8 + 36)</p>
+        <p><strong>Speed</strong> 50 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">CON</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">INT</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">10 (+0)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +6, Dex +8</p>
+        <p><strong>Skills</strong> Acrobatics +8, Athletics +6, Perception +5</p>
+        <p><strong>Condition Immunities</strong> frightened</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 15</p>
+        <p><strong>Languages</strong> Deep Speech; understands one other language</p>
+        <p><strong>Challenge</strong> 5 (1,800 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Unnatural Speed.</span> The Locus can take the Dash action as a bonus action.</div>
+      <div class="entry"><span class="entry-name">Guardian's Vigilance.</span> While within 5 feet of its Magus, both the Locus and the Magus have advantage on initiative rolls.</div>
+      <div class="entry"><span class="entry-name">Preternatural Reflexes.</span> The Locus has advantage on Dexterity saving throws and cannot be surprised.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Locus makes three Locus Blade attacks.</div>
+      <div class="entry"><span class="entry-name">Locus Blade.</span> <em>Melee Weapon Attack:</em> +8 to hit, reach 5 ft., one target. <em>Hit:</em> 9 (1d8 + 5) slashing damage. If the target is within 5 feet of the Locus's Magus, this attack deals an extra 7 (2d6) slashing damage.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Sprint.</span> The Locus moves up to its speed toward a creature it can see without provoking opportunity attacks.</div>
+      <hr class="div">
+      <h3 class="section-head">Reactions</h3>
+      <div class="entry"><span class="entry-name">Intercept.</span> When a creature the Locus can see attacks its Magus, the Locus moves up to 10 feet without provoking opportunity attacks and becomes the new target of the attack. The attack is resolved against the Locus instead.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ CR 6 ═══════════════════════════════ -->
+<div class="cr-section-header">Challenge Rating 6</div>
+
+<!-- SANCTUS -->
+<div class="creature-entry">
+  <div class="description">
+    <h3>Sanctus</h3>
+    <p>The Sanctus is the Genestealer Cult's dedicated assassin — specifically evolved and trained to kill psykers. Its alien biology contains a pheromone profile that disrupts psychic resonance, creating a null-zone that makes the Warp feel distant and unreliable to those who depend on it. Sanctuses seek out Primaris Psykers, Astropaths, Sorcerers, and any other target whose death will cripple an enemy's command structure, operating alone in hostile territory for months without resupply or psychic support.</p>
+    <p>The Sanctus is cold in a way that most Genestealer Hybrids are not. Where others feel the warmth of the brood-bond and the Patriarch's psychic love, the Sanctus carries its null-aura like a second skin — isolated even within the cult's psychic communion. This isolation is deliberately cultivated; the Sanctus must be able to function alone, deep in enemy territory, without any of the comforts of the hive-mind link. What emerges from this isolation is a creature of perfect patience and absolute lethality. It will wait. It will watch. When it finally fires, it will not miss.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Sanctus</p><p class="creature-type">Medium Humanoid (Genestealer Hybrid), Neutral Evil</p></div>
+      <div class="cr-badge">CR 6</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 16 (natural armor)</p>
+        <p><strong>Hit Points</strong> 91 (14d8 + 28)</p>
+        <p><strong>Speed</strong> 40 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">12 (+1)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Dex +8, Wis +6</p>
+        <p><strong>Skills</strong> Acrobatics +8, Deception +4, Perception +6, Stealth +11</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 16</p>
+        <p><strong>Languages</strong> Any two languages, Deep Speech</p>
+        <p><strong>Challenge</strong> 6 (2,300 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Assassinate.</span> During the first round of combat, the Sanctus has advantage on attack rolls against any creature that hasn't taken a turn yet. Any hit the Sanctus scores against a surprised creature is automatically a critical hit.</div>
+      <div class="entry"><span class="entry-name">Psychic Void.</span> Creatures with innate spellcasting or the ability to cast spells have disadvantage on concentration checks and spell attack rolls while within 60 feet of the Sanctus. The Sanctus cannot be detected by telepathy or divination magic.</div>
+      <div class="entry"><span class="entry-name">Evasion.</span> If the Sanctus is subjected to a Dexterity saving throw that allows it to take half damage on a success, it instead takes no damage on a success and only half damage on a failure.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Sanctus makes two Silencer Sniper Rifle attacks, or one Silencer Sniper Rifle attack and one Sanctus Blade attack.</div>
+      <div class="entry"><span class="entry-name">Silencer Sniper Rifle.</span> <em>Ranged Weapon Attack:</em> +8 to hit, range 150/600 ft., one target. <em>Hit:</em> 14 (2d8 + 5) piercing damage. On a critical hit, deals an extra 21 (6d6) damage.</div>
+      <div class="entry"><span class="entry-name">Sanctus Blade.</span> <em>Melee Weapon Attack:</em> +8 to hit, reach 5 ft., one target. <em>Hit:</em> 12 (2d6 + 5) slashing damage. On a hit, the target must succeed on a DC 14 Constitution saving throw or take 10 (3d6) poison damage and be poisoned for 1 minute.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Slither Away.</span> Immediately after making an attack, the Sanctus can Dash or Disengage as a bonus action.</div>
+    </div>
+  </div>
+</div>
+
+<!-- JACKAL ALPHUS -->
+<div class="creature-entry">
+  <div class="description">
+    <h3>Jackal Alphus</h3>
+    <p>The Jackal Alphus leads the cult's cavalry elements — the swift Jackal riders who serve as scouts, outriders, and rapid-response elements. The Alphus itself rides at the head of these formations, alternating between lightning-fast scouting maneuvers and long-range precision fire that pins down enemy elements while the rest of the cult advances. Where other cult officers command through the brood-bond, the Alphus commands through the scope of a precision rifle, painting targets for the forces flowing behind it.</p>
+    <p>The Alphus's primary value is target designation — a skill that transforms the cult's disparate elements into a focused killing machine. When the Alphus marks a target through its scope, that target's death is rarely a matter of whether, only of which angle the killing blow arrives from. Commanders who have engaged cults with an Alphus in the field report one consistent experience: the enemy always seems to know exactly where to aim, responding to movements that should have been impossible to observe. It is not magic — it is decades of riding these tunnels and streets and knowing every line of sight before the battle begins.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Jackal Alphus</p><p class="creature-type">Medium Humanoid (Genestealer Hybrid), Neutral Evil</p></div>
+      <div class="cr-badge">CR 6</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 15 (natural armor)</p>
+        <p><strong>Hit Points</strong> 91 (14d8 + 28)</p>
+        <p><strong>Speed</strong> 30 ft. (60 ft. mounted)</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">14 (+2)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Dex +7, Wis +6</p>
+        <p><strong>Skills</strong> Perception +6, Stealth +7, Survival +6</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 16</p>
+        <p><strong>Languages</strong> Any two languages, Deep Speech</p>
+        <p><strong>Challenge</strong> 6 (2,300 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Hunter's Mark.</span> At the start of combat, the Alphus designates one creature as a Marked Target. All allied Genestealer Cult creatures have advantage on attack rolls against the Marked Target. The Alphus can reassign the mark to a new target as a bonus action.</div>
+      <div class="entry"><span class="entry-name">Suppressive Fire.</span> When the Alphus scores a hit with a ranged weapon attack, the target has disadvantage on attack rolls until the start of the Alphus's next turn as the impact and sound of the shot pins it down.</div>
+      <div class="entry"><span class="entry-name">Elevated Advantage.</span> When the Alphus attacks from a position at least 10 feet higher than its target, its ranged attacks deal an extra 7 (2d6) damage.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Alphus makes two Customized Sniper Rifle attacks, or one Sniper Rifle attack and uses Designate Kill Zone.</div>
+      <div class="entry"><span class="entry-name">Customized Sniper Rifle.</span> <em>Ranged Weapon Attack:</em> +7 to hit, range 120/480 ft., one target. <em>Hit:</em> 13 (2d8 + 4) piercing damage. This attack ignores half cover and three-quarters cover.</div>
+      <div class="entry"><span class="entry-name">Combat Knife.</span> <em>Melee Weapon Attack:</em> +7 to hit, reach 5 ft., one target. <em>Hit:</em> 9 (2d4 + 4) slashing damage.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Designate Kill Zone.</span> The Alphus chooses a 10-foot-radius area within 60 feet. Until the start of the Alphus's next turn, all Genestealer Cult creatures have advantage on attack rolls against any creature standing in that area.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ CR 7 ═══════════════════════════════ -->
+<div class="cr-section-header">Challenge Rating 7</div>
+
+<!-- PRIMUS -->
+<div class="creature-entry">
+  <div class="description">
+    <h3>Primus</h3>
+    <p>The Primus is the cult's warlord — the master of arms who translates the Patriarch's psychic will into battlefield doctrine. Where the Magus shapes minds and the Patriarch projects alien authority, the Primus kills. It is the apex combatant of the Genestealer Cult, a blade-wielder of extraordinary skill who leads the assault personally when the moment calls for it. Even without its tactical gifts, a Primus would be one of the most dangerous melee fighters in any room it enters.</p>
+    <p>The Primus plans the uprising's military phase with methodical precision, knowing every Imperial garrison strength, every patrol route, every command bunker's security code — because it spent years, in near-human form, building relationships with the soldiers it will one day order its brood to slaughter. This is the Genestealer Cult's deepest cruelty: the moment of betrayal comes from people the victims trusted, fought alongside, shared meals with. When the Primus steps forward, blade drawn, from among the officers it has served beside for years, the shock of recognition is frequently the last emotion those officers ever experience.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Primus</p><p class="creature-type">Medium Humanoid (Genestealer Hybrid), Lawful Evil</p></div>
+      <div class="cr-badge">CR 7</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 16 (natural armor)</p>
+        <p><strong>Hit Points</strong> 117 (18d8 + 36)</p>
+        <p><strong>Speed</strong> 35 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">14 (+2)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +7, Dex +6, Con +5</p>
+        <p><strong>Skills</strong> Athletics +7, Deception +5, Intimidation +5, Perception +5, Stealth +6</p>
+        <p><strong>Condition Immunities</strong> frightened</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 15</p>
+        <p><strong>Languages</strong> Any three languages, Deep Speech</p>
+        <p><strong>Challenge</strong> 7 (2,900 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Brood Commander.</span> Allied Genestealer Cult creatures within 30 feet of the Primus that can see or sense it add their proficiency bonus to all damage rolls.</div>
+      <div class="entry"><span class="entry-name">Killing Blow.</span> When the Primus reduces a creature to 0 hit points, all allied Genestealer Cult creatures within 60 feet that can see it can immediately move up to 10 feet without provoking opportunity attacks.</div>
+      <div class="entry"><span class="entry-name">Combat Mastery.</span> The Primus can take one additional reaction each round, but only to make an opportunity attack.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Primus makes four Rending Blade attacks, or two Needle Pistol attacks and two Rending Blade attacks.</div>
+      <div class="entry"><span class="entry-name">Rending Blade.</span> <em>Melee Weapon Attack:</em> +7 to hit, reach 5 ft., one target. <em>Hit:</em> 11 (2d6 + 4) slashing damage. On a critical hit, the target takes an extra 14 (4d6) slashing damage and must succeed on a DC 15 Constitution saving throw or begin bleeding — taking 7 (2d6) slashing damage at the start of each of its turns until it uses an action to staunch the wound.</div>
+      <div class="entry"><span class="entry-name">Needle Pistol.</span> <em>Ranged Weapon Attack:</em> +6 to hit, range 40/80 ft., one target. <em>Hit:</em> 7 (1d8 + 3) piercing damage. The target must succeed on a DC 14 Constitution saving throw or be poisoned until the end of its next turn.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Tactical Surge.</span> The Primus calls out tactical commands. One allied Genestealer Cult creature within 30 feet can immediately make one weapon attack as a reaction.</div>
+      <hr class="div">
+      <h3 class="section-head">Reactions</h3>
+      <div class="entry"><span class="entry-name">Parry.</span> When the Primus is hit by a melee attack, it can use its reaction to add +3 to its AC against that attack, potentially causing it to miss.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════ CR 9 ═══════════════════════════════ -->
+<div class="cr-section-header">Challenge Rating 9</div>
+
+<!-- MAGUS -->
+<div class="creature-entry">
+  <div class="description">
+    <h3>Magus</h3>
+    <p>The Magus is the Genestealer Cult's living conduit to the alien — a hybrid whose psychic potential has been nurtured to extraordinary levels, blazing with xenos power that the Imperium classifies somewhere between psyker and entity. It is the Patriarch's mouthpiece, prophet, and priest, translating the ancient Genestealer's alien directives into comprehensible spiritual doctrine for the cult's lower orders. Its hypnotic gaze can break an unshielded mind in seconds, and its command of the brood-link makes it the keystone around which the entire cult's spiritual life is organized.</p>
+    <p>The Magus serves a dual function as both weapon and priest. In peacetime it leads the cult's religious ceremonies, reinforcing the brood-bond through ritual and maintaining the devotion of hybrids who have never met the Patriarch face to face. In battle it is a psychic engine of terrifying capability — mass-charming enemy forces, dominating key individuals, and feeding real-time intelligence back to the Patriarch through their shared psychic link. Cults that lack a Magus often struggle with internal cohesion; cults led by a powerful one become something approaching perfect instruments of the Hive Fleet's will.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Magus</p><p class="creature-type">Medium Humanoid (Genestealer Hybrid), Neutral Evil</p></div>
+      <div class="cr-badge">CR 9</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 14 (natural armor)</p>
+        <p><strong>Hit Points</strong> 130 (20d8 + 40)</p>
+        <p><strong>Speed</strong> 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">20 (+5)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Int +8, Wis +7, Cha +9</p>
+        <p><strong>Skills</strong> Arcana +8, Deception +9, Insight +7, Perception +7, Persuasion +9</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., truesight 30 ft., passive Perception 17</p>
+        <p><strong>Languages</strong> Any three languages, Deep Speech; telepathy 120 ft.</p>
+        <p><strong>Challenge</strong> 9 (5,000 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +4</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Brood Telepathy.</span> The Magus communicates telepathically with any Genestealer or Genestealer Hybrid within 120 feet.</div>
+      <div class="entry"><span class="entry-name">Hypnotic Gaze (Recharges after a Short or Long Rest).</span> When a creature that can see the Magus's eyes starts its turn within 30 feet of it, the Magus can force it to make a DC 17 Wisdom saving throw. On a failure, the creature is charmed by the Magus until the start of its next turn and cannot willingly move away from the Magus. A creature that succeeds is immune to this effect for 24 hours.</div>
+      <div class="entry"><span class="entry-name">Alien Conduit.</span> The Magus has advantage on Constitution saving throws to maintain concentration and cannot be magically silenced by effects of 3rd level or lower.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Magus uses two of its psychic abilities (any combination of Warp Bolt or Staff).</div>
+      <div class="entry"><span class="entry-name">Staff.</span> <em>Melee Weapon Attack:</em> +6 to hit, reach 5 ft., one target. <em>Hit:</em> 6 (1d6 + 2) bludgeoning damage plus 14 (4d6) psychic damage.</div>
+      <div class="entry"><span class="entry-name">Warp Bolt.</span> <em>Ranged Spell Attack:</em> +9 to hit, range 120 ft., one target. <em>Hit:</em> 22 (4d8 + 4) psychic damage.</div>
+      <div class="entry"><span class="entry-name">Mass Hypnosis (Recharge 5–6).</span> Each creature the Magus chooses within 60 feet that can see it must succeed on a DC 17 Wisdom saving throw or be charmed for 1 minute. While charmed, the creature cannot attack the Magus or its allies and uses its movement to approach the Magus each turn. A charmed creature can repeat the saving throw at the end of each of its turns (with disadvantage if it can see the Magus), ending the effect on a success.</div>
+      <div class="entry"><span class="entry-name">Dominate (1/Day).</span> The Magus targets one humanoid it can see within 60 feet. The target must succeed on a DC 17 Wisdom saving throw or be dominated by the Magus for 1 hour (as the <em>dominate person</em> spell). The target obeys the Magus's commands to the best of its ability and can repeat the saving throw each time it takes damage.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Psychic Shroud.</span> The Magus surrounds itself with flickering psychic phantoms until the end of its next turn, gaining half cover (+2 bonus to AC and Dexterity saving throws) as attackers' aim is disrupted.</div>
+      <hr class="div">
+      <h3 class="section-head">Reactions</h3>
+      <div class="entry"><span class="entry-name">Mental Deflection.</span> When the Magus fails a saving throw, it can use its reaction to reroll the saving throw, taking the new result.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ CR 11 ═══════════════════════════════ -->
+<div class="cr-section-header">Challenge Rating 11</div>
+
+<!-- BROODLORD -->
+<div class="creature-entry">
+  <div class="description">
+    <h3>Broodlord</h3>
+    <p>The Broodlord is what a Purestrain Genestealer becomes after centuries of predation and gene-expression — massive, ancient, and terrifying in a way that goes beyond the merely physical. It looms over its brood at nearly the size of a Space Marine in Terminator plate, its carapace scarred by centuries of combat, its rending talons capable of tearing through the thickest armor as if through parchment. It is the alpha of alphas: the exemplar of what all Genestealer biology aspires toward.</p>
+    <p>Broodlords are found at the head of the most mature and powerful Genestealer infestations, typically acting as the Patriarch's chief enforcer and the primary military threat of any assault. Where the Patriarch directs, the Broodlord leads. Its psychic presence elevates every nearby hybrid: brood-kin fight harder, strike truer, and endure more when the Broodlord's ancient alien will radiates through the pheromone link. Planetary defense forces that train specifically for Genestealer Cult uprisings brief their soldiers with one standing order: if you see the large one — the one that doesn't die to normal fire — fall back immediately and call for orbital support.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Broodlord</p><p class="creature-type">Large Aberration (Tyranid), Neutral Evil</p></div>
+      <div class="cr-badge">CR 11</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 18 (natural armor)</p>
+        <p><strong>Hit Points</strong> 178 (17d10 + 85)</p>
+        <p><strong>Speed</strong> 50 ft., climb 50 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">22 (+6)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">CON</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">INT</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">18 (+4)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +10, Dex +9, Con +9</p>
+        <p><strong>Skills</strong> Athletics +10, Perception +7, Stealth +9</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, and slashing from nonmagical attacks</p>
+        <p><strong>Condition Immunities</strong> charmed, frightened</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., blindsight 30 ft., passive Perception 17</p>
+        <p><strong>Languages</strong> Deep Speech; telepathy 120 ft.</p>
+        <p><strong>Challenge</strong> 11 (7,200 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +4</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Apex Predator.</span> The Broodlord has advantage on initiative rolls and cannot be surprised.</div>
+      <div class="entry"><span class="entry-name">Brood Superiority.</span> Genestealer Cult creatures within 60 feet of the Broodlord that can sense it have advantage on attack rolls and saving throws.</div>
+      <div class="entry"><span class="entry-name">Legendary Resistance (2/Day).</span> If the Broodlord fails a saving throw, it can choose to succeed instead.</div>
+      <div class="entry"><span class="entry-name">Spider Climb.</span> The Broodlord can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Broodlord makes four Rending Talon attacks, or two Rending Talon attacks and one Crushing Bite.</div>
+      <div class="entry"><span class="entry-name">Rending Talon.</span> <em>Melee Weapon Attack:</em> +10 to hit, reach 5 ft., one target. <em>Hit:</em> 13 (2d6 + 6) slashing damage. On a critical hit, the target's AC is reduced by 1 (minimum 0) until the damage is repaired during a long rest.</div>
+      <div class="entry"><span class="entry-name">Crushing Bite.</span> <em>Melee Weapon Attack:</em> +10 to hit, reach 5 ft., one target. <em>Hit:</em> 22 (3d10 + 6) piercing damage. The target must succeed on a DC 18 Strength saving throw or be grappled (escape DC 18) and restrained.</div>
+      <div class="entry"><span class="entry-name">Gene-seed Tsunami (Recharge 6).</span> The Broodlord exhales pheromone-laden spores. Each creature within 30 feet that is not a Tyranid or Genestealer Hybrid must succeed on a DC 17 Constitution saving throw or be charmed by the Broodlord for 1 hour, treating it as an ally and protecting it from harm. Creatures immune to the charmed condition are unaffected. The effect ends early if the charmed creature takes damage from the Broodlord or any of its allies. <em>Remove curse</em> or equivalent magic ends the effect.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Predator's Pounce.</span> The Broodlord leaps up to 30 feet toward a creature it can see without provoking opportunity attacks. If it ends this movement within 5 feet of a target, it can make one Rending Talon attack against it.</div>
+      <hr class="div">
+      <h3 class="section-head">Reactions</h3>
+      <div class="entry"><span class="entry-name">Fluid Evasion.</span> When targeted by a ranged attack, the Broodlord can move up to 15 feet in any direction without provoking opportunity attacks. If this movement causes the attacker to lose line of sight, the attack misses automatically.</div>
+      <hr class="div">
+      <h3 class="section-head">Legendary Actions</h3>
+      <div class="entry" style="font-style:italic;color:#555;font-size:0.87em;">The Broodlord can take 3 legendary actions, choosing from the options below. Only one legendary action option can be used at a time and only at the end of another creature's turn. The Broodlord regains spent legendary actions at the start of its turn.</div>
+      <div class="entry"><span class="entry-name">Slaughter.</span> The Broodlord makes one Rending Talon attack.</div>
+      <div class="entry"><span class="entry-name">Advance.</span> The Broodlord moves up to its speed without provoking opportunity attacks.</div>
+      <div class="entry"><span class="entry-name">Terrifying Shriek (Costs 2 Actions).</span> Each creature within 30 feet that can hear the Broodlord must succeed on a DC 16 Wisdom saving throw or be frightened of the Broodlord until the end of its next turn.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ CR 16 ═══════════════════════════════ -->
+<div class="cr-section-header">Challenge Rating 16</div>
+
+<!-- GENESTEALER PATRIARCH -->
+<div class="creature-entry">
+  <div class="description">
+    <h3>Genestealer Patriarch</h3>
+    <p>The Genestealer Patriarch is the source of everything — the first Genestealer to set foot on this world, potentially centuries before the cult's uprising, swollen now by decades of gene-energy from its brood into something barely recognizable as the creature it once was. Enormous and ancient, it crouches at the heart of the cult's most sacred sanctum like a living idol, radiating alien psychic presence that holds thousands of devotees in perfect thrall. To look upon it is to feel something deep in the hindbrain that evolution never quite managed to fully suppress: the recognition of an apex predator older and stranger than anything humanity has ever faced.</p>
+    <p>The Patriarch does not fight as other creatures fight — it fights as a god fights, with absolute certainty that everything in its presence exists to serve its purpose. Its rending claws carry centuries of muscle-memory that makes it a terrifyingly efficient killer even by the standards of the bioforms it has outlived. But it is the psychic presence — the Patriarch's Kiss, the ancient dominating gaze that compels devotion from even the most iron-willed minds — that makes it truly apocalyptic at close range. Scholars who have studied Genestealer Cult uprisings note one consistent observation: the cults with the oldest Patriarchs are always the most dangerous. Centuries of psychic feeding and gene-seed propagation make the ancient ones into something that barely belongs to the mortal world at all.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Genestealer Patriarch</p><p class="creature-type">Large Aberration (Tyranid, Named), Neutral Evil</p></div>
+      <div class="cr-badge">CR 16</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 20 (natural armor)</p>
+        <p><strong>Hit Points</strong> 256 (19d10 + 152)</p>
+        <p><strong>Speed</strong> 40 ft., climb 40 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">24 (+7)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">CON</div><div class="val">26 (+8)</div></div>
+        <div><div class="lbl">INT</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">22 (+6)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +12, Con +13, Wis +9, Cha +11</p>
+        <p><strong>Skills</strong> Athletics +12, Insight +9, Perception +9, Stealth +9</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, and slashing from nonmagical attacks; psychic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, poisoned</p>
+        <p><strong>Senses</strong> Darkvision 120 ft., blindsight 60 ft., truesight 30 ft., passive Perception 19</p>
+        <p><strong>Languages</strong> Deep Speech, any six languages; telepathy 120 ft.</p>
+        <p><strong>Challenge</strong> 16 (15,000 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +5</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Patriarch's Presence.</span> Any Genestealer Cult creature within 60 feet of the Patriarch automatically passes saving throws against being charmed or frightened by non-Patriarch sources, and deals an extra 5 (1d10) damage on all attack rolls.</div>
+      <div class="entry"><span class="entry-name">Legendary Resistance (3/Day).</span> If the Patriarch fails a saving throw, it can choose to succeed instead.</div>
+      <div class="entry"><span class="entry-name">Ancient Alien Mind.</span> The Patriarch is immune to divination magic and mind-reading. Any creature that attempts to read the Patriarch's mind must succeed on a DC 19 Intelligence saving throw or take 28 (8d6) psychic damage and be stunned until the end of its next turn.</div>
+      <div class="entry"><span class="entry-name">Spider Climb.</span> The Patriarch can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</div>
+      <div class="entry"><span class="entry-name">Progenitor's Will.</span> The first time the Patriarch is reduced to 0 hit points in a combat encounter, it can use its reaction to immediately regain 60 hit points. This ability does not function if the Patriarch was slain by a critical hit.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Patriarch makes two Rending Claws attacks and one Crushing Bite, or uses two Psychic Powers.</div>
+      <div class="entry"><span class="entry-name">Rending Claws.</span> <em>Melee Weapon Attack:</em> +12 to hit, reach 5 ft., one target. <em>Hit:</em> 16 (2d8 + 7) slashing damage. On a critical hit, the target's AC is reduced by 2 (minimum 0) until the armor is repaired.</div>
+      <div class="entry"><span class="entry-name">Crushing Bite.</span> <em>Melee Weapon Attack:</em> +12 to hit, reach 5 ft., one target. <em>Hit:</em> 26 (3d12 + 7) piercing damage. The target must succeed on a DC 20 Strength saving throw or be grappled (escape DC 20) and restrained.</div>
+      <div class="entry"><span class="entry-name">Patriarch's Kiss (Recharge 5–6).</span> The Patriarch targets one creature it has grappled. The creature must succeed on a DC 19 Constitution saving throw or take 40 (8d8 + 4) psychic damage and become permanently charmed by the Patriarch (as per the <em>geas</em> spell; removed by <em>remove curse</em> cast at 5th level or higher). On a success, the creature takes half damage and is not charmed.</div>
+      <div class="entry"><span class="entry-name">Dominating Gaze.</span> One creature within 60 feet that can see the Patriarch must succeed on a DC 19 Wisdom saving throw or be charmed for 1 minute. While charmed, it must use its action and movement to approach and defend the Patriarch. A creature can repeat the saving throw at the end of each of its turns, ending the effect on a success.</div>
+      <div class="entry"><span class="entry-name">Psychic Shriek (Recharge 6).</span> All creatures within 30 feet that are not Genestealer Cult members must succeed on a DC 19 Intelligence saving throw or take 45 (10d8) psychic damage and be stunned until the end of their next turn. On a success, a creature takes half damage and is not stunned.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Summon the Brood.</span> The Patriarch sends psychic compulsion through its brood. All Genestealer Cult creatures within 60 feet can move up to 10 feet without provoking opportunity attacks.</div>
+      <hr class="div">
+      <h3 class="section-head">Legendary Actions</h3>
+      <div class="entry" style="font-style:italic;color:#555;font-size:0.87em;">The Patriarch can take 3 legendary actions, choosing from the options below. Only one legendary action option can be used at a time and only at the end of another creature's turn. The Patriarch regains spent legendary actions at the start of its turn.</div>
+      <div class="entry"><span class="entry-name">Advance.</span> The Patriarch moves up to half its speed without provoking opportunity attacks.</div>
+      <div class="entry"><span class="entry-name">Rending Strike.</span> The Patriarch makes one Rending Claws attack.</div>
+      <div class="entry"><span class="entry-name">Mind Crush (Costs 2 Actions).</span> One creature within 60 feet must succeed on a DC 19 Wisdom saving throw or take 28 (8d6) psychic damage and be incapacitated until the end of its next turn. On a success, the creature takes half damage and is not incapacitated.</div>
+      <div class="entry"><span class="entry-name">Rise, My Children (Costs 3 Actions).</span> All Genestealer Cult creatures within 60 feet regain 20 hit points, can immediately stand from prone as a free action, and have advantage on all attack rolls until the start of the Patriarch's next turn.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════ FOOTER ═══════════════════════════════════ -->
+<div style="text-align:center;margin-top:40px;padding:16px;font-size:.78rem;color:#555;font-style:italic;">
+  Warhammer 40,000 &times; D&amp;D 5E Homebrew &mdash; Genestealer Cult Bestiary &mdash; 16 Creatures, CR 1/4 to CR 16<br>
+  Fan-made content for personal use only. Tyranid bioforms catalogued separately in the Tyranid Bestiary.
+</div>
+
+</body>
+</html>
+
+

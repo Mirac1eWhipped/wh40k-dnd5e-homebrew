@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deathwatch – D&D 5e Reference Key (Light)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+
+:root {
+  --bg:         #f5eedc;
+  --panel:      #ede5cc;
+  --panel2:     #e5dbc0;
+  --gold:       #7a5714;
+  --gold-light: #5c3e0a;
+  --gold-dim:   #9a7830;
+  --red:        #8b1818;
+  --red-dim:    #a83030;
+  --silver:     #2e2414;
+  --silver-dim: #6b5030;
+  --text:       #1a1008;
+  --text-dim:   #6b5030;
+  --border:     #c8b48a;
+  --border2:    #b8a070;
+  --font-head:  'Cinzel Decorative', 'Cinzel', serif;
+  --font-label: 'Cinzel', serif;
+  --font-body:  'Crimson Text', Georgia, serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #d8cfc0;
+  font-family: var(--font-body);
+  color: var(--text);
+  font-size: 10pt;
+}
+
+/* ── PAGE SHELL ── */
+.ref-page {
+  width: 8.5in;
+  min-height: 11in;
+  margin: 0.45in auto 0.5in;
+  padding: 0.38in 0.42in;
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  position: relative;
+  overflow: hidden;
+}
+.ref-page::before,
+.ref-page::after {
+  content: '';
+  position: absolute;
+  width: 42px; height: 42px;
+  border-color: var(--red-dim);
+  border-style: solid;
+  opacity: 0.6;
+  pointer-events: none;
+}
+.ref-page::before { top: 8px; left: 8px; border-width: 2px 0 0 2px; }
+.ref-page::after  { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
+
+/* ── HEADER ── */
+.ref-header {
+  text-align: center;
+  border-bottom: 2px solid var(--red-dim);
+  padding-bottom: 0.1in;
+  margin-bottom: 0.18in;
+}
+.ref-header .aquila {
+  font-size: 14pt;
+  color: var(--red);
+  letter-spacing: 0.3em;
+}
+.ref-header h1 {
+  font-family: var(--font-head);
+  font-size: 15pt;
+  color: var(--gold-light);
+  letter-spacing: 0.08em;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+  margin: 3px 0 2px;
+}
+.ref-header p {
+  font-family: var(--font-label);
+  font-size: 6.5pt;
+  color: var(--silver-dim);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+/* ── SECTION TITLE ── */
+.sec-head {
+  font-family: var(--font-label);
+  font-size: 7pt;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--red);
+  border-bottom: 1px solid var(--red-dim);
+  padding-bottom: 3px;
+  margin-bottom: 7px;
+}
+
+/* ── REFERENCE TABLE ── */
+table.ref {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9.5pt;
+}
+table.ref thead tr {
+  background: var(--panel2);
+}
+table.ref thead th {
+  font-family: var(--font-label);
+  font-size: 6.5pt;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red);
+  padding: 4px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--red-dim);
+}
+table.ref thead th:nth-child(2) {
+  border-left: 1px solid var(--border);
+}
+table.ref tbody tr {
+  border-bottom: 1px solid rgba(160,130,80,0.35);
+}
+table.ref tbody tr:nth-child(even) {
+  background: rgba(190,165,110,0.25);
+}
+table.ref tbody td {
+  padding: 4px 8px;
+  vertical-align: middle;
+}
+table.ref tbody td:first-child {
+  font-family: var(--font-label);
+  font-size: 9pt;
+  font-weight: 600;
+  color: var(--gold-light);
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+table.ref tbody td:nth-child(2) {
+  border-left: 1px solid var(--border);
+  color: var(--text);
+  font-style: italic;
+}
+table.ref tbody td .abbr {
+  font-family: var(--font-label);
+  font-size: 7pt;
+  color: var(--silver-dim);
+  margin-left: 5px;
+  font-style: normal;
+}
+table.ref tbody td .note {
+  font-size: 8pt;
+  color: var(--text-dim);
+  display: block;
+  margin-top: 1px;
+}
+
+/* ── LAYOUT GRID ── */
+.top-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.18in;
+  margin-bottom: 0.18in;
+}
+
+.full-width {
+  margin-bottom: 0.18in;
+}
+
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.18in;
+  margin-bottom: 0.18in;
+}
+
+.block {
+  border: 1px solid var(--border2);
+  background: var(--panel);
+  padding: 0.09in 0.1in;
+}
+
+/* ── FOOTER NOTE ── */
+.ref-footer {
+  margin-top: 0.15in;
+  border-top: 1px solid var(--red-dim);
+  padding-top: 0.08in;
+  font-family: var(--font-label);
+  font-size: 6pt;
+  color: var(--text-dim);
+  letter-spacing: 0.12em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* ── SCREEN CONTROLS ── */
+@media screen {
+  .print-note {
+    text-align: center;
+    font-family: var(--font-label);
+    font-size: 7pt;
+    color: var(--silver-dim);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.12in 0 0.06in;
+  }
+  .print-btn {
+    display: block;
+    margin: 0.08in auto 0.28in;
+    padding: 7px 22px;
+    background: transparent;
+    border: 1px solid var(--red-dim);
+    color: var(--red);
+    font-family: var(--font-label);
+    font-size: 7.5pt;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .print-btn:hover { background: var(--red-dim); color: var(--bg); }
+}
+
+/* ── PRINT ── */
+@media print {
+  @page { size: letter portrait; margin: 0; }
+  body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .ref-page { width: 8.5in; min-height: 11in; margin: 0; border: none; }
+  .print-note, .print-btn { display: none !important; }
+}
+
+</style>
+</head>
+<body>
+
+<p class="print-note">Deathwatch – D&amp;D 5e Reference Key (Light)</p>
+<button class="print-btn" onclick="window.print()">✠ &nbsp; Export to PDF / Print</button>
+
+<div class="ref-page">
+
+  <!-- HEADER -->
+  <div class="ref-header">
+    <div class="aquila">✠ &nbsp; ✠ &nbsp; ✠</div>
+    <h1>D&amp;D 5e Reference Key</h1>
+    <p>Deathwatch Homebrew &nbsp;·&nbsp; Jericho Reach Campaign &nbsp;·&nbsp; Ordo Xenos Classified</p>
+  </div>
+
+  <!-- TOP: Ability Scores + Combat Terms -->
+  <div class="top-grid">
+
+    <!-- Ability Scores -->
+    <div class="block">
+      <div class="sec-head">Ability Scores</div>
+      <table class="ref">
+        <thead>
+          <tr>
+            <th>Deathwatch Name</th>
+            <th>D&amp;D 5e Standard</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Might <span class="abbr">(Mgt)</span></td>
+            <td>Strength <span class="abbr">(STR)</span></td>
+          </tr>
+          <tr>
+            <td>Agility <span class="abbr">(Agi)</span></td>
+            <td>Dexterity <span class="abbr">(DEX)</span></td>
+          </tr>
+          <tr>
+            <td>Toughness <span class="abbr">(Tou)</span></td>
+            <td>Constitution <span class="abbr">(CON)</span></td>
+          </tr>
+          <tr>
+            <td>Lore <span class="abbr">(Lor)</span></td>
+            <td>Intelligence <span class="abbr">(INT)</span></td>
+          </tr>
+          <tr>
+            <td>Awareness <span class="abbr">(Awr)</span></td>
+            <td>Wisdom <span class="abbr">(WIS)</span></td>
+          </tr>
+          <tr>
+            <td>Command <span class="abbr">(Cmd)</span></td>
+            <td>Charisma <span class="abbr">(CHA)</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Combat & General Terms -->
+    <div class="block">
+      <div class="sec-head">Combat &amp; General Terms</div>
+      <table class="ref">
+        <thead>
+          <tr>
+            <th>Deathwatch Name</th>
+            <th>D&amp;D 5e Standard</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Wounds</td>
+            <td>Hit Points (HP)</td>
+          </tr>
+          <tr>
+            <td>Wound Maximum</td>
+            <td>Hit Point Maximum</td>
+          </tr>
+          <tr>
+            <td>Current Wounds</td>
+            <td>Current Hit Points</td>
+          </tr>
+          <tr>
+            <td>Temporary Wounds</td>
+            <td>Temporary Hit Points</td>
+          </tr>
+          <tr>
+            <td>Mortal Wounds</td>
+            <td>Death Saving Throws</td>
+          </tr>
+          <tr>
+            <td>Armour Class</td>
+            <td>Armor Class (AC)</td>
+          </tr>
+          <tr>
+            <td>Renown</td>
+            <td>Reputation / Fame</td>
+          </tr>
+          <tr>
+            <td>Requisition Points</td>
+            <td>Gold Pieces (GP)</td>
+          </tr>
+          <tr>
+            <td>Kill Team</td>
+            <td>Party / Adventuring Group</td>
+          </tr>
+          <tr>
+            <td>Specialty</td>
+            <td>Class</td>
+          </tr>
+          <tr>
+            <td>Chapter of Origin</td>
+            <td>Race / Lineage</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div><!-- /top-grid -->
+
+  <!-- FULL WIDTH: Skills -->
+  <div class="full-width">
+    <div class="block">
+      <div class="sec-head">Battle Disciplines &amp; Skills</div>
+      <table class="ref">
+        <thead>
+          <tr>
+            <th style="width:35%">Deathwatch Name</th>
+            <th>D&amp;D 5e Standard</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Agility / DEX -->
+          <tr>
+            <td>Combat Agility <span class="abbr">(Agi)</span></td>
+            <td>Acrobatics <span class="abbr">(DEX)</span></td>
+          </tr>
+          <tr>
+            <td>Sleight of Hand <span class="abbr">(Agi)</span></td>
+            <td>Sleight of Hand <span class="abbr">(DEX)</span></td>
+          </tr>
+          <tr>
+            <td>Infiltration <span class="abbr">(Agi)</span></td>
+            <td>Stealth <span class="abbr">(DEX)</span></td>
+          </tr>
+          <!-- Awareness / WIS -->
+          <tr>
+            <td>Xenos Handling <span class="abbr">(Awr)</span></td>
+            <td>Animal Handling <span class="abbr">(WIS)</span></td>
+          </tr>
+          <tr>
+            <td>Threat Assessment <span class="abbr">(Awr)</span></td>
+            <td>Insight <span class="abbr">(WIS)</span></td>
+          </tr>
+          <tr>
+            <td>Field Medicae <span class="abbr">(Awr)</span></td>
+            <td>Medicine <span class="abbr">(WIS)</span></td>
+          </tr>
+          <tr>
+            <td>Auspex Awareness <span class="abbr">(Awr)</span></td>
+            <td>Perception <span class="abbr">(WIS)</span></td>
+          </tr>
+          <tr>
+            <td>Wilderness Survival <span class="abbr">(Awr)</span></td>
+            <td>Survival <span class="abbr">(WIS)</span></td>
+          </tr>
+          <!-- Lore / INT -->
+          <tr>
+            <td>Forbidden Lore <span class="abbr">(Lor)</span></td>
+            <td>Arcana <span class="abbr">(INT)</span></td>
+          </tr>
+          <tr>
+            <td>Chapter History <span class="abbr">(Lor)</span></td>
+            <td>History <span class="abbr">(INT)</span></td>
+          </tr>
+          <tr>
+            <td>Tactical Analysis <span class="abbr">(Lor)</span></td>
+            <td>Investigation <span class="abbr">(INT)</span></td>
+          </tr>
+          <tr>
+            <td>Planetology <span class="abbr">(Lor)</span></td>
+            <td>Nature <span class="abbr">(INT)</span></td>
+          </tr>
+          <tr>
+            <td>Imperial Doctrine <span class="abbr">(Lor)</span></td>
+            <td>Religion <span class="abbr">(INT)</span></td>
+          </tr>
+          <!-- Might / STR -->
+          <tr>
+            <td>Physical Conditioning <span class="abbr">(Mgt)</span></td>
+            <td>Athletics <span class="abbr">(STR)</span></td>
+          </tr>
+          <!-- Command / CHA -->
+          <tr>
+            <td>Command Authority <span class="abbr">(Cmd)</span></td>
+            <td>Persuasion <span class="abbr">(CHA)</span></td>
+          </tr>
+          <tr>
+            <td>Oratory <span class="abbr">(Cmd)</span></td>
+            <td>Performance <span class="abbr">(CHA)</span></td>
+          </tr>
+          <tr>
+            <td>Subterfuge <span class="abbr">(Cmd)</span></td>
+            <td>Deception <span class="abbr">(CHA)</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- BOTTOM: Character Sheet Sections + Traits -->
+  <div class="bottom-grid">
+
+    <!-- Character Sheet Sections -->
+    <div class="block">
+      <div class="sec-head">Character Sheet Sections</div>
+      <table class="ref">
+        <thead>
+          <tr>
+            <th>Deathwatch Name</th>
+            <th>D&amp;D 5e Standard</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Battle-Brother Dossier</td>
+            <td>Character Sheet</td>
+          </tr>
+          <tr>
+            <td>Battle Disciplines</td>
+            <td>Skills</td>
+          </tr>
+          <tr>
+            <td>Wargear &amp; Equipment</td>
+            <td>Equipment</td>
+          </tr>
+          <tr>
+            <td>Chapter Relics</td>
+            <td>Magic Items</td>
+          </tr>
+          <tr>
+            <td>Auspex Awareness (Passive)</td>
+            <td>Passive Perception</td>
+          </tr>
+          <tr>
+            <td>Wargear Proficiencies</td>
+            <td>Weapon &amp; Armour Proficiencies</td>
+          </tr>
+          <tr>
+            <td>Chapter History</td>
+            <td>Character Backstory</td>
+          </tr>
+          <tr>
+            <td>Operational Log</td>
+            <td>Adventure Notes</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Personality / Traits -->
+    <div class="block">
+      <div class="sec-head">Personality &amp; Traits</div>
+      <table class="ref">
+        <thead>
+          <tr>
+            <th>Deathwatch Name</th>
+            <th>D&amp;D 5e Standard</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Behavioural Doctrines</td>
+            <td>Personality Traits</td>
+          </tr>
+          <tr>
+            <td>Battle-Oaths &amp; Ideals</td>
+            <td>Ideals</td>
+          </tr>
+          <tr>
+            <td>Bonds &amp; Obligations</td>
+            <td>Bonds</td>
+          </tr>
+          <tr>
+            <td>Weaknesses &amp; Flaws</td>
+            <td>Flaws</td>
+          </tr>
+          <tr>
+            <td>Rank &amp; Designation</td>
+            <td>Level &amp; Title</td>
+          </tr>
+          <tr>
+            <td>Chapter of Origin</td>
+            <td>Race</td>
+          </tr>
+          <tr>
+            <td>Specialty / Class</td>
+            <td>Class</td>
+          </tr>
+          <tr>
+            <td>Background</td>
+            <td>Background</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div><!-- /bottom-grid -->
+
+  <!-- FOOTER -->
+  <div class="ref-footer">
+    Deathwatch Kill Team · Jericho Reach Campaign · D&amp;D 5e Homebrew Reference &nbsp;·&nbsp; For Player Use
+  </div>
+
+</div><!-- /ref-page -->
+
+</body>
+</html>

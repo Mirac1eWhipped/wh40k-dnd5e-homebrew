@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tyranid Stat Blocks — Part 4</title>
+<style>
+  body {
+    font-family: 'Palatino Linotype', Palatino, 'Book Antiqua', serif;
+    background: #e8d8b4;
+    margin: 0;
+    padding: 20px;
+    color: #1a0a00;
+  }
+  h1 {
+    text-align: center;
+    color: #58180d;
+    font-size: 2em;
+    margin-bottom: 4px;
+  }
+  h1 + p {
+    text-align: center;
+    font-style: italic;
+    color: #58180d;
+    margin-top: 0;
+    margin-bottom: 30px;
+  }
+  .stat-block {
+    background: #fdf5e6;
+    border: 1px solid #c9a227;
+    border-top: 4px solid #58180d;
+    border-radius: 4px;
+    max-width: 680px;
+    margin: 30px auto;
+    padding: 0 0 12px 0;
+    box-shadow: 3px 4px 12px rgba(0,0,0,0.35);
+  }
+  .stat-block-header {
+    background: #58180d;
+    color: #fdf5e6;
+    padding: 10px 14px 8px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .creature-name {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 0;
+  }
+  .creature-type {
+    font-style: italic;
+    font-size: 0.9em;
+    margin: 2px 0 0 0;
+  }
+  .cr-badge {
+    background: #c9a227;
+    color: #1a0a00;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 0.85em;
+    font-weight: bold;
+    white-space: nowrap;
+    margin-top: 4px;
+  }
+  .divider {
+    border: none;
+    border-top: 2px solid #c9a227;
+    margin: 8px 14px;
+  }
+  .stat-block-body {
+    padding: 0 14px;
+  }
+  .top-stats p {
+    margin: 3px 0;
+    font-size: 0.95em;
+  }
+  .ability-grid {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+    background: #f5ead0;
+    border: 1px solid #c9a227;
+    border-radius: 3px;
+    padding: 6px 0;
+    margin: 8px 0;
+  }
+  .ability-grid div {
+    font-size: 0.9em;
+  }
+  .ability-grid .label {
+    font-weight: bold;
+    color: #58180d;
+    text-transform: uppercase;
+    font-size: 0.75em;
+  }
+  .ability-grid .score {
+    font-size: 1.1em;
+  }
+  .bottom-stats p {
+    margin: 2px 0;
+    font-size: 0.9em;
+  }
+  h3 {
+    color: #58180d;
+    font-size: 1.05em;
+    margin: 10px 0 4px 0;
+    border-bottom: 1px solid #c9a227;
+    padding-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .trait, .action-entry, .reaction-entry, .bonus-entry, .legendary-entry {
+    margin: 6px 0;
+    font-size: 0.93em;
+    line-height: 1.5;
+  }
+  .trait-name, .action-name {
+    font-weight: bold;
+    font-style: italic;
+    color: #58180d;
+  }
+  .flavor-note {
+    font-style: italic;
+    color: #555;
+    font-size: 0.88em;
+    border-left: 3px solid #c9a227;
+    margin: 8px 0 0 0;
+    padding: 4px 10px;
+    background: #f5ead0;
+  }
+  .variant-label {
+    text-align: center;
+    font-size: 0.82em;
+    color: #58180d;
+    font-style: italic;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px;
+    background: #f0ddb0;
+    border-bottom: 1px solid #c9a227;
+  }
+</style>
+</head>
+<body>
+
+<h1>Tyranid Stat Blocks — Part 4</h1>
+<p>Warhammer 40,000 × D&amp;D 5E Homebrew &bull; Von Ryan's Leaper &bull; Warrior Variants &bull; Neurolictor &bull; Tyranid Prime &bull; Death Leaper &bull; Harridan</p>
+
+<!-- VON RYAN'S LEAPER -->
+<div class="stat-block">
+  <div class="stat-block-header">
+    <div>
+      <p class="creature-name">Von Ryan's Leaper</p>
+      <p class="creature-type">Medium Monstrosity (Tyranid), unaligned</p>
+    </div>
+    <div class="cr-badge">CR 2</div>
+  </div>
+  <div class="stat-block-body">
+    <div class="top-stats">
+      <p><strong>Armor Class</strong> 14 (natural armor)</p>
+      <p><strong>Hit Points</strong> 45 (6d8 + 18)</p>
+      <p><strong>Speed</strong> 50 ft., climb 30 ft.</p>
+    </div>
+    <hr class="divider">
+    <div class="ability-grid">
+      <div><div class="label">STR</div><div class="score">16 (+3)</div></div>
+      <div><div class="label">DEX</div><div class="score">18 (+4)</div></div>
+      <div><div class="label">CON</div><div class="score">16 (+3)</div></div>
+      <div><div class="label">INT</div><div class="score">4 (&minus;3)</div></div>
+      <div><div class="label">WIS</div><div class="score">12 (+1)</div></div>
+      <div><div class="label">CHA</div><div class="score">5 (&minus;3)</div></div>
+    </div>
+    <hr class="divider">
+    <div class="bottom-stats">
+      <p><strong>Saving Throws</strong> Dex +6</p>
+      <p><strong>Skills</strong> Athletics +5, Perception +3, Stealth +6</p>
+      <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 13</p>
+      <p><strong>Languages</strong> —</p>
+      <p><strong>Proficiency Bonus</strong> +2</p>
+    </div>
+    <hr class="divider">
+    <h3>Traits</h3>
+    <div class="trait"><span class="trait-name">Pack Tactics.</span> The leaper has advantage on attack rolls against a creature if at least one of its allies is within 5 feet of the creature and the ally isn't incapacitated.</div>
+    <div class="trait"><span class="trait-name">Leaping Pounce.</span> If the leaper moves at least 15 feet toward a creature and hits it with a Rending Claws attack on the same turn, the target must succeed on a DC 13 Strength saving throw or be knocked prone. If knocked prone, the leaper may immediately make one Bite attack as a bonus action.</div>
+    <div class="trait"><span class="trait-name">Synapse Dependency.</span> While not within 24 hours of a Synapse creature, the leaper loses Pack Tactics and acts erratically, making a DC 10 Wisdom save at the start of each turn or attacking the nearest creature.</div>
+    <hr class="divider">
+    <h3>Actions</h3>
+    <div class="action-entry"><span class="action-name">Multiattack.</span> The leaper makes two Rending Claws attacks.</div>
+    <div class="action-entry"><span class="action-name">Rending Claws.</span> <em>Melee Weapon Attack:</em> +6 to hit, reach 5 ft., one target. <em>Hit:</em> 9 (2d4 + 4) slashing damage.</div>
+    <div class="action-entry"><span class="action-name">Bite.</span> <em>Melee Weapon Attack:</em> +5 to hit, reach 5 ft., one prone target. <em>Hit:</em> 7 (1d8 + 3) piercing damage, plus 4 (1d8) additional piercing damage if the target is prone.</div>
+    <hr class="divider">
+    <h3>Bonus Actions</h3>
+    <div class="bonus-entry"><span class="action-name">Leap.</span> The leaper jumps up to 30 feet horizontally or 15 feet vertically without provoking opportunity attacks. This does not count against its speed.</div>
+  </div>
+</div>
+
+<!-- WARRIOR - DEVOURER -->
+<div class="stat-block">
+  <div class="variant-label">Tyranid Warrior Variant — Devourer</div>
+  <div class="stat-block-header">
+    <div>
+      <p class="creature-name">Tyranid Warrior — Devourer</p>
+      <p class="creature-type">Large Monstrosity (Tyranid), unaligned</p>
+    </div>
+    <div class="cr-badge">CR 4</div>
+  </div>
+  <div class="stat-block-body">
+    <div class="top-stats">
+      <p><strong>Armor Class</strong> 15 (natural armor)</p>
+      <p><strong>Hit Points</strong> 85 (10d10 + 30)</p>
+      <p><strong>Speed</strong> 40 ft.</p>
+    </div>
+    <hr class="divider">
+    <div class="ability-grid">
+      <div><div class="label">STR</div><div class="score">18 (+4)</div></div>
+      <div><div class="label">DEX</div><div class="score">12 (+1)</div></div>
+      <div><div class="label">CON</div><div class="score">16 (+3)</div></div>
+      <div><div class="label">INT</div><div class="score">8 (&minus;1)</div></div>
+      <div><div class="label">WIS</div><div class="score">12 (+1)</div></div>
+      <div><div class="label">CHA</div><div class="score">8 (&minus;1)</div></div>
+    </div>
+    <hr class="divider">
+    <div class="bottom-stats">
+      <p><strong>Saving Throws</strong> Str +6, Con +5</p>
+      <p><strong>Skills</strong> Perception +3, Athletics +6</p>
+      <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 13</p>
+      <p><strong>Languages</strong> —</p>
+      <p><strong>Proficiency Bonus</strong> +2</p>
+    </div>
+    <hr class="divider">
+    <h3>Traits</h3>
+    <div class="trait"><span class="trait-name">Synapse Relay.</span> Friendly Tyranid creatures within 30 feet that lack Synapse are immune to Synapse Dependency while the warrior is conscious.</div>
+    <div class="trait"><span class="trait-name">Synapse Dependency.</span> While not within 24 hours of a Synapse creature, the warrior has disadvantage on attack rolls and ability checks.</div>
+    <div class="trait"><span class="trait-name">Adaptive Resilience.</span> When hit by a damage type for the first time in combat, the warrior gains resistance to that type until the end of its next turn.</div>
+    <hr class="divider">
+    <h3>Actions</h3>
+    <div class="action-entry"><span class="action-name">Multiattack.</span> The warrior makes two Devourer attacks and one Scything Talons attack.</div>
+    <div class="action-entry"><span class="action-name">Devourer.</span> <em>Ranged Weapon Attack:</em> +4 to hit, range 18/36 ft., one target. <em>Hit:</em> 7 (1d10 + 2) piercing damage. The target must succeed on a DC 12 Constitution save or take 3 (1d6) acid damage at the start of its next turn.</div>
+    <div class="action-entry"><span class="action-name">Scything Talons.</span> <em>Melee Weapon Attack:</em> +6 to hit, reach 5 ft., one target. <em>Hit:</em> 11 (2d6 + 4) slashing damage.</div>
+    <p class="flavor-note">The Devourer fires a torrent of flesh-borer beetles and writhing bio-acid, ideal for shredding lightly armored targets at close quarters.</p>
+  </div>
+</div>
+
+<!-- WARRIOR - VENOM CANNON -->
+<div class="stat-block">
+  <div class="variant-label">Tyranid Warrior Variant — Venom Cannon</div>
+  <div class="stat-block-header">
+    <div>
+      <p class="creature-name">Tyranid Warrior — Venom Cannon</p>
+      <p class="creature-type">Large Monstrosity (Tyranid), unaligned</p>
+    </div>
+    <div class="cr-badge">CR 4</div>
+  </div>
+  <div class="stat-block-body">
+    <div class="top-stats">
+      <p><strong>Armor Class</strong> 15 (natural armor)</p>
+      <p><strong>Hit Points</strong> 85 (10d10 + 30)</p>
+      <p><strong>Speed</strong> 40 ft.</p>
+    </div>
+    <hr class="divider">
+    <div class="ability-grid">
+      <div><div class="label">STR</div><div class="score">18 (+4)</div></div>
+      <div><div class="label">DEX</div><div class="score">12 (+1)</div></div>
+      <div><div class="label">CON</div><div class="score">16 (+3)</div></div>
+      <div><div class="label">INT</div><div class="score">8 (&minus;1)</div></div>
+      <div><div class="label">WIS</div><div class="score">12 (+1)</div></div>
+      <div><div class="label">CHA</div><div class="score">8 (&minus;1)</div></div>
+    </div>
+    <hr class="divider">
+    <div class="bottom-stats">
+      <p><strong>Saving Throws</strong> Str +6, Con +5</p>
+      <p><strong>Skills</strong> Perception +3, Athletics +6</p>
+      <p><strong>Damage Resistances</strong> Acid</p>
+      <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 13</p>
+      <p><strong>Languages</strong> —</p>
+      <p><strong>Proficiency Bonus</strong> +2</p>
+    </div>
+    <hr class="divider">
+    <h3>Traits</h3>
+    <div class="trait"><span class="trait-name">Synapse Relay.</span> Friendly Tyranid creatures within 30 feet that lack Synapse are immune to Synapse Dependency while the warrior is conscious.</div>
+    <div class="trait"><span class="trait-name">Synapse Dependency.</span> While not within 24 hours of a Synapse creature, the warrior has disadvantage on attack rolls and ability checks.</div>
+    <div class="trait"><span class="trait-name">Adaptive Resilience.</span> When hit by a damage type for the first time in combat, the warrior gains resistance to that type until the end of its next turn.</div>
+    <hr class="divider">
+    <h3>Actions</h3>
+    <div class="action-entry"><span class="action-name">Multiattack.</span> The warrior makes one Venom Cannon attack and one Scything Talons attack.</div>
+    <div class="action-entry"><span class="action-name">Venom Cannon.</span> <em>Ranged Weapon Attack:</em> +4 to hit, range 60/120 ft., one target. <em>Hit:</em> 18 (3d10 + 2) acid damage. The target must succeed on a DC 13 Constitution save or have its AC reduced by 2 until it receives magical healing or a creature tends to the wound.</div>
+    <div class="action-entry"><span class="action-name">Scything Talons.</span> <em>Melee Weapon Attack:</em> +6 to hit, reach 5 ft., one target. <em>Hit:</em> 11 (2d6 + 4) slashing damage.</div>
+    <p class="flavor-note">The Venom Cannon lobs a pressurized ball of corrosive bio-plasma that detonates on impact, dissolving armor plating and leaving targets exposed to subsequent attacks.</p>
+  </div>
+</div>
+
+<!-- WARRIOR - BARBED STRANGLER -->
+<div class="stat-block">
+  <div class="variant-label">Tyranid Warrior Variant — Barbed Strangler</div>
+  <div class="stat-block-header">
+    <div>
+      <p class="creature-name">Tyranid Warrior — Barbed Strangler</p>
+      <p class="creature-type">Large Monstrosity (Tyranid), unaligned</p>
+    </div>
+    <div class="cr-badge">CR 4</div>
+  </div>
+  <div class="stat-block-body">
+    <div class="top-stats">
+      <p><strong>Armor Class</strong> 15 (natural armor)</p>
+      <p><strong>Hit Points</strong> 85 (10d10 + 30)</p>
+      <p><strong>Speed</strong> 40 ft.</p>
+    </div>
+    <hr class="divider">
+    <div class="ability-grid">
+      <div><div class="label">STR</div><div class="score">18 (+4)</div></div>
+      <div><div class="label">DEX</div><div class="score">12 (+1)</div></div>
+      <div><div class="label">CON</div><div class="score">16 (+3)</div></div>
+      <div><div class="label">INT</div><div class="score">8 (&minus;1)</div></div>
+      <div><div class="label">WIS</div><div class="score">12 (+1)</div></div>
+      <div><div class="label">CHA</div><div class="score">8 (&minus;1)</div></div>
+    </div>
+    <hr class="divider">
+    <div class="bottom-stats">
+      <p><strong>Saving Throws</strong> Str +6, Con +5</p>
+      <p><strong>Skills</strong> Perception +3, Athletics +6</p>
+      <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 13</p>
+      <p><strong>Languages</strong> —</p>
+      <p><strong>Proficiency Bonus</strong> +2</p>
+    </div>
+    <hr class="divider">
+    <h3>Traits</h3>
+    <div class="trait"><span class="trait-name">Synapse Relay.</span> Friendly Tyranid creatures within 30 feet that lack Synapse are immune to Synapse Dependency while the warrior is conscious.</div>
+    <div class="trait"><span class="trait-name">Synapse Dependency.</span> While not within 24 hours of a Synapse creature, the warrior has disadvantage on attack rolls and ability checks.</div>
+    <div class="trait"><span class="trait-name">Adaptive Resilience.</span> When hit by a damage type for the first time in combat, the warrior gains resistance to that type until the end of its next turn.</div>
+    <hr class="divider">
+    <h3>Actions</h3>
+    <div class="action-entry"><span class="action-name">Multiattack.</span> The warrior uses its Barbed Strangler and makes one Scything Talons attack.</div>
+    <div class="action-entry"><span class="action-name">Barbed Strangler.</span> Each creature in a 10-foot-radius sphere centered on a point within 60 feet must succeed on a DC 13 Dexterity saving throw. <em>Failed save:</em> 9 (2d6 + 2) piercing damage and restrained until the end of its next turn. <em>Successful save:</em> half damage and not restrained. The area becomes difficult terrain until the end of the warrior's next turn.</div>
+    <div class="action-entry"><span class="action-name">Scything Talons.</span> <em>Melee Weapon Attack:</em> +6 to hit, reach 5 ft., one target. <em>Hit:</em> 11 (2d6 + 4) slashing damage.</div>
+    <p class="flavor-note">The Barbed Strangler fires seed-pods that explode into grasping vines and chitinous barbs, pinning clustered infantry and denying ground to enemies.</p>
+  </div>
+</div>
+
+<!-- NEUROLICTOR -->
+<div class="stat-block">
+  <div class="stat-block-header">
+    <div>
+      <p class="creature-name">Neurolictor</p>
+      <p class="creature-type">Medium Aberration (Tyranid), unaligned</p>
+    </div>
+    <div class="cr-badge">CR 5</div>
+  </div>
+  <div class="stat-block-body">
+    <div class="top-stats">
+      <p><strong>Armor Class</strong> 16 (natural armor)</p>
+      <p><strong>Hit Points</strong> 78 (12d8 + 24)</p>
+      <p><strong>Speed</strong> 40 ft., climb 40 ft.</p>
+    </div>
+    <hr class="divider">
+    <div class="ability-grid">
+      <div><div class="label">STR</div><div class="score">14 (+2)</div></div>
+      <div><div class="label">DEX</div><div class="score">20 (+5)</div></div>
+      <div><div class="label">CON</div><div class="score">14 (+2)</div></div>
+      <div><div class="label">INT</div><div class="score">16 (+3)</div></div>
+      <div><div class="label">WIS</div><div class="score">16 (+3)</div></div>
+      <div><div class="label">CHA</div><div class="score">10 (+0)</div></div>
+    </div>
+    <hr class="divider">
+    <div class="bottom-stats">
+      <p><strong>Saving Throws</strong> Dex +8, Wis +6</p>
+      <p><strong>Skills</strong> Perception +9 (Expertise), Stealth +11 (Expertise), Insight +6</p>
+      <p><strong>Senses</strong> Truesight 30 ft., Darkvision 60 ft., passive Perception 19</p>
+      <p><strong>Languages</strong> —</p>
+      <p><strong>Proficiency Bonus</strong> +3</p>
+    </div>
+    <hr class="divider">
+    <h3>Traits</h3>
+    <div class="trait"><span class="trait-name">Psychic Interference.</span> Any creature that attempts to cast a spell or use a psionic ability within 30 feet of the Neurolictor must first succeed on a DC 14 Intelligence saving throw. On a failure, the spell or ability fails without expending the slot or use.</div>
+    <div class="trait"><span class="trait-name">Shadow in the Warp.</span> The Neurolictor is invisible in areas of dim light or darkness. It can still be detected by truesight or by hearing (Perception with disadvantage).</div>
+    <div class="trait"><span class="trait-name">Spider Climb.</span> The Neurolictor can climb difficult surfaces, including upside down on ceilings, without ability checks.</div>
+    <div class="trait"><span class="trait-name">Synapse Dependency.</span> While not within 24 hours of a Synapse creature, the Neurolictor loses Psychic Interference and deals 1d6 less damage on its attacks.</div>
+    <hr class="divider">
+    <h3>Actions</h3>
+    <div class="action-entry"><span class="action-name">Multiattack.</span> The Neurolictor makes two attacks: one Neurolash and one Flesh Hooks.</div>
+    <div class="action-entry"><span class="action-name">Neurolash.</span> <em>Melee Weapon Attack:</em> +8 to hit, reach 5 ft., one target. <em>Hit:</em> 12 (2d6 + 5) slashing damage plus 7 (2d6) psychic damage. The target must succeed on a DC 14 Wisdom saving throw or be stunned until the end of its next turn.</div>
+    <div class="action-entry"><span class="action-name">Flesh Hooks.</span> <em>Melee Weapon Attack:</em> +8 to hit, reach 10 ft., one target. <em>Hit:</em> 10 (2d4 + 5) piercing damage. If Medium or smaller, the target is grappled (escape DC 15) and pulled up to 5 feet toward the Neurolictor.</div>
+    <hr class="divider">
+    <h3>Reactions</h3>
+    <div class="reaction-entry"><span class="action-name">Psychic Deflection.</span> When targeted by a spell that requires an attack roll, the Neurolictor uses its reaction to impose disadvantage on that attack roll.</div>
+  </div>
+</div>
+
+<!-- TYRANID PRIME -->
+<div class="stat-block">
+  <div class="stat-block-header">
+    <div>
+      <p class="creature-name">Tyranid Prime</p>
+      <p class="creature-type">Large Monstrosity (Tyranid), unaligned</p>
+    </div>
+    <div class="cr-badge">CR 6</div>
+  </div>
+  <div class="stat-block-body">
+    <div class="top-stats">
+      <p><strong>Armor Class</strong> 16 (natural armor)</p>
+      <p><strong>Hit Points</strong> 97 (13d10 + 26)</p>
+      <p><strong>Speed</strong> 40 ft.</p>
+    </div>
+    <hr class="divider">
+    <div class="ability-grid">
+      <div><div class="label">STR</div><div class="score">20 (+5)</div></div>
+      <div><div class="label">DEX</div><div class="score">14 (+2)</div></div>
+      <div><div class="label">CON</div><div class="score">16 (+3)</div></div>
+      <div><div class="label">INT</div><div class="score">12 (+1)</div></div>
+      <div><div class="label">WIS</div><div class="score">14 (+2)</div></div>
+      <div><div class="label">CHA</div><div class="score">10 (+0)</div></div>
+    </div>
+    <hr class="divider">
+    <div class="bottom-stats">
+      <p><strong>Saving Throws</strong> Str +8, Con +6, Wis +5</p>
+      <p><strong>Skills</strong> Athletics +8, Perception +5</p>
+      <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 15</p>
+      <p><strong>Languages</strong> —</p>
+      <p><strong>Proficiency Bonus</strong> +3</p>
+    </div>
+    <hr class="divider">
+    <h3>Traits</h3>
+    <div class="trait"><span class="trait-name">Alpha Warrior.</span> When the Tyranid Prime hits a creature with a melee attack, each Tyranid Warrior within 30 feet that can see the Prime may use its reaction to make one melee weapon attack against that creature.</div>
+    <div class="trait"><span class="trait-name">Synapse Node.</span> The Prime counts as a Synapse creature. Friendly Tyranid creatures within 30 feet are immune to Synapse Dependency and gain a +1 bonus to attack rolls and saving throws.</div>
+    <div class="trait"><span class="trait-name">Combat Adaptation.</span> Once per turn when hit by an attack, the Prime can use its reaction to increase its AC by 2 until the start of its next turn.</div>
+    <hr class="divider">
+    <h3>Actions</h3>
+    <div class="action-entry"><span class="action-name">Multiattack.</span> The Prime makes three attacks: two Boneswords and one Venom Cannon, or three Rending Claws.</div>
+    <div class="action-entry"><span class="action-name">Boneswords.</span> <em>Melee Weapon Attack:</em> +8 to hit, reach 5 ft., one target. <em>Hit:</em> 14 (2d8 + 5) slashing damage. DC 14 Constitution save or poisoned until end of next turn.</div>
+    <div class="action-entry"><span class="action-name">Rending Claws.</span> <em>Melee Weapon Attack:</em> +8 to hit, reach 5 ft., one target. <em>Hit:</em> 12 (2d6 + 5) slashing damage.</div>
+    <div class="action-entry"><span class="action-name">Venom Cannon.</span> <em>Ranged Weapon Attack:</em> +5 to hit, range 60/120 ft., one target. <em>Hit:</em> 15 (3d8 + 2) acid damage.</div>
+  </div>
+</div>
+
+<!-- TYRANID PRIME (WINGED) -->
+<div class="stat-block">
+  <div class="stat-block-header">
+    <div>
+      <p class="creature-name">Tyranid Prime (Winged)</p>
+      <p class="creature-type">Large Monstrosity (Tyranid), unaligned</p>
+    </div>
+    <div class="cr-badge">CR 7</div>
+  </div>
+  <div class="stat-block-body">
+    <div class="top-stats">
+      <p><strong>Armor Class</strong> 16 (natural armor)</p>
+      <p><strong>Hit Points</strong> 110 (13d10 + 39)</p>
+      <p><strong>Speed</strong> 40 ft., fly 60 ft.</p>
+    </div>
+    <hr class="divider">
+    <div class="ability-grid">
+      <div><div class="label">STR</div><div class="score">20 (+5)</div></div>
+      <div><div class="label">DEX</div><div class="score">16 (+3)</div></div>
+      <div><div class="label">CON</div><div class="score">18 (+4)</div></div>
+      <div><div class="label">INT</div><div class="score">12 (+1)</div></div>
+      <div><div class="label">WIS</div><div class="score">14 (+2)</div></div>
+      <div><div class="label">CHA</div><div class="score">10 (+0)</div></div>
+    </div>
+    <hr class="divider">
+    <div class="bottom-stats">
+      <p><strong>Saving Throws</strong> Str +8, Con +7, Dex +6</p>
+      <p><strong>Skills</strong> Athletics +8, Perception +5, Acrobatics +6</p>
+      <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 15</p>
+      <p><strong>Languages</strong> —</p>
+      <p><strong>Proficiency Bonus</strong> +3</p>
+    </div>
+    <hr class="divider">
+    <h3>Traits</h3>
+    <div class="trait"><span class="trait-name">Alpha Warrior.</span> When the Winged Prime hits a creature with a melee attack, each Tyranid Warrior within 30 feet that can see the Prime may use its reaction to make one melee weapon attack against that creature.</div>
+    <div class="trait"><span class="trait-name">Synapse Node.</span> The Prime counts as a Synapse creature. Friendly Tyranid creatures within 30 feet are immune to Synapse Dependency and gain a +1 bonus to attack rolls and saving throws.</div>
+    <div class="trait"><span class="trait-name">Aerial Pounce.</span> If the Prime flies at least 30 feet toward a target and hits with Rending Claws on the same turn, the target must succeed on a DC 15 Strength save or be knocked prone and take an extra 7 (2d6) slashing damage.</div>
+    <div class="trait"><span class="trait-name">Flyby.</span> The Winged Prime doesn't provoke opportunity attacks when it flies out of an enemy's reach.</div>
+    <hr class="divider">
+    <h3>Actions</h3>
+    <div class="action-entry"><span class="action-name">Multiattack.</span> The Winged Prime makes three attacks: two Boneswords and one Rending Claws, or two Rending Claws and one Devourer.</div>
+    <div class="action-entry"><span class="action-name">Boneswords.</span> <em>Melee Weapon Attack:</em> +8 to hit, reach 5 ft., one target. <em>Hit:</em> 14 (2d8 + 5) slashing damage. DC 15 Constitution save or poisoned until end of next turn.</div>
+    <div class="action-entry"><span class="action-name">Rending Claws.</span> <em>Melee Weapon Attack:</em> +8 to hit, reach 5 ft., one target. <em>Hit:</em> 12 (2d6 + 5) slashing damage.</div>
+    <div class="action-entry"><span class="action-name">Devourer.</span> <em>Ranged Weapon Attack:</em> +6 to hit, range 18/36 ft., one target. <em>Hit:</em> 8 (1d10 + 3) piercing damage plus 3 (1d6) acid damage.</div>
+  </div>
+</div>
+
+<!-- DEATH LEAPER -->
+<div class="stat-block">
+  <div class="stat-block-header">
+    <div>
+      <p class="creature-name">Death Leaper</p>
+      <p class="creature-type">Medium Monstrosity (Tyranid, Named), unaligned</p>
+    </div>
+    <div class="cr-badge">CR 8</div>
+  </div>
+  <div class="stat-block-body">
+    <div class="top-stats">
+      <p><strong>Armor Class</strong> 18 (natural armor)</p>
+      <p><strong>Hit Points</strong> 120 (16d8 + 48)</p>
+      <p><strong>Speed</strong> 50 ft., climb 50 ft.</p>
+    </div>
+    <hr class="divider">
+    <div class="ability-grid">
+      <div><div class="label">STR</div><div class="score">18 (+4)</div></div>
+      <div><div class="label">DEX</div><div class="score">24 (+7)</div></div>
+      <div><div class="label">CON</div><div class="score">16 (+3)</div></div>
+      <div><div class="label">INT</div><div class="score">10 (+0)</div></div>
+      <div><div class="label">WIS</div><div class="score">16 (+3)</div></div>
+      <div><div class="label">CHA</div><div class="score">8 (&minus;1)</div></div>
+    </div>
+    <hr class="divider">
+    <div class="bottom-stats">
+      <p><strong>Saving Throws</strong> Dex +10, Wis +6</p>
+      <p><strong>Skills</strong> Perception +9 (Expertise), Stealth +13 (Expertise), Athletics +7</p>
+      <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 19</p>
+      <p><strong>Languages</strong> —</p>
+      <p><strong>Proficiency Bonus</strong> +3</p>
+    </div>
+    <hr class="divider">
+    <h3>Traits</h3>
+    <div class="trait"><span class="trait-name">Shadow in the Warp.</span> Death Leaper is invisible in areas of dim light or darkness. It can still be detected by truesight.</div>
+    <div class="trait"><span class="trait-name">Spider Climb.</span> Death Leaper can climb difficult surfaces, including upside down on ceilings, without ability checks.</div>
+    <div class="trait"><span class="trait-name">Phantom Menace.</span> When Death Leaper kills a creature while invisible, each creature that witnessed the kill within 30 feet must succeed on a DC 14 Wisdom save or be frightened until the end of its next turn.</div>
+    <div class="trait"><span class="trait-name">Assassin's Focus.</span> Death Leaper has advantage on attack rolls against creatures that haven't taken a turn yet in combat, or against creatures it has grappled.</div>
+    <div class="trait"><span class="trait-name">Synapse Dependency.</span> While not within 24 hours of a Synapse creature, Death Leaper loses Shadow in the Warp and deals 1d8 less damage on its attacks.</div>
+    <hr class="divider">
+    <h3>Actions</h3>
+    <div class="action-entry"><span class="action-name">Multiattack.</span> Death Leaper makes two attacks: one Flesh Hooks and one Scything Talons, or two Scything Talons.</div>
+    <div class="action-entry"><span class="action-name">Flesh Hooks.</span> <em>Melee Weapon Attack:</em> +10 to hit, reach 10 ft., one target. <em>Hit:</em> 14 (2d6 + 7) piercing damage. The target is grappled (escape DC 15) and restrained until the grapple ends.</div>
+    <div class="action-entry"><span class="action-name">Scything Talons.</span> <em>Melee Weapon Attack:</em> +10 to hit, reach 5 ft., one target. <em>Hit:</em> 21 (4d6 + 7) slashing damage, plus an extra 10 (3d6) slashing damage if the target is grappled by Death Leaper.</div>
+    <hr class="divider">
+    <h3>Bonus Actions</h3>
+    <div class="bonus-entry"><span class="action-name">Vanish.</span> Death Leaper moves up to its speed without provoking opportunity attacks and becomes invisible until the start of its next turn or until it attacks.</div>
+    <hr class="divider">
+    <h3>Legendary Actions</h3>
+    <p style="font-size:0.9em;font-style:italic;margin:4px 0 8px 0;">Death Leaper can take 2 legendary actions, choosing from the options below. Only one legendary action can be used at a time and only at the end of another creature's turn. Legendary actions are regained at the start of Death Leaper's turn.</p>
+    <div class="legendary-entry"><span class="action-name">Skitter.</span> Death Leaper moves up to 20 feet without provoking opportunity attacks.</div>
+    <div class="legendary-entry"><span class="action-name">Lashing Strike (Costs 2 Actions).</span> Death Leaper makes one Flesh Hooks attack. If it hits and the target is already grappled, it automatically deals the bonus damage from Scything Talons.</div>
+  </div>
+</div>
+
+<!-- HARRIDAN -->
+<div class="stat-block">
+  <div class="stat-block-header">
+    <div>
+      <p class="creature-name">Harridan</p>
+      <p class="creature-type">Gargantuan Monstrosity (Tyranid), unaligned</p>
+    </div>
+    <div class="cr-badge">CR 14</div>
+  </div>
+  <div class="stat-block-body">
+    <div class="top-stats">
+      <p><strong>Armor Class</strong> 17 (natural armor)</p>
+      <p><strong>Hit Points</strong> 248 (16d20 + 80)</p>
+      <p><strong>Speed</strong> 20 ft., fly 80 ft.</p>
+    </div>
+    <hr class="divider">
+    <div class="ability-grid">
+      <div><div class="label">STR</div><div class="score">26 (+8)</div></div>
+      <div><div class="label">DEX</div><div class="score">14 (+2)</div></div>
+      <div><div class="label">CON</div><div class="score">20 (+5)</div></div>
+      <div><div class="label">INT</div><div class="score">6 (&minus;2)</div></div>
+      <div><div class="label">WIS</div><div class="score">12 (+1)</div></div>
+      <div><div class="label">CHA</div><div class="score">7 (&minus;2)</div></div>
+    </div>
+    <hr class="divider">
+    <div class="bottom-stats">
+      <p><strong>Saving Throws</strong> Str +13, Con +10, Dex +7</p>
+      <p><strong>Skills</strong> Perception +6, Athletics +13</p>
+      <p><strong>Damage Resistances</strong> Bludgeoning, Piercing, and Slashing from nonmagical attacks</p>
+      <p><strong>Condition Immunities</strong> Frightened, Prone</p>
+      <p><strong>Senses</strong> Darkvision 120 ft., passive Perception 16</p>
+      <p><strong>Languages</strong> —</p>
+      <p><strong>Proficiency Bonus</strong> +5</p>
+    </div>
+    <hr class="divider">
+    <h3>Traits</h3>
+    <div class="trait"><span class="trait-name">Living Carrier.</span> The Harridan can carry up to 3 Small or smaller Tyranid creatures on its underbelly. It can release one carried creature as a bonus action, depositing it in any unoccupied space within 10 feet.</div>
+    <div class="trait"><span class="trait-name">Sweeping Wings.</span> When the Harridan moves on the ground, each creature within 10 feet must succeed on a DC 18 Strength save or be knocked prone.</div>
+    <div class="trait"><span class="trait-name">Siege Monster.</span> The Harridan deals double damage to objects and structures.</div>
+    <div class="trait"><span class="trait-name">Synapse Node.</span> The Harridan counts as a Synapse creature. Friendly Tyranid creatures within 60 feet are immune to Synapse Dependency.</div>
+    <div class="trait"><span class="trait-name">Legendary Resistance (3/Day).</span> If the Harridan fails a saving throw, it can choose to succeed instead.</div>
+    <hr class="divider">
+    <h3>Actions</h3>
+    <div class="action-entry"><span class="action-name">Multiattack.</span> The Harridan makes three attacks: two Crushing Claws and one Bio-Salvo, or three Crushing Claws attacks.</div>
+    <div class="action-entry"><span class="action-name">Crushing Claw.</span> <em>Melee Weapon Attack:</em> +13 to hit, reach 15 ft., one target. <em>Hit:</em> 26 (4d8 + 8) bludgeoning damage. Large or smaller creatures must succeed on a DC 18 Strength save or be grappled (escape DC 18).</div>
+    <div class="action-entry"><span class="action-name">Bio-Salvo.</span> The Harridan spews corrosive ichor in a 30-foot cone. Each creature in the area makes a DC 18 Dexterity saving throw, taking 27 (6d8) acid damage on a failed save, or half on a success.</div>
+    <div class="action-entry"><span class="action-name">Wing Buffet (Recharge 5–6).</span> Each creature within 20 feet must succeed on a DC 18 Strength save or take 21 (6d6) bludgeoning damage and be thrown up to 20 feet and knocked prone. On a success, the creature takes half damage and is neither thrown nor knocked prone.</div>
+    <hr class="divider">
+    <h3>Legendary Actions</h3>
+    <p style="font-size:0.9em;font-style:italic;margin:4px 0 8px 0;">The Harridan can take 3 legendary actions, choosing from the options below. Only one legendary action can be used at a time and only at the end of another creature's turn. Legendary actions are regained at the start of the Harridan's turn.</p>
+    <div class="legendary-entry"><span class="action-name">Sweep.</span> The Harridan makes one Crushing Claw attack.</div>
+    <div class="legendary-entry"><span class="action-name">Reposition.</span> The Harridan moves up to half its fly speed without provoking opportunity attacks.</div>
+    <div class="legendary-entry"><span class="action-name">Release Brood (Costs 2 Actions).</span> The Harridan releases all carried Tyranid creatures into unoccupied spaces within 15 feet. Those creatures may immediately take their full turn.</div>
+  </div>
+</div>
+
+</body>
+</html>

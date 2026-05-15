@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Librarian — WH40K D&D 5E Homebrew</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080a0c;--panel:#0d1018;--panel2:#101420;--gold:#c8a44a;--gold-light:#e8c96a;--gold-dim:#7a6128;--silver:#9aaabb;--silver-dim:#4a5a6a;--text:#ccd4e0;--text-dim:#6a7a8a;--border:#2a3a52;--font-head:'Cinzel Decorative','Cinzel',serif;--font-label:'Cinzel',serif;--font-body:'Crimson Text',Georgia,serif;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size:10.5pt;}
+.page{width:9in;margin:.4in auto .6in;padding:.45in .52in;background:var(--bg);border:1px solid var(--border);position:relative;overflow:hidden;}
+.page::before,.page::after{content:'';position:absolute;width:48px;height:48px;border-color:var(--gold-dim);border-style:solid;opacity:.5;pointer-events:none;}
+.page::before{top:8px;left:8px;border-width:2px 0 0 2px;}.page::after{bottom:8px;right:8px;border-width:0 2px 2px 0;}
+@media screen{.print-bar{text-align:center;padding:.15in 0 .08in;}.print-btn{display:inline-block;padding:7px 28px;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);font-family:var(--font-label);font-size:7.5pt;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;transition:all .2s;}.print-btn:hover{background:var(--gold-dim);color:#000;}}
+@media print{@page{size:letter landscape;margin:0;}body{background:white;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.page{width:11in;min-height:8.5in;margin:0;border:none;}.print-bar{display:none!important;}}
+.class-header{text-align:center;border-bottom:2px solid var(--gold-dim);padding-bottom:.15in;margin-bottom:.18in;}
+.class-header .aquila{font-size:13pt;color:var(--gold);letter-spacing:.5em;margin-bottom:6px;}
+.class-header h1{font-family:var(--font-head);font-size:26pt;color:var(--gold-light);letter-spacing:.04em;text-shadow:0 0 32px rgba(200,164,74,.3);line-height:1.1;margin-bottom:4px;}
+.class-header .subtitle{font-family:var(--font-label);font-size:6.5pt;color:var(--silver-dim);letter-spacing:.35em;text-transform:uppercase;}
+.lore{margin-bottom:.16in;}.lore p{font-size:11pt;line-height:1.68;color:var(--text);text-align:justify;margin-bottom:.1in;}
+.lore p:first-child::first-letter{font-family:var(--font-head);font-size:38pt;color:var(--gold-light);float:left;line-height:.72;margin-right:7px;margin-top:8px;text-shadow:0 0 12px rgba(200,164,74,.4);}
+.divider{display:flex;align-items:center;gap:10px;margin:.14in 0;}.divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);}.divider-gem{width:8px;height:8px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;opacity:.85;}
+.section-title{font-family:var(--font-head);font-size:16pt;color:var(--gold-light);letter-spacing:.04em;border-bottom:1px solid var(--gold-dim);padding-bottom:5px;margin-bottom:.12in;text-shadow:0 0 14px rgba(200,164,74,.2);}
+.sec-head{font-family:var(--font-label);font-size:7pt;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--gold-dim);padding-bottom:3px;margin-bottom:8px;}
+.info-grid{display:grid;grid-template-columns:.9fr 1.8fr 1fr;gap:.14in;margin-bottom:.18in;}
+.info-panel{background:var(--panel);border:1px solid var(--border);padding:.1in .12in;}
+.hp-box{background:var(--panel2);border:1px solid var(--border);padding:7px 10px;margin-bottom:7px;text-align:center;}.hp-label{font-family:var(--font-label);font-size:6pt;color:var(--text-dim);letter-spacing:.2em;text-transform:uppercase;}.hp-value{font-family:var(--font-label);font-size:18pt;color:var(--gold-light);font-weight:700;line-height:1.1;}
+.info-row{display:flex;gap:6px;margin-bottom:5px;align-items:flex-start;}.info-label{font-family:var(--font-label);font-size:7.5pt;color:var(--gold);white-space:nowrap;min-width:72px;flex-shrink:0;padding-top:1px;}.info-value{font-size:9pt;color:var(--text);line-height:1.45;}
+.equip-item{display:flex;align-items:flex-start;gap:6px;margin-bottom:5px;font-size:9pt;color:var(--text);line-height:1.4;}.equip-bullet{color:var(--gold);flex-shrink:0;margin-top:1px;}
+.level-table-wrap{margin-bottom:.18in;}
+table.lvl{width:100%;border-collapse:collapse;font-size:9.5pt;}
+table.lvl thead tr{background:var(--panel2);}
+table.lvl thead th{font-family:var(--font-label);font-size:6.5pt;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);padding:5px 10px;border-bottom:1px solid var(--gold-dim);text-align:center;white-space:nowrap;}
+table.lvl thead th:first-child{text-align:left;width:60px;}table.lvl thead th:last-child{text-align:left;}
+table.lvl tbody tr{border-bottom:1px solid rgba(42,58,82,.35);}table.lvl tbody tr:nth-child(even){background:rgba(16,20,32,.45);}table.lvl tbody tr.milestone{background:rgba(200,164,74,.05);}
+table.lvl tbody td{padding:4px 10px;text-align:center;vertical-align:middle;}
+table.lvl tbody td:first-child{font-family:var(--font-label);font-size:9.5pt;font-weight:600;color:var(--gold-light);text-align:left;}
+table.lvl tbody td.prof{font-family:var(--font-label);font-size:11pt;color:var(--silver);font-weight:600;}
+table.lvl tbody td.warp{font-family:var(--font-label);font-size:10pt;color:var(--gold);font-weight:600;}
+table.lvl tbody td:last-child{text-align:left;color:var(--text);font-size:9.5pt;}
+.feature{margin-bottom:.14in;padding-left:10px;border-left:2px solid var(--gold-dim);}
+.feature-header{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px;margin-bottom:5px;}
+.feature-level{font-family:var(--font-label);font-size:6.5pt;color:var(--silver-dim);letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;background:var(--panel2);border:1px solid var(--border);padding:1px 6px;}
+.feature-name{font-family:var(--font-label);font-size:11.5pt;font-weight:600;color:var(--gold-light);letter-spacing:.02em;}
+.feature p{font-size:10pt;line-height:1.62;color:var(--text);text-align:justify;margin-bottom:5px;}
+.feature ul{margin:4px 0 6px 14px;}.feature ul li{font-size:10pt;line-height:1.58;color:var(--text);margin-bottom:3px;}.feature ul li strong{color:var(--gold-light);font-family:var(--font-label);font-size:9pt;}
+.resource-box{background:var(--panel);border:1px solid var(--border);border-top:3px solid var(--gold-dim);padding:.14in .16in;margin-bottom:.18in;}
+.resource-title{font-family:var(--font-head);font-size:13pt;color:var(--gold-light);margin-bottom:6px;}
+.resource-note{font-size:9.5pt;color:var(--text-dim);font-style:italic;margin-bottom:.1in;line-height:1.5;}
+.page-footer{margin-top:.2in;border-top:1px solid var(--gold-dim);padding-top:.09in;font-family:var(--font-label);font-size:6pt;color:var(--text-dim);letter-spacing:.16em;text-align:center;text-transform:uppercase;}
+</style>
+</head>
+<body>
+<div class="print-bar"><button class="print-btn" onclick="window.print()">✠ &nbsp; Export to PDF / Print</button></div>
+<div class="page">
+
+<div class="class-header">
+  <div class="aquila">✠ &nbsp; ✠ &nbsp; ✠</div>
+  <h1>Librarian</h1>
+  <div class="subtitle">Deathwatch Specialty &nbsp;·&nbsp; D&amp;D 5e Homebrew Ruleset &nbsp;·&nbsp; Jericho Reach Campaign</div>
+</div>
+
+<div class="lore">
+  <p>A Librarian of the Adeptus Astartes is a warrior of two battlefronts. With bolter and Force Sword they fight as any Space Marine fights — but behind their eyes burns a second awareness, one turned inward toward the churning currents of the Immaterium. Their minds have been pried open under the careful tutelage of the Librarius, shaped into instruments capable of reaching into the Warp and drawing forth power without being consumed by it. Every battle is a balancing act: draw too little and the mission suffers; draw too much and the Warp begins to notice.</p>
+  <p>In the Deathwatch, where missions take warriors to the fringes of human space and beyond, a Librarian's value cannot be overstated. They sense what others cannot, counter psykers and daemonic entities that would shrug off bolter fire, and project the Emperor's psychic will against the tides of Chaos. But every power costs something — and the Warp, patient and hungry, is always watching.</p>
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+<div class="info-grid">
+  <div class="info-panel">
+    <div class="sec-head">Hit Points</div>
+    <div class="hp-box"><div class="hp-label">Hit Dice</div><div class="hp-value">d8</div></div>
+    <div class="info-row"><div class="info-label">1st Level</div><div class="info-value">8 + CON modifier</div></div>
+    <div class="info-row"><div class="info-label">Higher Levels</div><div class="info-value">1d8 + CON modifier per level</div></div>
+  </div>
+  <div class="info-panel">
+    <div class="sec-head">Proficiencies</div>
+    <div class="info-row"><div class="info-label">Armour</div><div class="info-value">Phobos Armor, Tacticus Armor, Gravis Armor</div></div>
+    <div class="info-row"><div class="info-label">Weapons</div><div class="info-value">Ranged Secondary, Physical Melee, Force Sword, Force Staff</div></div>
+    <div class="info-row"><div class="info-label">Tools</div><div class="info-value">Auspex</div></div>
+    <div class="info-row"><div class="info-label">Saves</div><div class="info-value">Intelligence, Wisdom</div></div>
+    <div class="info-row"><div class="info-label">Skills</div><div class="info-value">Choose 3: Arcana, History, Insight, Investigation, Perception, Religion</div></div>
+  </div>
+  <div class="info-panel">
+    <div class="sec-head">Starting Equipment</div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Tacticus Armor</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Force Sword or Force Staff (choice)</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Bolt Secondary Weapon with 1 Full Crate of Ammo</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>3× Medicae Stims</span></div>
+  </div>
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+<div class="resource-box">
+  <div class="resource-title">Warp Resilience Points</div>
+  <div class="resource-note">Spent to manifest Advanced Warp Powers. Base Warp Spells are free and usable at will. Warp Resilience Points reset on resupply. Save DC for all Warp Powers = 8 + Proficiency Bonus + INT modifier.</div>
+  <div class="resource-note"><strong style="color:var(--gold)">Perils of the Warp:</strong> Whenever you manifest an Advanced Warp Power costing 6 or more Warp Resilience Points, make a WIS save (DC = 10 + points spent above 5). On a failure, gain Corruption equal to 1d4 and the GM may trigger a Warp Influence Effect.</div>
+</div>
+
+<div class="section-title">Level Progression</div>
+<div class="level-table-wrap">
+<table class="lvl">
+  <thead><tr><th>Level</th><th>Prof</th><th>Warp Points</th><th>Features</th></tr></thead>
+  <tbody>
+    <tr class="milestone"><td>1</td><td class="prof">+2</td><td class="warp">20</td><td>Psyker Awakening (Rank 1), Class Proficiencies</td></tr>
+    <tr><td>2</td><td class="prof">+2</td><td class="warp">24</td><td>Force Weapon Mastery</td></tr>
+    <tr><td>3</td><td class="prof">+2</td><td class="warp">28</td><td>Warp Sense</td></tr>
+    <tr><td>4</td><td class="prof">+2</td><td class="warp">32</td><td>Ability Score Improvement or Feat</td></tr>
+    <tr class="milestone"><td>5</td><td class="prof">+3</td><td class="warp">36</td><td>Warp Conduit</td></tr>
+    <tr><td>6</td><td class="prof">+3</td><td class="warp">40</td><td>Psychic Cleansing</td></tr>
+    <tr class="milestone"><td>7</td><td class="prof">+3</td><td class="warp">44</td><td>Psyker Ranking 2, Psychic Strike 3d6</td></tr>
+    <tr><td>8</td><td class="prof">+3</td><td class="warp">48</td><td>Ability Score Improvement or Feat</td></tr>
+    <tr><td>9</td><td class="prof">+4</td><td class="warp">52</td><td>Deny the Witch</td></tr>
+    <tr><td>10</td><td class="prof">+4</td><td class="warp">56</td><td>—</td></tr>
+    <tr><td>11</td><td class="prof">+4</td><td class="warp">60</td><td>Psychic Hood</td></tr>
+    <tr><td>12</td><td class="prof">+4</td><td class="warp">64</td><td>Ability Score Improvement or Feat</td></tr>
+    <tr><td>13</td><td class="prof">+5</td><td class="warp">68</td><td>Warp Shield</td></tr>
+    <tr class="milestone"><td>14</td><td class="prof">+5</td><td class="warp">72</td><td>Psyker Ranking 3, Psychic Strike 4d6</td></tr>
+    <tr><td>15</td><td class="prof">+5</td><td class="warp">76</td><td>—</td></tr>
+    <tr><td>16</td><td class="prof">+5</td><td class="warp">80</td><td>Ability Score Improvement or Feat</td></tr>
+    <tr><td>17</td><td class="prof">+6</td><td class="warp">84</td><td>Warp Mastery</td></tr>
+    <tr><td>18</td><td class="prof">+6</td><td class="warp">88</td><td>Mind Fortress</td></tr>
+    <tr><td>19</td><td class="prof">+6</td><td class="warp">92</td><td>Ability Score Improvement or Feat</td></tr>
+    <tr class="milestone"><td>20</td><td class="prof">+6</td><td class="warp">100</td><td>Herald of the Warp</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+<div class="section-title">Class Features</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 1</span><span class="feature-name">Psyker Awakening</span></div>
+  <p>Your mind has been opened to the Warp under the careful tutelage of your Chapter's Librarius. You gain proficiency with the Force Sword and Force Staff and their Warp Conduit modifier. You may spend Warp Resilience Points to manifest Warp Powers from The Librarian &amp; Psychic Powers sheet. Base Warp Spells are free and usable at will.</p>
+  <p>Your Psyker Ranking begins at 1, giving access to all Rank 1 Advanced Warp Powers. You unlock Rank 2 at level 7 and Rank 3 at level 14. The save DC for all Warp Powers is 8 + Proficiency Bonus + INT modifier. Warp Resilience Points reset on resupply.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 2</span><span class="feature-name">Force Weapon Mastery</span></div>
+  <p>Your Force weapon becomes a conduit for your psychic will. When you hit with a Force Sword or Force Staff, you may spend 2 Warp Resilience Points to trigger a Psychic Strike — dealing an additional 2d6 psychic damage beyond the weapon's standard Warp Conduit bonus. This does not trigger a Perils of the Warp check. The Psychic Strike bonus damage increases to 3d6 at level 7 and 4d6 at level 14.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 3</span><span class="feature-name">Warp Sense</span></div>
+  <p>Your connection to the Warp grants supernatural awareness of nearby threats. You can detect the presence of psykers, daemons, and warp-corrupted entities within 60ft as a free action — you sense their presence but not their exact location unless they are within line of sight. You have advantage on saving throws against psychic damage and warp-based effects.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 5</span><span class="feature-name">Warp Conduit</span></div>
+  <p>Your force weapon and your psychic abilities feed one another in combat. You add your INT modifier to all damage rolls made with Advanced Warp Powers.</p>
+  <p>Additionally, when you hit a creature with your Force Sword or Force Staff, your next Advanced Warp Power manifested before the end of your next turn costs 2 fewer Warp Resilience Points (minimum 1). This reduction can only apply once per turn.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 6</span><span class="feature-name">Psychic Cleansing</span></div>
+  <p>During a short rest you may enter a deep meditative trance and spend Warp Resilience Points to purge Corruption from your mind and soul. For every 5 Warp Resilience Points spent, reduce your Corruption score by 1. You may not reduce your Corruption below the threshold of your current Corruption tier — Corruption can be managed but not fully erased without narrative intervention from a Chaplain or Inquisitor.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 7</span><span class="feature-name">Psyker Ranking 2</span></div>
+  <p>You unlock access to all Rank 2 Advanced Warp Powers from The Librarian &amp; Psychic Powers sheet. Your Psychic Strike bonus damage increases from 2d6 to 3d6.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 9</span><span class="feature-name">Deny the Witch</span></div>
+  <p>When a creature within 60ft of you casts a spell or manifests a psychic power, you may use your reaction and spend Warp Resilience Points equal to the power's cost (minimum 4) to attempt to nullify it. The caster must make an INT saving throw (DC = 8 + Proficiency Bonus + INT modifier). On a failure the power is completely negated. On a success your Warp Resilience Points are still spent but the power proceeds. You may use this feature a number of times equal to your Proficiency Bonus per resupply.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 11</span><span class="feature-name">Psychic Hood</span></div>
+  <p>Your psychic hood filters the most dangerous warp energies before they can overwhelm your mind. The Perils of the Warp WIS save DC is reduced by 2 — now 8 + the number of points spent above 5 (down from 10). You gain resistance to psychic damage.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 13</span><span class="feature-name">Warp Shield</span></div>
+  <p>As a reaction when you or an ally within 30ft would take damage, you may spend 4 Warp Resilience Points to project a psychic barrier — reducing the incoming damage by 2d10 + INT modifier. This does not trigger a Perils of the Warp check.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 14</span><span class="feature-name">Psyker Ranking 3</span></div>
+  <p>You attain mastery of the most powerful and dangerous warp abilities available to the Adeptus Astartes. You unlock access to all Rank 3 Advanced Warp Powers from The Librarian &amp; Psychic Powers sheet. Your Psychic Strike bonus damage increases from 3d6 to 4d6.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 17</span><span class="feature-name">Warp Mastery</span></div>
+  <p>Your control over the Warp and your own psychic resilience reaches its apex. Your Psychic Cleansing cost reduces from 5 Warp Resilience Points per Corruption to 3 Warp Resilience Points per Corruption. Your Deny the Witch feature no longer costs Warp Resilience Points to activate — it is free to use, limited only by your reaction and your Proficiency Bonus uses per resupply.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 18</span><span class="feature-name">Mind Fortress</span></div>
+  <p>Your psychic defenses become virtually impenetrable. You are immune to psychic damage and the Charmed condition. Your INT score increases by 2 and its maximum increases to 22. The Perils of the Warp save DC is reduced by a further 2 — now 6 + the number of points spent above 5.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 20</span><span class="feature-name">Herald of the Warp — Class Paragon</span></div>
+  <p>Once per resupply as an action, for 1 minute you become a conduit of pure psychic power. All Warp Powers cost half their normal Warp Resilience Points for the duration (rounded up). Perils of the Warp checks are not required for the duration — your mastery is absolute. Your Psychic Strike deals maximum damage automatically — no roll required.</p>
+  <p>Enemies within 15ft of you must make a WIS saving throw (DC = 8 + Proficiency Bonus + INT modifier) at the start of each of their turns or be Stunned until the end of their next turn as your psychic presence overwhelms their minds.</p>
+</div>
+
+<div class="page-footer">Librarian &nbsp;·&nbsp; Deathwatch Kill Team &nbsp;·&nbsp; WH40K D&amp;D 5E Homebrew &nbsp;·&nbsp; Jericho Reach Campaign</div>
+</div>
+</body>
+</html>

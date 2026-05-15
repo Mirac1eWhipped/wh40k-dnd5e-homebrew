@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gravis Operative — WH40K D&D 5E Homebrew</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080a0c;--panel:#0d1018;--panel2:#101420;--gold:#c8a44a;--gold-light:#e8c96a;--gold-dim:#7a6128;--silver:#9aaabb;--silver-dim:#4a5a6a;--text:#ccd4e0;--text-dim:#6a7a8a;--border:#2a3a52;--font-head:'Cinzel Decorative','Cinzel',serif;--font-label:'Cinzel',serif;--font-body:'Crimson Text',Georgia,serif;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size:10.5pt;}
+.page{width:9in;margin:.4in auto .6in;padding:.45in .52in;background:var(--bg);border:1px solid var(--border);position:relative;overflow:hidden;}
+.page::before,.page::after{content:'';position:absolute;width:48px;height:48px;border-color:var(--gold-dim);border-style:solid;opacity:.5;pointer-events:none;}
+.page::before{top:8px;left:8px;border-width:2px 0 0 2px;}.page::after{bottom:8px;right:8px;border-width:0 2px 2px 0;}
+@media screen{.print-bar{text-align:center;padding:.15in 0 .08in;}.print-btn{display:inline-block;padding:7px 28px;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);font-family:var(--font-label);font-size:7.5pt;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;transition:all .2s;}.print-btn:hover{background:var(--gold-dim);color:#000;}}
+@media print{@page{size:letter landscape;margin:0;}body{background:white;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.page{width:11in;min-height:8.5in;margin:0;border:none;}.print-bar{display:none!important;}}
+.class-header{text-align:center;border-bottom:2px solid var(--gold-dim);padding-bottom:.15in;margin-bottom:.18in;}
+.class-header .aquila{font-size:13pt;color:var(--gold);letter-spacing:.5em;margin-bottom:6px;}
+.class-header h1{font-family:var(--font-head);font-size:26pt;color:var(--gold-light);letter-spacing:.04em;text-shadow:0 0 32px rgba(200,164,74,.3);line-height:1.1;margin-bottom:4px;}
+.class-header .subtitle{font-family:var(--font-label);font-size:6.5pt;color:var(--silver-dim);letter-spacing:.35em;text-transform:uppercase;}
+.lore{margin-bottom:.16in;}.lore p{font-size:11pt;line-height:1.68;color:var(--text);text-align:justify;margin-bottom:.1in;}
+.lore p:first-child::first-letter{font-family:var(--font-head);font-size:38pt;color:var(--gold-light);float:left;line-height:.72;margin-right:7px;margin-top:8px;text-shadow:0 0 12px rgba(200,164,74,.4);}
+.divider{display:flex;align-items:center;gap:10px;margin:.14in 0;}.divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);}.divider-gem{width:8px;height:8px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;opacity:.85;}
+.section-title{font-family:var(--font-head);font-size:16pt;color:var(--gold-light);letter-spacing:.04em;border-bottom:1px solid var(--gold-dim);padding-bottom:5px;margin-bottom:.12in;text-shadow:0 0 14px rgba(200,164,74,.2);}
+.sec-head{font-family:var(--font-label);font-size:7pt;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--gold-dim);padding-bottom:3px;margin-bottom:8px;}
+.info-grid{display:grid;grid-template-columns:.9fr 1.8fr 1fr;gap:.14in;margin-bottom:.18in;}
+.info-panel{background:var(--panel);border:1px solid var(--border);padding:.1in .12in;}
+.hp-box{background:var(--panel2);border:1px solid var(--border);padding:7px 10px;margin-bottom:7px;text-align:center;}.hp-label{font-family:var(--font-label);font-size:6pt;color:var(--text-dim);letter-spacing:.2em;text-transform:uppercase;}.hp-value{font-family:var(--font-label);font-size:18pt;color:var(--gold-light);font-weight:700;line-height:1.1;}
+.info-row{display:flex;gap:6px;margin-bottom:5px;align-items:flex-start;}.info-label{font-family:var(--font-label);font-size:7.5pt;color:var(--gold);white-space:nowrap;min-width:72px;flex-shrink:0;padding-top:1px;}.info-value{font-size:9pt;color:var(--text);line-height:1.45;}
+.equip-item{display:flex;align-items:flex-start;gap:6px;margin-bottom:5px;font-size:9pt;color:var(--text);line-height:1.4;}.equip-bullet{color:var(--gold);flex-shrink:0;margin-top:1px;}
+.level-table-wrap{margin-bottom:.18in;}
+table.lvl{width:100%;border-collapse:collapse;font-size:9.5pt;}
+table.lvl thead tr{background:var(--panel2);}
+table.lvl thead th{font-family:var(--font-label);font-size:6.5pt;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);padding:5px 10px;border-bottom:1px solid var(--gold-dim);text-align:center;white-space:nowrap;}
+table.lvl thead th:first-child{text-align:left;width:60px;}table.lvl thead th:last-child{text-align:left;}
+table.lvl tbody tr{border-bottom:1px solid rgba(42,58,82,.35);}table.lvl tbody tr:nth-child(even){background:rgba(16,20,32,.45);}table.lvl tbody tr.milestone{background:rgba(200,164,74,.05);}
+table.lvl tbody td{padding:4px 10px;text-align:center;vertical-align:middle;}
+table.lvl tbody td:first-child{font-family:var(--font-label);font-size:9.5pt;font-weight:600;color:var(--gold-light);text-align:left;}
+table.lvl tbody td.prof{font-family:var(--font-label);font-size:11pt;color:var(--silver);font-weight:600;}
+table.lvl tbody td:last-child{text-align:left;color:var(--text);font-size:9.5pt;}
+.feature{margin-bottom:.14in;padding-left:10px;border-left:2px solid var(--gold-dim);}
+.feature-header{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px;margin-bottom:5px;}
+.feature-level{font-family:var(--font-label);font-size:6.5pt;color:var(--silver-dim);letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;background:var(--panel2);border:1px solid var(--border);padding:1px 6px;}
+.feature-name{font-family:var(--font-label);font-size:11.5pt;font-weight:600;color:var(--gold-light);letter-spacing:.02em;}
+.feature p{font-size:10pt;line-height:1.62;color:var(--text);text-align:justify;margin-bottom:5px;}
+.feature ul{margin:4px 0 6px 14px;}.feature ul li{font-size:10pt;line-height:1.58;color:var(--text);margin-bottom:3px;}.feature ul li strong{color:var(--gold-light);font-family:var(--font-label);font-size:9pt;}
+.subclass-section{border:1px solid var(--border);border-top:3px solid var(--gold-dim);background:var(--panel);padding:.18in .2in;margin-bottom:.2in;}
+.subclass-tag{font-family:var(--font-label);font-size:6.5pt;letter-spacing:.35em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:3px;}
+.subclass-name{font-family:var(--font-head);font-size:18pt;color:var(--gold-light);letter-spacing:.03em;margin-bottom:8px;text-shadow:0 0 16px rgba(200,164,74,.25);}
+.subclass-lore{font-size:10.5pt;line-height:1.64;color:var(--text);font-style:italic;border-bottom:1px solid var(--border);padding-bottom:.1in;margin-bottom:.12in;text-align:justify;}
+.subclass-profs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:.14in;}
+.prof-item{background:var(--panel2);border:1px solid var(--border);padding:6px 9px;}.prof-item-label{font-family:var(--font-label);font-size:6pt;color:var(--gold);letter-spacing:.22em;text-transform:uppercase;margin-bottom:3px;}.prof-item-value{font-size:9pt;color:var(--text);line-height:1.4;}
+.page-footer{margin-top:.2in;border-top:1px solid var(--gold-dim);padding-top:.09in;font-family:var(--font-label);font-size:6pt;color:var(--text-dim);letter-spacing:.16em;text-align:center;text-transform:uppercase;}
+</style>
+</head>
+<body>
+<div class="print-bar"><button class="print-btn" onclick="window.print()">✠ &nbsp; Export to PDF / Print</button></div>
+<div class="page">
+
+<div class="class-header">
+  <div class="aquila">✠ &nbsp; ✠ &nbsp; ✠</div>
+  <h1>Gravis Operative</h1>
+  <div class="subtitle">Deathwatch Specialty &nbsp;·&nbsp; D&amp;D 5e Homebrew Ruleset &nbsp;·&nbsp; Jericho Reach Campaign</div>
+</div>
+
+<div class="lore">
+  <p>Clad in the heaviest powered armour the Adeptus Astartes can field short of a Dreadnought, the Gravis Operative is a walking fortress of firepower. Where other warriors manoeuvre and adapt, the Gravis Operative plants their feet, locks their targeting cogitators, and unleashes annihilation. The sheer mass of their Gravis Armour — reinforced ceramite, motorised fibre-bundles, and integrated weapons mounts — transforms them into something between warrior and weapons emplacement, an immovable platform from which no volume of fire can dislodge them.</p>
+  <p>To fight alongside a Gravis Operative is to fight from behind a wall of lead and fire. Every step they choose not to take is a choice that makes their guns deadlier. In the calculus of the Deathwatch, they are both shield and siege weapon — and when the Omnissiah's Wrath descends upon an enemy formation, survival is no longer a possibility their foes are permitted to consider.</p>
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+<div class="info-grid">
+  <div class="info-panel">
+    <div class="sec-head">Hit Points</div>
+    <div class="hp-box"><div class="hp-label">Hit Dice</div><div class="hp-value">d10</div></div>
+    <div class="info-row"><div class="info-label">1st Level</div><div class="info-value">10 + CON modifier</div></div>
+    <div class="info-row"><div class="info-label">Higher Levels</div><div class="info-value">1d10 + CON modifier per level</div></div>
+  </div>
+  <div class="info-panel">
+    <div class="sec-head">Proficiencies</div>
+    <div class="info-row"><div class="info-label">Armour</div><div class="info-value">Gravis Armor</div></div>
+    <div class="info-row"><div class="info-label">Weapons</div><div class="info-value">Ranged Primary, Ranged Secondary, Physical Melee, Power Melee (excl. Thunder Hammer &amp; Lightning Claws)</div></div>
+    <div class="info-row"><div class="info-label">Tools</div><div class="info-value">Auspex</div></div>
+    <div class="info-row"><div class="info-label">Saves</div><div class="info-value">Strength, Constitution</div></div>
+    <div class="info-row"><div class="info-label">Skills</div><div class="info-value">Choose 3: Athletics, Intimidation, Perception, History, Survival, Religion</div></div>
+  </div>
+  <div class="info-panel">
+    <div class="sec-head">Starting Equipment</div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Gravis Armor</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Gravis-tagged Primary Weapon with 2 Full Crates of Ammo</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Power Melee Weapon</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>Bolt Secondary Weapon with 1 Full Crate of Ammo</span></div>
+    <div class="equip-item"><span class="equip-bullet">✦</span><span>2× Medicae Stims</span></div>
+  </div>
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+<div class="section-title">Level Progression</div>
+<div class="level-table-wrap">
+<table class="lvl">
+  <thead><tr><th>Level</th><th>Prof</th><th>Features</th></tr></thead>
+  <tbody>
+    <tr class="milestone"><td>1</td><td class="prof">+2</td><td>Fire Platform, Class Proficiencies</td></tr>
+    <tr><td>2</td><td class="prof">+2</td><td>Gravis Resilience</td></tr>
+    <tr><td>3</td><td class="prof">+2</td><td>Subclass Assignment, Subclass Proficiencies</td></tr>
+    <tr><td>4</td><td class="prof">+2</td><td>Ability Score Improvement or Feat</td></tr>
+    <tr class="milestone"><td>5</td><td class="prof">+3</td><td>Extra Attack</td></tr>
+    <tr><td>6</td><td class="prof">+3</td><td>Subclass Feature</td></tr>
+    <tr><td>7</td><td class="prof">+3</td><td>Iron Halo</td></tr>
+    <tr><td>8</td><td class="prof">+3</td><td>Ability Score Improvement or Feat</td></tr>
+    <tr><td>9</td><td class="prof">+4</td><td>—</td></tr>
+    <tr><td>10</td><td class="prof">+4</td><td>Subclass Feature</td></tr>
+    <tr class="milestone"><td>11</td><td class="prof">+4</td><td>Sustained Barrage</td></tr>
+    <tr><td>12</td><td class="prof">+4</td><td>Ability Score Improvement or Feat</td></tr>
+    <tr><td>13</td><td class="prof">+5</td><td>—</td></tr>
+    <tr><td>14</td><td class="prof">+5</td><td>Subclass Feature</td></tr>
+    <tr class="milestone"><td>15</td><td class="prof">+5</td><td>Unyielding Platform</td></tr>
+    <tr><td>16</td><td class="prof">+5</td><td>Ability Score Improvement or Feat</td></tr>
+    <tr><td>17</td><td class="prof">+6</td><td>—</td></tr>
+    <tr><td>18</td><td class="prof">+6</td><td>Fortress of Firepower</td></tr>
+    <tr><td>19</td><td class="prof">+6</td><td>Ability Score Improvement or Feat</td></tr>
+    <tr class="milestone"><td>20</td><td class="prof">+6</td><td>Omnissiah's Wrath</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+<div class="section-title">Class Features</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 1</span><span class="feature-name">Fire Platform</span></div>
+  <p>At the start of each combat, you gain one of two stances based on how much you move each turn.</p>
+  <ul>
+    <li><strong>Suppression Stance</strong> (moved half speed or less this turn): Your ranged attacks gain +1 to hit and ignore half cover on all ranged attacks.</li>
+    <li><strong>Ironclad Stance</strong> (did not move at all this turn): All Suppression Stance bonuses apply, plus your ranged attacks deal +1 die of weapon damage and any creature you hit must make a STR saving throw (DC = 8 + Proficiency Bonus + STR modifier) or have their movement speed reduced to 0 until the end of their next turn.</li>
+  </ul>
+  <p>Forced movement does not count against your movement for either stance but breaks Ironclad Stance if it occurs.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 2</span><span class="feature-name">Gravis Resilience</span></div>
+  <p>While wearing Gravis Armor you cannot be knocked Prone involuntarily unless the source is a Large or larger creature or a vehicle. You count as one size larger for grappling and shoving, and have advantage on STR saving throws against effects that would move you against your will.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 5</span><span class="feature-name">Extra Attack</span></div>
+  <p>When you take the Attack action, you can make 2 ranged or melee attacks instead of 1.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 7</span><span class="feature-name">Iron Halo</span></div>
+  <p>Your Gravis armor is fitted with an Iron Halo — a powerful energy field generator that deflects incoming fire and projects a protective barrier around you and your brothers.</p>
+  <p>As a bonus action, you may activate your Iron Halo, gaining temporary hit points equal to 5 × your Proficiency Bonus. These follow all standard temporary HP rules — absorbing damage before regular HP, not stacking with other temporary HP sources, and not regenerating on their own.</p>
+  <p>While the Iron Halo is active and temporary hit points remain, allies within 5ft directly behind you are treated as though they have total cover against ranged attacks. This protection ends immediately if the temporary hit points are reduced to 0 or the ally moves out of position.</p>
+  <p>The Iron Halo provides no protection against Mortal Wounds, psychic damage, or damage from sources within melee range of you. You may activate the Iron Halo a number of times equal to your Proficiency Bonus per resupply.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 11</span><span class="feature-name">Sustained Barrage</span></div>
+  <p>When you take the Attack action and are in Ironclad Stance, you may make one additional ranged attack as part of that action for a total of 3. Your attacks during Ironclad Stance also score a critical hit on a 19 or 20.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 15</span><span class="feature-name">Unyielding Platform</span></div>
+  <p>While in Ironclad Stance you gain resistance to all damage from ranged weapon attacks. When a creature attempts to force you to move, you may use your reaction to make a STR saving throw (DC = the effect's save DC + 2) — on a success you are not moved and remain in Ironclad Stance.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 18</span><span class="feature-name">Fortress of Firepower</span></div>
+  <p>Your presence on the battlefield becomes a suppressive force in itself. While you are in Ironclad Stance, any enemy that enters within 15ft of you must make a STR saving throw (DC = 8 + Proficiency Bonus + STR modifier) or immediately lose all remaining movement for that turn, stopped dead by the weight of fire and the crushing presence of your weapons platform.</p>
+  <p>Additionally, you may now re-enter Ironclad Stance even if forced movement was applied to you this turn, provided you did not willingly move.</p>
+</div>
+
+<div class="feature">
+  <div class="feature-header"><span class="feature-level">Level 20</span><span class="feature-name">Omnissiah's Wrath — Class Paragon</span></div>
+  <p>Once per resupply, for 1 minute you become an unassailable weapons platform. You automatically enter Ironclad Stance regardless of whether you moved, and Ironclad Stance cannot be broken for the duration — no forced movement, effect, or damage can remove it.</p>
+  <p>Every hit you land reduces the target's AC by 1, stacking up to a maximum of −10 for the duration. Your weapons ignore all damage resistances and immunities for the duration.</p>
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+<div class="section-title">Subclasses</div>
+
+<!-- ERADICATOR -->
+<div class="subclass-section">
+  <div class="subclass-tag">Gravis Operative Subclass</div>
+  <div class="subclass-name">Eradicator</div>
+  <div class="subclass-lore">Where the Devastator buries targets in sustained fire, the Eradicator buries them in flame, plasma, and ordnance. Eradicators specialise in explosive weaponry to a degree that borders on artistry — they read blast radii the way other warriors read ground, positioning detonations with lethal precision. In the Deathwatch, they are deployed when the objective is not to suppress but to annihilate.</div>
+  <div class="subclass-profs">
+    <div class="prof-item"><div class="prof-item-label">Bonus Proficiency</div><div class="prof-item-value">All Explosive Weapons, Thrown Explosives</div></div>
+    <div class="prof-item"><div class="prof-item-label">Subclass Granted At</div><div class="prof-item-value">Level 3</div></div>
+    <div class="prof-item"><div class="prof-item-label">Features At</div><div class="prof-item-value">Levels 3, 6, 10, 14</div></div>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">Level 3</span><span class="feature-name">Ordnance Specialist</span></div>
+    <p>You gain proficiency with all Explosive weapons and thrown explosives. Your training grants the following: blast radius on all explosives you use increases by 5ft; the DEX save DC for all your explosives increases by your Proficiency Bonus instead of the weapon's standard DC; and you may throw grenades up to twice the listed range without penalty.</p>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">Level 6</span><span class="feature-name">Shaped Charges</span></div>
+    <p>When you fire a launcher weapon or throw a grenade, you may choose up to a number of creatures equal to your Proficiency Bonus within the blast radius to automatically succeed on their DEX saving throw, routing the explosion around them. This allows safe detonation in melee range of allies.</p>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">Level 10</span><span class="feature-name">Chain Detonation</span></div>
+    <p>When one of your explosives kills a creature, you may use your reaction to immediately throw a grenade or fire a launcher weapon. Additionally, if two or more of your explosives detonate within the same round within 20ft of each other, each deals +2d6 bonus damage to any creature caught in both blasts.</p>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">Level 14</span><span class="feature-name">Apocalypse Ordnance</span></div>
+    <p>Once per resupply as an action, designate a point within 200ft. Every creature within a 40ft radius must make a DEX saving throw (DC = 8 + Proficiency Bonus + DEX modifier) or take 10d6 fire damage, or half on a success. Structures and vehicles within the radius take maximum damage automatically. The area becomes difficult terrain until cleared.</p>
+  </div>
+</div>
+
+<!-- DEVASTATOR -->
+<div class="subclass-section">
+  <div class="subclass-tag">Gravis Operative Subclass</div>
+  <div class="subclass-name">Devastator</div>
+  <div class="subclass-lore">The Devastator is the fire-support pillar of any Deathwatch kill team — a walking heavy weapons platform that turns the Fire Platform stance into something approaching industrial suppression. Where other warriors shoot to kill, the Devastator shoots to deny, to break, to overwhelm. Entire flanks collapse under sustained Devastator fire, and even armoured vehicles learn quickly that not all cover is cover enough.</div>
+  <div class="subclass-profs">
+    <div class="prof-item"><div class="prof-item-label">Bonus Proficiency</div><div class="prof-item-value">All Gravis-tagged &amp; Heavy Weapons</div></div>
+    <div class="prof-item"><div class="prof-item-label">Subclass Granted At</div><div class="prof-item-value">Level 3</div></div>
+    <div class="prof-item"><div class="prof-item-label">Features At</div><div class="prof-item-value">Levels 3, 6, 10, 14</div></div>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">Level 3</span><span class="feature-name">Heavy Weapons Platform</span></div>
+    <p>You gain proficiency with all Gravis-tagged and Heavy weapons. While in Suppression or Ironclad Stance, you ignore the Stationary modifier restriction on all Gravis-tagged and Heavy Ordinance weapons — your armor provides the stability platform these weapons require. Additionally, while in Ironclad Stance, your Gravis-tagged and Heavy Ordinance weapons gain one additional attack before reload.</p>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">Level 6</span><span class="feature-name">Covering Fire</span></div>
+    <p>As a bonus action you may lay down a suppressive barrage covering a 15ft wide corridor between you and a point within your weapon's range. Any creature that moves through that corridor this round must make a DEX saving throw (DC = 8 + Proficiency Bonus + DEX modifier) or take damage equal to one weapon damage die and have their movement speed halved until the end of their turn. This feature can be used a number of times equal to your Proficiency Bonus per resupply.</p>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">Level 10</span><span class="feature-name">Armour Bane</span></div>
+    <p>Your sustained heavy fire wears down even the most resilient targets. When you hit the same creature with a Gravis-tagged or Heavy Ordinance weapon two or more times in the same turn, the target's AC is reduced by 2 until the start of your next turn. This effect does not stack beyond −2.</p>
+  </div>
+
+  <div class="feature">
+    <div class="feature-header"><span class="feature-level">Level 14</span><span class="feature-name">Annihilation Protocol</span></div>
+    <p>Once per resupply, when you take the Attack action while in Ironclad Stance, you may activate Annihilation Protocol. For that action only, you may make one attack against every creature within your weapon's range that you can see, up to a maximum number of targets equal to your remaining charges + Proficiency Bonus. Each attack is rolled separately.</p>
+    <p>After Annihilation Protocol resolves, you must finish a short rest or resupply before using Suppression or Ironclad Stance again — the sheer volume of fire depletes your targeting cogitator's reserves.</p>
+  </div>
+</div>
+
+<div class="page-footer">Gravis Operative &nbsp;·&nbsp; Deathwatch Kill Team &nbsp;·&nbsp; WH40K D&amp;D 5E Homebrew &nbsp;·&nbsp; Jericho Reach Campaign</div>
+</div>
+</body>
+</html>
