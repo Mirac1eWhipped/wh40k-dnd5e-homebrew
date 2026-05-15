@@ -40,6 +40,8 @@ body{background:var(--bg-page);font-family:var(--font-body);color:var(--text);fo
 #save-dot{width:8px;height:8px;border-radius:50%;background:#555;flex-shrink:0;}
 #save-label{color:var(--silver-dim);flex:1;}
 #save-email{color:var(--gold);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+#copy-uid-btn{background:transparent;border:1px solid var(--border2);color:var(--silver-dim);font-family:var(--font-label);font-size:6pt;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;cursor:pointer;display:none;}
+#copy-uid-btn:hover{border-color:var(--gold);color:var(--gold);}
 .sbar-btn{background:transparent;border:1px solid var(--border2);color:var(--silver-dim);font-family:var(--font-label);font-size:6pt;letter-spacing:.14em;text-transform:uppercase;padding:4px 10px;cursor:pointer;transition:all .2s;}
 .sbar-btn:hover{border-color:var(--gold);color:var(--gold);}
 #file-input{display:none;}
@@ -202,6 +204,39 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
   .tab-panel{display:block!important;}
 }
 
+
+/* ══ DOSSIER OVERVIEW ══ */
+.dos-ab-bar{display:flex;gap:5px;margin-bottom:8px;}
+.dos-ab-box{background:var(--panel2);border:1px solid var(--border2);padding:8px 6px 6px;text-align:center;flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;}
+.dos-ab-lbl{font-family:var(--font-label);font-size:7pt;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:700;}
+.dos-ab-mod input{font-family:var(--font-label)!important;font-size:20pt!important;font-weight:700!important;color:var(--text)!important;background:transparent!important;border:none!important;outline:none!important;text-align:center!important;width:60px!important;padding:0!important;line-height:1.1!important;}
+.dos-ab-score input{font-family:var(--font-label)!important;font-size:11pt!important;color:var(--silver-dim)!important;background:transparent!important;border-bottom:1px solid var(--line)!important;border-top:none!important;border-left:none!important;border-right:none!important;outline:none!important;text-align:center!important;width:44px!important;padding:0!important;}
+.dos-stat-bar{display:flex;gap:5px;margin-bottom:8px;}
+.dos-stat{background:var(--panel2);border:1px solid var(--border2);padding:6px 8px;text-align:center;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;}
+.dos-stat input{font-family:var(--font-label)!important;font-size:15pt!important;font-weight:700!important;color:var(--gold-light)!important;background:transparent!important;border:none!important;outline:none!important;text-align:center!important;width:80px!important;padding:0!important;}
+.dos-stat-lbl{font-family:var(--font-label);font-size:5.5pt;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);}
+.dos-hp-cell{background:var(--panel2);border:1px solid var(--border2);padding:6px 8px;text-align:center;flex:2;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.dos-hp-cell input{font-family:var(--font-label)!important;font-size:20pt!important;font-weight:700!important;color:var(--gold-light)!important;background:transparent!important;border:none!important;outline:none!important;text-align:center!important;width:90px!important;padding:0!important;}
+.dos-3col{display:grid;grid-template-columns:210px 230px 1fr;gap:10px;}
+.dos-row{display:flex;align-items:center;gap:5px;padding:4px 2px;border-bottom:1px solid rgba(42,58,80,.3);}
+.dos-row input[type=checkbox]{width:12px;height:12px;accent-color:var(--gold);flex-shrink:0;cursor:pointer;}
+.dos-attr-tag{font-family:var(--font-label);font-size:6pt;color:var(--silver-dim);width:26px;flex-shrink:0;letter-spacing:.05em;}
+.dos-row-name{font-family:var(--font-label);font-size:7.5pt;color:var(--silver);flex:1;}
+.dos-bonus input{font-family:var(--font-label)!important;font-size:10pt!important;font-weight:700!important;color:var(--gold-light)!important;background:transparent!important;border:none!important;outline:none!important;text-align:right!important;width:34px!important;padding:0!important;}
+.dos-col-hdr{display:flex;align-items:center;gap:5px;padding:3px 2px 5px;border-bottom:1px solid var(--gold-dim);margin-bottom:4px;}
+.dos-col-hdr-lbl{font-family:var(--font-label);font-size:6pt;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);}
+.dos-passive-row{display:flex;align-items:center;gap:6px;padding:5px 6px;background:var(--panel2);border:1px solid var(--border2);margin-bottom:4px;}
+.dos-passive-val input{font-family:var(--font-label)!important;font-size:13pt!important;font-weight:700!important;color:var(--gold-light)!important;background:transparent!important;border:none!important;outline:none!important;text-align:center!important;width:36px!important;padding:0!important;}
+.dos-passive-name{font-family:var(--font-label);font-size:7pt;color:var(--silver);flex:1;}
+.dos-passive-attr{font-family:var(--font-label);font-size:6pt;color:var(--silver-dim);}
+.dos-prof-label{font-family:var(--font-label);font-size:6pt;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:2px;margin-top:8px;}
+.dos-prof-ta{width:100%;background:transparent;border:none;border-bottom:1px solid var(--line);color:var(--text);font-family:var(--font-body);font-size:10pt;outline:none;resize:none;padding:2px 0;box-sizing:border-box;}
+.dos-atk-table{width:100%;border-collapse:collapse;margin-top:4px;}
+.dos-atk-table thead th{font-family:var(--font-label);font-size:6pt;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);padding:4px 6px;border-bottom:1px solid var(--gold-dim);text-align:left;}
+.dos-atk-table td{padding:2px 4px;}
+.dos-atk-table td input{font-size:10pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:3px 0!important;background:transparent!important;color:var(--text)!important;outline:none!important;width:100%!important;}
+.dos-atk-table tr:hover td input{border-bottom-color:var(--gold)!important;}
+.dos-textarea{width:100%;background:var(--panel2);border:1px solid var(--border2);color:var(--text);font-family:var(--font-body);font-size:10pt;outline:none;resize:none;padding:6px 8px;box-sizing:border-box;margin-top:4px;}
 </style>
 </head>
 <body>
@@ -224,7 +259,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 <div id="save-bar">
   <span id="save-dot"></span>
   <span id="save-label">Not signed in</span>
-  <span id="save-email"></span>
+  <span id="save-email"></span><button id="copy-uid-btn" title="Copy your UID to share with GM" onclick="copyMyUid()">Copy UID</button>
   <button class="sbar-btn" onclick="exportSheet()">Backup</button>
   <label class="sbar-btn" for="file-input" style="cursor:pointer;">Restore</label>
   <input type="file" id="file-input" accept=".json" onchange="importSheet(event)">
@@ -267,143 +302,107 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 </div>
 
 <div class="tab-panel active" id="panel-dossier">
-  <div class="dossier-layout">
+  <!-- Ability Score Bar -->
+  <div class="dos-ab-bar">
+<div class="dos-ab-box"><span class="dos-ab-lbl">STR</span><div class="dos-ab-mod"><input type="text" id="str-mod" readonly placeholder="+0"></div><div class="dos-ab-score"><input type="number" id="str-score" value="10" oninput="calcMod('str')"></div></div>
+<div class="dos-ab-box"><span class="dos-ab-lbl">DEX</span><div class="dos-ab-mod"><input type="text" id="dex-mod" readonly placeholder="+0"></div><div class="dos-ab-score"><input type="number" id="dex-score" value="10" oninput="calcMod('dex')"></div></div>
+<div class="dos-ab-box"><span class="dos-ab-lbl">CON</span><div class="dos-ab-mod"><input type="text" id="con-mod" readonly placeholder="+0"></div><div class="dos-ab-score"><input type="number" id="con-score" value="10" oninput="calcMod('con')"></div></div>
+<div class="dos-ab-box"><span class="dos-ab-lbl">INT</span><div class="dos-ab-mod"><input type="text" id="int-mod" readonly placeholder="+0"></div><div class="dos-ab-score"><input type="number" id="int-score" value="10" oninput="calcMod('int')"></div></div>
+<div class="dos-ab-box"><span class="dos-ab-lbl">WIS</span><div class="dos-ab-mod"><input type="text" id="wis-mod" readonly placeholder="+0"></div><div class="dos-ab-score"><input type="number" id="wis-score" value="10" oninput="calcMod('wis')"></div></div>
+<div class="dos-ab-box"><span class="dos-ab-lbl">CHA</span><div class="dos-ab-mod"><input type="text" id="cha-mod" readonly placeholder="+0"></div><div class="dos-ab-score"><input type="number" id="cha-score" value="10" oninput="calcMod('cha')"></div></div>
+  </div>
+  <!-- Combat Quick-Stats -->
+  <div class="dos-stat-bar">
+    <div class="dos-stat"><input type="text" placeholder="15"><span class="dos-stat-lbl">Armor Class</span></div>
+    <div class="dos-stat"><input type="text" placeholder="+2"><span class="dos-stat-lbl">Initiative</span></div>
+    <div class="dos-stat"><input type="text" placeholder="30 ft"><span class="dos-stat-lbl">Speed</span></div>
+    <div class="dos-stat"><input type="text" placeholder="+2"><span class="dos-stat-lbl">Prof Bonus</span></div>
+    <div class="dos-stat"><input type="text" placeholder="0"><span class="dos-stat-lbl">Inspiration</span></div>
+    <div class="dos-hp-cell"><input type="number" id="hp-cur" placeholder="—"><span class="dos-stat-lbl">Current HP</span></div>
+    <div class="dos-hp-cell"><input type="number" placeholder="—"><span class="dos-stat-lbl">Max HP</span></div>
+    <div class="dos-hp-cell"><input type="number" placeholder="—"><span class="dos-stat-lbl">Temp HP</span></div>
+  </div>
+  <!-- Three Columns -->
+  <div class="dos-3col">
+    <!-- LEFT: Saves · Passives · Proficiencies -->
     <div>
       <div class="section">
-        <div class="sec-title">Ability Scores</div>
-        <div class="ability-list">
-<div class="ab-block">
-  <span class="ab-name">STR</span>
-  <div class="ab-row">
-    <div class="ab-score"><input class="ab-score-inp" type="number" id="str-score" value="10" oninput="calcMod('str')">
-      <span class="ab-lbl">Score</span></div>
-    <div style="display:flex;flex-direction:column;align-items:center;">
-      <div class="ab-mod-box"><input type="text" id="str-mod" readonly></div>
-      <span class="ab-lbl">Mod</span>
-    </div>
-  </div>
-</div>
-<div class="ab-block">
-  <span class="ab-name">DEX</span>
-  <div class="ab-row">
-    <div class="ab-score"><input class="ab-score-inp" type="number" id="dex-score" value="10" oninput="calcMod('dex')">
-      <span class="ab-lbl">Score</span></div>
-    <div style="display:flex;flex-direction:column;align-items:center;">
-      <div class="ab-mod-box"><input type="text" id="dex-mod" readonly></div>
-      <span class="ab-lbl">Mod</span>
-    </div>
-  </div>
-</div>
-<div class="ab-block">
-  <span class="ab-name">CON</span>
-  <div class="ab-row">
-    <div class="ab-score"><input class="ab-score-inp" type="number" id="con-score" value="10" oninput="calcMod('con')">
-      <span class="ab-lbl">Score</span></div>
-    <div style="display:flex;flex-direction:column;align-items:center;">
-      <div class="ab-mod-box"><input type="text" id="con-mod" readonly></div>
-      <span class="ab-lbl">Mod</span>
-    </div>
-  </div>
-</div>
-<div class="ab-block">
-  <span class="ab-name">INT</span>
-  <div class="ab-row">
-    <div class="ab-score"><input class="ab-score-inp" type="number" id="int-score" value="10" oninput="calcMod('int')">
-      <span class="ab-lbl">Score</span></div>
-    <div style="display:flex;flex-direction:column;align-items:center;">
-      <div class="ab-mod-box"><input type="text" id="int-mod" readonly></div>
-      <span class="ab-lbl">Mod</span>
-    </div>
-  </div>
-</div>
-<div class="ab-block">
-  <span class="ab-name">WIS</span>
-  <div class="ab-row">
-    <div class="ab-score"><input class="ab-score-inp" type="number" id="wis-score" value="10" oninput="calcMod('wis')">
-      <span class="ab-lbl">Score</span></div>
-    <div style="display:flex;flex-direction:column;align-items:center;">
-      <div class="ab-mod-box"><input type="text" id="wis-mod" readonly></div>
-      <span class="ab-lbl">Mod</span>
-    </div>
-  </div>
-</div>
-<div class="ab-block">
-  <span class="ab-name">CHA</span>
-  <div class="ab-row">
-    <div class="ab-score"><input class="ab-score-inp" type="number" id="cha-score" value="10" oninput="calcMod('cha')">
-      <span class="ab-lbl">Score</span></div>
-    <div style="display:flex;flex-direction:column;align-items:center;">
-      <div class="ab-mod-box"><input type="text" id="cha-mod" readonly></div>
-      <span class="ab-lbl">Mod</span>
-    </div>
-  </div>
-</div>
-        </div>
+        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Saving Throws</span></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">STR</span><span class="dos-row-name">Strength Save</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">DEX</span><span class="dos-row-name">Dexterity Save</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">CON</span><span class="dos-row-name">Constitution Save</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Intelligence Save</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Wisdom Save</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Charisma Save</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+      </div>
+      <div class="section" style="margin-top:8px;">
+        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Senses</span></div>
+        <div class="dos-passive-row"><div class="dos-passive-val"><input type="text" placeholder="10"></div><span class="dos-passive-name">Passive Perception</span><span class="dos-passive-attr">WIS</span></div>
+        <div class="dos-passive-row"><div class="dos-passive-val"><input type="text" placeholder="10"></div><span class="dos-passive-name">Passive Investigation</span><span class="dos-passive-attr">INT</span></div>
+        <div class="dos-passive-row"><div class="dos-passive-val"><input type="text" placeholder="10"></div><span class="dos-passive-name">Passive Insight</span><span class="dos-passive-attr">WIS</span></div>
+      </div>
+      <div class="section" style="margin-top:8px;">
+        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Proficiencies &amp; Training</span></div>
+        <span class="dos-prof-label">Armor</span>
+        <textarea class="dos-prof-ta" rows="2" placeholder="Light Armor, Medium Armor…"></textarea>
+        <span class="dos-prof-label">Weapons</span>
+        <textarea class="dos-prof-ta" rows="2" placeholder="Simple Weapons, Martial Weapons…"></textarea>
+        <span class="dos-prof-label">Tools</span>
+        <textarea class="dos-prof-ta" rows="1" placeholder="Thieves' Tools, Herbalism Kit…"></textarea>
+        <span class="dos-prof-label">Languages</span>
+        <textarea class="dos-prof-ta" rows="1" placeholder="Common, Elvish, Dwarvish…"></textarea>
       </div>
     </div>
-    <div class="saves-skills-col">
-      <div class="section">
-        <div class="insp-prof">
-          <div class="mini-box"><input type="text" placeholder="0"><span class="ab-lbl">Inspiration</span></div>
-          <div class="mini-box"><input type="text" placeholder="+2"><span class="ab-lbl">Prof Bonus</span></div>
-        </div>
-        <div class="sec-title">Saving Throws</div>
-        <div class="save-row"><input type="checkbox"><div class="sv-box"><input type="text" style="width:28px;"></div><span class="sv-name">STR Save</span></div>
-<div class="save-row"><input type="checkbox"><div class="sv-box"><input type="text" style="width:28px;"></div><span class="sv-name">DEX Save</span></div>
-<div class="save-row"><input type="checkbox"><div class="sv-box"><input type="text" style="width:28px;"></div><span class="sv-name">CON Save</span></div>
-<div class="save-row"><input type="checkbox"><div class="sv-box"><input type="text" style="width:28px;"></div><span class="sv-name">INT Save</span></div>
-<div class="save-row"><input type="checkbox"><div class="sv-box"><input type="text" style="width:28px;"></div><span class="sv-name">WIS Save</span></div>
-<div class="save-row"><input type="checkbox"><div class="sv-box"><input type="text" style="width:28px;"></div><span class="sv-name">CHA Save</span></div>
-      </div>
-      <div class="section">
-        <div class="sec-title">Combat</div>
-        <div style="display:flex;flex-direction:column;gap:6px;">
-          <div class="field-group"><label>Armor Class</label><input type="text" placeholder="10"></div>
-          <div class="field-group"><label>Initiative</label><input type="text" placeholder="+0"></div>
-          <div class="field-group"><label>Speed</label><input type="text" placeholder="30 ft"></div>
-          <div class="field-group"><label>Max HP</label><input type="number" placeholder="0"></div>
-          <div class="field-group"><label>Current HP</label><input type="number" placeholder="0" id="hp-cur"></div>
-          <div class="field-group"><label>Temp HP</label><input type="number" placeholder="0"></div>
-        </div>
-      </div>
-    </div>
+    <!-- MIDDLE: Skills -->
     <div>
       <div class="section">
-        <div class="sec-title">Skills</div>
-        <div class="skill-row"><input type="checkbox"><div class="sk-box"><input type="text" style="width:26px;"></div><span class="sk-name">Acrobatics</span><span class="sk-attr">DEX</span></div>
-<div class="skill-row"><input type="checkbox"><div class="sk-box"><input type="text" style="width:26px;"></div><span class="sk-name">Animal Handling</span><span class="sk-attr">WIS</span></div>
-<div class="skill-row"><input type="checkbox"><div class="sk-box"><input type="text" style="width:26px;"></div><span class="sk-name">Arcana</span><span class="sk-attr">INT</span></div>
-<div class="skill-row"><input type="checkbox"><div class="sk-box"><input type="text" style="width:26px;"></div><span class="sk-name">Athletics</span><span class="sk-attr">STR</span></div>
-<div class="skill-row"><input type="checkbox"><div class="sk-box"><input type="text" style="width:26px;"></div><span class="sk-name">Deception</span><span class="sk-attr">CHA</span></div>
-<div class="skill-row"><input type="checkbox"><div class="sk-box"><input type="text" style="width:26px;"></div><span class="sk-name">History</span><span class="sk-attr">INT</span></div>
-<div class="skill-row"><input type="checkbox"><div class="sk-box"><input type="text" style="width:26px;"></div><span class="sk-name">Insight</span><span class="sk-attr">WIS</span></div>
-<div class="skill-row"><input type="checkbox"><div class="sk-box"><input type="text" style="width:26px;"></div><span class="sk-name">Intimidation</span><span class="sk-attr">CHA</span></div>
-<div class="skill-row"><input type="checkbox"><div class="sk-box"><input type="text" style="width:26px;"></div><span class="sk-name">Investigation</span><span class="sk-attr">INT</span></div>
-<div class="skill-row"><input type="checkbox"><div class="sk-box"><input type="text" style="width:26px;"></div><span class="sk-name">Medicine</span><span class="sk-attr">WIS</span></div>
-<div class="skill-row"><input type="checkbox"><div class="sk-box"><input type="text" style="width:26px;"></div><span class="sk-name">Nature</span><span class="sk-attr">INT</span></div>
-<div class="skill-row"><input type="checkbox"><div class="sk-box"><input type="text" style="width:26px;"></div><span class="sk-name">Perception</span><span class="sk-attr">WIS</span></div>
-<div class="skill-row"><input type="checkbox"><div class="sk-box"><input type="text" style="width:26px;"></div><span class="sk-name">Performance</span><span class="sk-attr">CHA</span></div>
-<div class="skill-row"><input type="checkbox"><div class="sk-box"><input type="text" style="width:26px;"></div><span class="sk-name">Persuasion</span><span class="sk-attr">CHA</span></div>
-<div class="skill-row"><input type="checkbox"><div class="sk-box"><input type="text" style="width:26px;"></div><span class="sk-name">Religion</span><span class="sk-attr">INT</span></div>
-<div class="skill-row"><input type="checkbox"><div class="sk-box"><input type="text" style="width:26px;"></div><span class="sk-name">Sleight of Hand</span><span class="sk-attr">DEX</span></div>
-<div class="skill-row"><input type="checkbox"><div class="sk-box"><input type="text" style="width:26px;"></div><span class="sk-name">Stealth</span><span class="sk-attr">DEX</span></div>
-<div class="skill-row"><input type="checkbox"><div class="sk-box"><input type="text" style="width:26px;"></div><span class="sk-name">Survival</span><span class="sk-attr">WIS</span></div>
-        <div class="passive-row" style="margin-top:6px;">
-          <input type="text" placeholder="10">
-          <div><span class="sv-name" style="display:block;">Passive Perception</span><span class="sk-attr">10 + WIS mod</span></div>
+        <div class="dos-col-hdr">
+          <span style="width:14px;display:inline-block;"></span>
+          <span class="dos-attr-tag" style="color:var(--gold);font-size:6pt;">MOD</span>
+          <span class="dos-col-hdr-lbl" style="flex:1;">Skill</span>
+          <span class="dos-col-hdr-lbl">Bonus</span>
         </div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">DEX</span><span class="dos-row-name">Acrobatics</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Animal Handling</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Arcana</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">STR</span><span class="dos-row-name">Athletics</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Deception</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">INT</span><span class="dos-row-name">History</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Insight</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Intimidation</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Investigation</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Medicine</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Nature</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Perception</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Performance</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Persuasion</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Religion</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">DEX</span><span class="dos-row-name">Sleight of Hand</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">DEX</span><span class="dos-row-name">Stealth</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Survival</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
       </div>
     </div>
-  </div>
-
-  <div class="g2" style="margin-top:10px;">
-    <div class="section">
-      <div class="sec-title">Armor, Weapon &amp; Tool Proficiencies</div>
-      <textarea class="lined" rows="4" placeholder="Armor, weapons, tools…"></textarea>
-    </div>
-    <div class="section">
-      <div class="sec-title">Languages</div>
-      <textarea class="lined" rows="4" placeholder="Common, Elvish, Dwarvish…"></textarea>
+    <!-- RIGHT: Quick Attacks · Conditions · Notes -->
+    <div>
+      <div class="section">
+        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Quick Attacks</span></div>
+        <table class="dos-atk-table">
+          <thead><tr><th>Weapon / Spell</th><th>Hit</th><th>Dmg</th><th>Type / Notes</th></tr></thead>
+          <tbody><tr><td><input type="text" placeholder="Weapon / spell…"></td><td><input type="text" placeholder="+0" style="width:44px;text-align:center;"></td><td><input type="text" placeholder="1d8" style="width:54px;text-align:center;"></td><td><input type="text" placeholder="Type / notes…"></td></tr>
+<tr><td><input type="text" placeholder="Weapon / spell…"></td><td><input type="text" placeholder="+0" style="width:44px;text-align:center;"></td><td><input type="text" placeholder="1d8" style="width:54px;text-align:center;"></td><td><input type="text" placeholder="Type / notes…"></td></tr>
+<tr><td><input type="text" placeholder="Weapon / spell…"></td><td><input type="text" placeholder="+0" style="width:44px;text-align:center;"></td><td><input type="text" placeholder="1d8" style="width:54px;text-align:center;"></td><td><input type="text" placeholder="Type / notes…"></td></tr>
+<tr><td><input type="text" placeholder="Weapon / spell…"></td><td><input type="text" placeholder="+0" style="width:44px;text-align:center;"></td><td><input type="text" placeholder="1d8" style="width:54px;text-align:center;"></td><td><input type="text" placeholder="Type / notes…"></td></tr>
+</tbody>
+        </table>
+      </div>
+      <div class="section" style="margin-top:8px;">
+        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Conditions &amp; Status</span></div>
+        <textarea class="dos-textarea" rows="3" placeholder="Poisoned, Stunned, Frightened…"></textarea>
+      </div>
+      <div class="section" style="margin-top:8px;">
+        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Session Notes</span></div>
+        <textarea class="dos-textarea" rows="7" placeholder="Reminders, quest notes, party info…"></textarea>
+      </div>
     </div>
   </div>
 </div>
@@ -1018,10 +1017,59 @@ document.addEventListener('DOMContentLoaded', async function() {
   STATS.forEach(s => calcMod(s));
   _updateBar();
   _wireFields();
-  if (_loggedIn()) { await _loadSheet(); }
-  else { showAuth(); }
+  // Check for view-only mode (?uid= param — viewing another player's sheet)
+  var urlParams = new URLSearchParams(window.location.search);
+  var viewUid = urlParams.get('uid');
+  if (viewUid && viewUid !== _uid()) {
+    await _loadSheetForUser(viewUid);
+    _setViewOnly();
+  } else if (_loggedIn()) {
+    await _loadSheet();
+    var uidBtn = document.getElementById('copy-uid-btn');
+    if (uidBtn) uidBtn.style.display = '';
+  } else {
+    _status('offline', 'Sign in from the portal to save');
+  }
 });
 
+
+/* ══ VIEW-ONLY MODE (viewing another player's sheet) ══ */
+async function _loadSheetForUser(uid) {
+  try {
+    var rows = await _sfetch('/rest/v1/characters?user_id=eq.' + uid + '&sheet_type=eq.' + _STYPE + '&order=updated_at.desc&limit=1', {method:'GET'});
+    if (!Array.isArray(rows) || !rows.length) { _status('loaded','No data found for this player'); return; }
+    var ff = _fields();
+    (rows[0].fields || []).forEach(function(v,i){ if(ff[i]) ff[i].value = v||''; });
+    var cc = _checkboxes();
+    (rows[0].checkboxes || []).forEach(function(v,i){ if(cc[i]) cc[i].checked = !!v; });
+    var ext = rows[0].extra || {};
+    var clsSel = document.getElementById('cls-select');
+    var subSel = document.getElementById('sub-select');
+    var featLvl = document.getElementById('feat-level');
+    if (clsSel && ext.cls) clsSel.value = ext.cls;
+    if (featLvl && ext.feat_lvl) featLvl.value = ext.feat_lvl;
+    updateSubclassOpts();
+    if (subSel && ext.sub) { subSel.value = ext.sub; renderFeatures(); }
+    STATS.forEach(function(s){ calcMod(s); });
+    _status('loaded', 'Viewing ' + (rows[0].name || 'player') + '\'s sheet');
+  } catch(e) { _status('error','Could not load player sheet'); }
+}
+function _setViewOnly() {
+  _fields().forEach(function(f){ f.readOnly = true; f.style.cursor='default'; });
+  _checkboxes().forEach(function(c){ c.disabled = true; });
+  var bar = document.createElement('div');
+  bar.style.cssText = 'position:fixed;top:38px;left:0;right:0;padding:5px;text-align:center;background:rgba(200,164,74,.12);border-bottom:1px solid var(--gold-dim);font-family:var(--font-label);font-size:6pt;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);z-index:150;';
+  bar.textContent = '++ Read-Only — Viewing Another Player\'s Sheet ++';
+  document.body.insertBefore(bar, document.body.children[1]);
+}
+function copyMyUid() {
+  var uid = _uid();
+  if (!uid) return;
+  navigator.clipboard.writeText(uid).then(function(){
+    var btn = document.getElementById('copy-uid-btn');
+    if(btn){ btn.textContent='Copied!'; setTimeout(function(){ btn.textContent='Copy UID'; },2000); }
+  });
+}
 </script>
 </body>
 </html>

@@ -892,9 +892,57 @@
     .ei-trait strong { color: var(--silver); }
     .ei-close-btn { position: sticky; float: right; top: 0; background: transparent; border: 1px solid var(--border); color: var(--silver-dim); font-size: 14px; width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; margin-left: auto; }
     .ei-close-btn:hover { border-color: #f87171; color: #f87171; }
+  
+    /* ── Portal auth bar ── */
+    #portal-auth-bar{position:fixed;top:0;left:0;right:0;height:36px;background:#040609;border-bottom:1px solid #1a2535;display:flex;align-items:center;padding:0 16px;gap:10px;z-index:9999;font-family:'Cinzel',serif;}
+    #portal-auth-bar .pab-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#8a9bb5;flex:1;}
+    #portal-auth-bar .pab-email{font-size:9px;letter-spacing:.15em;color:#c8a44a;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    #portal-auth-bar .pab-uid{font-size:8px;letter-spacing:.1em;color:#4a6080;cursor:pointer;}
+    #portal-auth-bar .pab-uid:hover{color:#c8a44a;}
+    #portal-auth-bar .pab-btn{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.18em;text-transform:uppercase;padding:4px 12px;border:1px solid #1a2535;background:transparent;color:#8a9bb5;cursor:pointer;}
+    #portal-auth-bar .pab-btn:hover{border-color:#c8a44a;color:#c8a44a;}
+    #portal-auth-bar .pab-btn.signin{border-color:#c8a44a88;color:#c8a44a;}
+    /* push page content below auth bar */
+    body{padding-top:36px;}
+    /* portal auth modal */
+    #portal-auth-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:10000;align-items:center;justify-content:center;}
+    #portal-auth-modal.open{display:flex;}
+    #portal-auth-box{background:#0d1018;border:1px solid #1a2535;border-top:2px solid #c8a44a;padding:28px 32px;width:360px;max-width:95vw;}
+    #portal-auth-box h2{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:#c8a44a;margin-bottom:18px;text-align:center;}
+    #portal-auth-box input{width:100%;background:#101420;border:1px solid #1a2535;color:#dde3ec;font-family:'Cinzel',serif;font-size:11px;padding:8px 10px;outline:none;margin-bottom:10px;box-sizing:border-box;}
+    #portal-auth-box input:focus{border-color:#c8a44a66;}
+    #portal-auth-box .pab-submit{width:100%;background:#c8a44a22;border:1px solid #c8a44a88;color:#c8a44a;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.26em;text-transform:uppercase;padding:10px;cursor:pointer;margin-top:4px;}
+    #portal-auth-box .pab-submit:hover{background:#c8a44a44;}
+    #portal-auth-box .pab-err{color:#c0392b;font-size:9px;min-height:14px;text-align:center;margin-top:6px;font-family:'Cinzel',serif;letter-spacing:.1em;}
+    #portal-auth-box .pab-toggle{text-align:center;margin-top:12px;font-size:8px;color:#4a6080;letter-spacing:.12em;cursor:pointer;font-family:'Cinzel',serif;text-transform:uppercase;}
+    #portal-auth-box .pab-toggle:hover{color:#c8a44a;}
+    #portal-auth-box .pab-close{text-align:right;margin-bottom:8px;}
+    #portal-auth-box .pab-close span{color:#4a6080;cursor:pointer;font-size:14px;}
+    #portal-auth-box .pab-close span:hover{color:#c8a44a;}
+
   </style>
 </head>
 <body>
+<div id="portal-auth-bar">
+  <span class="pab-label">++ Adeptus Inquisitorium Network ++</span>
+  <span class="pab-email" id="pab-email" style="display:none;"></span>
+  <span class="pab-uid" id="pab-uid" title="Click to copy your UID (share with GM to link your sheet)" style="display:none;" onclick="copyUid()">Copy UID</span>
+  <button class="pab-btn signin" id="pab-signin-btn" onclick="openPortalAuth()">⟢ Sign In</button>
+  <button class="pab-btn" id="pab-signout-btn" style="display:none;" onclick="portalSignOut()">Sign Out</button>
+</div>
+
+<div id="portal-auth-modal">
+  <div id="portal-auth-box">
+    <div class="pab-close"><span onclick="closePortalAuth()">✕</span></div>
+    <h2 id="pab-title">Sign In</h2>
+    <input type="email" id="pab-inp-email" placeholder="Email address" />
+    <input type="password" id="pab-inp-pw" placeholder="Password" />
+    <button class="pab-submit" onclick="portalAuthSubmit()">⟢ Authenticate</button>
+    <div class="pab-err" id="pab-err"></div>
+    <div class="pab-toggle" id="pab-toggle" onclick="togglePortalAuthMode()">New Battle-Brother? Register here</div>
+  </div>
+</div>
+
 
 <!-- ════════════════════ HEADER ════════════════════ -->
 <header>
@@ -1743,6 +1791,10 @@
           </div>
         </div>
       </div>
+      <div class="add-field" style="margin-top:8px;">
+        <label style="font-size:9px;letter-spacing:.15em;color:#8a9bb5;">Player UID <span style="font-weight:400;color:#4a6080;">(optional — paste from player's "Copy UID" button)</span></label>
+        <input type="text" id="add-player-uid" placeholder="Leave blank for your own sheet" style="font-size:10px;" />
+      </div>
       <div class="add-modal-btns">
         <button class="add-cancel-btn" onclick="closeAddModal()">Cancel</button>
         <button class="add-create-btn" onclick="createOperative()">&#x2192; Open Sheet</button>
@@ -2061,7 +2113,8 @@
     if (!name) { alert('Please enter a name for this operative.'); return; }
     if (chapter === CHAPTERS_LIST[0]) chapter = 'Deathwatch';
     if (cls    === CLASSES_LIST[0])   cls     = 'Tactical Operative';
-    var op = newOperative(name, chapter, cls, sheet);
+    var playerUid = (document.getElementById('add-player-uid')||{}).value || '';
+    var op = newOperative(name, chapter, cls, sheet, playerUid);
     var data = loadRoster();
     data.push(op);
     saveRoster(data);
@@ -2081,7 +2134,11 @@
     var nameEl = document.getElementById('iframe-op-name');
     if (nameEl) nameEl.textContent = op.name + '  ·  ' + (op.chapter || '') + '  ·  ' + (op.operativeClass || '');
     var iframe = document.getElementById('sheet-iframe');
-    if (iframe) iframe.src = (op.sheetFile || 'deathwatch_character_sheet.html') + '?v=' + Date.now();
+    var uidParam = '';
+    if (op.playerUid && op.playerUid !== _portalUid()) {
+      uidParam = '&uid=' + encodeURIComponent(op.playerUid);
+    }
+    if (iframe) iframe.src = (op.sheetFile || 'deathwatch_character_sheet.html') + '?v=' + Date.now() + uidParam;
     document.getElementById('sheet-overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
@@ -2374,6 +2431,103 @@
   });
 
   document.addEventListener('DOMContentLoaded', () => { combatRender(); });
+
+  /* ══ PORTAL SUPABASE AUTH ══ */
+  const _PAB_URL = 'https://uggazjqvwyndpcxrkazx.supabase.co';
+  const _PAB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnZ2F6anF2d3luZHBjeHJrYXp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4MTcxOTAsImV4cCI6MjA5NDM5MzE5MH0.6dcsbi-lzQJUQS5UZTVg-tI_mFuy8yfAlfWsf0ennpU';
+  var _pabMode = 'signin'; // or 'register'
+
+  function _portalToken()  { return localStorage.getItem('supa_tok')   || ''; }
+  function _portalUid()    { return localStorage.getItem('supa_uid')    || ''; }
+  function _portalEmail()  { return localStorage.getItem('supa_email')  || ''; }
+  function _portalLoggedIn() { return !!localStorage.getItem('supa_tok'); }
+
+  function _portalSetSession(d) {
+    if (!d || !d.access_token) return;
+    localStorage.setItem('supa_tok',   d.access_token);
+    localStorage.setItem('supa_rtok',  d.refresh_token || '');
+    localStorage.setItem('supa_uid',   d.user.id);
+    localStorage.setItem('supa_email', d.user.email);
+  }
+  function _portalClearSession() {
+    ['supa_tok','supa_rtok','supa_uid','supa_email'].forEach(k => localStorage.removeItem(k));
+  }
+
+  function updatePortalAuthBar() {
+    var loggedIn = _portalLoggedIn();
+    document.getElementById('pab-signin-btn').style.display  = loggedIn ? 'none' : '';
+    document.getElementById('pab-signout-btn').style.display = loggedIn ? '' : 'none';
+    document.getElementById('pab-email').style.display       = loggedIn ? '' : 'none';
+    document.getElementById('pab-uid').style.display         = loggedIn ? '' : 'none';
+    if (loggedIn) {
+      document.getElementById('pab-email').textContent = _portalEmail();
+      document.getElementById('pab-uid').textContent = '[ Copy UID ]';
+    }
+  }
+
+  function openPortalAuth()  { document.getElementById('portal-auth-modal').classList.add('open'); }
+  function closePortalAuth() { document.getElementById('portal-auth-modal').classList.remove('open'); }
+
+  function togglePortalAuthMode() {
+    _pabMode = _pabMode === 'signin' ? 'register' : 'signin';
+    document.getElementById('pab-title').textContent   = _pabMode === 'signin' ? 'Sign In' : 'Create Account';
+    document.getElementById('pab-toggle').textContent  = _pabMode === 'signin' ? 'New Battle-Brother? Register here' : 'Already have an account? Sign in';
+    document.getElementById('pab-err').textContent = '';
+  }
+
+  async function portalAuthSubmit() {
+    var email = document.getElementById('pab-inp-email').value.trim();
+    var pw    = document.getElementById('pab-inp-pw').value;
+    var errEl = document.getElementById('pab-err');
+    if (!email || !pw) { errEl.textContent = 'Email and password required.'; return; }
+    var endpoint = _pabMode === 'signin'
+      ? '/auth/v1/token?grant_type=password'
+      : '/auth/v1/signup';
+    try {
+      var r = await fetch(_PAB_URL + endpoint, {
+        method: 'POST',
+        headers: {'apikey': _PAB_KEY, 'Content-Type': 'application/json'},
+        body: JSON.stringify({email, password: pw})
+      });
+      var d = await r.json();
+      if (d.access_token) {
+        _portalSetSession(d);
+        updatePortalAuthBar();
+        closePortalAuth();
+        errEl.textContent = '';
+        document.getElementById('pab-inp-pw').value = '';
+      } else {
+        errEl.textContent = d.error_description || d.msg || 'Authentication failed.';
+      }
+    } catch(e) { errEl.textContent = 'Network error — check connection.'; }
+  }
+
+  function portalSignOut() {
+    _portalClearSession();
+    updatePortalAuthBar();
+  }
+
+  function copyUid() {
+    var uid = _portalUid();
+    if (!uid) return;
+    navigator.clipboard.writeText(uid).then(() => {
+      document.getElementById('pab-uid').textContent = '[ Copied! ]';
+      setTimeout(() => document.getElementById('pab-uid').textContent = '[ Copy UID ]', 2000);
+    });
+  }
+
+  // Also allow Enter key in auth modal
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && document.getElementById('portal-auth-modal').classList.contains('open')) {
+      portalAuthSubmit();
+    }
+  });
+
+  // Init on load
+  document.addEventListener('DOMContentLoaded', function() {
+    updatePortalAuthBar();
+  });
+
 </script>
 
 </body>
