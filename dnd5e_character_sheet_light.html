@@ -87,7 +87,7 @@ body{background:var(--bg-page);font-family:var(--font-body);color:var(--text);fo
 .tab-panel.active{display:block;}
 
 /* ── Section Block ── */
-.section{background:var(--panel);border:1px solid var(--border2);padding:10px 12px;margin-bottom:10px;}
+.section{background:var(--panel);border:1px solid var(--border2);padding:10px 12px;margin-bottom:10px;box-sizing:border-box;}
 .sec-title{font-family:var(--font-label);font-size:7.5pt;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--gold-dim);padding-bottom:3px;margin-bottom:8px;}
 
 /* ── Field helpers ── */
@@ -107,14 +107,14 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .g-auto{display:grid;gap:8px;}
 
 /* ── DOSSIER TAB ── */
-.dossier-layout{display:grid;grid-template-columns:160px 220px 1fr;gap:10px;align-items:start;}
+.dossier-layout{display:grid;grid-template-columns:220px 300px 1fr;gap:12px;align-items:stretch;}
 
 /* Ability score blocks */
-.ability-list{display:flex;flex-direction:column;gap:6px;}
-.ab-block{background:var(--panel2);border:1px solid var(--border2);text-align:center;padding:6px 4px;}
+.ability-list{display:flex;flex-direction:column;gap:10px;height:100%;justify-content:space-evenly;}
+.ab-block{background:var(--panel2);border:1px solid var(--border2);text-align:center;padding:12px 6px;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;}
 .ab-name{font-family:var(--font-label);font-size:8pt;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--border2);padding-bottom:2px;margin-bottom:4px;}
 .ab-row{display:flex;align-items:flex-end;justify-content:center;gap:6px;}
-.ab-score-inp{font-size:24pt!important;font-family:var(--font-label)!important;font-weight:700!important;color:var(--text)!important;text-align:center!important;border-bottom:1px solid var(--line)!important;width:50px!important;padding:0!important;background:transparent!important;border-top:none!important;border-left:none!important;border-right:none!important;outline:none!important;}
+.ab-score-inp{font-size:24pt!important;font-family:var(--font-label)!important;font-weight:700!important;color:var(--text)!important;text-align:center!important;border-bottom:1px solid var(--line)!important;width:60px!important;padding:0!important;background:transparent!important;border-top:none!important;border-left:none!important;border-right:none!important;outline:none!important;}
 .ab-mod-box{background:var(--panel);border:1px solid var(--border2);width:38px;height:30px;line-height:30px;text-align:center;font-family:var(--font-label);font-size:14pt;font-weight:700;color:var(--gold-light);}
 .ab-mod-box input{border:none!important;width:38px!important;text-align:center!important;font-family:var(--font-label)!important;font-size:14pt!important;font-weight:700!important;color:var(--gold-light)!important;background:transparent!important;padding:0!important;outline:none!important;}
 .ab-lbl{font-size:5pt;font-family:var(--font-label);color:var(--text-dim);margin-top:1px;display:block;}
@@ -264,7 +264,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 </div>
 
 <div class="tab-panel active" id="panel-dossier">
-  <div class="dossier-layout">
+  <div class="dossier-layout" style="height:calc(100vh - 140px);">
     <div>
       <div class="section">
         <div class="sec-title">Ability Scores</div>
@@ -390,16 +390,6 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
           <div><span class="sv-name" style="display:block;">Passive Perception</span><span class="sk-attr">10 + WIS mod</span></div>
         </div>
       </div>
-    </div>
-  </div>
-  <div class="g2" style="margin-top:10px;">
-    <div class="section">
-      <div class="sec-title">Proficiencies &amp; Languages</div>
-      <textarea class="lined" rows="5" placeholder="Armor, weapons, tools, languages…"></textarea>
-    </div>
-    <div class="section">
-      <div class="sec-title">Other Notes</div>
-      <textarea class="lined" rows="5" placeholder="Racial traits, additional features…"></textarea>
     </div>
   </div>
 </div>
