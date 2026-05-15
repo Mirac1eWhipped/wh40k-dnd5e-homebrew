@@ -1025,10 +1025,14 @@ async function _doSave() {
   const clsSel = document.getElementById('cls-select');
   const subSel = document.getElementById('sub-select');
   const featLvl = document.getElementById('feat-level');
+  const _chEl = document.getElementById('char-chapter');
+  const _clEl = document.getElementById('char-class');
   const extra = {
     cls: clsSel ? clsSel.value : '',
     sub: subSel ? subSel.value : '',
-    feat_lvl: featLvl ? featLvl.value : ''
+    feat_lvl: featLvl ? featLvl.value : '',
+    chapter: _chEl ? _chEl.value : '',
+    op_class: _clEl ? _clEl.value : ''
   };
   const name = _charName();
   try {

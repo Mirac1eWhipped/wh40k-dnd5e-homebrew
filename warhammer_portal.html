@@ -2132,7 +2132,7 @@
   async function _syncRosterFromCloud() {
     if (!_portalLoggedIn()) return;
     try {
-      var r = await fetch(_PAB_URL + '/rest/v1/characters?user_id=eq.' + _portalUid() + '&select=id,name,sheet_type', {
+      var r = await fetch(_PAB_URL + '/rest/v1/characters?user_id=eq.' + _portalUid() + '&select=id,name,sheet_type,extra', {
         method: 'GET',
         headers: {'apikey': _PAB_KEY, 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _portalToken()}
       });
@@ -2147,10 +2147,12 @@
           return op.sheetFile === sheetFile && (!op.playerUid || op.playerUid === _portalUid());
         });
         if (!exists) {
+          var ext = row.extra || {};
           roster.push({
             id: 'op_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
             name: row.name || 'Unnamed Operative',
-            chapter: '', operativeClass: '',
+            chapter: ext.chapter || '',
+            operativeClass: ext.op_class || '',
             sheetFile: sheetFile,
             playerUid: _portalUid()
           });
