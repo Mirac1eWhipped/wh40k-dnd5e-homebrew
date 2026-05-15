@@ -2129,15 +2129,24 @@
     'dnd5e_dark': 'dnd5e_character_sheet.html',
     'dnd5e_light':'dnd5e_character_sheet_light.html'
   };
+  var _syncPollInterval = null;
+  function _startSyncPolling() {
+    if (_syncPollInterval) return;
+    _syncPollInterval = setInterval(_syncRosterFromCloud, 30000);
+  }
+  function _stopSyncPolling() {
+    if (_syncPollInterval) { clearInterval(_syncPollInterval); _syncPollInterval = null; }
+  }
   async function _syncRosterFromCloud() {
     if (!_portalLoggedIn()) return;
     try {
-      var r = await fetch(_PAB_URL + '/rest/v1/characters?user_id=eq.' + _portalUid() + '&select=id,name,sheet_type,extra', {
+      var r = await fetch(_PAB_URL + '/rest/v1/characters?select=id,user_id,name,sheet_type,extra', {
         method: 'GET',
         headers: {'apikey': _PAB_KEY, 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _portalToken()}
       });
+      if (!r.ok) return;
       var rows = await r.json();
-      if (!Array.isArray(rows) || !rows.length) return;
+      if (!Array.isArray(rows)) return;
       var roster = loadRoster();
       var changed = false;
       rows.forEach(function(row) {
@@ -2146,26 +2155,34 @@
         var ext = row.extra || {};
         var existing = null;
         for (var j = 0; j < roster.length; j++) {
-          if (roster[j].sheetFile === sheetFile && (!roster[j].playerUid || roster[j].playerUid === _portalUid())) {
-            existing = roster[j]; break;
-          }
+          if (roster[j].cloudId === row.id) { existing = roster[j]; break; }
         }
         if (!existing) {
           roster.push({
             id: 'op_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
+            cloudId: row.id,
             name: row.name || 'Unnamed Operative',
             chapter: ext.chapter || '',
             operativeClass: ext.op_class || '',
             playerName: ext.player_name || '',
+            hpCurrent: ext.hp_cur || '',
+            hpMax: ext.hp_max || '',
+            ac: ext.ac || '',
+            level: ext.level || '',
             sheetFile: sheetFile,
-            playerUid: _portalUid()
+            playerUid: row.user_id
           });
           changed = true;
         } else {
+          existing.cloudId = row.id;
           if (row.name) existing.name = row.name;
           if (ext.chapter !== undefined) existing.chapter = ext.chapter;
           if (ext.op_class !== undefined) existing.operativeClass = ext.op_class;
           if (ext.player_name !== undefined) existing.playerName = ext.player_name;
+          if (ext.hp_cur !== undefined) existing.hpCurrent = ext.hp_cur;
+          if (ext.hp_max !== undefined) existing.hpMax = ext.hp_max;
+          if (ext.ac !== undefined) existing.ac = ext.ac;
+          if (ext.level !== undefined) existing.level = ext.level;
           changed = true;
         }
       });
@@ -2177,6 +2194,7 @@
   document.addEventListener('DOMContentLoaded', function() {
     renderRoster();
     _syncRosterFromCloud();
+    if (_portalLoggedIn()) _startSyncPolling();
   });
 
   /* ════════════════════════════════════════════
@@ -2439,6 +2457,7 @@
         errEl.textContent = '';
         document.getElementById('pab-inp-pw').value = '';
         _syncRosterFromCloud();
+        _startSyncPolling();
       } else {
         errEl.textContent = d.error_description || d.msg || 'Authentication failed.';
       }
@@ -2450,6 +2469,7 @@
     if (iframe && iframe.contentWindow && iframe.src && iframe.src !== 'about:blank') {
       iframe.contentWindow.postMessage({type: 'portal-signout'}, '*');
     }
+    _stopSyncPolling();
     _portalClearSession();
     updatePortalAuthBar();
   }
