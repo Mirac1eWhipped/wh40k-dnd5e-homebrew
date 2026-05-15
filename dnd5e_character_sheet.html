@@ -450,9 +450,36 @@ input[type="checkbox"] { accent-color: var(--gold); width: 10px; height: 10px; c
 </head>
 <body>
 
-<p class="print-note">D&amp;D 5e – Character Sheet &nbsp;·&nbsp; Three Pages</p>
-<button class="print-btn" onclick="window.print()">✦ &nbsp; Export to PDF / Print</button>
+<!-- ════ SAVE BAR ════════════════════════════════════════════════ -->
+<div id="save-bar" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:#0b0e14;border-bottom:1px solid #2a2e3a;display:flex;align-items:center;gap:12px;padding:7px 16px;flex-wrap:wrap;font-family:'Cinzel',Georgia,serif;print-color-adjust:exact;">
+  <span style="font-size:10px;letter-spacing:2px;color:#c8a44a;text-transform:uppercase;white-space:nowrap;">⚙ Sheet Sync</span>
+  <div style="display:flex;align-items:center;gap:6px;">
+    <div id="save-dot" style="width:8px;height:8px;border-radius:50%;background:#555;flex-shrink:0;"></div>
+    <span id="save-label" style="font-size:10px;letter-spacing:1px;color:#7a8090;white-space:nowrap;">Not saved</span>
+  </div>
+  <div style="flex:1;min-width:0;"></div>
+  <button onclick="copySheetLink()" style="background:transparent;border:1px solid #2a2e3a;color:#7a8090;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:5px 12px;cursor:pointer;white-space:nowrap;" title="Copy a bookmarkable link to this sheet">⎘ Copy Link</button>
+  <button onclick="exportSheet()" style="background:transparent;border:1px solid #2a2e3a;color:#7a8090;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:5px 12px;cursor:pointer;white-space:nowrap;" title="Download sheet as a backup file">↓ Export</button>
+  <button onclick="document.getElementById('import-file').click()" style="background:transparent;border:1px solid #2a2e3a;color:#7a8090;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:5px 12px;cursor:pointer;white-space:nowrap;" title="Restore sheet from a backup file">↑ Import</button>
+  <input type="file" id="import-file" accept=".json" style="display:none" onchange="importSheet(event)">
+  <button onclick="toggleSyncPanel()" id="sync-toggle" style="background:transparent;border:1px solid #2a2e3a;color:#7a8090;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:5px 12px;cursor:pointer;white-space:nowrap;" title="Sync to GitHub Gist for cross-device access">☁ Cloud Sync</button>
+  <button onclick="window.print()" style="background:transparent;border:1px solid #2a2e3a;color:#7a8090;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:5px 12px;cursor:pointer;white-space:nowrap;">✠ Print / PDF</button>
+</div>
+<div id="sync-panel" style="display:none;position:fixed;top:37px;right:0;z-index:9998;background:#0b0e14;border:1px solid #2a2e3a;border-top:none;padding:12px 16px;flex-direction:column;gap:8px;min-width:340px;">
+  <div style="font-size:9px;letter-spacing:1px;color:#7a8090;">GitHub Gist sync stores your sheet in the cloud so you can access it from any device. Create a token at <a href="https://github.com/settings/tokens" target="_blank" style="color:#c8a44a;">github.com/settings/tokens</a> with <strong style="color:#c8a44a;">gist</strong> scope.</div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+    <span style="font-size:9px;letter-spacing:1px;color:#7a8090;min-width:80px;">TOKEN</span>
+    <input id="sync-token" type="password" placeholder="ghp_..." oninput="localStorage.setItem('sheet_gist_token',this.value)" style="flex:1;background:#080a0c;border:1px solid #2a2e3a;color:#c8d0e0;font-size:13px;padding:5px 8px;outline:none;min-width:180px;">
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+    <button onclick="pushSheetToGist()" style="background:#1a2030;border:1px solid #2a2e3a;color:#c8a44a;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:6px 14px;cursor:pointer;">↑ Save to Cloud</button>
+    <button onclick="pullSheetFromGist()" style="background:#1a2030;border:1px solid #2a2e3a;color:#c8a44a;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:6px 14px;cursor:pointer;">↓ Load from Cloud</button>
+  </div>
+</div>
+<div style="height:44px;" class="no-print"></div>
 
+
+<p class="print-note">D&amp;D 5e – Character Sheet &nbsp;·&nbsp; Three Pages</p>
 <!-- ════════════════════════════════════════════════════
      PAGE 1 — CHARACTER PROFILE
 ════════════════════════════════════════════════════ -->
@@ -965,6 +992,208 @@ function calcMod(s) {
   el.value = mod >= 0 ? '+' + mod : String(mod);
 }
 window.addEventListener('DOMContentLoaded', () => { stats.forEach(s => calcMod(s)); });
+
+  /* ══════════════════════════════════════════════════
+     SHEET SAVE SYSTEM — localStorage + Gist + URL
+  ══════════════════════════════════════════════════ */
+  var _sheetSaveTimer = null;
+
+  function _getFields() {
+    return Array.from(document.querySelectorAll(
+      'input:not([readonly]):not([type="button"]):not([type="submit"]):not([type="file"]), textarea, select'
+    ));
+  }
+
+  function _getCharKey() {
+    // Use URL param first, then try to find name in fields
+    var params = new URLSearchParams(window.location.search);
+    var urlName = params.get('char');
+    if (urlName) return urlName;
+    // Heuristic: find first text input that looks like a character name field
+    var fields = _getFields();
+    // Typically the 4th editable input is "Battle-Brother Name" / "Character Name"
+    for (var i = 3; i < Math.min(8, fields.length); i++) {
+      if (fields[i] && fields[i].value && fields[i].value.trim().length > 1) {
+        return fields[i].value.trim();
+      }
+    }
+    return localStorage.getItem('sheet_last_char') || 'my-character';
+  }
+
+  function _setSaveStatus(state) {
+    var dot = document.getElementById('save-dot');
+    var lbl = document.getElementById('save-label');
+    var map = {
+      saved:  ['#3c8a4a', 'Saved locally'],
+      saving: ['#c8a44a', 'Saving…'],
+      synced: ['#3c8a4a', 'Synced to cloud'],
+      syncing:['#c8a44a', 'Syncing…'],
+      error:  ['#c0392b', 'Error — check token'],
+      loaded: ['#3c8a4a', 'Loaded']
+    };
+    if (!dot || !map[state]) return;
+    dot.style.background = map[state][0];
+    if (lbl) lbl.textContent = map[state][1];
+  }
+
+  function _doSave() {
+    var key = _getCharKey();
+    var data = { v: 1, ts: Date.now(), fields: _getFields().map(function(f){ return f.value; }) };
+    localStorage.setItem('wh40k_sheet_' + key, JSON.stringify(data));
+    localStorage.setItem('sheet_last_char', key);
+    _setSaveStatus('saved');
+  }
+
+  function _scheduleSave() {
+    _setSaveStatus('saving');
+    clearTimeout(_sheetSaveTimer);
+    _sheetSaveTimer = setTimeout(_doSave, 600);
+  }
+
+  function _loadFromStorage(key) {
+    var raw = localStorage.getItem('wh40k_sheet_' + key);
+    if (!raw) return false;
+    try {
+      var data = JSON.parse(raw);
+      var fields = _getFields();
+      (data.fields || []).forEach(function(val, i) {
+        if (fields[i] && !fields[i].readOnly) fields[i].value = val || '';
+      });
+      // Re-run modifier calc if present
+      if (typeof calcMod === 'function') {
+        ['str','dex','con','int','wis','cha'].forEach(function(s){ calcMod(s); });
+      }
+      _setSaveStatus('loaded');
+      return true;
+    } catch(e) { return false; }
+  }
+
+  function copySheetLink() {
+    var key = _getCharKey();
+    var url = window.location.origin + window.location.pathname + '?char=' + encodeURIComponent(key);
+    navigator.clipboard.writeText(url).then(function() {
+      var lbl = document.getElementById('save-label');
+      if (lbl) { lbl.textContent = 'Link copied!'; setTimeout(function(){ _setSaveStatus('saved'); }, 2000); }
+    }).catch(function() { prompt('Copy this link:', url); });
+  }
+
+  function exportSheet() {
+    var key = _getCharKey();
+    var data = { v: 1, char: key, ts: Date.now(), fields: _getFields().map(function(f){ return f.value; }) };
+    var blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = (key || 'sheet').replace(/\s+/g,'_') + '_backup.json';
+    a.click();
+  }
+
+  function importSheet(evt) {
+    var file = evt.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        var data = JSON.parse(e.target.result);
+        var fields = _getFields();
+        (data.fields || []).forEach(function(val, i) {
+          if (fields[i] && !fields[i].readOnly) fields[i].value = val || '';
+        });
+        if (typeof calcMod === 'function') {
+          ['str','dex','con','int','wis','cha'].forEach(function(s){ calcMod(s); });
+        }
+        _doSave();
+        _setSaveStatus('loaded');
+      } catch(e) { _setSaveStatus('error'); }
+    };
+    reader.readAsText(file);
+    evt.target.value = '';
+  }
+
+  function toggleSyncPanel() {
+    var p = document.getElementById('sync-panel');
+    if (!p) return;
+    p.style.display = p.style.display === 'none' ? 'flex' : 'none';
+    p.style.flexDirection = 'column';
+    var t = document.getElementById('sync-token');
+    if (t) t.value = localStorage.getItem('sheet_gist_token') || '';
+  }
+
+  function pushSheetToGist() {
+    var token = localStorage.getItem('sheet_gist_token') || '';
+    if (!token) { alert('Enter your GitHub token in the Cloud Sync panel first.'); return; }
+    var key  = _getCharKey();
+    var data = { v: 1, char: key, ts: Date.now(), fields: _getFields().map(function(f){ return f.value; }) };
+    var file = (key || 'sheet').replace(/[^a-z0-9_-]/gi,'_').toLowerCase() + '_sheet.json';
+    var gistId = localStorage.getItem('sheet_gist_id_' + key) || '';
+    var payload = JSON.stringify({
+      description: 'wh40k_character_' + key,
+      public: false,
+      files: {}
+    });
+    var payloadObj = { description: 'wh40k_character_' + key, public: false, files: {} };
+    payloadObj.files[file] = { content: JSON.stringify(data, null, 2) };
+    _setSaveStatus('syncing');
+    fetch(gistId ? 'https://api.github.com/gists/' + gistId : 'https://api.github.com/gists', {
+      method: gistId ? 'PATCH' : 'POST',
+      headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
+      body: JSON.stringify(payloadObj)
+    }).then(function(r){ return r.json(); })
+      .then(function(j){
+        if (j.id) {
+          localStorage.setItem('sheet_gist_id_' + key, j.id);
+          _setSaveStatus('synced');
+        } else { _setSaveStatus('error'); }
+      }).catch(function(){ _setSaveStatus('error'); });
+  }
+
+  function pullSheetFromGist() {
+    var token  = localStorage.getItem('sheet_gist_token') || '';
+    var key    = _getCharKey();
+    var gistId = localStorage.getItem('sheet_gist_id_' + key) || '';
+    if (!token || !gistId) { alert('Push to cloud first to create the Gist, then you can pull from any device.'); return; }
+    var file = (key || 'sheet').replace(/[^a-z0-9_-]/gi,'_').toLowerCase() + '_sheet.json';
+    _setSaveStatus('syncing');
+    fetch('https://api.github.com/gists/' + gistId, {
+      headers: { 'Authorization': 'token ' + token }
+    }).then(function(r){ return r.json(); })
+      .then(function(j){
+        if (j.files && j.files[file]) {
+          var data = JSON.parse(j.files[file].content);
+          var fields = _getFields();
+          (data.fields || []).forEach(function(val, i) {
+            if (fields[i] && !fields[i].readOnly) fields[i].value = val || '';
+          });
+          if (typeof calcMod === 'function') {
+            ['str','dex','con','int','wis','cha'].forEach(function(s){ calcMod(s); });
+          }
+          _doSave();
+          _setSaveStatus('synced');
+        } else { _setSaveStatus('error'); }
+      }).catch(function(){ _setSaveStatus('error'); });
+  }
+
+  /* ── Init ── */
+  document.addEventListener('DOMContentLoaded', function() {
+    // Load from URL param or last used
+    var params  = new URLSearchParams(window.location.search);
+    var urlChar = params.get('char');
+    var loaded  = false;
+    if (urlChar) {
+      loaded = _loadFromStorage(urlChar);
+    }
+    if (!loaded) {
+      var last = localStorage.getItem('sheet_last_char');
+      if (last) _loadFromStorage(last);
+    }
+    // Wire auto-save on all fields
+    _getFields().forEach(function(f) {
+      f.addEventListener('input',  _scheduleSave);
+      f.addEventListener('change', _scheduleSave);
+    });
+    // Show loaded status only if something was actually loaded
+    if (!loaded) _setSaveStatus('saving'); // will settle after first edit
+  });
+
 </script>
 
 </body>
