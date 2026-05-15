@@ -1769,7 +1769,7 @@
     <div class="iframe-toolbar">
       <span id="iframe-op-name" class="iframe-op-name"></span>
       <div class="iframe-toolbar-right">
-        <span class="iframe-hint">&#128161; Fill out your sheet — it saves automatically in your browser</span>
+        <span class="iframe-hint">&#128161; Fill out your sheet — fills in automatically from cloud — changes save instantly</span>
         <button class="sheet-close-btn" onclick="closeSheet()">&#x2715; Close</button>
       </div>
     </div>
@@ -2332,6 +2332,15 @@
     localStorage.setItem('supa_rtok',  d.refresh_token || '');
     localStorage.setItem('supa_uid',   d.user.id);
     localStorage.setItem('supa_email', d.user.email);
+    // Notify the open sheet iframe so it can init without a page refresh
+    var iframe = document.getElementById('sheet-iframe');
+    if (iframe && iframe.contentWindow && iframe.src) {
+      iframe.contentWindow.postMessage({
+        type: 'portal-session',
+        uid: d.user.id, email: d.user.email,
+        token: d.access_token, refresh: d.refresh_token || ''
+      }, '*');
+    }
   }
   function _portalClearSession() {
     ['supa_tok','supa_rtok','supa_uid','supa_email'].forEach(k => localStorage.removeItem(k));
@@ -2407,8 +2416,31 @@
     }
   });
 
+  // Portal token refresh helper
+  async function _portalRefreshToken() {
+    var rt = localStorage.getItem('supa_rtok');
+    if (!rt) { _portalClearSession(); return; }
+    try {
+      var d = await fetch(_PAB_URL + '/auth/v1/token?grant_type=refresh_token', {
+        method:'POST', headers:{'apikey':_PAB_KEY,'Content-Type':'application/json'},
+        body: JSON.stringify({refresh_token: rt})
+      }).then(r => r.json());
+      if (d.access_token) { _portalSetSession(d); }
+      else { _portalClearSession(); }
+    } catch(e) {}
+  }
+  function _portalTokenExpired() {
+    var tok = localStorage.getItem('supa_tok');
+    if (!tok) return false;
+    try { var p = JSON.parse(atob(tok.split('.')[1])); return p.exp && (Date.now()/1000) > (p.exp - 60); }
+    catch(e) { return false; }
+  }
+
   // Init on load
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', async function() {
+    if (_portalLoggedIn() && _portalTokenExpired()) {
+      await _portalRefreshToken();
+    }
     updatePortalAuthBar();
   });
 
