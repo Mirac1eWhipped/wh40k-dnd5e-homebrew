@@ -44,7 +44,6 @@ body{background:var(--bg-page);font-family:var(--font-body);color:var(--text);fo
 #copy-uid-btn:hover{border-color:var(--gold);color:var(--gold);}
 .sbar-btn{background:transparent;border:1px solid var(--border2);color:var(--silver-dim);font-family:var(--font-label);font-size:6pt;letter-spacing:.14em;text-transform:uppercase;padding:4px 10px;cursor:pointer;transition:all .2s;}
 .sbar-btn:hover{border-color:var(--gold);color:var(--gold);}
-#file-input{display:none;}
 
 /* ── Auth Modal ── */
 #auth-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:300;align-items:center;justify-content:center;}
@@ -260,10 +259,6 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
   <span id="save-dot"></span>
   <span id="save-label">Not signed in</span>
   <span id="save-email"></span><button id="copy-uid-btn" title="Copy your UID to share with GM" onclick="copyMyUid()">Copy UID</button>
-  <button class="sbar-btn" onclick="exportSheet()">Backup</button>
-  <label class="sbar-btn" for="file-input" style="cursor:pointer;">Restore</label>
-  <input type="file" id="file-input" accept=".json" onchange="importSheet(event)">
-  <button class="sbar-btn" id="btn-signin" onclick="showAuth()" style="display:none;">Sign In</button>
   <button class="sbar-btn" id="btn-signout" onclick="supaSignOut()" style="display:none;">Sign Out</button>
   <button class="sbar-btn" onclick="window.print()">Print</button>
 </div>
@@ -930,12 +925,6 @@ async function _loadSheet() {
     _status('loaded', 'Sheet loaded — ' + _uemail());
   } catch(e) { _status('error','Load failed'); }
 }
-function showAuth(msg) {
-  const m = document.getElementById('auth-modal');
-  if (m) m.style.display = 'flex';
-  const e = document.getElementById('auth-err');
-  if (e) e.textContent = msg || '';
-}
 function _hideAuth() {
   const m = document.getElementById('auth-modal'); if (m) m.style.display = 'none';
 }
@@ -972,42 +961,19 @@ function toggleAuthMode() {
   tgl.textContent = up ? 'Already have an account? Sign in' : "Don't have an account? Sign up";
   if (ttl) ttl.textContent = up ? 'Create Account' : 'Sign In';
 }
-function supaSignOut() { _clearSession(); _charId = null; _updateBar(); showAuth(); }
+function supaSignOut() { _clearSession(); _charId = null; _updateBar(); }
 function _updateBar() {
   const em = document.getElementById('save-email');
   const so = document.getElementById('btn-signout');
-  const si = document.getElementById('btn-signin');
   if (_loggedIn()) {
     if (em) em.textContent = _uemail();
     if (so) so.style.display = 'inline-block';
-    if (si) si.style.display = 'none';
   } else {
     if (em) em.textContent = '';
     if (so) so.style.display = 'none';
-    if (si) si.style.display = 'inline-block';
     _status('offline');
   }
 }
-function exportSheet() {
-  const ff   = _fields();
-  const name = _charName();
-  const blob = new Blob([JSON.stringify({v:3,char:name,fields:ff.map(f=>f.value),checkboxes:_checkboxes().map(c=>c.checked)},null,2)],{type:'application/json'});
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-  a.download = name.replace(/\s+/g,'_')+'_backup.json'; a.click();
-}
-function importSheet(evt) {
-  const file = evt.target.files[0]; if (!file) return;
-  const rd = new FileReader();
-  rd.onload = function(e) {
-    try {
-      const d = JSON.parse(e.target.result);
-      const ff = _fields();
-      (d.fields||[]).forEach((v,i)=>{if(ff[i]&&!ff[i].readOnly)ff[i].value=v||'';});
-      const cc = _checkboxes();
-      (d.checkboxes||[]).forEach((v,i)=>{if(cc[i])cc[i].checked=!!v;});
-      STATS.forEach(s=>calcMod(s));
-      _doSave(); _status('loaded','Backup restored');
-    } catch(e) { _status('error','Invalid file'); }
   };
   rd.readAsText(file); evt.target.value='';
 }

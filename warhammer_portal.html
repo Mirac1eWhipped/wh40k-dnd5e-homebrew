@@ -737,24 +737,8 @@
     .roster-add-btn { background: linear-gradient(135deg, #1a2438 0%, #0f1118 100%); border: 1px solid var(--gold-dim); color: var(--gold); font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; padding: 9px 20px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
     .roster-add-btn:hover { border-color: var(--gold); color: var(--gold-light); background: linear-gradient(135deg, #1e2c44 0%, #141720 100%); }
     .roster-add-btn svg { width: 14px; height: 14px; }
-    .gist-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .gist-toggle { background: transparent; border: 1px solid var(--border2); color: var(--silver-dim); font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 2px; padding: 6px 12px; cursor: pointer; transition: all 0.2s; }
-    .gist-toggle:hover { border-color: var(--border2); color: var(--silver); }
     .sync-pill { display: flex; align-items: center; gap: 5px; font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 1px; color: var(--text-dim); }
-    .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text-dim); }
-    .sync-dot.synced  { background: #3c8a4a; }
-    .sync-dot.saving  { background: var(--gold-dim); animation: pulse 1s infinite; }
-    .sync-dot.error   { background: var(--red-bright); }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-    .gist-panel { background: var(--bg2); border: 1px solid var(--border); padding: 14px 18px; margin-bottom: 16px; display: none; gap: 12px; flex-direction: column; }
-    .gist-panel.open { display: flex; }
-    .gist-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .gist-label { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 2px; color: var(--silver-dim); text-transform: uppercase; white-space: nowrap; min-width: 80px; }
-    .gist-input { flex: 1; background: #080a0c; border: 1px solid var(--border); color: var(--text); font-family: 'Crimson Text', serif; font-size: 14px; padding: 5px 8px; outline: none; min-width: 200px; }
-    .gist-input:focus { border-color: var(--border2); }
-    .gist-btn { background: var(--border); border: none; color: var(--silver); font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 1px; padding: 6px 14px; cursor: pointer; }
-    .gist-btn:hover { background: var(--border2); color: var(--gold); }
-    .gist-note { font-size: 12px; color: var(--text-dim); }
     /* ─── Operative summary cards ─── */
     .roster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
     .op-card { background: var(--panel); border: 1px solid var(--border); border-top: 3px solid var(--gold-dim); padding: 16px; display: flex; flex-direction: column; gap: 12px; position: relative; transition: border-color 0.2s; }
@@ -1726,29 +1710,6 @@
           <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 4a1 1 0 00-1 1v4H5a1 1 0 000 2h4v4a1 1 0 002 0v-4h4a1 1 0 000-2h-4V5a1 1 0 00-1-1z"/></svg>
           Add Operative
         </button>
-        <div class="gist-bar">
-          <div class="sync-pill">
-            <div class="sync-dot" id="sync-dot"></div>
-            <span id="sync-label">Local</span>
-          </div>
-          <button class="gist-toggle" onclick="toggleGistPanel()">&#9881; GitHub Sync</button>
-        </div>
-      </div>
-      <!-- GitHub settings panel -->
-      <div class="gist-panel" id="gist-panel">
-        <div class="gist-row">
-          <span class="gist-label">Access Token</span>
-          <input class="gist-input" type="password" id="gist-token" placeholder="ghp_xxxxxxxxxxxx" oninput="gistTokenChanged(this.value)" />
-        </div>
-        <div class="gist-row">
-          <span class="gist-label">Gist ID</span>
-          <input class="gist-input" type="text" id="gist-id-input" placeholder="Auto-created on first save" readonly />
-          <button class="gist-btn" onclick="forcePushGist()">Push Now</button>
-          <button class="gist-btn" onclick="forcePullGist()">Pull</button>
-        </div>
-        <div class="gist-note">
-          Create a token at github.com/settings/tokens with <strong>gist</strong> scope. Data is saved as a secret Gist named <em>dw_kill_team_roster</em>.
-        </div>
       </div>
       <!-- Roster cards -->
       <div class="roster-grid" id="roster-grid"></div>
@@ -1968,9 +1929,6 @@
   };
 
   var STORAGE_KEY    = 'dw_kill_team_roster_v2';
-  var GIST_TOKEN_KEY = 'dw_gist_token';
-  var GIST_ID_KEY    = 'dw_gist_id';
-  var _gistSaveTimer = null;
 
   // ── Chapter SVG emblems ──────────────────────────────────────
   var CHAPTER_SVGS = {
@@ -1993,7 +1951,6 @@
   }
   function saveRoster(data) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    scheduleGistSave();
   }
   function newOperative(name, chapter, opClass, sheetFile) {
     return {
@@ -2153,86 +2110,9 @@
     if (iframe) iframe.src = '';
   }
 
-  // ── GitHub Gist sync ────────────────────────────────────────
-  function getGistToken() { return localStorage.getItem(GIST_TOKEN_KEY) || ''; }
-  function getGistId()    { return localStorage.getItem(GIST_ID_KEY)    || ''; }
-
-  function setSyncStatus(state, label) {
-    var dot = document.getElementById('sync-dot');
-    var lbl = document.getElementById('sync-label');
-    if (dot) dot.className = 'sync-dot ' + state;
-    if (lbl) lbl.textContent = label;
-  }
-  function toggleGistPanel() {
-    var panel = document.getElementById('gist-panel');
-    if (!panel) return;
-    panel.classList.toggle('open');
-    var tokenInput = document.getElementById('gist-token');
-    if (tokenInput) tokenInput.value = getGistToken();
-    var idInput = document.getElementById('gist-id-input');
-    if (idInput) idInput.value = getGistId();
-  }
-  function gistTokenChanged(val) {
-    localStorage.setItem(GIST_TOKEN_KEY, val.trim());
-  }
-  function scheduleGistSave() {
-    if (!getGistToken()) return;
-    if (_gistSaveTimer) clearTimeout(_gistSaveTimer);
-    setSyncStatus('saving', 'Saving...');
-    _gistSaveTimer = setTimeout(pushToGist, 2000);
-  }
-  function pushToGist() {
-    var token  = getGistToken();
-    if (!token) return;
-    var data   = loadRoster();
-    var gistId = getGistId();
-    var payload = JSON.stringify({
-      description: 'dw_kill_team_roster',
-      public: false,
-      files: { 'kill_team_roster.json': { content: JSON.stringify(data, null, 2) } }
-    });
-    var method = gistId ? 'PATCH' : 'POST';
-    var url    = gistId ? 'https://api.github.com/gists/' + gistId : 'https://api.github.com/gists';
-    fetch(url, {
-      method: method,
-      headers: { 'Authorization': 'token ' + token, 'Content-Type': 'application/json' },
-      body: payload
-    }).then(function(r) { return r.json(); })
-      .then(function(j) {
-        if (j.id) {
-          localStorage.setItem(GIST_ID_KEY, j.id);
-          var idInput = document.getElementById('gist-id-input');
-          if (idInput) idInput.value = j.id;
-          setSyncStatus('synced', 'Synced');
-        } else {
-          setSyncStatus('error', 'Error');
-        }
-      }).catch(function() { setSyncStatus('error', 'Error'); });
-  }
-  function forcePushGist() { pushToGist(); }
-  function forcePullGist() {
-    var token  = getGistToken();
-    var gistId = getGistId();
-    if (!token || !gistId) { alert('Enter a GitHub token and make sure a Gist ID exists.'); return; }
-    setSyncStatus('saving', 'Pulling...');
-    fetch('https://api.github.com/gists/' + gistId, {
-      headers: { 'Authorization': 'token ' + token }
-    }).then(function(r) { return r.json(); })
-      .then(function(j) {
-        if (j.files && j.files['kill_team_roster.json']) {
-          localStorage.setItem(STORAGE_KEY, j.files['kill_team_roster.json'].content);
-          renderRoster();
-          setSyncStatus('synced', 'Pulled');
-        } else {
-          setSyncStatus('error', 'No data');
-        }
-      }).catch(function() { setSyncStatus('error', 'Error'); });
-  }
-
   // ── Init ─────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function() {
     renderRoster();
-    if (getGistToken()) setSyncStatus('synced', 'GitHub Ready');
   });
 
   /* ════════════════════════════════════════════
