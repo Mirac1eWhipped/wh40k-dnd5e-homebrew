@@ -402,10 +402,10 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 <div class="tab-panel" id="panel-combat">
   <div class="combat-stats-row">
     <div class="stat-box"><div class="stat-box-val"><input type="text" placeholder="15"></div><span class="stat-box-lbl">Armor Class</span></div>
-    <div class="stat-box"><div class="stat-box-val"><input type="text" placeholder="+2"></div><span class="stat-box-lbl">Initiative</span></div>
+    <div class="stat-box"><div class="stat-box-val"><input type="text" id="combat-initiative" placeholder="+2"></div><span class="stat-box-lbl">Initiative</span></div>
     <div class="stat-box"><div class="stat-box-val"><input type="text" placeholder="30"></div><span class="stat-box-lbl">Speed (ft)</span></div>
-    <div class="stat-box"><div class="stat-box-val"><input type="text" placeholder="+2"></div><span class="stat-box-lbl">Prof Bonus</span></div>
-    <div class="stat-box"><div class="stat-box-val"><input type="text" placeholder="0" id="mortal-wounds"></div><span class="stat-box-lbl">Mortal Wounds</span></div>
+    <div class="stat-box"><div class="stat-box-val"><input type="text" id="combat-prof" placeholder="+2"></div><span class="stat-box-lbl">Prof Bonus</span></div>
+    <div class="stat-box"><div class="stat-box-val"><input type="text" placeholder="0" id="combat-mortal-wounds"></div><span class="stat-box-lbl">Mortal Wounds</span></div>
   </div>
 
   <div class="hp-layout">
@@ -761,6 +761,10 @@ function _recalcDerived() {
   function fmt(n) { return n >= 0 ? '+'+n : String(n); }
   const initEl = document.getElementById('stat-initiative');
   if (initEl) initEl.value = fmt(_mod('dex'));
+  const combatInitEl = document.getElementById('combat-initiative');
+  if (combatInitEl) combatInitEl.value = fmt(_mod('dex'));
+  const combatProfEl = document.getElementById('combat-prof');
+  if (combatProfEl) combatProfEl.value = pbFmt;
   ['str','dex','con','int','wis','cha'].forEach(function(s) {
     const chk = document.getElementById('save-'+s+'-prof');
     const el  = document.getElementById('save-'+s);
