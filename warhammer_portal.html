@@ -2009,7 +2009,7 @@
           '<div class="op-hp-bar"><div class="op-hp-fill" style="width:' + hpPct + '%"></div></div>' +
         '</div>' +
         '<div class="op-card-sheet-tag">&#128196; ' + sheetLabel + '</div>' +
-        (op.playerEmail ? '<div class="op-card-player">&#9651; ' + op.playerEmail + '</div>' : '') +
+        (op.playerName ? '<div class="op-card-player">&#9651; ' + op.playerName + '</div>' : '') +
         '<div class="op-card-actions">' +
           '<button class="op-view-btn" onclick="openSheet(\'' + op.id + '\')">&#9654; View Sheet</button>' +
           '<button class="op-del-btn" onclick="deleteOperative(\'' + op.id + '\')" title="Remove Operative">&times;</button>' +
@@ -2143,19 +2143,29 @@
       rows.forEach(function(row) {
         var sheetFile = SHEET_TYPE_MAP[row.sheet_type];
         if (!sheetFile) return;
-        var exists = roster.some(function(op) {
-          return op.sheetFile === sheetFile && (!op.playerUid || op.playerUid === _portalUid());
-        });
-        if (!exists) {
-          var ext = row.extra || {};
+        var ext = row.extra || {};
+        var existing = null;
+        for (var j = 0; j < roster.length; j++) {
+          if (roster[j].sheetFile === sheetFile && (!roster[j].playerUid || roster[j].playerUid === _portalUid())) {
+            existing = roster[j]; break;
+          }
+        }
+        if (!existing) {
           roster.push({
             id: 'op_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
             name: row.name || 'Unnamed Operative',
             chapter: ext.chapter || '',
             operativeClass: ext.op_class || '',
+            playerName: ext.player_name || '',
             sheetFile: sheetFile,
             playerUid: _portalUid()
           });
+          changed = true;
+        } else {
+          if (row.name) existing.name = row.name;
+          if (ext.chapter !== undefined) existing.chapter = ext.chapter;
+          if (ext.op_class !== undefined) existing.operativeClass = ext.op_class;
+          if (ext.player_name !== undefined) existing.playerName = ext.player_name;
           changed = true;
         }
       });
