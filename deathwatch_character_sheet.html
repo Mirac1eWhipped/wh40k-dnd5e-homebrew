@@ -1053,26 +1053,51 @@ input[type="checkbox"] {
 </head>
 <body>
 
-<!-- ════ SAVE BAR ════════════════════════════════════════════════ -->
+<!-- ════ SUPABASE SAVE SYSTEM ════════════════════════════════════ -->
 <style>
-  @media print { #save-bar, #save-bar-spacer { display: none !important; } }
+  @media print { #save-bar,#save-bar-spacer,#auth-modal{display:none!important} }
+  #auth-modal{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center}
+  .auth-box{background:#0b0e14;border:1px solid #2a2e3a;border-top:2px solid #c8a44a;padding:32px 36px;width:100%;max-width:380px;display:flex;flex-direction:column;gap:14px;box-sizing:border-box}
+  .auth-title{font-family:'Cinzel',serif;font-size:14px;letter-spacing:2px;color:#c8a44a;text-transform:uppercase;text-align:center}
+  .auth-sub{font-size:12px;color:#7a8090;text-align:center;letter-spacing:1px;line-height:1.5}
+  .auth-inp{background:#080a0c;border:1px solid #2a2e3a;color:#c8d0e0;font-size:14px;padding:9px 12px;outline:none;width:100%;box-sizing:border-box}
+  .auth-inp:focus{border-color:#c8a44a}
+  .auth-btn{background:linear-gradient(135deg,#1a2438,#0f1118);border:1px solid rgba(200,164,74,0.5);color:#c8a44a;font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;padding:11px;cursor:pointer;text-transform:uppercase;width:100%}
+  .auth-btn:hover{border-color:#c8a44a}
+  .auth-btn:disabled{opacity:0.5;cursor:not-allowed}
+  .auth-toggle{font-size:11px;color:#7a8090;text-align:center;cursor:pointer;letter-spacing:1px}
+  .auth-toggle:hover{color:#c8a44a}
+  .auth-err{font-size:11px;color:#c0392b;text-align:center;min-height:16px}
+  #save-bar button:hover{border-color:#c8a44a!important;color:#c8a44a!important}
 </style>
-<div id="save-bar" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:#0b0e14;border-bottom:1px solid #2a2e3a;display:flex;align-items:center;gap:10px;padding:7px 16px;flex-wrap:wrap;font-family:'Cinzel',Georgia,serif;">
-  <span style="font-size:10px;letter-spacing:2px;color:#c8a44a;text-transform:uppercase;white-space:nowrap;flex-shrink:0;">⚙ Sheet Sync</span>
-  <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
-    <div id="save-dot" style="width:8px;height:8px;border-radius:50%;background:#3c8a4a;flex-shrink:0;transition:background 0.3s;"></div>
-    <span id="save-label" style="font-size:10px;letter-spacing:1px;color:#7a8090;white-space:nowrap;min-width:80px;">Ready</span>
+<div id="auth-modal" style="display:none">
+  <div class="auth-box">
+    <div class="auth-title" id="auth-title">Sign In</div>
+    <div class="auth-sub">✠ Adeptus Inquisitorium<br>Operative Dossier Access</div>
+    <div id="auth-mode" data-mode="signin" style="display:none"></div>
+    <input class="auth-inp" id="auth-email" type="email" placeholder="Email address" autocomplete="email">
+    <input class="auth-inp" id="auth-pass"  type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')authSubmit()">
+    <div class="auth-err" id="auth-err"></div>
+    <button class="auth-btn" id="auth-btn" onclick="authSubmit()">Sign In</button>
+    <div class="auth-toggle" id="auth-toggle" onclick="toggleAuthMode()">Don't have an account? Sign up</div>
   </div>
-  <div style="flex:1;"></div>
-  <button onclick="saveSheetLink()" title="Bookmark this URL — it contains your full sheet" style="background:#1a2438;border:1px solid rgba(200,164,74,0.4);color:#c8a44a;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:5px 13px;cursor:pointer;white-space:nowrap;transition:all 0.2s;">✦ Save &amp; Copy Link</button>
-  <button onclick="exportSheet()" title="Download sheet as a JSON backup file" style="background:transparent;border:1px solid #2a2e3a;color:#7a8090;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:5px 12px;cursor:pointer;white-space:nowrap;">↓ Backup</button>
-  <button onclick="document.getElementById('import-file').click()" title="Restore sheet from a backup file" style="background:transparent;border:1px solid #2a2e3a;color:#7a8090;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:5px 12px;cursor:pointer;white-space:nowrap;">↑ Restore</button>
-  <input type="file" id="import-file" accept=".json" style="display:none" onchange="importSheet(event)">
-  <button onclick="window.print()" style="background:transparent;border:1px solid #2a2e3a;color:#7a8090;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:5px 12px;cursor:pointer;white-space:nowrap;">✠ Print / PDF</button>
 </div>
-<div id="save-bar-spacer" style="height:44px;"></div>
-
-
+<div id="save-bar" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:#0b0e14;border-bottom:1px solid #2a2e3a;display:flex;align-items:center;gap:10px;padding:7px 16px;flex-wrap:wrap;font-family:'Cinzel',Georgia,serif;">
+  <span style="font-size:10px;letter-spacing:2px;color:#c8a44a;text-transform:uppercase;white-space:nowrap;flex-shrink:0">⚙ Sheet Sync</span>
+  <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+    <div id="save-dot" style="width:8px;height:8px;border-radius:50%;background:#555;flex-shrink:0;transition:background 0.3s"></div>
+    <span id="save-label" style="font-size:10px;letter-spacing:1px;color:#7a8090;white-space:nowrap;min-width:90px"></span>
+  </div>
+  <span id="save-email" style="font-size:10px;letter-spacing:1px;color:#5a7090;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px"></span>
+  <div style="flex:1"></div>
+  <button onclick="exportSheet()" style="background:transparent;border:1px solid #2a2e3a;color:#7a8090;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:5px 12px;cursor:pointer;white-space:nowrap;transition:all 0.2s">↓ Backup</button>
+  <button onclick="document.getElementById('imp-file').click()" style="background:transparent;border:1px solid #2a2e3a;color:#7a8090;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:5px 12px;cursor:pointer;white-space:nowrap;transition:all 0.2s">↑ Restore</button>
+  <input type="file" id="imp-file" accept=".json" style="display:none" onchange="importSheet(event)">
+  <button id="btn-signout" onclick="supaSignOut()" style="display:none;background:transparent;border:1px solid #2a2e3a;color:#7a8090;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:5px 12px;cursor:pointer;white-space:nowrap;transition:all 0.2s">Sign Out</button>
+  <button id="btn-signin"  onclick="showAuth()" style="background:linear-gradient(135deg,#1a2438,#0f1118);border:1px solid rgba(200,164,74,0.4);color:#c8a44a;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:5px 12px;cursor:pointer;white-space:nowrap;transition:all 0.2s">Sign In</button>
+  <button onclick="window.print()" style="background:transparent;border:1px solid #2a2e3a;color:#7a8090;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:5px 12px;cursor:pointer;white-space:nowrap;transition:all 0.2s">✠ Print / PDF</button>
+</div>
+<div id="save-bar-spacer" style="height:44px"></div>
 
 
 <p class="print-note">Deathwatch – Battle-Brother Dossier &nbsp;·&nbsp; Three Pages</p>
@@ -1644,165 +1669,225 @@ function calcMod(s) {
 window.addEventListener('DOMContentLoaded', () => {
   stats.forEach(s => calcMod(s));
 });
-  /* ══════════════════════════════════════════════════
-     SHEET SAVE SYSTEM v2 — URL-encoded, no token needed
-     Saves entire sheet state into the URL hash.
-     Bookmark the URL = save the sheet. Works anywhere.
-  ══════════════════════════════════════════════════ */
-  var _sheetSaveTimer = null;
 
-  function _getFields() {
+  /* ══════════════════════════════════════════════════
+     SUPABASE SAVE SYSTEM — auto-saves on every change,
+     loads on login, works on any device, no token needed
+  ══════════════════════════════════════════════════ */
+  const _SURL  = 'https://uggazjqvwyndpcxrkazx.supabase.co';
+  const _SKEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnZ2F6anF2d3luZHBjeHJrYXp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4MTcxOTAsImV4cCI6MjA5NDM5MzE5MH0.6dcsbi-lzQJUQS5UZTVg-tI_mFuy8yfAlfWsf0ennpU';
+  const _STYPE = 'dw_dark';
+  var _saveTimer = null;
+  var _charId    = null;  // cached DB row id once loaded/created
+
+  /* ── Tiny Supabase client ── */
+  function _authHdr() {
+    const t = localStorage.getItem('supa_tok');
+    return t ? { 'Authorization': 'Bearer ' + t } : {};
+  }
+  async function _sfetch(path, opts) {
+    const r = await fetch(_SURL + path, {
+      ...opts,
+      headers: { 'apikey': _SKEY, 'Content-Type': 'application/json', ..._authHdr(), ...(opts.headers||{}) }
+    });
+    if (r.status === 204) return {};
+    return r.json();
+  }
+  function _loggedIn()  { return !!localStorage.getItem('supa_tok'); }
+  function _uid()       { return localStorage.getItem('supa_uid') || ''; }
+  function _uemail()    { return localStorage.getItem('supa_email') || ''; }
+  function _setSession(d) {
+    if (!d || !d.access_token) return;
+    localStorage.setItem('supa_tok',   d.access_token);
+    localStorage.setItem('supa_rtok',  d.refresh_token || '');
+    localStorage.setItem('supa_uid',   d.user.id);
+    localStorage.setItem('supa_email', d.user.email);
+  }
+  function _clearSession() {
+    ['supa_tok','supa_rtok','supa_uid','supa_email'].forEach(k => localStorage.removeItem(k));
+  }
+
+  /* ── Field helpers ── */
+  function _fields() {
     return Array.from(document.querySelectorAll(
-      'input:not([readonly]):not([type="button"]):not([type="submit"]):not([type="file"]), textarea, select'
+      'input:not([readonly]):not([type=button]):not([type=submit]):not([type=file]):not(.auth-inp),' +
+      'textarea:not(.auth-inp),select'
     ));
   }
-
-  function _setSaveStatus(state, override) {
-    var dot = document.getElementById('save-dot');
-    var lbl = document.getElementById('save-label');
-    var map = {
-      saved:   ['#3c8a4a', 'Saved — bookmark this tab'],
-      saving:  ['#c8a44a', 'Saving…'],
-      loaded:  ['#3c8a4a', 'Sheet loaded'],
-      copied:  ['#3c8a4a', 'Link copied to clipboard!'],
-      error:   ['#c0392b', 'Error — could not load'],
-      empty:   ['#555555', 'Ready — start filling your sheet']
-    };
-    if (!dot || !map[state]) return;
-    dot.style.background = map[state][0];
-    if (lbl) lbl.textContent = override || map[state][1];
-  }
-
-  /* ── Encode / Decode ── */
-  function _encode(fields) {
-    var vals = fields.map(function(f){ return f.value; });
-    // Trim trailing empty strings to keep URL short
-    while (vals.length && vals[vals.length - 1] === '') vals.pop();
-    try {
-      return btoa(unescape(encodeURIComponent(JSON.stringify(vals))));
-    } catch(e) { return ''; }
-  }
-
-  function _decode(hash) {
-    try {
-      return JSON.parse(decodeURIComponent(escape(atob(hash))));
-    } catch(e) { return null; }
-  }
-
-  /* ── Save (encodes to URL hash + localStorage) ── */
-  function _doSave(silent) {
-    var fields  = _getFields();
-    var encoded = _encode(fields);
-    if (!encoded) return;
-    // Update URL without adding browser history entry
-    history.replaceState(null, '', window.location.pathname + window.location.search + '#' + encoded);
-    // Also persist to localStorage as fallback (keyed by sheet filename)
-    var key = window.location.pathname.split('/').pop();
-    localStorage.setItem('wh40k_sheet_v2_' + key, encoded);
-    if (!silent) _setSaveStatus('saved');
-  }
-
-  function _scheduleSave() {
-    _setSaveStatus('saving');
-    clearTimeout(_sheetSaveTimer);
-    _sheetSaveTimer = setTimeout(_doSave, 500);
-  }
-
-  /* ── Load from hash or localStorage ── */
-  function _loadData(encoded) {
-    if (!encoded) return false;
-    var vals   = _decode(encoded);
-    if (!vals)  return false;
-    var fields = _getFields();
-    vals.forEach(function(val, i) {
-      if (fields[i] && !fields[i].readOnly) fields[i].value = val || '';
-    });
-    if (typeof calcMod === 'function') {
-      ['str','dex','con','int','wis','cha'].forEach(function(s){ calcMod(s); });
+  function _charName() {
+    const ff = _fields();
+    for (let i = 3; i < Math.min(8, ff.length); i++) {
+      if (ff[i] && ff[i].value.trim().length > 1) return ff[i].value.trim();
     }
-    return true;
+    return 'Unnamed Operative';
   }
 
-  /* ── Public actions ── */
-  function saveSheetLink() {
-    _doSave(true);
-    var url = window.location.href;
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(url).then(function() {
-        _setSaveStatus('copied');
-        setTimeout(function(){ _setSaveStatus('saved'); }, 2500);
-      }).catch(function() { prompt('Copy and bookmark this link:', url); });
-    } else {
-      prompt('Copy and bookmark this link:', url);
-    }
+  /* ── Status dot ── */
+  function _status(s, m) {
+    const dot = document.getElementById('save-dot');
+    const lbl = document.getElementById('save-label');
+    const MAP = { saved:['#3c8a4a','Saved'], saving:['#c8a44a','Saving…'],
+                  loaded:['#3c8a4a','Loaded'], error:['#c0392b', m||'Error'],
+                  offline:['#555','Not signed in'] };
+    if (!dot || !MAP[s]) return;
+    dot.style.background = MAP[s][0];
+    if (lbl) lbl.textContent = m || MAP[s][1];
   }
 
-  function exportSheet() {
-    var fields = _getFields();
-    var data = { v: 2, ts: Date.now(), fields: fields.map(function(f){ return f.value; }) };
-    var name = (fields[3] && fields[3].value) ? fields[3].value.replace(/\s+/g,'_') : 'sheet';
-    var blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = name + '_backup.json';
-    a.click();
-  }
-
-  function importSheet(evt) {
-    var file = evt.target.files[0];
-    if (!file) return;
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      try {
-        var data = JSON.parse(e.target.result);
-        var vals   = data.fields || data; // support both formats
-        var fields = _getFields();
-        vals.forEach(function(val, i) {
-          if (fields[i] && !fields[i].readOnly) fields[i].value = val || '';
+  /* ── Save ── */
+  async function _doSave() {
+    if (!_loggedIn()) return;
+    const vals = _fields().map(f => f.value);
+    const name = _charName();
+    try {
+      if (_charId) {
+        await _sfetch('/rest/v1/characters?id=eq.' + _charId, {
+          method: 'PATCH', body: JSON.stringify({ fields: vals, name }),
+          headers: { 'Prefer': 'return=minimal' }
         });
-        if (typeof calcMod === 'function') {
-          ['str','dex','con','int','wis','cha'].forEach(function(s){ calcMod(s); });
+      } else {
+        // check for existing row first
+        const ex = await _sfetch(
+          '/rest/v1/characters?user_id=eq.' + _uid() + '&sheet_type=eq.' + _STYPE + '&select=id',
+          { method: 'GET' }
+        );
+        if (Array.isArray(ex) && ex.length) {
+          _charId = ex[0].id;
+          await _sfetch('/rest/v1/characters?id=eq.' + _charId, {
+            method: 'PATCH', body: JSON.stringify({ fields: vals, name }),
+            headers: { 'Prefer': 'return=minimal' }
+          });
+        } else {
+          const cr = await _sfetch('/rest/v1/characters', {
+            method: 'POST',
+            body: JSON.stringify({ user_id: _uid(), name, sheet_type: _STYPE, fields: vals }),
+            headers: { 'Prefer': 'return=representation' }
+          });
+          if (Array.isArray(cr) && cr[0]) _charId = cr[0].id;
         }
-        _doSave();
-        _setSaveStatus('loaded', 'Backup restored');
-      } catch(e) { _setSaveStatus('error'); }
+      }
+      _status('saved');
+    } catch(e) { _status('error', 'Save failed'); }
+  }
+  function _schedSave() { _status('saving'); clearTimeout(_saveTimer); _saveTimer = setTimeout(_doSave, 800); }
+
+  /* ── Load ── */
+  async function _loadSheet() {
+    if (!_loggedIn()) { _status('offline'); return; }
+    try {
+      const rows = await _sfetch(
+        '/rest/v1/characters?user_id=eq.' + _uid() + '&sheet_type=eq.' + _STYPE +
+        '&order=updated_at.desc&limit=1',
+        { method: 'GET' }
+      );
+      if (!Array.isArray(rows) || !rows.length) {
+        _status('loaded', 'New sheet — start filling it in');
+        return;
+      }
+      _charId = rows[0].id;
+      const ff = _fields();
+      (rows[0].fields || []).forEach((v, i) => { if (ff[i] && !ff[i].readOnly) ff[i].value = v || ''; });
+      if (typeof calcMod === 'function') ['str','dex','con','int','wis','cha'].forEach(s => calcMod(s));
+      _status('loaded', 'Sheet loaded — ' + _uemail());
+    } catch(e) { _status('error', 'Load failed'); }
+  }
+
+  /* ── Auth ── */
+  function showAuth(msg) {
+    const m = document.getElementById('auth-modal');
+    if (m) m.style.display = 'flex';
+    const e = document.getElementById('auth-err');
+    if (e) e.textContent = msg || '';
+  }
+  function _hideAuth() {
+    const m = document.getElementById('auth-modal');
+    if (m) m.style.display = 'none';
+  }
+  async function authSubmit() {
+    const email = document.getElementById('auth-email').value.trim();
+    const pass  = document.getElementById('auth-pass').value;
+    const isUp  = document.getElementById('auth-mode').dataset.mode === 'signup';
+    const btn   = document.getElementById('auth-btn');
+    const err   = document.getElementById('auth-err');
+    if (!email || !pass) { err.textContent = 'Enter your email and password.'; return; }
+    btn.disabled = true; btn.textContent = 'Please wait…';
+    const endpoint = isUp ? '/auth/v1/signup' : '/auth/v1/token?grant_type=password';
+    try {
+      const d = await _sfetch(endpoint, { method: 'POST', body: JSON.stringify({ email, password: pass }) });
+      if (d.access_token) {
+        _setSession(d); _hideAuth(); _updateBar();
+        await _loadSheet(); _wireFields();
+      } else if (d.user && !d.access_token) {
+        err.textContent = 'Check your email to confirm your account, then sign in.';
+      } else {
+        err.textContent = d.error_description || d.msg || 'Authentication failed.';
+      }
+    } catch(e) { err.textContent = 'Network error — try again.'; }
+    btn.disabled = false; btn.textContent = isUp ? 'Create Account' : 'Sign In';
+  }
+  function toggleAuthMode() {
+    const md  = document.getElementById('auth-mode');
+    const btn = document.getElementById('auth-btn');
+    const tgl = document.getElementById('auth-toggle');
+    const ttl = document.getElementById('auth-title');
+    const up  = md.dataset.mode !== 'signup';
+    md.dataset.mode    = up ? 'signup' : 'signin';
+    btn.textContent    = up ? 'Create Account' : 'Sign In';
+    tgl.textContent    = up ? 'Already have an account? Sign in' : "Don't have an account? Sign up";
+    ttl.textContent    = up ? 'Create Account' : 'Sign In';
+  }
+  function supaSignOut() { _clearSession(); _charId = null; _updateBar(); showAuth(); }
+
+  /* ── Bar state ── */
+  function _updateBar() {
+    const em  = document.getElementById('save-email');
+    const so  = document.getElementById('btn-signout');
+    const si  = document.getElementById('btn-signin');
+    if (_loggedIn()) {
+      if (em) em.textContent = _uemail();
+      if (so) so.style.display = 'inline-block';
+      if (si) si.style.display = 'none';
+    } else {
+      if (em) em.textContent = '';
+      if (so) so.style.display = 'none';
+      if (si) si.style.display = 'inline-block';
+      _status('offline');
+    }
+  }
+
+  /* ── Backup / Restore ── */
+  function exportSheet() {
+    const ff   = _fields();
+    const name = _charName();
+    const blob = new Blob([JSON.stringify({ v:2, char: name, fields: ff.map(f=>f.value) }, null, 2)], {type:'application/json'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = name.replace(/\s+/g,'_') + '_backup.json'; a.click();
+  }
+  function importSheet(evt) {
+    const file = evt.target.files[0]; if (!file) return;
+    const rd = new FileReader();
+    rd.onload = function(e) {
+      try {
+        const d  = JSON.parse(e.target.result);
+        const ff = _fields();
+        (d.fields||[]).forEach((v,i) => { if (ff[i] && !ff[i].readOnly) ff[i].value = v||''; });
+        if (typeof calcMod === 'function') ['str','dex','con','int','wis','cha'].forEach(s=>calcMod(s));
+        _doSave(); _status('loaded','Backup restored');
+      } catch(e) { _status('error','Invalid file'); }
     };
-    reader.readAsText(file);
-    evt.target.value = '';
+    rd.readAsText(file); evt.target.value = '';
+  }
+
+  /* ── Wire fields ── */
+  function _wireFields() {
+    _fields().forEach(f => { f.addEventListener('input',_schedSave); f.addEventListener('change',_schedSave); });
   }
 
   /* ── Init ── */
-  document.addEventListener('DOMContentLoaded', function() {
-    var loaded = false;
-
-    // Priority 1: URL hash (the canonical save location)
-    var hash = window.location.hash.slice(1);
-    if (hash) {
-      loaded = _loadData(hash);
-      if (loaded) _setSaveStatus('loaded');
-    }
-
-    // Priority 2: localStorage fallback (same browser, sheet was saved before)
-    if (!loaded) {
-      var key = window.location.pathname.split('/').pop();
-      var stored = localStorage.getItem('wh40k_sheet_v2_' + key);
-      if (stored) {
-        loaded = _loadData(stored);
-        if (loaded) {
-          // Sync loaded data into URL too
-          _doSave(true);
-          _setSaveStatus('loaded', 'Session restored');
-        }
-      }
-    }
-
-    if (!loaded) _setSaveStatus('empty');
-
-    // Wire auto-save on every field change
-    _getFields().forEach(function(f) {
-      f.addEventListener('input',  _scheduleSave);
-      f.addEventListener('change', _scheduleSave);
-    });
+  document.addEventListener('DOMContentLoaded', async function() {
+    _updateBar();
+    if (_loggedIn()) { await _loadSheet(); _wireFields(); }
+    else { showAuth(); }
   });
 
 </script>

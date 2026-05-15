@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GM Dashboard — Kill Team: Jericho</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#07090d; --bg2:#0b0e14; --bg3:#0f1420;
+    --gold:#c8a44a; --gold-dim:rgba(200,164,74,0.4); --gold-light:#e0bc6a;
+    --text:#c8d0e0; --text-dim:#6a7080; --silver:#a0aab8; --silver-dim:#6a7480;
+    --border:#1e2230; --border2:#2a3040;
+    --red:#c0392b; --green:#3c8a4a; --amber:#c8a44a;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--text); font-family:'Crimson Text',serif; min-height:100vh; }
+
+  /* ── Auth modal ── */
+  #auth-modal { position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center; }
+  .auth-box { background:var(--bg2);border:1px solid var(--border2);border-top:2px solid var(--gold);padding:36px 40px;width:100%;max-width:400px;display:flex;flex-direction:column;gap:16px; }
+  .auth-title { font-family:'Cinzel',serif;font-size:15px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;text-align:center; }
+  .auth-sub { font-size:13px;color:var(--text-dim);text-align:center;letter-spacing:1px;line-height:1.6; }
+  .auth-inp { background:#060809;border:1px solid var(--border2);color:var(--text);font-size:14px;padding:10px 13px;outline:none;width:100%; }
+  .auth-inp:focus { border-color:var(--gold-dim); }
+  .auth-btn { background:linear-gradient(135deg,#1a2438,#0f1118);border:1px solid var(--gold-dim);color:var(--gold);font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;padding:12px;cursor:pointer;text-transform:uppercase;width:100%;transition:all 0.2s; }
+  .auth-btn:hover { border-color:var(--gold);background:linear-gradient(135deg,#1e2c44,#141720); }
+  .auth-btn:disabled { opacity:0.5;cursor:not-allowed; }
+  .auth-err { font-size:12px;color:var(--red);text-align:center;min-height:16px; }
+
+  /* ── Top bar ── */
+  .topbar { background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100; }
+  .topbar-title { font-family:'Cinzel',serif;font-size:12px;letter-spacing:3px;color:var(--gold);text-transform:uppercase; }
+  .topbar-sub { font-size:11px;color:var(--text-dim);letter-spacing:1px; }
+  .topbar-spacer { flex:1; }
+  .topbar-email { font-size:10px;color:var(--text-dim);letter-spacing:1px; }
+  .signout-btn { background:transparent;border:1px solid var(--border2);color:var(--text-dim);font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:5px 12px;cursor:pointer;transition:all 0.2s; }
+  .signout-btn:hover { border-color:var(--gold-dim);color:var(--gold); }
+  .refresh-btn { background:linear-gradient(135deg,#1a2438,#0f1118);border:1px solid var(--gold-dim);color:var(--gold);font-family:'Cinzel',serif;font-size:9px;letter-spacing:1px;padding:5px 14px;cursor:pointer;transition:all 0.2s; }
+  .refresh-btn:hover { border-color:var(--gold); }
+
+  /* ── Main layout ── */
+  .main { padding:32px 24px;max-width:1400px;margin:0 auto; }
+  .page-header { margin-bottom:32px; }
+  .page-eyebrow { font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;color:var(--text-dim);text-transform:uppercase;margin-bottom:8px; }
+  .page-title { font-family:'Cinzel',serif;font-size:24px;font-weight:700;color:var(--gold);letter-spacing:2px; }
+  .page-sub { font-size:14px;color:var(--text-dim);margin-top:6px;letter-spacing:1px; }
+
+  /* ── Stats bar ── */
+  .stats-row { display:flex;gap:16px;margin-bottom:32px;flex-wrap:wrap; }
+  .stat-chip { background:var(--bg2);border:1px solid var(--border);padding:14px 20px;min-width:120px; }
+  .stat-val { font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--gold); }
+  .stat-lbl { font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin-top:3px; }
+
+  /* ── Filter tabs ── */
+  .filter-bar { display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap; }
+  .filter-btn { background:transparent;border:1px solid var(--border2);color:var(--text-dim);font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;padding:6px 16px;cursor:pointer;transition:all 0.2s;text-transform:uppercase; }
+  .filter-btn.active,.filter-btn:hover { border-color:var(--gold-dim);color:var(--gold);background:rgba(200,164,74,0.05); }
+
+  /* ── Character cards ── */
+  .cards-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px; }
+  .char-card { background:var(--bg2);border:1px solid var(--border);border-top:2px solid var(--gold-dim);padding:20px;transition:border-color 0.2s;cursor:pointer; }
+  .char-card:hover { border-color:var(--border2);border-top-color:var(--gold); }
+  .card-header { display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;gap:8px; }
+  .card-name { font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--text);letter-spacing:1px; }
+  .card-email { font-size:11px;color:var(--text-dim);letter-spacing:1px;margin-top:3px; }
+  .card-type-pill { font-family:'Cinzel',serif;font-size:7px;letter-spacing:1px;padding:3px 8px;border:1px solid var(--border2);color:var(--text-dim);text-transform:uppercase;white-space:nowrap;flex-shrink:0; }
+  .card-fields { display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px; }
+  .card-field { background:var(--bg);border:1px solid var(--border);padding:8px 10px; }
+  .cf-lbl { font-family:'Cinzel',serif;font-size:7px;letter-spacing:1.5px;color:var(--text-dim);text-transform:uppercase;margin-bottom:3px; }
+  .cf-val { font-size:14px;color:var(--text);font-weight:600; }
+  .card-updated { font-size:11px;color:var(--text-dim);letter-spacing:1px; }
+  .card-open-btn { display:block;width:100%;margin-top:12px;background:transparent;border:1px solid var(--border2);color:var(--silver-dim);font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;padding:7px;cursor:pointer;transition:all 0.2s;text-align:center;text-transform:uppercase;text-decoration:none; }
+  .card-open-btn:hover { border-color:var(--gold-dim);color:var(--gold); }
+
+  /* ── Empty state ── */
+  .empty-state { grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-dim);font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;border:1px dashed var(--border2); }
+
+  /* ── Loading ── */
+  .loading { text-align:center;padding:60px;color:var(--text-dim);font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px; }
+</style>
+</head>
+<body>
+
+<!-- Auth Modal -->
+<div id="auth-modal">
+  <div class="auth-box">
+    <div class="auth-title">✠ GM Access</div>
+    <div class="auth-sub">Kill Team: Jericho<br>Watch Commander's Dashboard</div>
+    <input class="auth-inp" id="auth-email" type="email" placeholder="GM Email address" autocomplete="email">
+    <input class="auth-inp" id="auth-pass"  type="password" placeholder="Password" autocomplete="current-password"
+           onkeydown="if(event.key==='Enter')gmSignIn()">
+    <div class="auth-err" id="auth-err"></div>
+    <button class="auth-btn" id="auth-btn" onclick="gmSignIn()">Enter the Strategium</button>
+  </div>
+</div>
+
+<!-- Top Bar -->
+<div class="topbar">
+  <div>
+    <div class="topbar-title">Watch Commander</div>
+    <div class="topbar-sub">Kill Team: Jericho — Operative Records</div>
+  </div>
+  <div class="topbar-spacer"></div>
+  <span class="topbar-email" id="gm-email"></span>
+  <button class="refresh-btn" onclick="loadAllChars()">↻ Refresh</button>
+  <button class="signout-btn" onclick="gmSignOut()">Sign Out</button>
+</div>
+
+<!-- Main -->
+<div class="main">
+  <div class="page-header">
+    <div class="page-eyebrow">++ Ordo Xenos — Deathwatch Strategium — Eyes Only ++</div>
+    <h1 class="page-title">Operative Dossiers</h1>
+    <p class="page-sub">All active operative character sheets. Updates in real time as players save their sheets.</p>
+  </div>
+
+  <div class="stats-row" id="stats-row">
+    <div class="stat-chip"><div class="stat-val" id="stat-total">—</div><div class="stat-lbl">Total Operatives</div></div>
+    <div class="stat-chip"><div class="stat-val" id="stat-dw">—</div><div class="stat-lbl">Deathwatch Sheets</div></div>
+    <div class="stat-chip"><div class="stat-val" id="stat-dnd">—</div><div class="stat-lbl">D&D 5E Sheets</div></div>
+    <div class="stat-chip"><div class="stat-val" id="stat-updated">—</div><div class="stat-lbl">Last Updated</div></div>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="setFilter('all',this)">All Sheets</button>
+    <button class="filter-btn" onclick="setFilter('dw_dark',this)">DW Dark</button>
+    <button class="filter-btn" onclick="setFilter('dw_light',this)">DW Light</button>
+    <button class="filter-btn" onclick="setFilter('dnd5e_dark',this)">D&D Dark</button>
+    <button class="filter-btn" onclick="setFilter('dnd5e_light',this)">D&D Light</button>
+  </div>
+
+  <div class="cards-grid" id="cards-grid">
+    <div class="loading">++ Awaiting Authentication — Stand By ++</div>
+  </div>
+</div>
+
+<script>
+const SUPA_URL = 'https://uggazjqvwyndpcxrkazx.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnZ2F6anF2d3luZHBjeHJrYXp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4MTcxOTAsImV4cCI6MjA5NDM5MzE5MH0.6dcsbi-lzQJUQS5UZTVg-tI_mFuy8yfAlfWsf0ennpU';
+const GM_EMAIL = 'sn1pergod1337.mc@gmail.com';
+
+let _allChars = [];
+let _filter   = 'all';
+
+function _authHdr() {
+  const t = localStorage.getItem('gm_supa_tok');
+  return t ? { 'Authorization': 'Bearer ' + t } : {};
+}
+async function _sfetch(path, opts={}) {
+  const r = await fetch(SUPA_URL + path, {
+    ...opts,
+    headers: { 'apikey': SUPA_KEY, 'Content-Type': 'application/json', ..._authHdr(), ...(opts.headers||{}) }
+  });
+  if (r.status === 204) return {};
+  return r.json();
+}
+function _loggedIn() { return !!localStorage.getItem('gm_supa_tok'); }
+
+async function gmSignIn() {
+  const email = document.getElementById('auth-email').value.trim();
+  const pass  = document.getElementById('auth-pass').value;
+  const btn   = document.getElementById('auth-btn');
+  const err   = document.getElementById('auth-err');
+  if (!email || !pass) { err.textContent = 'Enter your email and password.'; return; }
+  if (email.toLowerCase() !== GM_EMAIL.toLowerCase()) {
+    err.textContent = 'Access restricted to the Watch Commander.'; return;
+  }
+  btn.disabled = true; btn.textContent = 'Authenticating…';
+  try {
+    const d = await _sfetch('/auth/v1/token?grant_type=password', {
+      method:'POST', body: JSON.stringify({ email, password: pass })
+    });
+    if (d.access_token) {
+      localStorage.setItem('gm_supa_tok', d.access_token);
+      localStorage.setItem('gm_supa_email', d.user.email);
+      document.getElementById('auth-modal').style.display = 'none';
+      document.getElementById('gm-email').textContent = d.user.email;
+      await loadAllChars();
+    } else {
+      err.textContent = d.error_description || 'Authentication failed.';
+    }
+  } catch(e) { err.textContent = 'Network error — try again.'; }
+  btn.disabled = false; btn.textContent = 'Enter the Strategium';
+}
+
+function gmSignOut() {
+  localStorage.removeItem('gm_supa_tok');
+  localStorage.removeItem('gm_supa_email');
+  document.getElementById('auth-modal').style.display = 'flex';
+  document.getElementById('gm-email').textContent = '';
+  document.getElementById('cards-grid').innerHTML = '<div class="loading">++ Awaiting Authentication — Stand By ++</div>';
+}
+
+async function loadAllChars() {
+  const grid = document.getElementById('cards-grid');
+  grid.innerHTML = '<div class="loading">++ Retrieving Operative Records ++</div>';
+  try {
+    // Use the service role endpoint to get all characters (GM sees everything via RLS policy)
+    const rows = await _sfetch('/rest/v1/characters?select=*&order=updated_at.desc', { method:'GET' });
+    if (!Array.isArray(rows)) {
+      grid.innerHTML = '<div class="loading">++ No records found or insufficient clearance ++</div>';
+      return;
+    }
+    _allChars = rows;
+    _renderStats(rows);
+    _renderCards(rows);
+  } catch(e) {
+    grid.innerHTML = '<div class="loading">++ Error retrieving records — check connection ++</div>';
+  }
+}
+
+function _renderStats(rows) {
+  document.getElementById('stat-total').textContent = rows.length;
+  document.getElementById('stat-dw').textContent    = rows.filter(r => r.sheet_type.startsWith('dw')).length;
+  document.getElementById('stat-dnd').textContent   = rows.filter(r => r.sheet_type.startsWith('dnd')).length;
+  if (rows.length) {
+    const latest = new Date(rows[0].updated_at);
+    document.getElementById('stat-updated').textContent = latest.toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+  }
+}
+
+function setFilter(f, btn) {
+  _filter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  _renderCards(_allChars);
+}
+
+const SHEET_URLS = {
+  dw_dark:    'deathwatch_character_sheet.html',
+  dw_light:   'deathwatch_character_sheet_light.html',
+  dnd5e_dark: 'dnd5e_character_sheet.html',
+  dnd5e_light:'dnd5e_character_sheet_light.html',
+};
+const TYPE_LABELS = {
+  dw_dark:'DW Dark', dw_light:'DW Light', dnd5e_dark:'D&D Dark', dnd5e_light:'D&D Light'
+};
+
+// Key field indices to preview (class/level=0, background=1, player=2, char name=3)
+const PREVIEW_FIELDS = [
+  { label:'Name',       idx:3 },
+  { label:'Class/Lvl', idx:0 },
+  { label:'Chapter',   idx:4 },
+  { label:'Player',    idx:2 },
+];
+
+function _renderCards(rows) {
+  const grid = document.getElementById('cards-grid');
+  const filtered = _filter === 'all' ? rows : rows.filter(r => r.sheet_type === _filter);
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="empty-state">++ NO OPERATIVE RECORDS FOUND ++</div>';
+    return;
+  }
+  grid.innerHTML = filtered.map(row => {
+    const fields = row.fields || [];
+    const updated = new Date(row.updated_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    const sheetUrl = SHEET_URLS[row.sheet_type] || '#';
+    const typeLabel = TYPE_LABELS[row.sheet_type] || row.sheet_type;
+    const previewHtml = PREVIEW_FIELDS.map(p => {
+      const val = fields[p.idx] || '—';
+      return `<div class="card-field"><div class="cf-lbl">${p.label}</div><div class="cf-val">${val}</div></div>`;
+    }).join('');
+    return `
+      <div class="char-card">
+        <div class="card-header">
+          <div>
+            <div class="card-name">${row.name || 'Unnamed Operative'}</div>
+            <div class="card-email">${row.user_id.slice(0,8)}…</div>
+          </div>
+          <span class="card-type-pill">${typeLabel}</span>
+        </div>
+        <div class="card-fields">${previewHtml}</div>
+        <div class="card-updated">Last updated: ${updated}</div>
+        <a class="card-open-btn" href="${sheetUrl}" target="_blank">▶ Open Sheet</a>
+      </div>`;
+  }).join('');
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', function() {
+  if (_loggedIn()) {
+    document.getElementById('auth-modal').style.display = 'none';
+    document.getElementById('gm-email').textContent = localStorage.getItem('gm_supa_email') || '';
+    loadAllChars();
+  }
+});
+</script>
+</body>
+</html>
