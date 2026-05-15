@@ -1032,30 +1032,45 @@ document.addEventListener('DOMContentLoaded', async function() {
     try { window.parent.postMessage({type:'sheet-login', uid:_uid(), email:_uemail()}, '*'); } catch(e){}
   } else {
     _status('offline', 'Sign in from the portal to save');
+    // Pull: ask parent portal for session in case we loaded after sign-in
+    try { window.parent.postMessage({type: 'sheet-needs-session'}, '*'); } catch(e) {}
   }
 
-  // React when the portal logs in after the sheet is already loaded
+  // React when the portal logs in/out after the sheet is already loaded
   window.addEventListener('storage', async function(e) {
-    if (e.key === 'supa_tok' && e.newValue && !_charId) {
+    if (e.key !== 'supa_tok') return;
+    if (e.newValue) {
       if (_tokenExpired()) await _refreshToken();
       _updateBar();
-      await _loadSheet();
-      var uidBtn = document.getElementById('copy-uid-btn');
-      if (uidBtn) uidBtn.style.display = '';
-      try { window.parent.postMessage({type:'sheet-login', uid:_uid(), email:_uemail()}, '*'); } catch(ee){}
+      if (!_charId) {
+        await _loadSheet();
+        var uidBtn = document.getElementById('copy-uid-btn');
+        if (uidBtn) uidBtn.style.display = '';
+        try { window.parent.postMessage({type:'sheet-login', uid:_uid(), email:_uemail()}, '*'); } catch(ee){}
+      }
+    } else {
+      _charId = null;
+      _updateBar();
     }
   });
 
-  // Also react to direct postMessage from portal on login
+  // React to direct postMessage from portal on login or sign-out
   window.addEventListener('message', async function(e) {
-    if (!e.data || e.data.type !== 'portal-session') return;
-    if (_charId) return; // already loaded
-    _setSession({access_token: e.data.token, refresh_token: e.data.refresh||'',
-                 user: {id: e.data.uid, email: e.data.email}});
-    _updateBar();
-    await _loadSheet();
-    var uidBtn = document.getElementById('copy-uid-btn');
-    if (uidBtn) uidBtn.style.display = '';
+    if (!e.data) return;
+    if (e.data.type === 'portal-session') {
+      _setSession({access_token: e.data.token, refresh_token: e.data.refresh||'',
+                   user: {id: e.data.uid, email: e.data.email}});
+      _updateBar();
+      if (!_charId) {
+        await _loadSheet();
+        var uidBtn = document.getElementById('copy-uid-btn');
+        if (uidBtn) uidBtn.style.display = '';
+      }
+    } else if (e.data.type === 'portal-signout') {
+      _charId = null;
+      _clearSession();
+      _updateBar();
+    }
   });
 });
 

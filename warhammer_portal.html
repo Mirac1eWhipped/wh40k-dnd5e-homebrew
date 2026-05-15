@@ -2098,7 +2098,19 @@
     if (op.playerUid && op.playerUid !== _portalUid()) {
       uidParam = '&uid=' + encodeURIComponent(op.playerUid);
     }
-    if (iframe) iframe.src = (op.sheetFile || 'deathwatch_character_sheet.html') + '?v=' + Date.now() + uidParam;
+    if (iframe) {
+      // Push session to sheet as soon as iframe finishes loading
+      iframe.onload = function() {
+        if (_portalLoggedIn() && this.src && this.src !== 'about:blank') {
+          this.contentWindow.postMessage({
+            type: 'portal-session',
+            uid: _portalUid(), email: _portalEmail(),
+            token: _portalToken(), refresh: localStorage.getItem('supa_rtok') || ''
+          }, '*');
+        }
+      };
+      iframe.src = (op.sheetFile || 'deathwatch_character_sheet.html') + '?v=' + Date.now() + uidParam;
+    }
     document.getElementById('sheet-overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
@@ -2107,7 +2119,7 @@
     document.getElementById('sheet-overlay').classList.remove('open');
     document.body.style.overflow = '';
     var iframe = document.getElementById('sheet-iframe');
-    if (iframe) iframe.src = '';
+    if (iframe) { iframe.onload = null; iframe.src = 'about:blank'; }
   }
 
   // ── Init ─────────────────────────────────────────────────────
@@ -2396,6 +2408,10 @@
   }
 
   function portalSignOut() {
+    var iframe = document.getElementById('sheet-iframe');
+    if (iframe && iframe.contentWindow && iframe.src && iframe.src !== 'about:blank') {
+      iframe.contentWindow.postMessage({type: 'portal-signout'}, '*');
+    }
     _portalClearSession();
     updatePortalAuthBar();
   }
@@ -2448,7 +2464,22 @@
   /* ══ AUTO-CAPTURE PLAYER UID FROM SHEET IFRAME ══ */
   var _currentOpenOpId = null;
   window.addEventListener('message', function(e) {
-    if (!e.data || e.data.type !== 'sheet-login') return;
+    if (!e.data) return;
+    // Sheet asks for session (pull mechanism — handles sign-in-before-open timing)
+    if (e.data.type === 'sheet-needs-session') {
+      if (_portalLoggedIn()) {
+        var iframe = document.getElementById('sheet-iframe');
+        if (iframe && iframe.contentWindow) {
+          iframe.contentWindow.postMessage({
+            type: 'portal-session',
+            uid: _portalUid(), email: _portalEmail(),
+            token: _portalToken(), refresh: localStorage.getItem('supa_rtok') || ''
+          }, '*');
+        }
+      }
+      return;
+    }
+    if (e.data.type !== 'sheet-login') return;
     if (!_currentOpenOpId) return;
     var data = loadRoster();
     var op = data.find(function(o){ return o.id === _currentOpenOpId; });
