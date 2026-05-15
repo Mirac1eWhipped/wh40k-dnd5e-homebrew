@@ -1054,7 +1054,7 @@ async function _doSave() {
       }
     }
     _status('saved');
-  } catch(e) { _status('error','Save failed'); }
+  } catch(e) { _status('error', e.message || 'Save failed'); console.error('Save error:', e); }
 }
 function _schedSave() { _status('saving'); clearTimeout(_saveTimer); _saveTimer = setTimeout(_doSave, 800); }
 async function _loadSheet() {
@@ -1077,7 +1077,7 @@ async function _loadSheet() {
     if (subSel && ext.sub) { subSel.value = ext.sub; renderFeatures(); }
     STATS.forEach(s => calcMod(s));
     _status('loaded', 'Sheet loaded — ' + _uemail());
-  } catch(e) { _status('error','Load failed'); }
+  } catch(e) { _status('error', e.message || 'Load failed'); console.error('Load error:', e); }
 }
 function showAuth(msg) {
   const m = document.getElementById('auth-modal');
