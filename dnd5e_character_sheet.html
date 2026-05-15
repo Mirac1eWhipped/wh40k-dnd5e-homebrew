@@ -1018,7 +1018,7 @@ function _status(s, m) {
   if (lbl) lbl.textContent = m || MAP[s][1];
 }
 async function _doSave() {
-  if (!_loggedIn()) return;
+  if (!_loggedIn()) { _status('offline'); return; }
   const vals = _fields().map(f => f.value);
   const chks = _checkboxes().map(c => c.checked);
   const clsSel = document.getElementById('cls-select');
