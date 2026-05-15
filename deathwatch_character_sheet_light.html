@@ -259,6 +259,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
   <span id="save-dot"></span>
   <span id="save-label">Not signed in</span>
   <span id="save-email"></span><button id="copy-uid-btn" title="Copy your UID to share with GM" onclick="copyMyUid()">Copy UID</button>
+  <button class="sbar-btn" id="btn-signin" onclick="showAuth()">Sign In</button>
   <button class="sbar-btn" id="btn-signout" onclick="supaSignOut()" style="display:none;">Sign Out</button>
   <button class="sbar-btn" onclick="window.print()">Print</button>
 </div>
@@ -944,6 +945,12 @@ async function _loadSheet() {
     _status('loaded', 'Sheet loaded — ' + _uemail());
   } catch(e) { _status('error','Load failed'); }
 }
+function showAuth(msg) {
+  const m = document.getElementById('auth-modal');
+  if (m) m.style.display = 'flex';
+  const e = document.getElementById('auth-err');
+  if (e) e.textContent = msg || '';
+}
 function _hideAuth() {
   const m = document.getElementById('auth-modal'); if (m) m.style.display = 'none';
 }
@@ -980,16 +987,19 @@ function toggleAuthMode() {
   tgl.textContent = up ? 'Already have an account? Sign in' : "Don't have an account? Sign up";
   if (ttl) ttl.textContent = up ? 'Create Account' : 'Sign In';
 }
-function supaSignOut() { _clearSession(); _charId = null; _updateBar(); }
+function supaSignOut() { _clearSession(); _charId = null; _updateBar(); showAuth(); }
 function _updateBar() {
   const em = document.getElementById('save-email');
   const so = document.getElementById('btn-signout');
+  const si = document.getElementById('btn-signin');
   if (_loggedIn()) {
     if (em) em.textContent = _uemail();
     if (so) so.style.display = 'inline-block';
+    if (si) si.style.display = 'none';
   } else {
     if (em) em.textContent = '';
     if (so) so.style.display = 'none';
+    if (si) si.style.display = 'inline-block';
     _status('offline');
   }
 }
