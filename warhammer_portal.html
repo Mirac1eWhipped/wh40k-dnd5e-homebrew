@@ -772,6 +772,7 @@
     .op-hp-bar    { flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
     .op-hp-fill   { height: 100%; background: var(--red-bright); border-radius: 2px; transition: width 0.3s; }
     .op-card-sheet-tag { font-family: 'Cinzel', serif; font-size: 8px; letter-spacing: 1px; color: var(--text-dim); background: #080a0c; border: 1px solid var(--border); padding: 2px 7px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+    .op-card-player { font-family: 'Cinzel', serif; font-size: 8px; letter-spacing: 1px; color: var(--gold); background: rgba(200,164,74,0.08); border: 1px solid var(--gold-dim); padding: 2px 7px; display:inline-flex; align-items:center; gap:5px; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
     .op-card-actions { display: flex; gap: 8px; align-items: center; }
     .op-view-btn { flex: 1; background: transparent; border: 1px solid var(--border2); color: var(--silver); font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: 2px; padding: 6px 10px; cursor: pointer; transition: all 0.2s; }
     .op-view-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
@@ -2051,6 +2052,7 @@
           '<div class="op-hp-bar"><div class="op-hp-fill" style="width:' + hpPct + '%"></div></div>' +
         '</div>' +
         '<div class="op-card-sheet-tag">&#128196; ' + sheetLabel + '</div>' +
+        (op.playerEmail ? '<div class="op-card-player">&#9651; ' + op.playerEmail + '</div>' : '') +
         '<div class="op-card-actions">' +
           '<button class="op-view-btn" onclick="openSheet(\'' + op.id + '\')">&#9654; View Sheet</button>' +
           '<button class="op-del-btn" onclick="deleteOperative(\'' + op.id + '\')" title="Remove Operative">&times;</button>' +
@@ -2125,6 +2127,7 @@
 
   // ── Open sheet iframe ────────────────────────────────────────
   function openSheet(id) {
+    _currentOpenOpId = id;
     var data = loadRoster();
     var op = null;
     for (var i = 0; i < data.length; i++) {
@@ -2143,6 +2146,7 @@
     document.body.style.overflow = 'hidden';
   }
   function closeSheet() {
+    _currentOpenOpId = null;
     document.getElementById('sheet-overlay').classList.remove('open');
     document.body.style.overflow = '';
     var iframe = document.getElementById('sheet-iframe');
@@ -2526,6 +2530,27 @@
   // Init on load
   document.addEventListener('DOMContentLoaded', function() {
     updatePortalAuthBar();
+  });
+
+
+  /* ══ AUTO-CAPTURE PLAYER UID FROM SHEET IFRAME ══ */
+  var _currentOpenOpId = null;
+  window.addEventListener('message', function(e) {
+    if (!e.data || e.data.type !== 'sheet-login') return;
+    if (!_currentOpenOpId) return;
+    var data = loadRoster();
+    var op = data.find(function(o){ return o.id === _currentOpenOpId; });
+    if (!op) return;
+    var changed = false;
+    if (e.data.uid && op.playerUid !== e.data.uid) {
+      op.playerUid   = e.data.uid;
+      op.playerEmail = e.data.email || e.data.uid.slice(0,8) + '…';
+      changed = true;
+    }
+    if (changed) {
+      saveRoster(data);
+      renderRoster();
+    }
   });
 
 </script>

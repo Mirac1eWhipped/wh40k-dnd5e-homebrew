@@ -842,6 +842,7 @@ function _setSession(d) {
   localStorage.setItem('supa_rtok',  d.refresh_token || '');
   localStorage.setItem('supa_uid',   d.user.id);
   localStorage.setItem('supa_email', d.user.email);
+  try { window.parent.postMessage({type:'sheet-login', uid:d.user.id, email:d.user.email}, '*'); } catch(e){}
 }
 function _clearSession() {
   ['supa_tok','supa_rtok','supa_uid','supa_email'].forEach(k => localStorage.removeItem(k));
@@ -1027,6 +1028,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     await _loadSheet();
     var uidBtn = document.getElementById('copy-uid-btn');
     if (uidBtn) uidBtn.style.display = '';
+    // Notify parent portal (already logged in)
+    try { window.parent.postMessage({type:'sheet-login', uid:_uid(), email:_uemail()}, '*'); } catch(e){}
   } else {
     _status('offline', 'Sign in from the portal to save');
   }
