@@ -308,14 +308,14 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
   </div>
   <!-- Combat Quick-Stats -->
   <div class="dos-stat-bar">
-    <div class="dos-stat"><input type="text" placeholder="15"><span class="dos-stat-lbl">Armor Class</span></div>
-    <div class="dos-stat"><input type="text" placeholder="+2"><span class="dos-stat-lbl">Initiative</span></div>
-    <div class="dos-stat"><input type="text" placeholder="30 ft"><span class="dos-stat-lbl">Speed</span></div>
-    <div class="dos-stat"><input type="text" placeholder="+2"><span class="dos-stat-lbl">Prof Bonus</span></div>
-    <div class="dos-stat"><input type="text" placeholder="0" id="mortal-wounds"><span class="dos-stat-lbl">Mortal Wounds</span></div>
+    <div class="dos-stat"><input type="text" id="stat-ac" placeholder="15"><span class="dos-stat-lbl">Armor Class</span></div>
+    <div class="dos-stat"><input type="text" id="stat-initiative" placeholder="+2"><span class="dos-stat-lbl">Initiative</span></div>
+    <div class="dos-stat"><input type="text" id="stat-speed" placeholder="30 ft"><span class="dos-stat-lbl">Speed</span></div>
+    <div class="dos-stat"><input type="text" id="stat-prof" placeholder="+2"><span class="dos-stat-lbl">Prof Bonus</span></div>
+    <div class="dos-stat"><input type="text" id="mortal-wounds" placeholder="0"><span class="dos-stat-lbl">Mortal Wounds</span></div>
     <div class="dos-hp-cell"><input type="number" id="hp-cur" placeholder="—"><span class="dos-stat-lbl">Current HP</span></div>
-    <div class="dos-hp-cell"><input type="number" placeholder="—"><span class="dos-stat-lbl">Max HP</span></div>
-    <div class="dos-hp-cell"><input type="number" placeholder="—"><span class="dos-stat-lbl">Temp HP</span></div>
+    <div class="dos-hp-cell"><input type="number" id="hp-max" placeholder="—"><span class="dos-stat-lbl">Max HP</span></div>
+    <div class="dos-hp-cell"><input type="number" id="hp-temp" placeholder="—"><span class="dos-stat-lbl">Temp HP</span></div>
   </div>
   <!-- Three Columns -->
   <div class="dos-3col">
@@ -323,18 +323,18 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
     <div>
       <div class="section">
         <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Saving Throws</span></div>
-<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">STR</span><span class="dos-row-name">Strength Save</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">DEX</span><span class="dos-row-name">Dexterity Save</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">CON</span><span class="dos-row-name">Constitution Save</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Intelligence Save</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Wisdom Save</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Charisma Save</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="save-str-prof"><span class="dos-attr-tag">STR</span><span class="dos-row-name">Strength Save</span><div class="dos-bonus"><input type="text" id="save-str" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="save-dex-prof"><span class="dos-attr-tag">DEX</span><span class="dos-row-name">Dexterity Save</span><div class="dos-bonus"><input type="text" id="save-dex" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="save-con-prof"><span class="dos-attr-tag">CON</span><span class="dos-row-name">Constitution Save</span><div class="dos-bonus"><input type="text" id="save-con" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="save-int-prof"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Intelligence Save</span><div class="dos-bonus"><input type="text" id="save-int" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="save-wis-prof"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Wisdom Save</span><div class="dos-bonus"><input type="text" id="save-wis" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="save-cha-prof"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Charisma Save</span><div class="dos-bonus"><input type="text" id="save-cha" placeholder="+0"></div></div>
       </div>
       <div class="section" style="margin-top:8px;">
         <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Senses</span></div>
-        <div class="dos-passive-row"><div class="dos-passive-val"><input type="text" placeholder="10"></div><span class="dos-passive-name">Passive Perception</span><span class="dos-passive-attr">WIS</span></div>
-        <div class="dos-passive-row"><div class="dos-passive-val"><input type="text" placeholder="10"></div><span class="dos-passive-name">Passive Investigation</span><span class="dos-passive-attr">INT</span></div>
-        <div class="dos-passive-row"><div class="dos-passive-val"><input type="text" placeholder="10"></div><span class="dos-passive-name">Passive Insight</span><span class="dos-passive-attr">WIS</span></div>
+        <div class="dos-passive-row"><div class="dos-passive-val"><input type="text" id="passive-perception" placeholder="10"></div><span class="dos-passive-name">Passive Perception</span><span class="dos-passive-attr">WIS</span></div>
+        <div class="dos-passive-row"><div class="dos-passive-val"><input type="text" id="passive-investigation" placeholder="10"></div><span class="dos-passive-name">Passive Investigation</span><span class="dos-passive-attr">INT</span></div>
+        <div class="dos-passive-row"><div class="dos-passive-val"><input type="text" id="passive-insight" placeholder="10"></div><span class="dos-passive-name">Passive Insight</span><span class="dos-passive-attr">WIS</span></div>
       </div>
       <div class="section" style="margin-top:8px;">
         <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Proficiencies &amp; Training</span></div>
@@ -357,21 +357,21 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
           <span class="dos-col-hdr-lbl" style="flex:1;">Skill</span>
           <span class="dos-col-hdr-lbl">Bonus</span>
         </div>
-<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">DEX</span><span class="dos-row-name">Acrobatics</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">STR</span><span class="dos-row-name">Athletics</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Deception</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">INT</span><span class="dos-row-name">History</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Insight</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Intimidation</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Investigation</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Medicine</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Perception</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Persuasion</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Religion</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">DEX</span><span class="dos-row-name">Sleight of Hand</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">DEX</span><span class="dos-row-name">Stealth</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Survival</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Technology</span><div class="dos-bonus"><input type="text" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-acrobatics-prof"><span class="dos-attr-tag">DEX</span><span class="dos-row-name">Acrobatics</span><div class="dos-bonus"><input type="text" id="skill-acrobatics" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-athletics-prof"><span class="dos-attr-tag">STR</span><span class="dos-row-name">Athletics</span><div class="dos-bonus"><input type="text" id="skill-athletics" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-deception-prof"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Deception</span><div class="dos-bonus"><input type="text" id="skill-deception" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-history-prof"><span class="dos-attr-tag">INT</span><span class="dos-row-name">History</span><div class="dos-bonus"><input type="text" id="skill-history" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-insight-prof"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Insight</span><div class="dos-bonus"><input type="text" id="skill-insight" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-intimidation-prof"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Intimidation</span><div class="dos-bonus"><input type="text" id="skill-intimidation" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-investigation-prof"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Investigation</span><div class="dos-bonus"><input type="text" id="skill-investigation" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-medicine-prof"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Medicine</span><div class="dos-bonus"><input type="text" id="skill-medicine" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-perception-prof"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Perception</span><div class="dos-bonus"><input type="text" id="skill-perception" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-persuasion-prof"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Persuasion</span><div class="dos-bonus"><input type="text" id="skill-persuasion" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-religion-prof"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Religion</span><div class="dos-bonus"><input type="text" id="skill-religion" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-sleight-of-hand-prof"><span class="dos-attr-tag">DEX</span><span class="dos-row-name">Sleight of Hand</span><div class="dos-bonus"><input type="text" id="skill-sleight-of-hand" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-stealth-prof"><span class="dos-attr-tag">DEX</span><span class="dos-row-name">Stealth</span><div class="dos-bonus"><input type="text" id="skill-stealth" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-survival-prof"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Survival</span><div class="dos-bonus"><input type="text" id="skill-survival" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-technology-prof"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Technology</span><div class="dos-bonus"><input type="text" id="skill-technology" placeholder="+0"></div></div>
       </div>
     </div>
     <!-- RIGHT: Quick Attacks · Conditions · Notes -->
@@ -629,6 +629,26 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
   </div>
 
   <div class="section" style="margin-top:14px;">
+    <div class="sec-title">Spellcasting / Psyker Powers</div>
+    <div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;margin-bottom:6px;">
+      <div class="field-group"><label>Casting Ability</label>
+        <select id="spell-ability">
+          <option value="">— None —</option>
+          <option value="int">Intelligence</option>
+          <option value="wis">Wisdom</option>
+          <option value="cha">Charisma</option>
+        </select>
+      </div>
+      <div class="field-group"><label>Spell Save DC</label>
+        <input type="text" id="spell-save-dc" readonly placeholder="—" style="width:44px;text-align:center;">
+      </div>
+      <div class="field-group"><label>Spell Attack</label>
+        <input type="text" id="spell-atk-bonus" readonly placeholder="—" style="width:44px;text-align:center;">
+      </div>
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:14px;">
     <div class="sec-title">Custom / Additional Features &amp; Notes</div>
     <textarea class="lined" rows="8" placeholder="Additional class features, racial traits, feats, special abilities, blessings, bionic enhancements…"></textarea>
   </div>
@@ -709,6 +729,68 @@ function showTab(name) {
 
 /* ── Ability modifier calc ── */
 const STATS = ['str','dex','con','int','wis','cha'];
+const _SKILLS = [
+  {id:'acrobatics',      stat:'dex'},
+  {id:'athletics',       stat:'str'},
+  {id:'deception',       stat:'cha'},
+  {id:'history',         stat:'int'},
+  {id:'insight',         stat:'wis'},
+  {id:'intimidation',    stat:'cha'},
+  {id:'investigation',   stat:'int'},
+  {id:'medicine',        stat:'wis'},
+  {id:'perception',      stat:'wis'},
+  {id:'persuasion',      stat:'cha'},
+  {id:'religion',        stat:'int'},
+  {id:'sleight-of-hand', stat:'dex'},
+  {id:'stealth',         stat:'dex'},
+  {id:'survival',        stat:'wis'},
+  {id:'technology',      stat:'int'},
+];
+function _recalcDerived() {
+  const lvl = parseInt(document.getElementById('char-level').value) || 1;
+  const pb  = Math.ceil(lvl / 4) + 1;
+  const pbFmt = '+' + pb;
+  const profEl = document.getElementById('char-prof');
+  if (profEl) profEl.value = pbFmt;
+  const statProfEl = document.getElementById('stat-prof');
+  if (statProfEl) statProfEl.value = pbFmt;
+  function _mod(s) {
+    const sc = parseInt((document.getElementById(s+'-score')||{}).value);
+    return isNaN(sc) ? 0 : Math.floor((sc - 10) / 2);
+  }
+  function fmt(n) { return n >= 0 ? '+'+n : String(n); }
+  const initEl = document.getElementById('stat-initiative');
+  if (initEl) initEl.value = fmt(_mod('dex'));
+  ['str','dex','con','int','wis','cha'].forEach(function(s) {
+    const chk = document.getElementById('save-'+s+'-prof');
+    const el  = document.getElementById('save-'+s);
+    if (el) el.value = fmt(_mod(s) + (chk && chk.checked ? pb : 0));
+  });
+  _SKILLS.forEach(function(sk) {
+    const chk = document.getElementById('skill-'+sk.id+'-prof');
+    const el  = document.getElementById('skill-'+sk.id);
+    if (!el) return;
+    el.value = fmt(_mod(sk.stat) + (chk && chk.checked ? pb : 0));
+  });
+  function _passive(skillId) {
+    const el = document.getElementById('skill-'+skillId);
+    return 10 + (el ? (parseInt(el.value) || 0) : 0);
+  }
+  const ppEl = document.getElementById('passive-perception');
+  if (ppEl) ppEl.value = String(_passive('perception'));
+  const piEl = document.getElementById('passive-investigation');
+  if (piEl) piEl.value = String(_passive('investigation'));
+  const psEl = document.getElementById('passive-insight');
+  if (psEl) psEl.value = String(_passive('insight'));
+  const spAbEl = document.getElementById('spell-ability');
+  if (spAbEl && spAbEl.value) {
+    const spMod = _mod(spAbEl.value);
+    const dcEl  = document.getElementById('spell-save-dc');
+    const atkEl = document.getElementById('spell-atk-bonus');
+    if (dcEl)  dcEl.value  = String(8 + pb + spMod);
+    if (atkEl) atkEl.value = fmt(pb + spMod);
+  }
+}
 function calcMod(s) {
   const score = parseInt(document.getElementById(s+'-score').value);
   const el    = document.getElementById(s+'-mod');
@@ -716,14 +798,12 @@ function calcMod(s) {
   if (isNaN(score)) { el.value = ''; return; }
   const mod = Math.floor((score - 10) / 2);
   el.value = mod >= 0 ? '+' + mod : String(mod);
+  _recalcDerived();
 }
 
 /* ── Level → Prof bonus ── */
 function onLevelChange() {
-  const lvl  = parseInt(document.getElementById('char-level').value) || 1;
-  const prof  = Math.ceil(lvl / 4) + 1;
-  const profEl = document.getElementById('char-prof');
-  if (profEl && !profEl.value) profEl.value = '+' + prof;
+  _recalcDerived();
   updateSubclassOpts();
 }
 
@@ -1009,6 +1089,16 @@ function _updateBar() {
 function _wireFields() {
   _fields().forEach(f => { f.addEventListener('input',_schedSave); f.addEventListener('change',_schedSave); });
   _checkboxes().forEach(c => c.addEventListener('change', _schedSave));
+  ['str','dex','con','int','wis','cha'].forEach(function(s) {
+    var el = document.getElementById('save-'+s+'-prof');
+    if (el) el.addEventListener('change', _recalcDerived);
+  });
+  _SKILLS.forEach(function(sk) {
+    var el = document.getElementById('skill-'+sk.id+'-prof');
+    if (el) el.addEventListener('change', _recalcDerived);
+  });
+  var spAbEl = document.getElementById('spell-ability');
+  if (spAbEl) spAbEl.addEventListener('change', _recalcDerived);
 }
 document.addEventListener('DOMContentLoaded', async function() {
   STATS.forEach(s => calcMod(s));
