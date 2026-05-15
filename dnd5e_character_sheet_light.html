@@ -1089,9 +1089,6 @@ function _updateBar() {
     _status('offline');
   }
 }
-  };
-  rd.readAsText(file); evt.target.value='';
-}
 function _wireFields() {
   _fields().forEach(f => { f.addEventListener('input',_schedSave); f.addEventListener('change',_schedSave); });
   _checkboxes().forEach(c => c.addEventListener('change', _schedSave));
