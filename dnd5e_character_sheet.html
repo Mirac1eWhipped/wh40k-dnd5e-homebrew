@@ -267,7 +267,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 </div>
 
 <div class="tab-panel active" id="panel-dossier">
-  <div class="dossier-layout" style="height:calc(100vh - 240px);">
+  <div class="dossier-layout">
     <div>
       <div class="section">
         <div class="sec-title">Ability Scores</div>
@@ -1017,7 +1017,8 @@ function _wireFields() {
 document.addEventListener('DOMContentLoaded', async function() {
   STATS.forEach(s => calcMod(s));
   _updateBar();
-  if (_loggedIn()) { await _loadSheet(); _wireFields(); }
+  _wireFields();
+  if (_loggedIn()) { await _loadSheet(); }
   else { showAuth(); }
 });
 
