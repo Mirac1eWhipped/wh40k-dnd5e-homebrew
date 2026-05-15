@@ -245,13 +245,11 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
     <div class="auth-aquila">✠ &nbsp; ✠ &nbsp; ✠</div>
     <div class="auth-title-line">Adeptus Inquisitorium</div>
     <div class="auth-subtitle">Operative Dossier Access</div>
-    <div id="auth-mode" data-mode="signin"></div>
-    <div id="auth-title" style="font-family:var(--font-label);font-size:8pt;color:var(--silver);letter-spacing:.2em;text-transform:uppercase;text-align:center;margin-bottom:14px;">Sign In</div>
     <input class="auth-inp" id="auth-email" type="email" placeholder="Email address" autocomplete="username">
     <input class="auth-inp" id="auth-pass"  type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')authSubmit()">
     <button class="auth-btn" id="auth-btn" onclick="authSubmit()">Sign In</button>
     <div class="auth-err" id="auth-err"></div>
-    <div class="auth-toggle" id="auth-toggle" onclick="toggleAuthMode()">Don't have an account? Sign up</div>
+    <div class="auth-toggle" style="cursor:default;">Contact your DM to register an account</div>
   </div>
 </div>
 
@@ -1091,35 +1089,20 @@ function _hideAuth() {
 async function authSubmit() {
   const email = document.getElementById('auth-email').value.trim();
   const pass  = document.getElementById('auth-pass').value;
-  const isUp  = document.getElementById('auth-mode').dataset.mode === 'signup';
   const btn   = document.getElementById('auth-btn');
   const err   = document.getElementById('auth-err');
   if (!email || !pass) { err.textContent = 'Enter your email and password.'; return; }
   btn.disabled = true; btn.textContent = 'Please wait…';
-  const endpoint = isUp ? '/auth/v1/signup' : '/auth/v1/token?grant_type=password';
   try {
-    const d = await _sfetch(endpoint, {method:'POST', body:JSON.stringify({email, password:pass})});
+    const d = await _sfetch('/auth/v1/token?grant_type=password', {method:'POST', body:JSON.stringify({email, password:pass})});
     if (d.access_token) {
       _setSession(d); _hideAuth(); _updateBar();
       await _loadSheet(); _wireFields();
-    } else if (d.user && !d.access_token) {
-      err.textContent = 'Check your email to confirm your account, then sign in.';
     } else {
       err.textContent = d.error_description || d.msg || 'Authentication failed.';
     }
-  } catch(e) { err.textContent = 'Network error — try again.'; }
-  btn.disabled = false; btn.textContent = isUp ? 'Create Account' : 'Sign In';
-}
-function toggleAuthMode() {
-  const md = document.getElementById('auth-mode');
-  const btn = document.getElementById('auth-btn');
-  const tgl = document.getElementById('auth-toggle');
-  const ttl = document.getElementById('auth-title');
-  const up = md.dataset.mode !== 'signup';
-  md.dataset.mode = up ? 'signup' : 'signin';
-  btn.textContent = up ? 'Create Account' : 'Sign In';
-  tgl.textContent = up ? 'Already have an account? Sign in' : "Don't have an account? Sign up";
-  if (ttl) ttl.textContent = up ? 'Create Account' : 'Sign In';
+  } catch(e) { err.textContent = e.message || 'Network error — try again.'; }
+  btn.disabled = false; btn.textContent = 'Sign In';
 }
 function supaSignOut() { _clearSession(); _charId = null; _updateBar(); showAuth(); }
 function _updateBar() {
