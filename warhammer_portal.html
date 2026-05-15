@@ -2081,7 +2081,7 @@
     var nameEl = document.getElementById('iframe-op-name');
     if (nameEl) nameEl.textContent = op.name + '  ·  ' + (op.chapter || '') + '  ·  ' + (op.operativeClass || '');
     var iframe = document.getElementById('sheet-iframe');
-    if (iframe) iframe.src = op.sheetFile || 'deathwatch_character_sheet.html';
+    if (iframe) iframe.src = (op.sheetFile || 'deathwatch_character_sheet.html') + '?v=' + Date.now();
     document.getElementById('sheet-overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
