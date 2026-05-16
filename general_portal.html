@@ -922,6 +922,7 @@
 <!-- ════════════════════ NAVIGATION ════════════════════ -->
 <nav>
   <div class="nav-inner">
+    <button class="nav-btn" onclick="showSection('lineage', this)">Lineage</button>
     <button class="nav-btn active" onclick="showSection('operatives', this)">Operatives</button>
     <button class="nav-btn" onclick="showSection('bestiary', this)">Bestiary</button>
     <button class="nav-btn" onclick="showSection('tools', this)">Tools</button>
@@ -941,6 +942,86 @@
 
 <!-- ════════════════════ MAIN CONTENT ════════════════════ -->
 <main>
+
+  <!-- ════════════════════ LINEAGE ════════════════════ -->
+  <section id="lineage" class="section">
+    <div class="section-heading">
+      <h2>Adeptus Astartes — Lineage</h2>
+      <div class="section-heading-line"></div>
+    </div>
+
+    <!-- Overview -->
+    <div class="card" style="margin-bottom:28px;">
+      <div class="card-title">The Emperor's Finest</div>
+      <div class="card-meta">Adeptus Astartes &nbsp;·&nbsp; Post-Human Warriors</div>
+      <p>The Adeptus Astartes are the Emperor's finest shock troops. Post-human super-soldiers created through gene-forging, psycho-indoctrination, and divine warcraft. They tower above mortals and wield the might of humanity's greatest weapons.</p>
+    </div>
+
+    <!-- Astartes Traits -->
+    <div class="section-heading" style="margin-top:36px;">
+      <h2>Astartes Traits</h2>
+      <div class="section-heading-line"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Ability Score Increase</div>
+      <p>Your Strength and Constitution scores each increase by 1. In addition, one of your choice of Wisdom or Intelligence increases by 1.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Size</div>
+      <p>Adeptus Astartes stand between 7 and 8 feet tall and weigh between 700 and 1,000 pounds in full armour. Your size is Medium, but you count as Large for the purpose of carrying capacity, pushing, dragging, lifting, and grappling.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Speed</div>
+      <p>Your base walking speed is 35 feet.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Occulobe</div>
+      <div class="card-meta">Darkvision</div>
+      <p>Your gene-crafted Occulobe implant grants exceptional night vision. You can see in dim light within 60 feet as if it were bright light, and in darkness as if it were dim light. You cannot discern colour in darkness, only shades of grey.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Astartes Resilience</div>
+      <p>You have advantage on saving throws against disease and being poisoned, and you have resistance to poison damage. Additionally, you can survive in a vacuum or airless environment for up to 10 minutes before suffering its effects.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Transhuman Physiology</div>
+      <p>Your superhuman constitution grants extraordinary endurance. You recover from exhaustion twice as fast as normal creatures. When you take a long rest, you can enter a Catalepsean trance for 4 hours instead of sleeping for 8, gaining the same benefits. You do not require food or water to survive, and you can breathe in toxic atmospheres and underwater without harm.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Angels of Death</div>
+      <p>You gain proficiency in the Intimidation skill.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Astartes Training</div>
+      <p>Your extensive martial conditioning means you are proficient with all armour (light, medium, and heavy), shields, and all weapons (simple and martial).</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Languages</div>
+      <p>You can speak, read, and write Low Gothic (the common tongue of the Imperium) and Techna-Lingua (the binary cant of the Adeptus Mechanicus).</p>
+    </div>
+
+    <!-- Chapter Heritage placeholder -->
+    <div class="section-heading" style="margin-top:40px;">
+      <h2>Chapter Heritage</h2>
+      <div class="section-heading-line"></div>
+    </div>
+
+    <div class="card" style="border-top-color: var(--gold-dim); opacity:0.7;">
+      <div class="card-title" style="color:var(--text-dim);">Coming Soon</div>
+      <div class="card-meta">Chapter-Specific Abilities</div>
+      <p style="color:var(--text-dim);">Each Chapter of the Adeptus Astartes carries a unique heritage — distinct gene-seed lineage, doctrine, and battlefield role. Chapter Heritage abilities will be added here, allowing you to select your Chapter and apply its blessings and burdens to your Battle-Brother.</p>
+    </div>
+
+  </section>
 
   <section id="operatives" class="section active">
     <div class="section-heading">
