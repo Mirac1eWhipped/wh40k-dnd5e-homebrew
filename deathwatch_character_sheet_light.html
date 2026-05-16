@@ -232,8 +232,15 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .dos-stat{background:var(--panel2);border:1px solid var(--border2);padding:6px 8px;text-align:center;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;}
 .dos-stat input{font-family:var(--font-label)!important;font-size:15pt!important;font-weight:700!important;color:var(--gold-light)!important;background:transparent!important;border:none!important;outline:none!important;text-align:center!important;width:80px!important;padding:0!important;}
 .dos-stat-lbl{font-family:var(--font-label);font-size:9pt;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);}
-.dos-hp-cell{background:var(--panel2);border:1px solid var(--border2);padding:6px 8px;text-align:center;flex:2;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-.dos-hp-cell input{font-family:var(--font-label)!important;font-size:20pt!important;font-weight:700!important;color:var(--gold-light)!important;background:transparent!important;border:none!important;outline:none!important;text-align:center!important;width:90px!important;padding:0!important;}
+.dos-hp-block{background:var(--panel2);border:1px solid var(--border2);padding:6px 12px;text-align:center;flex:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;}
+.dos-hp-frac{display:flex;align-items:baseline;gap:4px;}
+.dos-hp-frac input{font-family:var(--font-label)!important;font-size:20pt!important;font-weight:700!important;color:var(--gold-light)!important;background:transparent!important;border:none!important;outline:none!important;text-align:center!important;width:62px!important;padding:0!important;}
+.dos-hp-fsep{font-family:var(--font-label);font-size:16pt;font-weight:300;color:var(--text-dim);line-height:1;}
+.dos-hp-lbl{display:flex;align-items:center;gap:4px;font-family:var(--font-label);font-size:8pt;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);}
+.dos-hp-lbl span{width:62px;text-align:center;}
+.dos-hp-lbl .dos-hp-fsep-lbl{width:auto;color:transparent;font-size:8pt;}
+.dos-hp-temp{display:flex;align-items:center;gap:6px;margin-top:4px;padding-top:4px;border-top:1px solid var(--border);}
+.dos-hp-temp input{font-family:var(--font-label)!important;font-size:12pt!important;font-weight:600!important;color:var(--text)!important;background:transparent!important;border:none!important;border-bottom:1px solid var(--line)!important;outline:none!important;text-align:center!important;width:46px!important;padding:0!important;}
 .dos-3col{display:grid;grid-template-columns:210px 230px 1fr;gap:14px;}
 .dos-row{display:flex;align-items:center;gap:5px;padding:4px 2px;border-bottom:1px solid rgba(42,58,80,.3);}
 .dos-row input[type=checkbox]{width:12px;height:12px;accent-color:var(--gold);flex-shrink:0;cursor:pointer;}
@@ -347,9 +354,18 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
     <div class="dos-stat"><input type="text" placeholder="30 ft"><span class="dos-stat-lbl">Speed</span></div>
     <div class="dos-stat"><input type="text" id="stat-prof" placeholder="+2"><span class="dos-stat-lbl">Prof Bonus</span></div>
     <div class="dos-stat"><input type="text" placeholder="0" id="mortal-wounds"><span class="dos-stat-lbl">Mortal Wounds</span></div>
-    <div class="dos-hp-cell"><input type="number" id="hp-cur" placeholder="—"><span class="dos-stat-lbl">Current HP</span></div>
-    <div class="dos-hp-cell"><input type="number" placeholder="—"><span class="dos-stat-lbl">Max HP</span></div>
-    <div class="dos-hp-cell"><input type="number" placeholder="—"><span class="dos-stat-lbl">Temp HP</span></div>
+    <div class="dos-hp-block">
+      <div class="dos-hp-frac">
+        <input type="number" id="hp-cur" placeholder="—">
+        <span class="dos-hp-fsep">/</span>
+        <input type="number" id="hp-max" placeholder="—">
+      </div>
+      <div class="dos-hp-lbl"><span>Current</span><span class="dos-hp-fsep-lbl">/</span><span>Max HP</span></div>
+      <div class="dos-hp-temp">
+        <input type="number" id="hp-temp" placeholder="—">
+        <span class="dos-stat-lbl">Temp HP</span>
+      </div>
+    </div>
   </div>
   <!-- Three Columns -->
   <div class="dos-3col">
