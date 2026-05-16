@@ -219,6 +219,12 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .dos-3col{display:grid;grid-template-columns:210px 230px 1fr;gap:14px;}
 .dos-row{display:flex;align-items:center;gap:5px;padding:4px 2px;border-bottom:1px solid rgba(42,58,80,.3);}
 .dos-row input[type=checkbox]{width:12px;height:12px;accent-color:var(--gold);flex-shrink:0;cursor:pointer;}
+.exp-chk{appearance:none;-webkit-appearance:none;width:12px;height:12px;flex-shrink:0;cursor:pointer;position:relative;margin:0;}
+.exp-chk::after{content:'✦';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:10px;line-height:1;color:var(--border2);transition:color .12s;}
+.exp-chk:checked::after{color:var(--gold-light);}
+.exp-chk:disabled{cursor:not-allowed;opacity:.3;}
+.exp-chk:not(:disabled):not(:checked):hover::after{color:var(--gold-dim);}
+.dos-col-hdr-exp{font-family:var(--font-label);font-size:8pt;letter-spacing:.05em;text-transform:uppercase;color:var(--gold-light);width:12px;text-align:center;flex-shrink:0;}
 .dos-attr-tag{font-family:var(--font-label);font-size:9pt;color:var(--silver-dim);width:32px;flex-shrink:0;letter-spacing:.04em;}
 .dos-row-name{font-family:var(--font-label);font-size:9pt;color:var(--silver);flex:1;}
 .dos-bonus input{font-family:var(--font-label)!important;font-size:10pt!important;font-weight:700!important;color:var(--gold-light)!important;background:transparent!important;border:none!important;outline:none!important;text-align:right!important;width:34px!important;padding:0!important;}
@@ -363,26 +369,27 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
     <div>
       <div class="section">
         <div class="dos-col-hdr">
-          <span style="width:14px;display:inline-block;"></span>
+          <span class="dos-col-hdr-lbl" style="width:12px;text-align:center;font-size:8pt;" title="Proficiency">P</span>
+          <span class="dos-col-hdr-exp" title="Expertise">E</span>
           <span class="dos-attr-tag" style="color:var(--gold);font-size:9pt;">MOD</span>
           <span class="dos-col-hdr-lbl" style="flex:1;">Skill</span>
           <span class="dos-col-hdr-lbl">Bonus</span>
         </div>
-<div class="dos-row"><input type="checkbox" id="skill-acrobatics-prof"><span class="dos-attr-tag">DEX</span><span class="dos-row-name">Acrobatics</span><div class="dos-bonus"><input type="text" id="skill-acrobatics" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-athletics-prof"><span class="dos-attr-tag">STR</span><span class="dos-row-name">Athletics</span><div class="dos-bonus"><input type="text" id="skill-athletics" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-deception-prof"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Deception</span><div class="dos-bonus"><input type="text" id="skill-deception" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-history-prof"><span class="dos-attr-tag">INT</span><span class="dos-row-name">History</span><div class="dos-bonus"><input type="text" id="skill-history" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-insight-prof"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Insight</span><div class="dos-bonus"><input type="text" id="skill-insight" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-intimidation-prof"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Intimidation</span><div class="dos-bonus"><input type="text" id="skill-intimidation" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-investigation-prof"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Investigation</span><div class="dos-bonus"><input type="text" id="skill-investigation" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-medicine-prof"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Medicine</span><div class="dos-bonus"><input type="text" id="skill-medicine" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-perception-prof"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Perception</span><div class="dos-bonus"><input type="text" id="skill-perception" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-persuasion-prof"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Persuasion</span><div class="dos-bonus"><input type="text" id="skill-persuasion" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-religion-prof"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Religion</span><div class="dos-bonus"><input type="text" id="skill-religion" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-sleight-of-hand-prof"><span class="dos-attr-tag">DEX</span><span class="dos-row-name">Sleight of Hand</span><div class="dos-bonus"><input type="text" id="skill-sleight-of-hand" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-stealth-prof"><span class="dos-attr-tag">DEX</span><span class="dos-row-name">Stealth</span><div class="dos-bonus"><input type="text" id="skill-stealth" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-survival-prof"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Survival</span><div class="dos-bonus"><input type="text" id="skill-survival" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-technology-prof"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Technology</span><div class="dos-bonus"><input type="text" id="skill-technology" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-acrobatics-prof" onchange="onProfChange('acrobatics')"><input type="checkbox" class="exp-chk" id="skill-acrobatics-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">DEX</span><span class="dos-row-name">Acrobatics</span><div class="dos-bonus"><input type="text" id="skill-acrobatics" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-athletics-prof" onchange="onProfChange('athletics')"><input type="checkbox" class="exp-chk" id="skill-athletics-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">STR</span><span class="dos-row-name">Athletics</span><div class="dos-bonus"><input type="text" id="skill-athletics" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-deception-prof" onchange="onProfChange('deception')"><input type="checkbox" class="exp-chk" id="skill-deception-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Deception</span><div class="dos-bonus"><input type="text" id="skill-deception" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-history-prof" onchange="onProfChange('history')"><input type="checkbox" class="exp-chk" id="skill-history-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">INT</span><span class="dos-row-name">History</span><div class="dos-bonus"><input type="text" id="skill-history" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-insight-prof" onchange="onProfChange('insight')"><input type="checkbox" class="exp-chk" id="skill-insight-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Insight</span><div class="dos-bonus"><input type="text" id="skill-insight" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-intimidation-prof" onchange="onProfChange('intimidation')"><input type="checkbox" class="exp-chk" id="skill-intimidation-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Intimidation</span><div class="dos-bonus"><input type="text" id="skill-intimidation" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-investigation-prof" onchange="onProfChange('investigation')"><input type="checkbox" class="exp-chk" id="skill-investigation-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Investigation</span><div class="dos-bonus"><input type="text" id="skill-investigation" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-medicine-prof" onchange="onProfChange('medicine')"><input type="checkbox" class="exp-chk" id="skill-medicine-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Medicine</span><div class="dos-bonus"><input type="text" id="skill-medicine" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-perception-prof" onchange="onProfChange('perception')"><input type="checkbox" class="exp-chk" id="skill-perception-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Perception</span><div class="dos-bonus"><input type="text" id="skill-perception" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-persuasion-prof" onchange="onProfChange('persuasion')"><input type="checkbox" class="exp-chk" id="skill-persuasion-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Persuasion</span><div class="dos-bonus"><input type="text" id="skill-persuasion" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-religion-prof" onchange="onProfChange('religion')"><input type="checkbox" class="exp-chk" id="skill-religion-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Religion</span><div class="dos-bonus"><input type="text" id="skill-religion" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-sleight-of-hand-prof" onchange="onProfChange('sleight-of-hand')"><input type="checkbox" class="exp-chk" id="skill-sleight-of-hand-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">DEX</span><span class="dos-row-name">Sleight of Hand</span><div class="dos-bonus"><input type="text" id="skill-sleight-of-hand" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-stealth-prof" onchange="onProfChange('stealth')"><input type="checkbox" class="exp-chk" id="skill-stealth-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">DEX</span><span class="dos-row-name">Stealth</span><div class="dos-bonus"><input type="text" id="skill-stealth" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-survival-prof" onchange="onProfChange('survival')"><input type="checkbox" class="exp-chk" id="skill-survival-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Survival</span><div class="dos-bonus"><input type="text" id="skill-survival" placeholder="+0"></div></div>
+<div class="dos-row"><input type="checkbox" id="skill-technology-prof" onchange="onProfChange('technology')"><input type="checkbox" class="exp-chk" id="skill-technology-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Technology</span><div class="dos-bonus"><input type="text" id="skill-technology" placeholder="+0"></div></div>
       </div>
     </div>
     <!-- RIGHT: Quick Attacks · Conditions · Notes -->
@@ -832,9 +839,12 @@ function _recalcDerived() {
   });
   _SKILLS.forEach(function(sk) {
     const chk = document.getElementById('skill-'+sk.id+'-prof');
+    const exp = document.getElementById('skill-'+sk.id+'-exp');
     const el  = document.getElementById('skill-'+sk.id);
     if (!el) return;
-    el.value = fmt(_mod(sk.stat) + (chk && chk.checked ? pb : 0));
+    const profBonus = (chk && chk.checked) ? pb : 0;
+    const expBonus  = (chk && chk.checked && exp && exp.checked) ? pb : 0;
+    el.value = fmt(_mod(sk.stat) + profBonus + expBonus);
   });
   function _passive(skillId) {
     const el = document.getElementById('skill-'+skillId);
@@ -1017,7 +1027,7 @@ function _fields() {
   ));
 }
 function _checkboxes() {
-  return Array.from(document.querySelectorAll('input[type=checkbox]'));
+  return Array.from(document.querySelectorAll('input[type=checkbox]:not(.exp-chk)'));
 }
 function _charName() {
   const el = document.getElementById('char-name');
@@ -1054,7 +1064,11 @@ async function _doSave() {
     hp_cur: (document.getElementById('hp-cur') || {value:''}).value,
     hp_max: (document.getElementById('hp-max') || {value:''}).value,
     ac: (document.getElementById('stat-ac') || {value:''}).value,
-    level: (document.getElementById('char-level') || {value:''}).value
+    level: (document.getElementById('char-level') || {value:''}).value,
+    expertise: _SKILLS.filter(function(sk) {
+      var e = document.getElementById('skill-'+sk.id+'-exp');
+      return e && e.checked;
+    }).map(function(sk) { return sk.id; })
   };
   const name = _charName();
   try {
@@ -1101,6 +1115,17 @@ async function _loadSheet() {
     updateSubclassOpts();
     if (subSel && ext.sub) { subSel.value = ext.sub; renderFeatures(); }
     renderLineageTraits();
+    _SKILLS.forEach(function(sk) {
+      var prof = document.getElementById('skill-'+sk.id+'-prof');
+      var exp  = document.getElementById('skill-'+sk.id+'-exp');
+      if (prof && prof.checked && exp) exp.disabled = false;
+    });
+    if (ext.expertise && Array.isArray(ext.expertise)) {
+      ext.expertise.forEach(function(skId) {
+        var exp = document.getElementById('skill-'+skId+'-exp');
+        if (exp) exp.checked = true;
+      });
+    }
     STATS.forEach(s => calcMod(s));
     _status('loaded', 'Sheet loaded — ' + _uemail());
   } catch(e) { _status('error', e.message || 'Load failed'); console.error('Load error:', e); }
@@ -1310,6 +1335,17 @@ async function _loadSheetForUser(uid) {
     updateSubclassOpts();
     if (subSel && ext.sub) { subSel.value = ext.sub; renderFeatures(); }
     renderLineageTraits();
+    _SKILLS.forEach(function(sk) {
+      var prof = document.getElementById('skill-'+sk.id+'-prof');
+      var exp  = document.getElementById('skill-'+sk.id+'-exp');
+      if (prof && prof.checked && exp) exp.disabled = false;
+    });
+    if (ext.expertise && Array.isArray(ext.expertise)) {
+      ext.expertise.forEach(function(skId) {
+        var exp = document.getElementById('skill-'+skId+'-exp');
+        if (exp) exp.checked = true;
+      });
+    }
     STATS.forEach(function(s){ calcMod(s); });
     _status('loaded', 'Viewing ' + (rows[0].name || 'player') + '\'s sheet');
   } catch(e) { _status('error','Could not load player sheet'); }
@@ -1329,6 +1365,15 @@ function copyMyUid() {
     var btn = document.getElementById('copy-uid-btn');
     if(btn){ btn.textContent='Copied!'; setTimeout(function(){ btn.textContent='Copy UID'; },2000); }
   });
+}
+
+function onProfChange(skId) {
+  var prof = document.getElementById('skill-'+skId+'-prof');
+  var exp  = document.getElementById('skill-'+skId+'-exp');
+  if (!prof || !exp) return;
+  if (!prof.checked) { exp.checked = false; exp.disabled = true; }
+  else { exp.disabled = false; }
+  _recalcDerived();
 }
 
 /* ══════════════════════════════════════════════════════
