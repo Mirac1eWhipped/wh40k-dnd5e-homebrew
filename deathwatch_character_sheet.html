@@ -890,6 +890,7 @@ function syncQuickActionsFromWargear() {
     var stat = meta.stat || 'str';
     var hit  = fmt(_mod(stat) + pb);
     var dmg  = meta.dmg  || '—';
+    if (dmg !== '—') { dmg = dmg + ' ' + fmt(_mod(stat)); }
     var wtype = meta.wtype || '';
     rows += '<tr>'
       + '<td>'+name+'</td>'
