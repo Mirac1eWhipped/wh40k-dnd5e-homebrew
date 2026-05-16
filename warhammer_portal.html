@@ -880,11 +880,11 @@
   
     /* ── Portal auth bar ── */
     #portal-auth-bar{position:fixed;top:0;left:0;right:0;height:36px;background:#040609;border-bottom:1px solid #1a2535;display:flex;align-items:center;padding:0 16px;gap:10px;z-index:9999;font-family:'Cinzel',serif;}
-    #portal-auth-bar .pab-label{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#8a9bb5;flex:1;}
-    #portal-auth-bar .pab-email{font-size:9px;letter-spacing:.15em;color:#c8a44a;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-    #portal-auth-bar .pab-uid{font-size:8px;letter-spacing:.1em;color:#4a6080;cursor:pointer;}
+    #portal-auth-bar .pab-label{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#8a9bb5;flex:1;}
+    #portal-auth-bar .pab-email{font-size:12px;letter-spacing:.15em;color:#c8a44a;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+    #portal-auth-bar .pab-uid{font-size:12px;letter-spacing:.1em;color:#4a6080;cursor:pointer;}
     #portal-auth-bar .pab-uid:hover{color:#c8a44a;}
-    #portal-auth-bar .pab-btn{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.18em;text-transform:uppercase;padding:4px 12px;border:1px solid #1a2535;background:transparent;color:#8a9bb5;cursor:pointer;}
+    #portal-auth-bar .pab-btn{font-family:'Cinzel',serif;font-size:12px;letter-spacing:.18em;text-transform:uppercase;padding:4px 12px;border:1px solid #1a2535;background:transparent;color:#8a9bb5;cursor:pointer;}
     #portal-auth-bar .pab-btn:hover{border-color:#c8a44a;color:#c8a44a;}
     #portal-auth-bar .pab-btn.signin{border-color:#c8a44a88;color:#c8a44a;}
     /* push page content below auth bar */
@@ -894,12 +894,12 @@
     #portal-auth-modal.open{display:flex;}
     #portal-auth-box{background:#0d1018;border:1px solid #1a2535;border-top:2px solid #c8a44a;padding:28px 32px;width:360px;max-width:95vw;}
     #portal-auth-box h2{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:#c8a44a;margin-bottom:18px;text-align:center;}
-    #portal-auth-box input{width:100%;background:#101420;border:1px solid #1a2535;color:#dde3ec;font-family:'Cinzel',serif;font-size:11px;padding:8px 10px;outline:none;margin-bottom:10px;box-sizing:border-box;}
+    #portal-auth-box input{width:100%;background:#101420;border:1px solid #1a2535;color:#dde3ec;font-family:'Cinzel',serif;font-size:12px;padding:8px 10px;outline:none;margin-bottom:10px;box-sizing:border-box;}
     #portal-auth-box input:focus{border-color:#c8a44a66;}
-    #portal-auth-box .pab-submit{width:100%;background:#c8a44a22;border:1px solid #c8a44a88;color:#c8a44a;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.26em;text-transform:uppercase;padding:10px;cursor:pointer;margin-top:4px;}
+    #portal-auth-box .pab-submit{width:100%;background:#c8a44a22;border:1px solid #c8a44a88;color:#c8a44a;font-family:'Cinzel',serif;font-size:12px;letter-spacing:.26em;text-transform:uppercase;padding:10px;cursor:pointer;margin-top:4px;}
     #portal-auth-box .pab-submit:hover{background:#c8a44a44;}
-    #portal-auth-box .pab-err{color:#c0392b;font-size:9px;min-height:14px;text-align:center;margin-top:6px;font-family:'Cinzel',serif;letter-spacing:.1em;}
-    #portal-auth-box .pab-toggle{text-align:center;margin-top:12px;font-size:8px;color:#4a6080;letter-spacing:.12em;cursor:pointer;font-family:'Cinzel',serif;text-transform:uppercase;}
+    #portal-auth-box .pab-err{color:#c0392b;font-size:12px;min-height:14px;text-align:center;margin-top:6px;font-family:'Cinzel',serif;letter-spacing:.1em;}
+    #portal-auth-box .pab-toggle{text-align:center;margin-top:12px;font-size:12px;color:#4a6080;letter-spacing:.12em;cursor:pointer;font-family:'Cinzel',serif;text-transform:uppercase;}
     #portal-auth-box .pab-toggle:hover{color:#c8a44a;}
     #portal-auth-box .pab-close{text-align:right;margin-bottom:8px;}
     #portal-auth-box .pab-close span{color:#4a6080;cursor:pointer;font-size:14px;}
@@ -1106,7 +1106,7 @@
             <div class="objective"><span class="obj-icon">◇</span> Investigate Kethis Pater-Hold — identify cult activity</div>
             <div class="objective"><span class="obj-icon">◇</span> Locate and assess the Patriarch or Magus (if present)</div>
           </div>
-          <div style="margin-top:16px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--gold);">▶ Open Full Mission Briefing</div>
+          <div style="margin-top:16px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;color:var(--gold);">▶ Open Full Mission Briefing</div>
         </div>
       </a>
 
@@ -1161,17 +1161,17 @@
     <div id="planet-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:2000;align-items:center;justify-content:center;" onclick="closePlanetPopup(event)">
       <div id="planet-popup" style="background:var(--panel);border:1px solid var(--border2);border-top:3px solid var(--gold);max-width:440px;width:90%;padding:28px 30px 24px;position:relative;pointer-events:all;" onclick="event.stopPropagation()">
         <button onclick="closePlanetPopup()" style="position:absolute;top:12px;right:16px;background:none;border:none;color:var(--text-dim);font-size:18px;cursor:pointer;font-family:serif;line-height:1;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-dim)'">✕</button>
-        <div id="pp-salient" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:4px;color:var(--text-dim);margin-bottom:6px;"></div>
+        <div id="pp-salient" style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:4px;color:var(--text-dim);margin-bottom:6px;"></div>
         <div id="pp-name"    style="font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--gold);letter-spacing:2px;margin-bottom:4px;"></div>
-        <div id="pp-type"    style="font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--silver-dim);margin-bottom:14px;"></div>
-        <div id="pp-status"  style="display:inline-block;font-family:'Cinzel',serif;font-size:9px;letter-spacing:2px;padding:3px 10px;border:1px solid;margin-bottom:16px;"></div>
+        <div id="pp-type"    style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;color:var(--silver-dim);margin-bottom:14px;"></div>
+        <div id="pp-status"  style="display:inline-block;font-family:'Cinzel',serif;font-size:12px;letter-spacing:2px;padding:3px 10px;border:1px solid;margin-bottom:16px;"></div>
         <p  id="pp-lore"     style="color:var(--text);line-height:1.8;font-size:14px;margin-bottom:12px;"></p>
         <div id="pp-intel"   style="display:none;background:rgba(200,164,74,0.06);border-left:2px solid var(--gold-dim);padding:10px 14px;font-size:13px;color:var(--text-dim);line-height:1.7;font-style:italic;margin-top:8px;"></div>
       </div>
     </div>
 
     <div style="width:100%;background:#0a0d14;border:1px solid var(--border2);border-radius:4px;overflow:hidden;margin-bottom:20px;">
-      <div style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:4px;color:var(--text-dim);padding:10px 20px;border-bottom:1px solid var(--border);">
+      <div style="font-family:'Cinzel',serif;font-size:12px;letter-spacing:4px;color:var(--text-dim);padding:10px 20px;border-bottom:1px solid var(--border);">
         ++ JERICHO REACH — STRATEGIC OVERVIEW — ACHILUS CRUSADE THEATRE ++
       </div>
       <svg id="sector-map-svg" viewBox="0 0 1200 760" xmlns="http://www.w3.org/2000/svg" width="100%" style="display:block;cursor:default;">
@@ -1754,8 +1754,8 @@
         </div>
       </div>
       <div class="add-field" style="margin-top:8px;">
-        <label style="font-size:9px;letter-spacing:.15em;color:#8a9bb5;">Player UID <span style="font-weight:400;color:#4a6080;">(optional — paste from player's "Copy UID" button)</span></label>
-        <input type="text" id="add-player-uid" placeholder="Leave blank for your own sheet" style="font-size:10px;" />
+        <label style="font-size:12px;letter-spacing:.15em;color:#8a9bb5;">Player UID <span style="font-weight:400;color:#4a6080;">(optional — paste from player's "Copy UID" button)</span></label>
+        <input type="text" id="add-player-uid" placeholder="Leave blank for your own sheet" style="font-size:12px;" />
       </div>
       <div class="add-modal-btns">
         <button class="add-cancel-btn" onclick="closeAddModal()">Cancel</button>
