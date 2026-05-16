@@ -852,6 +852,15 @@
     .badge-terminator{ background: rgba(20,184,166,0.12);  color: #5eead4; border: 1px solid rgba(20,184,166,0.3); }
     .badge-relic     { background: rgba(212,160,48,0.12);  color: var(--gold); border: 1px solid rgba(212,160,48,0.3); }
     .badge-equipment { background: rgba(107,114,128,0.12); color: #9ca3af; border: 1px solid rgba(107,114,128,0.3); }
+    .badge-armor     { background: rgba(212,160,48,0.12);  color: var(--gold); border: 1px solid rgba(212,160,48,0.3); }
+    .badge-ammo      { background: rgba(234,88,12,0.12);   color: #fb923c;     border: 1px solid rgba(234,88,12,0.3); }
+    .req-card-caps { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 10px; margin-top: 4px; }
+    .req-cap-row { display: flex; justify-content: space-between; font-family: 'Cinzel', serif; font-size: 11px; color: var(--text-dim); }
+    .req-cap-row span:last-child { color: var(--gold-dim); }
+    .rmd-cap-table { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; margin: 8px 0 12px; }
+    .rmd-cap-cell { font-family: 'Cinzel', serif; font-size: 12px; }
+    .rmd-cap-cell .rmd-stat-label { font-size: 10px; }
+    .rmd-cap-cell .rmd-stat-value { font-size: 14px; color: var(--gold); }
     /* Modal */
     #req-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 950; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s; padding: 20px; overflow-y: auto; }
     #req-modal-overlay.open { opacity: 1; pointer-events: all; }
@@ -1473,6 +1482,8 @@
           <button class="req-filter" data-cat="Terminator" onclick="reqSetCat(this,'Terminator')">Terminator</button>
           <button class="req-filter" data-cat="Relic" onclick="reqSetCat(this,'Relic')">Relic</button>
           <button class="req-filter" data-cat="Equipment" onclick="reqSetCat(this,'Equipment')">Equipment</button>
+          <button class="req-filter" data-cat="Armor" onclick="reqSetCat(this,'Armor')">Armor Patterns</button>
+          <button class="req-filter" data-cat="Ammo" onclick="reqSetCat(this,'Ammo')">Ammo Types</button>
         </div>
       </div>
       <!-- Card Grid -->
@@ -1707,6 +1718,8 @@
     'Terminator':      'badge-terminator',
     'Relic':           'badge-relic',
     'Equipment':       'badge-equipment',
+    'Armor':           'badge-armor',
+    'Ammo':            'badge-ammo',
   };
 
   const REQ_ITEMS = [
@@ -1822,6 +1835,33 @@
     {id:'dev_icon',     cat:'Relic',           name:'Devotional Icon of the Emperor',wtype:'Ward',     dmg:'N/A',                   range:'30 ft',       ammo:'N/A', shots:'N/A', mods:[], cost:'Cannot be purchased', notes:'Passive +1 to saving throws against psychic and warp effects. Reaction (3 uses per resupply): grant an ally within 30 ft advantage on a saving throw before they roll.', lore:'A consecrated aquila or effigy of the Emperor, blessed through rituals stretching back to the founding of the Chapter. To hold it aloft is to invite the Emperor\'s gaze upon the battlefield — and where He looks, the warp recoils.'},
     {id:'chap_standard',cat:'Relic',           name:'Chapter Standard Shard',        wtype:'Ward',     dmg:'N/A',                   range:'15 ft aura',  ammo:'N/A', shots:'N/A', mods:[], cost:'Cannot be purchased', notes:'Aura: allies within 15 ft cannot be Frightened and gain +1 to attack rolls. The bearer has disadvantage on Stealth checks while carrying it openly.', lore:'A fragment torn from a Chapter battle standard that has flown over a hundred campaigns. The machine spirit woven into its threads still remembers those victories. In its presence, warriors fight as though the eyes of every fallen brother are upon them — because they are.'},
     {id:'litany_scroll',cat:'Relic',           name:'Litany Scroll',                 wtype:'Ritual',   dmg:'N/A',                   range:'30 ft',       ammo:'N/A', shots:'N/A', mods:[], cost:'Cannot be purchased', notes:'Action: read aloud to choose one effect — (1) all allies within 30 ft gain advantage on their next attack roll; (2) all allies gain resistance to one chosen damage type for 1 minute; (3) one condition is removed from every ally in range. Single use.', lore:'A prayer inscribed on sacred parchment by a senior Chaplain, sealed with his personal sigil. To read it in the heat of battle is to give voice to ten thousand years of faith and fury. The words are not metaphor. They are instruction — and the universe listens.'},
+
+    // ── ARMOR PATTERNS ──────────────────────────────────────
+    {id:'armor_phobos',    cat:'Armor', wtype:'Armor Pattern', name:'Phobos Armor',     armor_type:'phobos',    base_ac:12, dex_mod:'full',  cost:'Standard Issue',      str_req:'—',       effects:'+5 ft movement. Advantage on Stealth checks.', mods:[], notes:'Lightweight Mark X variant optimised for stealth, speed, and infiltration. Cannot be worn by Gravis or Terminator class operatives.', lore:'The Mark X Phobos pattern is the armour of the shadow-warrior. Stripped back for speed, every gram of ceramite is precisely placed for maximum protection without sacrificing mobility. Phobos operatives move like ghosts — and ghosts do not slow down.'},
+    {id:'armor_tacticus',  cat:'Armor', wtype:'Armor Pattern', name:'Tacticus Armor',   armor_type:'tacticus',  base_ac:16, dex_mod:'none',  cost:'Standard Issue',      str_req:'—',       effects:'Does not inhibit movement. Increased Ammo & Supplies carrying capacity.', mods:[], notes:'Standard Mark X Variant. The baseline armour of the Primaris Space Marine. Compatible with all standard wargear.', lore:'The Mark X Tacticus represents the perfect balance of the Adeptus Astartes — mobile enough to advance under fire, strong enough to weather anything short of a battle cannon. It is the armour of the line warrior, and the line has held for ten thousand years.'},
+    {id:'armor_gravis',    cat:'Armor', wtype:'Armor Pattern', name:'Gravis Armor',     armor_type:'gravis',    base_ac:18, dex_mod:'none',  cost:'Standard Issue',      str_req:'—',       effects:'−5 ft movement. Disadvantage on Stealth checks. Increased Ammo & Supplies carrying capacity.', mods:[], notes:'Reinforced Mark X Variant. Requires Gravis class proficiency. Thicker ceramite plating reduces mobility but provides outstanding protection.', lore:'The Mark X Gravis pattern sacrifices swiftness for stopping power. A warrior in Gravis armour is not stopped by small arms fire, vehicle impacts, or the attention of most alien predators. What moves slowly, moves with absolute certainty.'},
+    {id:'armor_term',      cat:'Armor', wtype:'Armor Pattern', name:'Terminator Armor', armor_type:'terminator',base_ac:20, dex_mod:'none',  cost:'Cannot be purchased', str_req:'STR 15+', effects:'−10 ft movement. Disadvantage on all DEX checks. Cannot Dash unless STR > 18. Cannot Dodge. Unlocks Terminator-exclusive wargear.', mods:[], notes:'Requires Terminator Class proficiency. Tactical Dreadnought Armour — scarce and available only to the finest warriors. Disadvantage on all Dexterity checks.', lore:'Tactical Dreadnought Armour. The Terminator suit is a walking fortress of adamantium and ceramite unchanged in principle since the Heresy. No other armour in the Imperium offers comparable protection. Its cost in resources and expertise is staggering — only the very best earn the right to wear it.'},
+
+    // ── AMMO TYPES ──────────────────────────────────────
+    {id:'ammo_lbolter',    cat:'Ammo', wtype:'Bolt',    name:'Light Bolter Ammo',    cost:'10 RP/clip',  caps:{phobos:5, tacticus:6, gravis:7, terminator:'N/A'}, mods:[], notes:'Used by: Bolt Pistol, Needle Pistol', lore:'Light-frame mass-reactive rounds scaled for pistol-weight bolt weapons. Lower yield than standard bolts but sufficient to penetrate unaugmented targets at close range.'},
+    {id:'ammo_sbolter',    cat:'Ammo', wtype:'Bolt',    name:'Standard Bolter Ammo', cost:'15 RP/clip',  caps:{phobos:3, tacticus:5, gravis:6, terminator:'N/A'}, mods:[], notes:'Used by: Bolter/Auto Bolt Rifle, Bolt Carbine, Bolt Rifle, Heavy Bolt Pistol', lore:'The standard mass-reactive bolt round. Accelerated to hypersonic velocity, it punches through armour before the micro-detonation within tears the target apart from the inside. Standard issue across the Adeptus Astartes.'},
+    {id:'ammo_hbolter',    cat:'Ammo', wtype:'Bolt',    name:'Heavy Bolter Ammo',    cost:'25 RP/clip',  caps:{phobos:3, tacticus:5, gravis:6, terminator:6},     mods:[], notes:'Used by: Heavy Bolter, Storm Bolter, Assault Cannon', lore:'Oversized mass-reactive rounds for heavy-frame bolt weapons. The detonation yield is substantially higher than standard bolts — enough to threaten light vehicle armour at sustained fire rates.'},
+    {id:'ammo_sniper',     cat:'Ammo', wtype:'Sniper',  name:'Sniper Bolter Ammo',   cost:'30 RP/clip',  caps:{phobos:3, tacticus:5, gravis:6, terminator:'N/A'}, mods:[], notes:'Used by: Bolt Sniper Rifle, Stalker Bolt Rifle', lore:'Stalker-pattern subsonic rounds designed for precision elimination at extreme range. The reduced muzzle signature makes the origin point nearly impossible to detect — the target simply stops moving.'},
+    {id:'ammo_lmelta',     cat:'Ammo', wtype:'Melta',   name:'Light Melta Ammo',     cost:'35 RP/clip',  caps:{phobos:3, tacticus:5, gravis:6, terminator:'N/A'}, mods:[], notes:'Used by: Inferno Pistol', lore:'Miniaturised melta fuel canisters for pistol-frame melta weapons. Generates sufficient thermal output to reduce ceramite to slag at point-blank range, though the focused yield is lower than full-size melta ammunition.'},
+    {id:'ammo_smelta',     cat:'Ammo', wtype:'Melta',   name:'Standard Melta Ammo',  cost:'50 RP/clip',  caps:{phobos:5, tacticus:7, gravis:7, terminator:'N/A'}, mods:[], notes:'Used by: Meltagun, Melta Rifle', lore:'Standard melta fuel for mid-frame thermal weapons. The superheated particle beam reduces armour and flesh to incandescent vapour. Anti-tank doctrine requires every kill-team carry at least one melta weapon.'},
+    {id:'ammo_hmelta',     cat:'Ammo', wtype:'Melta',   name:'Heavy Melta Ammo',     cost:'75 RP/clip',  caps:{phobos:5, tacticus:7, gravis:7, terminator:'N/A'}, mods:[], notes:'Used by: Multi-Melta', lore:'Twin-canister heavy melta fuel, engineered for the sustained thermal output of the Multi-Melta. A direct hit at optimal range will fully penetrate any battle tank fielded by any known species. The Emperor provides.'},
+    {id:'ammo_fuel',       cat:'Ammo', wtype:'Flame',   name:'Fuel Canister',        cost:'20 RP/clip',  caps:{phobos:3, tacticus:5, gravis:7, terminator:7},     mods:[], notes:'Used by: Flamer/Pyreblaster, Pyre Pistol, Heavy Flamer', lore:'Promethium fuel canisters for flame weapons. Pressurised and ignited by the weapon\'s pilot flame, the stream of burning liquid adheres to targets and continues burning. Remarkably difficult to extinguish.'},
+    {id:'ammo_fusil',      cat:'Ammo', wtype:'Sniper',  name:'Fusil Battery',        cost:'40 RP/clip',  caps:{phobos:4, tacticus:6, gravis:6, terminator:'N/A'}, mods:[], notes:'Used by: Las Fusil', lore:'High-density las-cells for the Las Fusil. Each battery stores enough charge for three full-power shots before requiring replacement. The focused beam they power can punch through hardened cover that standard lasfire merely scorches.'},
+    {id:'ammo_plasma',     cat:'Ammo', wtype:'Plasma',  name:'Plasma Cell',          cost:'40 RP/clip',  caps:{phobos:3, tacticus:5, gravis:6, terminator:6},     mods:[], notes:'Used by: Plasma Incinerator, Heavy Plasma Incinerator, Plasma Pistol, Plasma Cannon', lore:'Pressurised deuterium plasma cells for all plasma weapon patterns. Handle with extreme care — a cracked cell does not merely leak, it detonates. The machine spirit of a plasma weapon does not forgive carelessness.'},
+    {id:'ammo_fragstorm',  cat:'Ammo', wtype:'Explosive',name:'Fragstorm Rounds',    cost:'30 RP/clip',  caps:{phobos:3, tacticus:5, gravis:6, terminator:6},     mods:[], notes:'Used by: Fragstorm Grenade Launcher', lore:'Airburst fragstorm rounds designed for the grenade launcher pattern. Each round detonates above the target area, saturating it with high-velocity shrapnel. Favoured for clearing personnel from fortified positions.'},
+    {id:'ammo_missiles',   cat:'Ammo', wtype:'Explosive',name:'Missiles',            cost:'100 RP/clip', caps:{phobos:2, tacticus:4, gravis:5, terminator:5},     mods:[], notes:'Used by: Locke Missile Launcher, Cyclone Missile Launcher', lore:'Standard Astartes high-explosive missiles. Fin-stabilised and proximity-fuzed, each warhead carries enough shaped charge to destroy a light vehicle or demolish a reinforced position. Logistics ensure every kill-team resupply includes a minimum allocation.'},
+    {id:'ammo_promo',      cat:'Ammo', wtype:'Flame',   name:'Promethium Oil',       cost:'50 RP/clip',  caps:{phobos:3, tacticus:4, gravis:5, terminator:5},     mods:[], notes:'Used by: Promethium Incinerator (Relic). Blessed by the Chaplaincy.', lore:'Consecrated promethium oil anointed through Reclusiam purification rites. Where standard fuel burns hot, blessed promethium burns with a light inimical to the warp itself. Daemons struck by it do not merely die — they are unmade.'},
+    {id:'ammo_autocannon', cat:'Ammo', wtype:'Heavy',   name:'Autocannon Ammo',      cost:'75 RP/clip',  caps:{phobos:3, tacticus:5, gravis:6, terminator:'N/A'}, mods:[], notes:'Used by: Accelerator Autocannon, Hellshot Anti-Material Rifle', lore:'Tungsten-cored penetrator rounds for heavy autocannon systems. Launched at hypersonic velocity, they are capable of penetrating light vehicle armour at range. The Accelerator pattern achieves terminal velocity that makes standard cover effectively irrelevant.'},
+    {id:'ammo_grav',       cat:'Ammo', wtype:'Grav',    name:'Grav Ammo',            cost:'35 RP/clip',  caps:{phobos:4, tacticus:5, gravis:6, terminator:'N/A'}, mods:[], notes:'Used by: Grav-Gun, Grav-Pistol', lore:'Gravitic flux canisters that power grav weapons\' field projectors. The technology is imperfectly understood by most Techmarines — the important thing is that the weapon works, the target is crushed by its own mass, and the Omnissiah is praised.'},
+    {id:'ammo_hgrav',      cat:'Ammo', wtype:'Grav',    name:'Heavy Grav Ammo',      cost:'60 RP/clip',  caps:{phobos:3, tacticus:4, gravis:5, terminator:5},     mods:[], notes:'Used by: Deathwatch Graviton Cannon', lore:'High-yield gravitic flux canisters for heavy grav cannon systems. Generates a localised gravity field of sufficient intensity to crush armoured targets into a density approximating a neutron star. Cleared for Deathwatch use only.'},
+    {id:'ammo_volkite',    cat:'Ammo', wtype:'Volkite', name:'Volkite Coil',         cost:'30 RP/clip',  caps:{phobos:4, tacticus:5, gravis:6, terminator:'N/A'}, mods:[], notes:'Used by: Volkite Blaster, Volkite Charger, Volkite Cavitor, Volkite Serpenta, Neo-Volkite Pistol, Volkite Culverin', lore:'Ancient Volkite energy coils machined to tolerances that no modern forge world can reliably replicate. Each coil powers the deflagrating beam that has made Volkite weapons feared for ten thousand years. Handle every coil as an irreplaceable relic.'},
+    {id:'ammo_needle',     cat:'Ammo', wtype:'Needle',  name:'Needle Rounds',        cost:'25 RP/clip',  caps:{phobos:4, tacticus:5, gravis:6, terminator:'N/A'}, mods:[], notes:'Used by: Needler Sniper Rifle, Needler Cannon, Needle Pistol', lore:'Crystalline flechettes laced with potent neurotoxins, grown in the bio-vats of the Apothecarion. Each round is individually synthesised — the toxin load bypasses conventional armour entirely, working through micro-perforations that even power armour seals cannot fully prevent.'},
+    {id:'ammo_adrathic',   cat:'Ammo', wtype:'Adrathic',name:'Adrathic Cell',        cost:'150 RP/clip', caps:{phobos:2, tacticus:3, gravis:4, terminator:4},     mods:[], notes:'Used by: Adrathic Destructor (Relic). Treat every cell as a critical war asset.', lore:'Adrathic energy cells of pre-Imperial manufacture. The technology required to produce them is lost — every cell in existence is either a survivor of the Dark Age or recaptured from alien civilisations that reverse-engineered the principle. The Inquisition tracks every cell individually.'},
   ];
 
   let _reqCat = 'all';
@@ -1830,14 +1870,15 @@
     const q = document.getElementById('req-search').value.toLowerCase();
     const grid = document.getElementById('req-grid');
     grid.innerHTML = '';
-    const catOrder = ['Primary Ranged','Secondary Ranged','Melee','Unique Melee','Terminator','Relic','Equipment'];
+    const catOrder = ['Primary Ranged','Secondary Ranged','Melee','Unique Melee','Terminator','Relic','Equipment','Armor','Ammo'];
     const cats = _reqCat === 'all' ? catOrder : [_reqCat];
     let total = 0;
     cats.forEach(cat => {
       const items = REQ_ITEMS.filter(item => {
         if (item.cat !== cat) return false;
         if (!q) return true;
-        return (item.name + item.wtype + item.cat + item.mods.join(' ') + item.notes + item.lore).toLowerCase().includes(q);
+        const searchStr = [item.name, item.wtype, item.cat, (item.mods||[]).join(' '), item.notes||'', item.lore||'', item.effects||''].join(' ').toLowerCase();
+        return searchStr.includes(q);
       });
       if (!items.length) return;
       const hdr = document.createElement('div');
@@ -1849,14 +1890,40 @@
         const card = document.createElement('div');
         card.className = 'req-card';
         card.onclick = () => reqOpenModal(item.id);
-        card.innerHTML = `
-          <div class="req-card-name">${item.name}</div>
-          <div class="req-card-type">${item.wtype} Weapon</div>
-          <div class="req-card-dmg">${item.dmg}</div>
-          <div class="req-card-footer">
-            <span class="req-cat-badge ${bc}">${item.cat}</span>
-            <span class="req-cost-tag">${item.cost}</span>
-          </div>`;
+        if (item.cat === 'Armor') {
+          card.innerHTML = `
+            <div class="req-card-name">${item.name}</div>
+            <div class="req-card-type">AC ${item.base_ac}${item.dex_mod === 'full' ? ' + DEX' : ''} &nbsp;·&nbsp; Str: ${item.str_req}</div>
+            <div class="req-card-dmg" style="font-size:13px;">${item.effects}</div>
+            <div class="req-card-footer">
+              <span class="req-cat-badge ${bc}">Armor</span>
+              <span class="req-cost-tag">${item.cost}</span>
+            </div>`;
+        } else if (item.cat === 'Ammo') {
+          const c = item.caps;
+          card.innerHTML = `
+            <div class="req-card-name">${item.name}</div>
+            <div class="req-card-type" style="color:var(--gold-dim);">${item.cost}</div>
+            <div class="req-card-caps">
+              <div class="req-cap-row"><span>Phobos</span><span>${c.phobos}</span></div>
+              <div class="req-cap-row"><span>Tacticus</span><span>${c.tacticus}</span></div>
+              <div class="req-cap-row"><span>Gravis</span><span>${c.gravis}</span></div>
+              <div class="req-cap-row"><span>Terminator</span><span>${c.terminator}</span></div>
+            </div>
+            <div class="req-card-footer" style="margin-top:6px;">
+              <span class="req-cat-badge ${bc}">Ammo</span>
+              <span class="req-cost-tag" style="font-size:10px;opacity:.7;">${item.wtype}</span>
+            </div>`;
+        } else {
+          card.innerHTML = `
+            <div class="req-card-name">${item.name}</div>
+            <div class="req-card-type">${item.wtype} Weapon</div>
+            <div class="req-card-dmg">${item.dmg}</div>
+            <div class="req-card-footer">
+              <span class="req-cat-badge ${bc}">${item.cat}</span>
+              <span class="req-cost-tag">${item.cost}</span>
+            </div>`;
+        }
         grid.appendChild(card);
         total++;
       });
@@ -1877,38 +1944,88 @@
     const item = REQ_ITEMS.find(x => x.id === id);
     if (!item) return;
     const bc = CAT_BADGE[item.cat] || 'badge-primary';
-    const ammoLine = (item.ammo && item.ammo !== 'N/A') ? `
-      <div class="rmd-stat-cell"><div class="rmd-stat-label">Ammunition</div><div class="rmd-stat-value">${item.ammo}</div></div>
-      <div class="rmd-stat-cell"><div class="rmd-stat-label">Shots / Reload</div><div class="rmd-stat-value">${item.shots}</div></div>` : '';
-    const modRules = item.mods.filter(m => MODIFIERS[m]).map(m =>
-      `<div class="rmd-mod-rule"><strong>${m}:</strong> ${MODIFIERS[m]}</div>`
-    ).join('');
-    const modBlock = item.mods.length ? `
-      <div class="rmd-section-title">Modifiers</div>
-      <div class="rmd-mod-chips">${item.mods.map(m => `<span class="rmd-mod-chip">${m}</span>`).join('')}</div>
-      ${modRules}` : '';
-    const notesBlock = item.notes ? `
-      <div class="rmd-section-title">Field Notes</div>
-      <div class="rmd-notes">${item.notes}</div>` : '';
-    document.getElementById('req-modal-body').innerHTML = `
-      <div class="rmd-name">${item.name}</div>
-      <div class="rmd-type-row">
-        <span class="req-cat-badge ${bc}">${item.cat}</span>
-        <span style="font-family:'Cinzel',serif;font-size:12px;color:var(--silver-dim);letter-spacing:1px;">${item.wtype} Weapon</span>
-      </div>
-      <div class="rmd-stat-grid">
-        <div class="rmd-stat-cell full">
-          <div class="rmd-stat-label">Damage</div>
-          <div class="rmd-stat-value" style="font-size:18px;color:var(--gold)">${item.dmg}</div>
+    let body = '';
+    if (item.cat === 'Armor') {
+      const notesBlock = item.notes ? `<div class="rmd-section-title">Field Notes</div><div class="rmd-notes">${item.notes}</div>` : '';
+      body = `
+        <div class="rmd-name">${item.name}</div>
+        <div class="rmd-type-row">
+          <span class="req-cat-badge ${bc}">Armor Pattern</span>
+          <span style="font-family:'Cinzel',serif;font-size:12px;color:var(--silver-dim);letter-spacing:1px;">Mark X ${item.name.replace(' Armor','')}</span>
         </div>
-        <div class="rmd-stat-cell"><div class="rmd-stat-label">Range</div><div class="rmd-stat-value">${item.range}</div></div>
-        <div class="rmd-stat-cell"><div class="rmd-stat-label">Cost</div><div class="rmd-stat-value" style="color:var(--gold-dim)">${item.cost}</div></div>
-        ${ammoLine}
-      </div>
-      ${modBlock}
-      ${notesBlock}
-      <div class="rmd-section-title">Lore</div>
-      <div class="rmd-lore">${item.lore}</div>`;
+        <div class="rmd-stat-grid">
+          <div class="rmd-stat-cell full">
+            <div class="rmd-stat-label">Armor Class</div>
+            <div class="rmd-stat-value" style="font-size:18px;color:var(--gold)">AC ${item.base_ac}${item.dex_mod === 'full' ? ' + DEX Modifier' : ''}</div>
+          </div>
+          <div class="rmd-stat-cell"><div class="rmd-stat-label">Str Requirement</div><div class="rmd-stat-value">${item.str_req}</div></div>
+          <div class="rmd-stat-cell"><div class="rmd-stat-label">Cost</div><div class="rmd-stat-value" style="color:var(--gold-dim)">${item.cost}</div></div>
+        </div>
+        <div class="rmd-section-title">Armor Effects</div>
+        <div class="rmd-notes">${item.effects}</div>
+        ${notesBlock}
+        <div class="rmd-section-title">Lore</div>
+        <div class="rmd-lore">${item.lore}</div>`;
+    } else if (item.cat === 'Ammo') {
+      const c = item.caps;
+      const notesBlock = item.notes ? `<div class="rmd-section-title">Compatible Weapons</div><div class="rmd-notes">${item.notes}</div>` : '';
+      body = `
+        <div class="rmd-name">${item.name}</div>
+        <div class="rmd-type-row">
+          <span class="req-cat-badge ${bc}">Ammunition</span>
+          <span style="font-family:'Cinzel',serif;font-size:12px;color:var(--silver-dim);letter-spacing:1px;">${item.wtype} Type</span>
+        </div>
+        <div class="rmd-stat-grid">
+          <div class="rmd-stat-cell full">
+            <div class="rmd-stat-label">Cost per Clip</div>
+            <div class="rmd-stat-value" style="font-size:18px;color:var(--gold)">${item.cost}</div>
+          </div>
+        </div>
+        <div class="rmd-section-title">Maximum Clips by Armor Pattern</div>
+        <div class="rmd-cap-table">
+          <div class="rmd-cap-cell"><div class="rmd-stat-label">Phobos</div><div class="rmd-stat-value">${c.phobos}</div></div>
+          <div class="rmd-cap-cell"><div class="rmd-stat-label">Tacticus</div><div class="rmd-stat-value">${c.tacticus}</div></div>
+          <div class="rmd-cap-cell"><div class="rmd-stat-label">Gravis</div><div class="rmd-stat-value">${c.gravis}</div></div>
+          <div class="rmd-cap-cell"><div class="rmd-stat-label">Terminator</div><div class="rmd-stat-value">${c.terminator}</div></div>
+        </div>
+        ${notesBlock}
+        <div class="rmd-section-title">Field Notes</div>
+        <div class="rmd-lore">${item.lore}</div>`;
+    } else {
+      const ammoLine = (item.ammo && item.ammo !== 'N/A') ? `
+        <div class="rmd-stat-cell"><div class="rmd-stat-label">Ammunition</div><div class="rmd-stat-value">${item.ammo}</div></div>
+        <div class="rmd-stat-cell"><div class="rmd-stat-label">Shots / Reload</div><div class="rmd-stat-value">${item.shots}</div></div>` : '';
+      const modRules = (item.mods||[]).filter(m => MODIFIERS[m]).map(m =>
+        `<div class="rmd-mod-rule"><strong>${m}:</strong> ${MODIFIERS[m]}</div>`
+      ).join('');
+      const modBlock = (item.mods||[]).length ? `
+        <div class="rmd-section-title">Modifiers</div>
+        <div class="rmd-mod-chips">${item.mods.map(m => `<span class="rmd-mod-chip">${m}</span>`).join('')}</div>
+        ${modRules}` : '';
+      const notesBlock = item.notes ? `
+        <div class="rmd-section-title">Field Notes</div>
+        <div class="rmd-notes">${item.notes}</div>` : '';
+      body = `
+        <div class="rmd-name">${item.name}</div>
+        <div class="rmd-type-row">
+          <span class="req-cat-badge ${bc}">${item.cat}</span>
+          <span style="font-family:'Cinzel',serif;font-size:12px;color:var(--silver-dim);letter-spacing:1px;">${item.wtype} Weapon</span>
+        </div>
+        <div class="rmd-stat-grid">
+          <div class="rmd-stat-cell full">
+            <div class="rmd-stat-label">Damage</div>
+            <div class="rmd-stat-value" style="font-size:18px;color:var(--gold)">${item.dmg}</div>
+          </div>
+          <div class="rmd-stat-cell"><div class="rmd-stat-label">Range</div><div class="rmd-stat-value">${item.range}</div></div>
+          <div class="rmd-stat-cell"><div class="rmd-stat-label">Cost</div><div class="rmd-stat-value" style="color:var(--gold-dim)">${item.cost}</div></div>
+          ${ammoLine}
+        </div>
+        ${modBlock}
+        ${notesBlock}
+        <div class="rmd-section-title">Lore</div>
+        <div class="rmd-lore">${item.lore}</div>`;
+    }
+    document.getElementById('req-modal-body').innerHTML = body;
     document.getElementById('req-modal-overlay').classList.add('open');
     document.addEventListener('keydown', _reqEsc);
   }
