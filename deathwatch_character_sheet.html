@@ -457,12 +457,11 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
           <div class="field-group"><label>Armor Name</label><input type="text" id="armor-name" placeholder="e.g. Tacticus, Phobos…"></div>
           <div class="field-group"><label>Armor Type</label>
             <select id="armor-type" onchange="onArmorTypeChange()">
-              <option value="none">No Armor (base 10)</option>
-              <option value="light">Light (base 11)</option>
-              <option value="medium">Medium (base 13)</option>
-              <option value="heavy">Heavy (base 16)</option>
-              <option value="power">Power Armor (base 16)</option>
-              <option value="terminator">Terminator (base 18)</option>
+              <option value="phobos">Phobos (12 + DEX)</option>
+              <option value="tacticus">Tacticus (16)</option>
+              <option value="gravis">Gravis (18)</option>
+              <option value="terminator">Terminator (20)</option>
+              <option value="custom">Custom</option>
             </select>
           </div>
         </div>
@@ -729,6 +728,8 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
         <button class="sreq-fbtn" onclick="_sreqSetCat(this,'Terminator')">Terminator</button>
         <button class="sreq-fbtn" onclick="_sreqSetCat(this,'Relic')">Relic</button>
         <button class="sreq-fbtn" onclick="_sreqSetCat(this,'Equipment')">Equipment</button>
+        <button class="sreq-fbtn" onclick="_sreqSetCat(this,'Armor')">Armor</button>
+        <button class="sreq-fbtn" onclick="_sreqSetCat(this,'Ammo')">Ammo</button>
       </div>
     </div>
     <div class="sreq-grid" id="sreq-grid"></div>
@@ -886,16 +887,16 @@ function syncQuickActionsFromWargear() {
 
 /* ── Armor Class calculation ── */
 var _ARMOR_DEFAULTS = {
-  none:       {base:10, dex:'full'},
-  light:      {base:11, dex:'full'},
-  medium:     {base:13, dex:'max2'},
-  heavy:      {base:16, dex:'none'},
-  power:      {base:16, dex:'none'},
-  terminator: {base:18, dex:'none'}
+  phobos:     {base:12, dex:'full'},
+  tacticus:   {base:16, dex:'none'},
+  gravis:     {base:18, dex:'none'},
+  terminator: {base:20, dex:'none'},
+  custom:     {base:10, dex:'full'}
 };
 function onArmorTypeChange() {
-  var type = (document.getElementById('armor-type')||{}).value || 'none';
-  var def  = _ARMOR_DEFAULTS[type] || _ARMOR_DEFAULTS.none;
+  var type = (document.getElementById('armor-type')||{}).value || 'tacticus';
+  var def  = _ARMOR_DEFAULTS[type];
+  if (!def) { calcAC(); return; }
   var baseEl = document.getElementById('armor-base-ac');
   var dexEl  = document.getElementById('armor-dex-mod');
   if (baseEl) baseEl.value = def.base;
@@ -1259,7 +1260,11 @@ function _sreqFilter() {
   const q = document.getElementById('sreq-search').value.toLowerCase();
   const items = (typeof REQ_ITEMS !== 'undefined' ? REQ_ITEMS : []).filter(it => {
     if (_sreqCat !== 'all' && it.cat !== _sreqCat) return false;
-    if (q && !it.name.toLowerCase().includes(q) && !it.cat.toLowerCase().includes(q) && !it.wtype.toLowerCase().includes(q)) return false;
+    if (q) {
+      const wt = (it.wtype||'').toLowerCase();
+      const notes = (it.notes||'').toLowerCase();
+      if (!it.name.toLowerCase().includes(q) && !it.cat.toLowerCase().includes(q) && !wt.includes(q) && !notes.includes(q)) return false;
+    }
     return true;
   });
   _sreqRender(items);
@@ -1267,11 +1272,42 @@ function _sreqFilter() {
 function _sreqRender(items) {
   const grid = document.getElementById('sreq-grid');
   if (!items.length) { grid.innerHTML = '<div class="sreq-empty">No items found.</div>'; return; }
-  grid.innerHTML = items.map(it => `<div class="sreq-card"><div class="sreq-card-name">${it.name}</div><div class="sreq-card-stat">${it.cat} &bull; ${it.wtype}</div><div class="sreq-card-stat">${it.dmg}</div><div class="sreq-card-stat">Range: ${it.range}</div><div class="sreq-card-stat">Cost: ${it.cost}</div><button class="sreq-add" onclick="_sreqAdd('${it.id}')">+ Add to Wargear</button></div>`).join('');
+  grid.innerHTML = items.map(it => {
+    if (it.cat === 'Armor') {
+      return `<div class="sreq-card"><div class="sreq-card-name">${it.name}</div><div class="sreq-card-stat">AC: ${it.base_ac}${it.dex_mod === 'full' ? ' + DEX' : ''} &bull; Str: ${it.str_req}</div><div class="sreq-card-stat">${it.effects}</div><div class="sreq-card-stat">Cost: ${it.cost}</div><button class="sreq-add" onclick="_sreqAdd('${it.id}')">Equip Armor</button></div>`;
+    }
+    if (it.cat === 'Ammo') {
+      const c = it.caps;
+      return `<div class="sreq-card"><div class="sreq-card-name">${it.name}</div><div class="sreq-card-stat">Cost: ${it.cost}</div><div class="sreq-card-stat" style="font-size:8.5pt;">Phobos ${c.phobos} &bull; Tacticus ${c.tacticus} &bull; Gravis ${c.gravis} &bull; Terminator ${c.terminator}</div>${it.notes ? `<div class="sreq-card-stat" style="font-size:8pt;font-style:italic;">${it.notes}</div>` : ''}<button class="sreq-add" onclick="_sreqAdd('${it.id}')">+ Add to Ammo</button></div>`;
+    }
+    return `<div class="sreq-card"><div class="sreq-card-name">${it.name}</div><div class="sreq-card-stat">${it.cat} &bull; ${it.wtype}</div><div class="sreq-card-stat">${it.dmg}</div><div class="sreq-card-stat">Range: ${it.range}</div><div class="sreq-card-stat">Cost: ${it.cost}</div><button class="sreq-add" onclick="_sreqAdd('${it.id}')">+ Add to Wargear</button></div>`;
+  }).join('');
 }
 function _sreqAdd(id) {
   const it = (typeof REQ_ITEMS !== 'undefined' ? REQ_ITEMS : []).find(x => x.id === id);
   if (!it) return;
+  if (it.cat === 'Armor') {
+    const nameEl = document.getElementById('armor-name');
+    const typeEl = document.getElementById('armor-type');
+    if (nameEl) nameEl.value = it.name;
+    if (typeEl) { typeEl.value = it.armor_type; onArmorTypeChange(); }
+    _sreqClose(); _schedSave(); return;
+  }
+  if (it.cat === 'Ammo') {
+    const armorType = (document.getElementById('armor-type')||{}).value || 'tacticus';
+    const maxClips = (it.caps && it.caps[armorType] !== undefined) ? String(it.caps[armorType]) : '—';
+    for (const row of document.querySelectorAll('.wg-ammo-row')) {
+      const ins = row.querySelectorAll('input');
+      if (ins.length && !ins[0].value.trim()) {
+        ins[0].value = it.name;
+        if (ins[1]) ins[1].value = maxClips;
+        if (ins[2]) ins[2].value = maxClips;
+        [ins[0], ins[1], ins[2]].filter(Boolean).forEach(el => { el.dispatchEvent(new Event('input')); el.dispatchEvent(new Event('change')); });
+        break;
+      }
+    }
+    _sreqClose(); _schedSave(); return;
+  }
   const rows = document.querySelectorAll('.wg-equip-row');
   let added = false;
   let addedIdx = -1;
