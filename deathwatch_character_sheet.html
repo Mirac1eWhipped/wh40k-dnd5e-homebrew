@@ -272,7 +272,20 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
   <div class="sh-fields">
     <div class="sh-field wide"><label>Operative Name</label><input type="text" id="char-name" placeholder="Enter name…"></div>
     <div class="sh-field wide"><label>Class / Specialty</label><input type="text" id="char-class" placeholder="e.g. Tactical Operative"></div>
-    <div class="sh-field"><label>Chapter</label><input type="text" id="char-chapter" placeholder=""></div>
+    <div class="sh-field"><label>Chapter</label>
+      <select id="char-chapter" onchange="renderLineageTraits()">
+        <option value="">— Select Chapter —</option>
+        <option value="Dark Angels">Dark Angels</option>
+        <option value="Space Wolves">Space Wolves</option>
+        <option value="Salamanders">Salamanders</option>
+        <option value="Ultramarines">Ultramarines</option>
+        <option value="Blood Angels">Blood Angels</option>
+        <option value="Raven Guard">Raven Guard</option>
+        <option value="White Scars">White Scars</option>
+        <option value="Iron Hands">Iron Hands</option>
+        <option value="Imperial Fists">Imperial Fists</option>
+      </select>
+    </div>
     <div class="sh-field"><label>Campaign</label><input type="text" id="char-campaign" placeholder="Kill Team: Jericho"></div>
     <div class="sh-field"><label>Player</label><input type="text" id="char-player" placeholder=""></div>
   </div>
@@ -618,6 +631,11 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
         <option value="">— Select Subclass —</option>
       </select>
     </div>
+  </div>
+
+  <div id="lineage-section" style="display:none;margin-bottom:16px;">
+    <div class="sec-title" style="margin-bottom:8px;">Lineage — Adeptus Astartes</div>
+    <div id="lineage-traits-list" class="feat-list"></div>
   </div>
 
   <div id="features-list" class="feat-list">
@@ -1082,6 +1100,7 @@ async function _loadSheet() {
     if (featLvl && ext.feat_lvl) featLvl.value = ext.feat_lvl;
     updateSubclassOpts();
     if (subSel && ext.sub) { subSel.value = ext.sub; renderFeatures(); }
+    renderLineageTraits();
     STATS.forEach(s => calcMod(s));
     _status('loaded', 'Sheet loaded — ' + _uemail());
   } catch(e) { _status('error', e.message || 'Load failed'); console.error('Load error:', e); }
@@ -1290,6 +1309,7 @@ async function _loadSheetForUser(uid) {
     if (featLvl && ext.feat_lvl) featLvl.value = ext.feat_lvl;
     updateSubclassOpts();
     if (subSel && ext.sub) { subSel.value = ext.sub; renderFeatures(); }
+    renderLineageTraits();
     STATS.forEach(function(s){ calcMod(s); });
     _status('loaded', 'Viewing ' + (rows[0].name || 'player') + '\'s sheet');
   } catch(e) { _status('error','Could not load player sheet'); }
@@ -1309,6 +1329,88 @@ function copyMyUid() {
     var btn = document.getElementById('copy-uid-btn');
     if(btn){ btn.textContent='Copied!'; setTimeout(function(){ btn.textContent='Copy UID'; },2000); }
   });
+}
+
+/* ══════════════════════════════════════════════════════
+   LINEAGE — ADEPTUS ASTARTES TRAITS & CHAPTER HERITAGE
+══════════════════════════════════════════════════════ */
+const ASTARTES_TRAITS = [
+  { badge:'Astartes', name:'Ability Score Increase',   body:'Your Strength and Constitution scores each increase by 1. One ability score of your choice — Wisdom or Intelligence — also increases by 1.' },
+  { badge:'Astartes', name:'Size',                     body:'You stand between 7 and 8 feet tall and weigh between 700 and 1,000 lbs in full armour. Your size is Medium, but you count as Large for carrying capacity, pushing, dragging, lifting, and grappling.' },
+  { badge:'Astartes', name:'Speed',                    body:'Your base walking speed is 35 feet.' },
+  { badge:'Astartes', name:'Occulobe',                 body:'<strong>Darkvision.</strong> You can see in dim light within 60 ft as if it were bright light, and in darkness as if it were dim light. You cannot discern colour in darkness, only shades of grey.' },
+  { badge:'Astartes', name:'Astartes Resilience',      body:'You have advantage on saving throws against disease and being poisoned, and resistance to poison damage. You can survive in a vacuum or airless environment for up to 10 minutes before suffering its effects.' },
+  { badge:'Astartes', name:'Transhuman Physiology',    body:'You recover from exhaustion twice as fast as normal creatures. A long rest requires only 4 hours (Catalepsean node trance) rather than 8, granting the same benefits. You require no food or water to survive, and you can breathe in toxic atmospheres and underwater without harm.' },
+  { badge:'Astartes', name:'Angels of Death',          body:'You gain proficiency in the Intimidation skill.' },
+  { badge:'Astartes', name:'Astartes Training',        body:'You are proficient with all armour (light, medium, and heavy), shields, and all weapons (simple and martial).' },
+  { badge:'Astartes', name:'Languages',                body:'You can speak, read, and write Low Gothic and Techna-Lingua.' }
+];
+
+const CHAPTER_HERITAGE = {
+  'Dark Angels': [
+    { badge:'Heritage', name:'Grim Resolve',                    body:'Advantage on saving throws against fear and charm effects. You gain proficiency with the Deception and Insight skills. If you already possess those proficiencies, you gain expertise.' },
+    { badge:'Heritage', name:'Hunt the Fallen',                 body:'Once per resupply, you mark a target in combat. You deal an additional 1d8 damage on attacks made to that creature until it dies.' },
+    { badge:'Heritage', name:'Abhor the Heretic, Purge the Xenos', body:'You gain advantage on Perception and Survival checks made to find heretical creatures. You gain advantage on the first attack you make against a Chaos-tainted creature per combat. This effect can trigger on each heretical creature once.' }
+  ],
+  'Space Wolves': [
+    { badge:'Heritage', name:'Feral Instincts', body:'You gain a climbing speed equal to your movement speed. You gain proficiency in Survival and Perception and have advantage on initiative rolls. If you already possess those proficiencies, you gain expertise.' },
+    { badge:'Heritage', name:'Nordic Rage',     body:'Once you drop below half your HP total, you enter a frenzied rage.<br><br><strong>Effects:</strong><ul><li>Advantage on Strength checks and Strength saving throws.</li><li>+3 bonus to damage rolls on melee attacks using Strength.</li></ul>This lasts without consequence for 1 minute. Each turn after that the rage persists, you gain 1 exhaustion. At 5 exhaustion you go feral, attacking any creature in range until stopped or incapacitated.' }
+  ],
+  'Salamanders': [
+    { badge:'Heritage', name:'Forge Born',       body:'You gain proficiency with Smith\'s tools and resistance to Fire damage. You can craft light bolter ammo, standard bolter ammo, and fuel canisters while deployed on missions (if necessary resources are available).' },
+    { badge:'Heritage', name:'Shield of Vulkan', body:'When an ally within 10 ft is hit by an attack, you can use your reaction to impose disadvantage on the roll. This can be used a number of times equal to your proficiency modifier and resets on a resupply.' }
+  ],
+  'Ultramarines': [
+    { badge:'Heritage', name:'Commanding Voice', body:'You can use the Help action as a Bonus Action to grant a single ally advantage on their next attack once per turn.' },
+    { badge:'Heritage', name:'Son of Guilliman', body:'You gain proficiency with the Persuasion skill. If you already possess this proficiency, you gain expertise.' },
+    { badge:'Heritage', name:'March for Macragge', body:'Once per resupply, you supply all allies with a 1d6 Inspiration die that can be used on any roll until the next resupply.' }
+  ],
+  'Blood Angels': [
+    { badge:'Heritage', name:'The Red Thirst', body:'If you have less than half your HP total, you may use your action to perform a bite attack. On a hit, roll 1d8 + STR. You heal for the damage dealt. Can be used a number of times equal to your proficiency modifier; resets on a resupply.' },
+    { badge:'Heritage', name:'The Black Rage', body:'Once per resupply, when reduced to 0 HP, you stay conscious and regain 1 HP. If you defeat an enemy in the following round, you regain 1d8 HP.' }
+  ],
+  'Raven Guard': [
+    { badge:'Heritage', name:'Shadow Masters',    body:'You gain proficiency with the Stealth skill. If you gain this proficiency from another source, you gain expertise instead. You have advantage on Stealth checks when in dim light or darkness.' },
+    { badge:'Heritage', name:'Guerilla Warfare',  body:'You gain a climbing speed equal to your movement speed. If you attack an opponent during a surprise round, you deal an additional 1d8 damage on all attacks.' }
+  ],
+  'White Scars': [
+    { badge:'Heritage', name:'Lightning Strike',      body:'You gain an additional 5 ft of movement and ignore difficult terrain. After successfully making a melee attack, you can move 10 ft without provoking opportunity attacks.' },
+    { badge:'Heritage', name:'Warrior of Chogoris',   body:'You gain proficiency with Vehicles (Land and Air).' },
+    { badge:'Heritage', name:'Tribal Inheritance',    body:'You may treat any melee weapon as though it has the Finesse trait, provided it does not require two hands and is not locked in.' }
+  ],
+  'Iron Hands': [
+    { badge:'Heritage', name:'The Flesh is Weak',       body:'While wearing Gravis or Terminator armour, bludgeoning, piercing, and slashing damage you take from nonmagical attacks is reduced by 2.' },
+    { badge:'Heritage', name:'Mechadendrite Interface', body:'You gain proficiency with servo-arms and mechadendrite arms. You gain a retractable mechadendrite arm that can manipulate tools. You have advantage on skill checks involving tools you are proficient with.' }
+  ],
+  'Imperial Fists': [
+    { badge:'Heritage', name:'Phalanx',            body:'If a creature within 10 ft of you takes damage, you can use your reaction to move 10 ft and take the attack instead. Roll 1d6 and reduce the damage by that amount. Can be used a number of times equal to your proficiency modifier; resets on a resupply.' },
+    { badge:'Heritage', name:'Defend the Imperium', body:'You gain +1 AC if you have not moved on your turn (excluding Terminator Armour). You cannot be forcibly moved by any effect that moves you less than 10 ft. The Phalanx reaction movement does not affect this ability.' }
+  ]
+};
+
+function renderLineageTraits() {
+  const chEl    = document.getElementById('char-chapter');
+  const section = document.getElementById('lineage-section');
+  const listEl  = document.getElementById('lineage-traits-list');
+  if (!chEl || !section || !listEl) return;
+
+  const chapter = chEl.value;
+  if (!chapter) { section.style.display = 'none'; return; }
+
+  section.style.display = '';
+  const heritage = CHAPTER_HERITAGE[chapter] || [];
+  const all = ASTARTES_TRAITS.concat(heritage);
+
+  listEl.innerHTML = all.map(function(t) {
+    var badgeColor = t.badge === 'Heritage' ? 'var(--gold)' : 'var(--silver-dim)';
+    return '<div class="feat-card">' +
+      '<div class="feat-card-hdr">' +
+        '<span class="feat-card-lvl" style="color:' + badgeColor + ';border-color:' + badgeColor + '">' + t.badge + '</span>' +
+        '<span class="feat-card-name">' + t.name + '</span>' +
+      '</div>' +
+      '<div class="feat-card-body">' + t.body + '</div>' +
+    '</div>';
+  }).join('');
 }
 </script>
 </body>
