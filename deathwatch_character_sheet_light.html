@@ -163,10 +163,13 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .atk-table td select:focus{border-bottom-color:var(--gold)!important;}
 
 /* ── WARGEAR TAB ── */
-.wg-equip-row{display:grid;grid-template-columns:3fr 1fr 2fr;gap:6px;align-items:center;padding:3px 4px;border-bottom:1px solid var(--border);}
-.wg-equip-row:nth-child(even){background:rgba(13,16,24,.4);}
+.wg-equip-row{display:grid;grid-template-columns:22px 3fr 1fr 2fr;gap:6px;align-items:center;padding:3px 4px;border-bottom:1px solid var(--border);}
+.wg-equip-row:nth-child(even){background:rgba(240,235,220,.4);}
 .wg-equip-row input{font-size:12pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:2px 0!important;background:transparent!important;color:var(--text)!important;outline:none!important;width:100%!important;}
 .wg-equip-row input:focus{border-bottom-color:var(--gold)!important;}
+.wg-equip-btn{width:20px;height:20px;padding:0;background:transparent;border:1px solid var(--border2);border-radius:3px;color:var(--text-dim);font-size:11px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.wg-equip-btn:hover{border-color:var(--gold-dim);color:var(--gold-dim);}
+.wg-equip-btn.equipped{border-color:var(--gold);color:var(--gold);background:rgba(180,140,60,.15);}
 .wg-ammo-row{display:grid;grid-template-columns:2fr 1fr 1fr;gap:6px;align-items:center;padding:3px 4px;border-bottom:1px solid var(--border);}
 .wg-ammo-row input{font-size:12pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:2px 0!important;background:transparent!important;color:var(--text)!important;outline:none!important;width:100%!important;}
 .wg-ammo-row input:focus{border-bottom-color:var(--gold)!important;}
@@ -394,70 +397,37 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 <div class="dos-row"><input type="checkbox" id="skill-technology-prof" onchange="onProfChange('technology')"><input type="checkbox" class="exp-chk" id="skill-technology-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Technology</span><div class="dos-bonus"><input type="text" id="skill-technology" placeholder="+0"></div></div>
       </div>
     </div>
-    <!-- RIGHT: Quick Attacks · Conditions · Notes -->
+    <!-- RIGHT: Hit Dice · Death Saves · Conditions · Quick Actions -->
     <div>
       <div class="section">
-        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Quick Actions</span></div>
-        <table class="dos-atk-table">
-          <thead><tr><th>Weapon</th><th>Hit</th><th>Dmg</th><th>Type / Notes</th></tr></thead>
-          <tbody id="quick-actions-tbody"><tr><td colspan="4" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">Add weapons in Attacks &amp; Actions below</td></tr></tbody>
-        </table>
+        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Hit Dice</span></div>
+        <div class="field-group" style="margin-bottom:4px;"><label>Type</label><input type="text" id="hd-type" placeholder="d8"></div>
+        <div class="g2">
+          <div class="field-group"><label>Total</label><input type="number" id="hd-total" placeholder="1"></div>
+          <div class="field-group"><label>Used</label><input type="number" id="hd-used" placeholder="0"></div>
+        </div>
+      </div>
+      <div class="section" style="margin-top:8px;">
+        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Death Saving Throws</span></div>
+        <div class="death-row"><span class="death-lbl">Successes</span>
+          <input type="checkbox" id="death-s1"><input type="checkbox" id="death-s2"><input type="checkbox" id="death-s3">
+        </div>
+        <div class="death-row"><span class="death-lbl">Failures</span>
+          <input type="checkbox" id="death-f1"><input type="checkbox" id="death-f2"><input type="checkbox" id="death-f3">
+        </div>
       </div>
       <div class="section" style="margin-top:8px;">
         <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Conditions &amp; Status</span></div>
         <textarea class="dos-textarea" rows="3" placeholder="Poisoned, Stunned, Burning, Pinned…"></textarea>
       </div>
       <div class="section" style="margin-top:8px;">
-        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Session Notes</span></div>
-        <textarea class="dos-textarea" rows="7" placeholder="Reminders, squad orders, mission objectives…"></textarea>
+        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Quick Actions</span></div>
+        <table class="dos-atk-table">
+          <thead><tr><th>Weapon</th><th>Hit</th><th>Dmg</th><th>Type</th></tr></thead>
+          <tbody id="quick-actions-tbody"><tr><td colspan="4" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">Equip weapons in the Wargear tab</td></tr></tbody>
+        </table>
       </div>
     </div>
-  </div>
-  <!-- ── Hit Dice & Death Saving Throws ── -->
-  <div class="g2" style="margin-top:10px;">
-    <div class="section">
-      <div class="sec-title">Hit Dice</div>
-      <div class="field-group" style="margin-bottom:6px;"><label>Type</label><input type="text" id="hd-type" placeholder="d8"></div>
-      <div class="g2">
-        <div class="field-group"><label>Total</label><input type="number" id="hd-total" placeholder="1"></div>
-        <div class="field-group"><label>Used</label><input type="number" id="hd-used" placeholder="0"></div>
-      </div>
-    </div>
-    <div class="section">
-      <div class="sec-title">Death Saving Throws</div>
-      <div class="death-row"><span class="death-lbl">Successes</span>
-        <input type="checkbox" id="death-s1"><input type="checkbox" id="death-s2"><input type="checkbox" id="death-s3">
-      </div>
-      <div class="death-row"><span class="death-lbl">Failures</span>
-        <input type="checkbox" id="death-f1"><input type="checkbox" id="death-f2"><input type="checkbox" id="death-f3">
-      </div>
-    </div>
-  </div>
-  <!-- ── Attacks & Actions ── -->
-  <div class="section" style="margin-top:10px;overflow-x:auto;">
-    <div class="sec-title">Attacks &amp; Actions</div>
-    <table class="atk-table">
-      <thead><tr>
-        <th style="min-width:130px;">Weapon / Attack</th>
-        <th>Stat</th>
-        <th title="Proficient?">Prof</th>
-        <th>Atk Bonus</th>
-        <th>Damage</th>
-        <th>Type</th>
-        <th>Range</th>
-        <th>Notes</th>
-      </tr></thead>
-      <tbody>
-<tr><td><input type="text" id="wpn-name-0" placeholder="Weapon name…" oninput="syncQuickActions()"></td><td><select id="wpn-stat-0" onchange="recalcWeapons()"><option value="str">STR</option><option value="dex">DEX</option><option value="con">CON</option><option value="int">INT</option><option value="wis">WIS</option><option value="cha">CHA</option></select></td><td style="text-align:center;"><input type="checkbox" id="wpn-prof-0" style="width:auto!important;" title="Proficient" onchange="recalcWeapons()"></td><td><input type="text" id="wpn-hit-0" readonly placeholder="+0" style="width:50px;text-align:center;"></td><td><input type="text" id="wpn-dmg-0" placeholder="1d8" style="width:65px;" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-type-0" placeholder="Type" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-range-0" placeholder="Range" style="width:65px;"></td><td><input type="text" id="wpn-notes-0" placeholder="Notes…"></td></tr>
-<tr><td><input type="text" id="wpn-name-1" placeholder="Weapon name…" oninput="syncQuickActions()"></td><td><select id="wpn-stat-1" onchange="recalcWeapons()"><option value="str">STR</option><option value="dex">DEX</option><option value="con">CON</option><option value="int">INT</option><option value="wis">WIS</option><option value="cha">CHA</option></select></td><td style="text-align:center;"><input type="checkbox" id="wpn-prof-1" style="width:auto!important;" title="Proficient" onchange="recalcWeapons()"></td><td><input type="text" id="wpn-hit-1" readonly placeholder="+0" style="width:50px;text-align:center;"></td><td><input type="text" id="wpn-dmg-1" placeholder="1d8" style="width:65px;" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-type-1" placeholder="Type" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-range-1" placeholder="Range" style="width:65px;"></td><td><input type="text" id="wpn-notes-1" placeholder="Notes…"></td></tr>
-<tr><td><input type="text" id="wpn-name-2" placeholder="Weapon name…" oninput="syncQuickActions()"></td><td><select id="wpn-stat-2" onchange="recalcWeapons()"><option value="str">STR</option><option value="dex">DEX</option><option value="con">CON</option><option value="int">INT</option><option value="wis">WIS</option><option value="cha">CHA</option></select></td><td style="text-align:center;"><input type="checkbox" id="wpn-prof-2" style="width:auto!important;" title="Proficient" onchange="recalcWeapons()"></td><td><input type="text" id="wpn-hit-2" readonly placeholder="+0" style="width:50px;text-align:center;"></td><td><input type="text" id="wpn-dmg-2" placeholder="1d8" style="width:65px;" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-type-2" placeholder="Type" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-range-2" placeholder="Range" style="width:65px;"></td><td><input type="text" id="wpn-notes-2" placeholder="Notes…"></td></tr>
-<tr><td><input type="text" id="wpn-name-3" placeholder="Weapon name…" oninput="syncQuickActions()"></td><td><select id="wpn-stat-3" onchange="recalcWeapons()"><option value="str">STR</option><option value="dex">DEX</option><option value="con">CON</option><option value="int">INT</option><option value="wis">WIS</option><option value="cha">CHA</option></select></td><td style="text-align:center;"><input type="checkbox" id="wpn-prof-3" style="width:auto!important;" title="Proficient" onchange="recalcWeapons()"></td><td><input type="text" id="wpn-hit-3" readonly placeholder="+0" style="width:50px;text-align:center;"></td><td><input type="text" id="wpn-dmg-3" placeholder="1d8" style="width:65px;" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-type-3" placeholder="Type" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-range-3" placeholder="Range" style="width:65px;"></td><td><input type="text" id="wpn-notes-3" placeholder="Notes…"></td></tr>
-<tr><td><input type="text" id="wpn-name-4" placeholder="Weapon name…" oninput="syncQuickActions()"></td><td><select id="wpn-stat-4" onchange="recalcWeapons()"><option value="str">STR</option><option value="dex">DEX</option><option value="con">CON</option><option value="int">INT</option><option value="wis">WIS</option><option value="cha">CHA</option></select></td><td style="text-align:center;"><input type="checkbox" id="wpn-prof-4" style="width:auto!important;" title="Proficient" onchange="recalcWeapons()"></td><td><input type="text" id="wpn-hit-4" readonly placeholder="+0" style="width:50px;text-align:center;"></td><td><input type="text" id="wpn-dmg-4" placeholder="1d8" style="width:65px;" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-type-4" placeholder="Type" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-range-4" placeholder="Range" style="width:65px;"></td><td><input type="text" id="wpn-notes-4" placeholder="Notes…"></td></tr>
-<tr><td><input type="text" id="wpn-name-5" placeholder="Weapon name…" oninput="syncQuickActions()"></td><td><select id="wpn-stat-5" onchange="recalcWeapons()"><option value="str">STR</option><option value="dex">DEX</option><option value="con">CON</option><option value="int">INT</option><option value="wis">WIS</option><option value="cha">CHA</option></select></td><td style="text-align:center;"><input type="checkbox" id="wpn-prof-5" style="width:auto!important;" title="Proficient" onchange="recalcWeapons()"></td><td><input type="text" id="wpn-hit-5" readonly placeholder="+0" style="width:50px;text-align:center;"></td><td><input type="text" id="wpn-dmg-5" placeholder="1d8" style="width:65px;" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-type-5" placeholder="Type" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-range-5" placeholder="Range" style="width:65px;"></td><td><input type="text" id="wpn-notes-5" placeholder="Notes…"></td></tr>
-<tr><td><input type="text" id="wpn-name-6" placeholder="Weapon name…" oninput="syncQuickActions()"></td><td><select id="wpn-stat-6" onchange="recalcWeapons()"><option value="str">STR</option><option value="dex">DEX</option><option value="con">CON</option><option value="int">INT</option><option value="wis">WIS</option><option value="cha">CHA</option></select></td><td style="text-align:center;"><input type="checkbox" id="wpn-prof-6" style="width:auto!important;" title="Proficient" onchange="recalcWeapons()"></td><td><input type="text" id="wpn-hit-6" readonly placeholder="+0" style="width:50px;text-align:center;"></td><td><input type="text" id="wpn-dmg-6" placeholder="1d8" style="width:65px;" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-type-6" placeholder="Type" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-range-6" placeholder="Range" style="width:65px;"></td><td><input type="text" id="wpn-notes-6" placeholder="Notes…"></td></tr>
-<tr><td><input type="text" id="wpn-name-7" placeholder="Weapon name…" oninput="syncQuickActions()"></td><td><select id="wpn-stat-7" onchange="recalcWeapons()"><option value="str">STR</option><option value="dex">DEX</option><option value="con">CON</option><option value="int">INT</option><option value="wis">WIS</option><option value="cha">CHA</option></select></td><td style="text-align:center;"><input type="checkbox" id="wpn-prof-7" style="width:auto!important;" title="Proficient" onchange="recalcWeapons()"></td><td><input type="text" id="wpn-hit-7" readonly placeholder="+0" style="width:50px;text-align:center;"></td><td><input type="text" id="wpn-dmg-7" placeholder="1d8" style="width:65px;" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-type-7" placeholder="Type" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-range-7" placeholder="Range" style="width:65px;"></td><td><input type="text" id="wpn-notes-7" placeholder="Notes…"></td></tr>
-      </tbody>
-    </table>
   </div>
   <!-- ── Actions / Bonus Actions / Reactions ── -->
   <div class="g3" style="margin-top:10px;">
@@ -494,25 +464,26 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
   <div class="g2">
     <div class="section">
       <div class="sec-title" style="display:flex;align-items:center;">Equipment &amp; Wargear<button class="sreq-open-btn" onclick="_sreqOpen()">+ Requisitorium</button></div>
-      <div style="display:grid;grid-template-columns:3fr 1fr 2fr;gap:4px;padding:3px 4px;border-bottom:1px solid var(--gold-dim);">
+      <div style="display:grid;grid-template-columns:22px 3fr 1fr 2fr;gap:4px;padding:3px 4px;border-bottom:1px solid var(--gold-dim);">
+        <span></span>
         <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Item</span>
         <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Qty</span>
         <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Notes</span>
       </div>
-      <div class="wg-equip-row"><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(0)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(1)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(2)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(3)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(4)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(5)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(6)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(7)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(8)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(9)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(10)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(11)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(12)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(13)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
 
     </div>
     <div>
@@ -798,7 +769,7 @@ function _recalcDerived() {
     if (dcEl)  dcEl.value  = String(8 + pb + spMod);
     if (atkEl) atkEl.value = fmt(pb + spMod);
   }
-  recalcWeapons();
+  syncQuickActionsFromWargear();
 }
 
 function calcMod(s) {
@@ -817,46 +788,53 @@ function onLevelChange() {
   updateSubclassOpts();
 }
 
-/* ── Weapon hit bonus auto-calc ── */
-var WPN_COUNT = 8;
-function recalcWeapons() {
+/* ── Wargear equip / Quick Actions system ── */
+var _wargearMeta = [];
+
+function _wpnStatFromCat(cat) {
+  return (cat === 'Primary Ranged' || cat === 'Secondary Ranged') ? 'dex' : 'str';
+}
+
+function _toggleEquip(idx) {
+  var btn = document.querySelectorAll('.wg-equip-btn')[idx];
+  if (!btn) return;
+  if (!_wargearMeta[idx]) _wargearMeta[idx] = {equipped:false};
+  _wargearMeta[idx].equipped = !_wargearMeta[idx].equipped;
+  btn.classList.toggle('equipped', _wargearMeta[idx].equipped);
+  syncQuickActionsFromWargear();
+  _schedSave();
+}
+
+function syncQuickActionsFromWargear() {
+  var tbody = document.getElementById('quick-actions-tbody');
+  if (!tbody) return;
   var lvl = parseInt((document.getElementById('char-level')||{}).value) || 1;
   var pb  = Math.ceil(lvl / 4) + 1;
-  function _wmod(s) {
+  function _mod(s) {
     var sc = parseInt((document.getElementById(s+'-score')||{}).value);
     return isNaN(sc) ? 0 : Math.floor((sc - 10) / 2);
   }
-  function wfmt(n) { return n >= 0 ? '+'+n : String(n); }
-  for (var i = 0; i < WPN_COUNT; i++) {
-    var statEl = document.getElementById('wpn-stat-'+i);
-    var profEl = document.getElementById('wpn-prof-'+i);
-    var hitEl  = document.getElementById('wpn-hit-'+i);
-    if (!hitEl) continue;
-    var stat  = statEl ? statEl.value : 'str';
-    var bonus = profEl && profEl.checked ? pb : 0;
-    hitEl.value = wfmt(_wmod(stat) + bonus);
-  }
-  syncQuickActions();
-}
-
-/* ── Quick Actions mirror ── */
-function syncQuickActions() {
-  var tbody = document.getElementById('quick-actions-tbody');
-  if (!tbody) return;
+  function fmt(n) { return n >= 0 ? '+'+n : String(n); }
   var rows = '';
-  for (var i = 0; i < WPN_COUNT; i++) {
-    var nameEl = document.getElementById('wpn-name-'+i);
-    if (!nameEl || !nameEl.value.trim()) continue;
-    var hitEl  = document.getElementById('wpn-hit-'+i);
-    var dmgEl  = document.getElementById('wpn-dmg-'+i);
-    var typeEl = document.getElementById('wpn-type-'+i);
-    var name = nameEl.value;
-    var hit  = hitEl  ? (hitEl.value  || '—') : '—';
-    var dmg  = dmgEl  ? (dmgEl.value  || '—') : '—';
-    var type = typeEl ? (typeEl.value || '')   : '';
-    rows += '<tr><td>'+name+'</td><td style="text-align:center;">'+hit+'</td><td style="text-align:center;">'+dmg+'</td><td>'+type+'</td></tr>';
+  var wgRows = document.querySelectorAll('.wg-equip-row');
+  for (var i = 0; i < wgRows.length; i++) {
+    var meta = _wargearMeta[i];
+    if (!meta || !meta.equipped || !meta.is_weapon) continue;
+    var ins  = wgRows[i].querySelectorAll('input');
+    var name = ins[0] ? ins[0].value.trim() : '';
+    if (!name) continue;
+    var stat = meta.stat || 'str';
+    var hit  = fmt(_mod(stat) + pb);
+    var dmg  = meta.dmg  || '—';
+    var wtype = meta.wtype || '';
+    rows += '<tr>'
+      + '<td>'+name+'</td>'
+      + '<td style="text-align:center;color:var(--gold);">'+hit+'</td>'
+      + '<td style="text-align:center;">'+dmg+'</td>'
+      + '<td>'+wtype+'</td>'
+      + '</tr>';
   }
-  if (!rows) rows = '<tr><td colspan="4" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">Add weapons in Attacks &amp; Actions below</td></tr>';
+  if (!rows) rows = '<tr><td colspan="4" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">Equip weapons in the Wargear tab</td></tr>';
   tbody.innerHTML = rows;
 }
 
@@ -1046,7 +1024,8 @@ async function _doSave() {
     expertise: _SKILLS.filter(function(sk) {
       var e = document.getElementById('skill-'+sk.id+'-exp');
       return e && e.checked;
-    }).map(function(sk) { return sk.id; })
+    }).map(function(sk) { return sk.id; }),
+    wargear_meta: _wargearMeta
   };
   const name = _charName();
   try {
@@ -1104,8 +1083,15 @@ async function _loadSheet() {
         if (exp) exp.checked = true;
       });
     }
+    if (ext.wargear_meta && Array.isArray(ext.wargear_meta)) {
+      _wargearMeta = ext.wargear_meta;
+      const wgBtns = document.querySelectorAll('.wg-equip-btn');
+      _wargearMeta.forEach(function(meta, i) {
+        if (meta && meta.equipped && wgBtns[i]) wgBtns[i].classList.add('equipped');
+      });
+    }
     STATS.forEach(s => calcMod(s));
-    recalcWeapons();
+    syncQuickActionsFromWargear();
     _status('loaded', 'Sheet loaded — ' + _uemail());
   } catch(e) { _status('error', e.message || 'Load failed'); console.error('Load error:', e); }
 }
@@ -1200,7 +1186,9 @@ function _sreqAdd(id) {
   if (!it) return;
   const rows = document.querySelectorAll('.wg-equip-row');
   let added = false;
-  for (const row of rows) {
+  let addedIdx = -1;
+  for (let ri = 0; ri < rows.length; ri++) {
+    const row = rows[ri];
     const ins = row.querySelectorAll('input');
     if (ins.length && !ins[0].value.trim()) {
       ins[0].value = it.name;
@@ -1210,6 +1198,14 @@ function _sreqAdd(id) {
         ins[2].value = parts.join(' · ');
       }
       [ins[0], ins[1], ins[2]].filter(Boolean).forEach(el => { el.dispatchEvent(new Event('input')); el.dispatchEvent(new Event('change')); });
+      const isWeapon = it.cat !== 'Equipment';
+      _wargearMeta[ri] = {
+        id: it.id, is_weapon: isWeapon,
+        stat: _wpnStatFromCat(it.cat),
+        dmg: it.dmg, wtype: it.wtype, range: it.range,
+        equipped: false
+      };
+      addedIdx = ri;
       added = true;
       break;
     }
