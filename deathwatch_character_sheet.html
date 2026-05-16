@@ -161,6 +161,17 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .atk-table td input[readonly]{color:var(--gold-light)!important;cursor:default!important;}
 .atk-table td select{font-size:10pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:2px 0!important;background:var(--panel)!important;color:var(--text)!important;outline:none!important;width:100%!important;}
 .atk-table td select:focus{border-bottom-color:var(--gold)!important;}
+/* ── ARMOR BLOCK ── */
+.ac-block{display:flex;align-items:center;gap:14px;background:var(--panel2);border:1px solid var(--gold-dim);padding:10px 14px;margin:8px 0;}
+.ac-shield{text-align:center;flex-shrink:0;}
+.ac-shield-num{font-family:var(--font-label);font-size:40pt;font-weight:700;color:var(--text);line-height:1;display:block;}
+.ac-shield-lbl{font-family:var(--font-label);font-size:9pt;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);}
+.ac-formula{font-family:var(--font-label);font-size:9pt;color:var(--text-dim);margin-top:4px;}
+.ac-formula span{color:var(--gold-light);}
+.armor-row{display:grid;gap:6px;align-items:end;margin-top:8px;}
+.armor-row.r4{grid-template-columns:1fr 1fr 70px auto;}
+.field-group select{font-family:var(--font-body);font-size:10pt;background:transparent;border:none;border-bottom:1px solid var(--line);color:var(--text);outline:none;padding:2px 0;width:100%;}
+.field-group select:focus{border-bottom-color:var(--gold);}
 
 /* ── WARGEAR TAB ── */
 .wg-equip-row{display:grid;grid-template-columns:22px 3fr 1fr 2fr;gap:6px;align-items:center;padding:3px 4px;border-bottom:1px solid var(--border);}
@@ -330,7 +341,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
   </div>
   <!-- Combat Quick-Stats -->
   <div class="dos-stat-bar">
-    <div class="dos-stat"><input type="text" id="stat-ac" placeholder="15"><span class="dos-stat-lbl">Armor Class</span></div>
+    <div class="dos-stat"><input type="text" id="stat-ac" placeholder="10" readonly><span class="dos-stat-lbl">Armor Class</span></div>
     <div class="dos-stat"><input type="text" id="stat-initiative" placeholder="+2"><span class="dos-stat-lbl">Initiative</span></div>
     <div class="dos-stat"><input type="text" id="stat-speed" placeholder="30 ft"><span class="dos-stat-lbl">Speed</span></div>
     <div class="dos-stat"><input type="text" id="stat-prof" placeholder="+2"><span class="dos-stat-lbl">Prof Bonus</span></div>
@@ -442,13 +453,47 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
     <div class="section">
       <div class="sec-title">Armor &amp; Protection</div>
       <div style="display:flex;flex-direction:column;gap:7px;">
-        <div class="field-group"><label>Armor Name</label><input type="text" placeholder="e.g. Phobos Armor, Tacticus Armor…"></div>
-        <div class="g3">
-          <div class="field-group"><label>Base AC</label><input type="number" placeholder="14"></div>
-          <div class="field-group"><label>Total AC</label><input type="number" placeholder="15"></div>
-          <div class="field-group"><label>Str Req.</label><input type="text" placeholder="—"></div>
+        <div class="armor-row" style="grid-template-columns:1fr 1fr;">
+          <div class="field-group"><label>Armor Name</label><input type="text" id="armor-name" placeholder="e.g. Tacticus, Phobos…"></div>
+          <div class="field-group"><label>Armor Type</label>
+            <select id="armor-type" onchange="onArmorTypeChange()">
+              <option value="none">No Armor (base 10)</option>
+              <option value="light">Light (base 11)</option>
+              <option value="medium">Medium (base 13)</option>
+              <option value="heavy">Heavy (base 16)</option>
+              <option value="power">Power Armor (base 16)</option>
+              <option value="terminator">Terminator (base 18)</option>
+            </select>
+          </div>
         </div>
-        <div class="field-group"><label>Special Properties</label><input type="text" placeholder="e.g. Stealth disadvantage, Power field…"></div>
+        <div class="ac-block">
+          <div class="ac-shield">
+            <span class="ac-shield-num" id="ac-display-val">10</span>
+            <span class="ac-shield-lbl">Armor Class</span>
+          </div>
+          <div style="flex:1;">
+            <div class="ac-formula" id="ac-formula-txt">Base <span id="acf-base">10</span> + DEX <span id="acf-dex">+0</span> + Other <span id="acf-other">+0</span></div>
+            <div class="armor-row r4" style="margin-top:6px;">
+              <div class="field-group"><label>Base AC</label><input type="number" id="armor-base-ac" placeholder="10" oninput="calcAC()"></div>
+              <div class="field-group"><label>DEX Bonus</label>
+                <select id="armor-dex-mod" onchange="calcAC()">
+                  <option value="full">Full DEX</option>
+                  <option value="max2">Max +2</option>
+                  <option value="none">None</option>
+                </select>
+              </div>
+              <div class="field-group"><label>Other</label><input type="number" id="armor-bonus" placeholder="0" oninput="calcAC()"></div>
+              <div class="field-group" style="align-items:center;display:flex;flex-direction:column;gap:2px;">
+                <label style="white-space:nowrap;">Shield +2</label>
+                <input type="checkbox" id="armor-shield" onchange="calcAC()" style="width:16px;height:16px;margin-top:2px;">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="armor-row" style="grid-template-columns:1fr 80px;">
+          <div class="field-group"><label>Special Properties</label><input type="text" id="armor-special" placeholder="e.g. Stealth disadvantage, Power field…"></div>
+          <div class="field-group"><label>Str Req.</label><input type="text" id="armor-str-req" placeholder="—"></div>
+        </div>
       </div>
     </div>
     <div class="section">
@@ -771,6 +816,7 @@ function _recalcDerived() {
     if (atkEl) atkEl.value = fmt(pb + spMod);
   }
   syncQuickActionsFromWargear();
+  calcAC();
 }
 function calcMod(s) {
   const score = parseInt(document.getElementById(s+'-score').value);
@@ -836,6 +882,47 @@ function syncQuickActionsFromWargear() {
   }
   if (!rows) rows = '<tr><td colspan="4" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">Equip weapons in the Wargear tab</td></tr>';
   tbody.innerHTML = rows;
+}
+
+/* ── Armor Class calculation ── */
+var _ARMOR_DEFAULTS = {
+  none:       {base:10, dex:'full'},
+  light:      {base:11, dex:'full'},
+  medium:     {base:13, dex:'max2'},
+  heavy:      {base:16, dex:'none'},
+  power:      {base:16, dex:'none'},
+  terminator: {base:18, dex:'none'}
+};
+function onArmorTypeChange() {
+  var type = (document.getElementById('armor-type')||{}).value || 'none';
+  var def  = _ARMOR_DEFAULTS[type] || _ARMOR_DEFAULTS.none;
+  var baseEl = document.getElementById('armor-base-ac');
+  var dexEl  = document.getElementById('armor-dex-mod');
+  if (baseEl) baseEl.value = def.base;
+  if (dexEl)  dexEl.value  = def.dex;
+  calcAC();
+}
+function calcAC() {
+  var base  = parseInt((document.getElementById('armor-base-ac')||{}).value) || 10;
+  var dexMod = (function() {
+    var sc = parseInt((document.getElementById('dex-score')||{}).value);
+    return isNaN(sc) ? 0 : Math.floor((sc - 10) / 2);
+  })();
+  var dexType = (document.getElementById('armor-dex-mod')||{}).value || 'full';
+  var dexBonus = dexType === 'none' ? 0 : (dexType === 'max2' ? Math.min(dexMod, 2) : dexMod);
+  var other  = parseInt((document.getElementById('armor-bonus')||{}).value) || 0;
+  var shield = (document.getElementById('armor-shield')||{}).checked ? 2 : 0;
+  var total  = base + dexBonus + other + shield;
+  var dispEl = document.getElementById('ac-display-val');
+  if (dispEl) dispEl.textContent = total;
+  var acEl = document.getElementById('stat-ac');
+  if (acEl) acEl.value = total;
+  var fBase  = document.getElementById('acf-base');
+  var fDex   = document.getElementById('acf-dex');
+  var fOther = document.getElementById('acf-other');
+  if (fBase)  fBase.textContent  = base;
+  if (fDex)   fDex.textContent   = (dexBonus >= 0 ? '+' : '') + dexBonus;
+  if (fOther) fOther.textContent = (other + shield >= 0 ? '+' : '') + (other + shield);
 }
 
 /* ── Class features renderer ── */
@@ -1092,6 +1179,7 @@ async function _loadSheet() {
     }
     STATS.forEach(s => calcMod(s));
     syncQuickActionsFromWargear();
+    calcAC();
     _status('loaded', 'Sheet loaded — ' + _uemail());
   } catch(e) { _status('error', e.message || 'Load failed'); console.error('Load error:', e); }
 }
