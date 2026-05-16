@@ -158,6 +158,9 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .atk-table td{padding:3px 6px;}
 .atk-table td input{font-size:10pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:2px 0!important;background:transparent!important;color:var(--text)!important;outline:none!important;width:100%!important;}
 .atk-table td input:focus{border-bottom-color:var(--gold)!important;}
+.atk-table td input[readonly]{color:var(--gold-light)!important;cursor:default!important;}
+.atk-table td select{font-size:10pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:2px 0!important;background:var(--panel)!important;color:var(--text)!important;outline:none!important;width:100%!important;}
+.atk-table td select:focus{border-bottom-color:var(--gold)!important;}
 
 /* ── WARGEAR TAB ── */
 .wg-equip-row{display:grid;grid-template-columns:3fr 1fr 2fr;gap:6px;align-items:center;padding:3px 4px;border-bottom:1px solid var(--border);}
@@ -305,8 +308,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 </div>
 
 <div class="tab-nav">
-  <button class="tab-btn active" data-tab="dossier" onclick="showTab('dossier')">✠ Dossier</button>
-  <button class="tab-btn" data-tab="combat"  onclick="showTab('combat')">⚔ Combat</button>
+  <button class="tab-btn active" data-tab="dossier" onclick="showTab('dossier')">✠ Dossier & Combat</button>
   <button class="tab-btn" data-tab="wargear" onclick="showTab('wargear')">⚙ Wargear</button>
   <button class="tab-btn" data-tab="abilities" onclick="showTab('abilities')">⬡ Abilities</button>
   <button class="tab-btn" data-tab="lore"    onclick="showTab('lore')">✦ Oaths &amp; Lore</button>
@@ -395,14 +397,10 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
     <!-- RIGHT: Quick Attacks · Conditions · Notes -->
     <div>
       <div class="section">
-        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Quick Attacks</span></div>
+        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Quick Actions</span></div>
         <table class="dos-atk-table">
           <thead><tr><th>Weapon</th><th>Hit</th><th>Dmg</th><th>Type / Notes</th></tr></thead>
-          <tbody><tr><td><input type="text" placeholder="Weapon name…"></td><td><input type="text" placeholder="+0" style="width:44px;text-align:center;"></td><td><input type="text" placeholder="1d8" style="width:54px;text-align:center;"></td><td><input type="text" placeholder="Damage type / notes…"></td></tr>
-<tr><td><input type="text" placeholder="Weapon name…"></td><td><input type="text" placeholder="+0" style="width:44px;text-align:center;"></td><td><input type="text" placeholder="1d8" style="width:54px;text-align:center;"></td><td><input type="text" placeholder="Damage type / notes…"></td></tr>
-<tr><td><input type="text" placeholder="Weapon name…"></td><td><input type="text" placeholder="+0" style="width:44px;text-align:center;"></td><td><input type="text" placeholder="1d8" style="width:54px;text-align:center;"></td><td><input type="text" placeholder="Damage type / notes…"></td></tr>
-<tr><td><input type="text" placeholder="Weapon name…"></td><td><input type="text" placeholder="+0" style="width:44px;text-align:center;"></td><td><input type="text" placeholder="1d8" style="width:54px;text-align:center;"></td><td><input type="text" placeholder="Damage type / notes…"></td></tr>
-</tbody>
+          <tbody id="quick-actions-tbody"><tr><td colspan="4" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">Add weapons in Attacks &amp; Actions below</td></tr></tbody>
         </table>
       </div>
       <div class="section" style="margin-top:8px;">
@@ -415,117 +413,57 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
       </div>
     </div>
   </div>
-</div>
-
-<div class="tab-panel" id="panel-combat">
-  <div class="combat-stats-row">
-    <div class="stat-box"><div class="stat-box-val"><input type="text" placeholder="15"></div><span class="stat-box-lbl">Armor Class</span></div>
-    <div class="stat-box"><div class="stat-box-val"><input type="text" id="combat-initiative" placeholder="+2"></div><span class="stat-box-lbl">Initiative</span></div>
-    <div class="stat-box"><div class="stat-box-val"><input type="text" placeholder="30"></div><span class="stat-box-lbl">Speed (ft)</span></div>
-    <div class="stat-box"><div class="stat-box-val"><input type="text" id="combat-prof" placeholder="+2"></div><span class="stat-box-lbl">Prof Bonus</span></div>
-    <div class="stat-box"><div class="stat-box-val"><input type="text" placeholder="0" id="combat-mortal-wounds"></div><span class="stat-box-lbl">Mortal Wounds</span></div>
-  </div>
-
-  <div class="hp-layout">
-    <div class="hp-box">
-      <div class="sec-title">Hit Points</div>
-      <div style="margin-bottom:4px;display:flex;align-items:center;gap:8px;">
-        <span style="font-family:var(--font-label);font-size:9pt;letter-spacing:.12em;color:var(--text-dim);text-transform:uppercase;white-space:nowrap;">Max HP:</span>
-        <input type="number" placeholder="—" style="font-family:var(--font-label);font-size:9pt;background:transparent;border:none;border-bottom:1px solid var(--line);color:var(--text);outline:none;width:70px;text-align:center;">
-      </div>
-      <div class="hp-big"><input type="number" placeholder="—" id="hp-cur"></div>
-      <span class="stat-box-lbl">Current HP</span>
-    </div>
-    <div class="hp-box">
-      <div class="sec-title">Temp HP</div>
-      <div style="margin-top:8px;" class="hp-big"><input type="number" placeholder="0"></div>
-    </div>
-    <div class="hp-box">
+  <!-- ── Hit Dice & Death Saving Throws ── -->
+  <div class="g2" style="margin-top:10px;">
+    <div class="section">
       <div class="sec-title">Hit Dice</div>
-      <div class="field-group" style="margin-bottom:6px;"><label>Type</label><input type="text" placeholder="d8"></div>
+      <div class="field-group" style="margin-bottom:6px;"><label>Type</label><input type="text" id="hd-type" placeholder="d8"></div>
       <div class="g2">
-        <div class="field-group"><label>Total</label><input type="number" placeholder="1"></div>
-        <div class="field-group"><label>Used</label><input type="number" placeholder="0"></div>
+        <div class="field-group"><label>Total</label><input type="number" id="hd-total" placeholder="1"></div>
+        <div class="field-group"><label>Used</label><input type="number" id="hd-used" placeholder="0"></div>
       </div>
     </div>
-  </div>
-
-  <div class="hd-death">
     <div class="section">
       <div class="sec-title">Death Saving Throws</div>
       <div class="death-row"><span class="death-lbl">Successes</span>
-        <input type="checkbox"><input type="checkbox"><input type="checkbox">
+        <input type="checkbox" id="death-s1"><input type="checkbox" id="death-s2"><input type="checkbox" id="death-s3">
       </div>
       <div class="death-row"><span class="death-lbl">Failures</span>
-        <input type="checkbox"><input type="checkbox"><input type="checkbox">
+        <input type="checkbox" id="death-f1"><input type="checkbox" id="death-f2"><input type="checkbox" id="death-f3">
       </div>
     </div>
-    <div class="section">
-      <div class="sec-title">Conditions / Status</div>
-      <textarea class="lined" rows="3" placeholder="Poisoned, Blinded, Ablaze, Prone…"></textarea>
-    </div>
   </div>
-
-  <div class="section">
+  <!-- ── Attacks & Actions ── -->
+  <div class="section" style="margin-top:10px;overflow-x:auto;">
     <div class="sec-title">Attacks &amp; Actions</div>
     <table class="atk-table">
-      <thead><tr><th style="min-width:160px;">Weapon / Attack</th><th>Atk Bonus</th><th>Damage</th><th>Type</th><th>Range</th><th>Notes</th></tr></thead>
-      <tbody><tr><td><input type="text" placeholder="Weapon name…" style="min-width:160px;"></td>
-  <td><input type="text" placeholder="+0" style="width:50px;text-align:center;"></td>
-  <td><input type="text" placeholder="1d8" style="width:70px;text-align:center;"></td>
-  <td><input type="text" placeholder="Damage type"></td>
-  <td><input type="text" placeholder="Range"></td>
-  <td><input type="text" placeholder="Properties / notes…"></td></tr>
-<tr><td><input type="text" placeholder="Weapon name…" style="min-width:160px;"></td>
-  <td><input type="text" placeholder="+0" style="width:50px;text-align:center;"></td>
-  <td><input type="text" placeholder="1d8" style="width:70px;text-align:center;"></td>
-  <td><input type="text" placeholder="Damage type"></td>
-  <td><input type="text" placeholder="Range"></td>
-  <td><input type="text" placeholder="Properties / notes…"></td></tr>
-<tr><td><input type="text" placeholder="Weapon name…" style="min-width:160px;"></td>
-  <td><input type="text" placeholder="+0" style="width:50px;text-align:center;"></td>
-  <td><input type="text" placeholder="1d8" style="width:70px;text-align:center;"></td>
-  <td><input type="text" placeholder="Damage type"></td>
-  <td><input type="text" placeholder="Range"></td>
-  <td><input type="text" placeholder="Properties / notes…"></td></tr>
-<tr><td><input type="text" placeholder="Weapon name…" style="min-width:160px;"></td>
-  <td><input type="text" placeholder="+0" style="width:50px;text-align:center;"></td>
-  <td><input type="text" placeholder="1d8" style="width:70px;text-align:center;"></td>
-  <td><input type="text" placeholder="Damage type"></td>
-  <td><input type="text" placeholder="Range"></td>
-  <td><input type="text" placeholder="Properties / notes…"></td></tr>
-<tr><td><input type="text" placeholder="Weapon name…" style="min-width:160px;"></td>
-  <td><input type="text" placeholder="+0" style="width:50px;text-align:center;"></td>
-  <td><input type="text" placeholder="1d8" style="width:70px;text-align:center;"></td>
-  <td><input type="text" placeholder="Damage type"></td>
-  <td><input type="text" placeholder="Range"></td>
-  <td><input type="text" placeholder="Properties / notes…"></td></tr>
-<tr><td><input type="text" placeholder="Weapon name…" style="min-width:160px;"></td>
-  <td><input type="text" placeholder="+0" style="width:50px;text-align:center;"></td>
-  <td><input type="text" placeholder="1d8" style="width:70px;text-align:center;"></td>
-  <td><input type="text" placeholder="Damage type"></td>
-  <td><input type="text" placeholder="Range"></td>
-  <td><input type="text" placeholder="Properties / notes…"></td></tr>
-<tr><td><input type="text" placeholder="Weapon name…" style="min-width:160px;"></td>
-  <td><input type="text" placeholder="+0" style="width:50px;text-align:center;"></td>
-  <td><input type="text" placeholder="1d8" style="width:70px;text-align:center;"></td>
-  <td><input type="text" placeholder="Damage type"></td>
-  <td><input type="text" placeholder="Range"></td>
-  <td><input type="text" placeholder="Properties / notes…"></td></tr>
-<tr><td><input type="text" placeholder="Weapon name…" style="min-width:160px;"></td>
-  <td><input type="text" placeholder="+0" style="width:50px;text-align:center;"></td>
-  <td><input type="text" placeholder="1d8" style="width:70px;text-align:center;"></td>
-  <td><input type="text" placeholder="Damage type"></td>
-  <td><input type="text" placeholder="Range"></td>
-  <td><input type="text" placeholder="Properties / notes…"></td></tr>
-</tbody>
+      <thead><tr>
+        <th style="min-width:130px;">Weapon / Attack</th>
+        <th>Stat</th>
+        <th title="Proficient?">Prof</th>
+        <th>Atk Bonus</th>
+        <th>Damage</th>
+        <th>Type</th>
+        <th>Range</th>
+        <th>Notes</th>
+      </tr></thead>
+      <tbody>
+<tr><td><input type="text" id="wpn-name-0" placeholder="Weapon name…" oninput="syncQuickActions()"></td><td><select id="wpn-stat-0" onchange="recalcWeapons()"><option value="str">STR</option><option value="dex">DEX</option><option value="con">CON</option><option value="int">INT</option><option value="wis">WIS</option><option value="cha">CHA</option></select></td><td style="text-align:center;"><input type="checkbox" id="wpn-prof-0" style="width:auto!important;" title="Proficient" onchange="recalcWeapons()"></td><td><input type="text" id="wpn-hit-0" readonly placeholder="+0" style="width:50px;text-align:center;"></td><td><input type="text" id="wpn-dmg-0" placeholder="1d8" style="width:65px;" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-type-0" placeholder="Type" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-range-0" placeholder="Range" style="width:65px;"></td><td><input type="text" id="wpn-notes-0" placeholder="Notes…"></td></tr>
+<tr><td><input type="text" id="wpn-name-1" placeholder="Weapon name…" oninput="syncQuickActions()"></td><td><select id="wpn-stat-1" onchange="recalcWeapons()"><option value="str">STR</option><option value="dex">DEX</option><option value="con">CON</option><option value="int">INT</option><option value="wis">WIS</option><option value="cha">CHA</option></select></td><td style="text-align:center;"><input type="checkbox" id="wpn-prof-1" style="width:auto!important;" title="Proficient" onchange="recalcWeapons()"></td><td><input type="text" id="wpn-hit-1" readonly placeholder="+0" style="width:50px;text-align:center;"></td><td><input type="text" id="wpn-dmg-1" placeholder="1d8" style="width:65px;" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-type-1" placeholder="Type" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-range-1" placeholder="Range" style="width:65px;"></td><td><input type="text" id="wpn-notes-1" placeholder="Notes…"></td></tr>
+<tr><td><input type="text" id="wpn-name-2" placeholder="Weapon name…" oninput="syncQuickActions()"></td><td><select id="wpn-stat-2" onchange="recalcWeapons()"><option value="str">STR</option><option value="dex">DEX</option><option value="con">CON</option><option value="int">INT</option><option value="wis">WIS</option><option value="cha">CHA</option></select></td><td style="text-align:center;"><input type="checkbox" id="wpn-prof-2" style="width:auto!important;" title="Proficient" onchange="recalcWeapons()"></td><td><input type="text" id="wpn-hit-2" readonly placeholder="+0" style="width:50px;text-align:center;"></td><td><input type="text" id="wpn-dmg-2" placeholder="1d8" style="width:65px;" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-type-2" placeholder="Type" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-range-2" placeholder="Range" style="width:65px;"></td><td><input type="text" id="wpn-notes-2" placeholder="Notes…"></td></tr>
+<tr><td><input type="text" id="wpn-name-3" placeholder="Weapon name…" oninput="syncQuickActions()"></td><td><select id="wpn-stat-3" onchange="recalcWeapons()"><option value="str">STR</option><option value="dex">DEX</option><option value="con">CON</option><option value="int">INT</option><option value="wis">WIS</option><option value="cha">CHA</option></select></td><td style="text-align:center;"><input type="checkbox" id="wpn-prof-3" style="width:auto!important;" title="Proficient" onchange="recalcWeapons()"></td><td><input type="text" id="wpn-hit-3" readonly placeholder="+0" style="width:50px;text-align:center;"></td><td><input type="text" id="wpn-dmg-3" placeholder="1d8" style="width:65px;" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-type-3" placeholder="Type" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-range-3" placeholder="Range" style="width:65px;"></td><td><input type="text" id="wpn-notes-3" placeholder="Notes…"></td></tr>
+<tr><td><input type="text" id="wpn-name-4" placeholder="Weapon name…" oninput="syncQuickActions()"></td><td><select id="wpn-stat-4" onchange="recalcWeapons()"><option value="str">STR</option><option value="dex">DEX</option><option value="con">CON</option><option value="int">INT</option><option value="wis">WIS</option><option value="cha">CHA</option></select></td><td style="text-align:center;"><input type="checkbox" id="wpn-prof-4" style="width:auto!important;" title="Proficient" onchange="recalcWeapons()"></td><td><input type="text" id="wpn-hit-4" readonly placeholder="+0" style="width:50px;text-align:center;"></td><td><input type="text" id="wpn-dmg-4" placeholder="1d8" style="width:65px;" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-type-4" placeholder="Type" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-range-4" placeholder="Range" style="width:65px;"></td><td><input type="text" id="wpn-notes-4" placeholder="Notes…"></td></tr>
+<tr><td><input type="text" id="wpn-name-5" placeholder="Weapon name…" oninput="syncQuickActions()"></td><td><select id="wpn-stat-5" onchange="recalcWeapons()"><option value="str">STR</option><option value="dex">DEX</option><option value="con">CON</option><option value="int">INT</option><option value="wis">WIS</option><option value="cha">CHA</option></select></td><td style="text-align:center;"><input type="checkbox" id="wpn-prof-5" style="width:auto!important;" title="Proficient" onchange="recalcWeapons()"></td><td><input type="text" id="wpn-hit-5" readonly placeholder="+0" style="width:50px;text-align:center;"></td><td><input type="text" id="wpn-dmg-5" placeholder="1d8" style="width:65px;" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-type-5" placeholder="Type" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-range-5" placeholder="Range" style="width:65px;"></td><td><input type="text" id="wpn-notes-5" placeholder="Notes…"></td></tr>
+<tr><td><input type="text" id="wpn-name-6" placeholder="Weapon name…" oninput="syncQuickActions()"></td><td><select id="wpn-stat-6" onchange="recalcWeapons()"><option value="str">STR</option><option value="dex">DEX</option><option value="con">CON</option><option value="int">INT</option><option value="wis">WIS</option><option value="cha">CHA</option></select></td><td style="text-align:center;"><input type="checkbox" id="wpn-prof-6" style="width:auto!important;" title="Proficient" onchange="recalcWeapons()"></td><td><input type="text" id="wpn-hit-6" readonly placeholder="+0" style="width:50px;text-align:center;"></td><td><input type="text" id="wpn-dmg-6" placeholder="1d8" style="width:65px;" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-type-6" placeholder="Type" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-range-6" placeholder="Range" style="width:65px;"></td><td><input type="text" id="wpn-notes-6" placeholder="Notes…"></td></tr>
+<tr><td><input type="text" id="wpn-name-7" placeholder="Weapon name…" oninput="syncQuickActions()"></td><td><select id="wpn-stat-7" onchange="recalcWeapons()"><option value="str">STR</option><option value="dex">DEX</option><option value="con">CON</option><option value="int">INT</option><option value="wis">WIS</option><option value="cha">CHA</option></select></td><td style="text-align:center;"><input type="checkbox" id="wpn-prof-7" style="width:auto!important;" title="Proficient" onchange="recalcWeapons()"></td><td><input type="text" id="wpn-hit-7" readonly placeholder="+0" style="width:50px;text-align:center;"></td><td><input type="text" id="wpn-dmg-7" placeholder="1d8" style="width:65px;" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-type-7" placeholder="Type" oninput="syncQuickActions()"></td><td><input type="text" id="wpn-range-7" placeholder="Range" style="width:65px;"></td><td><input type="text" id="wpn-notes-7" placeholder="Notes…"></td></tr>
+      </tbody>
     </table>
   </div>
-
+  <!-- ── Actions / Bonus Actions / Reactions ── -->
   <div class="g3" style="margin-top:10px;">
-    <div class="section"><div class="sec-title">Actions</div><textarea class="lined" rows="6" placeholder="Standard actions available this turn…"></textarea></div>
-    <div class="section"><div class="sec-title">Bonus Actions</div><textarea class="lined" rows="6" placeholder="Bonus actions available…"></textarea></div>
-    <div class="section"><div class="sec-title">Reactions</div><textarea class="lined" rows="6" placeholder="Reactions available…"></textarea></div>
+    <div class="section"><div class="sec-title">Actions</div><textarea class="lined" rows="5" id="combat-actions" placeholder="Standard actions available this turn…"></textarea></div>
+    <div class="section"><div class="sec-title">Bonus Actions</div><textarea class="lined" rows="5" id="combat-bonus-actions" placeholder="Bonus actions available…"></textarea></div>
+    <div class="section"><div class="sec-title">Reactions</div><textarea class="lined" rows="5" id="combat-reactions" placeholder="Reactions available…"></textarea></div>
   </div>
 </div>
 
@@ -829,10 +767,6 @@ function _recalcDerived() {
   function fmt(n) { return n >= 0 ? '+'+n : String(n); }
   const initEl = document.getElementById('stat-initiative');
   if (initEl) initEl.value = fmt(_mod('dex'));
-  const combatInitEl = document.getElementById('combat-initiative');
-  if (combatInitEl) combatInitEl.value = fmt(_mod('dex'));
-  const combatProfEl = document.getElementById('combat-prof');
-  if (combatProfEl) combatProfEl.value = pbFmt;
   ['str','dex','con','int','wis','cha'].forEach(function(s) {
     const chk = document.getElementById('save-'+s+'-prof');
     const el  = document.getElementById('save-'+s);
@@ -865,6 +799,7 @@ function _recalcDerived() {
     if (dcEl)  dcEl.value  = String(8 + pb + spMod);
     if (atkEl) atkEl.value = fmt(pb + spMod);
   }
+  recalcWeapons();
 }
 function calcMod(s) {
   const score = parseInt(document.getElementById(s+'-score').value);
@@ -880,6 +815,49 @@ function calcMod(s) {
 function onLevelChange() {
   _recalcDerived();
   updateSubclassOpts();
+}
+
+/* ── Weapon hit bonus auto-calc ── */
+var WPN_COUNT = 8;
+function recalcWeapons() {
+  var lvl = parseInt((document.getElementById('char-level')||{}).value) || 1;
+  var pb  = Math.ceil(lvl / 4) + 1;
+  function _wmod(s) {
+    var sc = parseInt((document.getElementById(s+'-score')||{}).value);
+    return isNaN(sc) ? 0 : Math.floor((sc - 10) / 2);
+  }
+  function wfmt(n) { return n >= 0 ? '+'+n : String(n); }
+  for (var i = 0; i < WPN_COUNT; i++) {
+    var statEl = document.getElementById('wpn-stat-'+i);
+    var profEl = document.getElementById('wpn-prof-'+i);
+    var hitEl  = document.getElementById('wpn-hit-'+i);
+    if (!hitEl) continue;
+    var stat  = statEl ? statEl.value : 'str';
+    var bonus = profEl && profEl.checked ? pb : 0;
+    hitEl.value = wfmt(_wmod(stat) + bonus);
+  }
+  syncQuickActions();
+}
+
+/* ── Quick Actions mirror ── */
+function syncQuickActions() {
+  var tbody = document.getElementById('quick-actions-tbody');
+  if (!tbody) return;
+  var rows = '';
+  for (var i = 0; i < WPN_COUNT; i++) {
+    var nameEl = document.getElementById('wpn-name-'+i);
+    if (!nameEl || !nameEl.value.trim()) continue;
+    var hitEl  = document.getElementById('wpn-hit-'+i);
+    var dmgEl  = document.getElementById('wpn-dmg-'+i);
+    var typeEl = document.getElementById('wpn-type-'+i);
+    var name = nameEl.value;
+    var hit  = hitEl  ? (hitEl.value  || '—') : '—';
+    var dmg  = dmgEl  ? (dmgEl.value  || '—') : '—';
+    var type = typeEl ? (typeEl.value || '')   : '';
+    rows += '<tr><td>'+name+'</td><td style="text-align:center;">'+hit+'</td><td style="text-align:center;">'+dmg+'</td><td>'+type+'</td></tr>';
+  }
+  if (!rows) rows = '<tr><td colspan="4" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">Add weapons in Attacks &amp; Actions below</td></tr>';
+  tbody.innerHTML = rows;
 }
 
 /* ── Class features renderer ── */
@@ -1127,6 +1105,7 @@ async function _loadSheet() {
       });
     }
     STATS.forEach(s => calcMod(s));
+    recalcWeapons();
     _status('loaded', 'Sheet loaded — ' + _uemail());
   } catch(e) { _status('error', e.message || 'Load failed'); console.error('Load error:', e); }
 }
