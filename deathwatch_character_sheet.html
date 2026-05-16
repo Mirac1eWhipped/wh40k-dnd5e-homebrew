@@ -72,8 +72,10 @@ body{background:var(--bg-page);font-family:var(--font-body);color:var(--text);fo
 .sh-field{display:flex;flex-direction:column;min-width:80px;}
 .sh-field.wide{min-width:140px;}
 .sh-field label{font-family:var(--font-label);font-size:9pt;letter-spacing:.18em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:2px;}
-.sh-field input{background:transparent;border:none;border-bottom:1px solid var(--line);color:var(--text);font-family:var(--font-body);font-size:13pt;padding:1px 2px;outline:none;width:100%;}
-.sh-field input:focus{border-bottom-color:var(--gold);}
+.sh-field input,.sh-field select{background:transparent;border:none;border-bottom:1px solid var(--line);color:var(--text);font-family:var(--font-body);font-size:13pt;padding:1px 2px;outline:none;width:100%;}
+.sh-field input:focus,.sh-field select:focus{border-bottom-color:var(--gold);}
+.sh-field select{-webkit-appearance:none;appearance:none;cursor:pointer;padding-right:18px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c8a44a'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 3px center;}
+.sh-field select option{background:var(--panel);color:var(--text);}
 .sh-meta{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
 .sh-meta-row{display:flex;gap:8px;}
 .sh-meta-field{display:flex;flex-direction:column;align-items:center;background:var(--panel);border:1px solid var(--border2);padding:4px 8px;min-width:54px;}
