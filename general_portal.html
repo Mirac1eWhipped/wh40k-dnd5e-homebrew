@@ -68,7 +68,7 @@
 
     .header-icon {
       font-size: 52px;
-      line-height: 1;
+      line-height: 1.2;
       margin-bottom: 10px;
       filter: drop-shadow(0 0 18px rgba(212,160,48,0.55));
     }
@@ -280,7 +280,7 @@
       font-size: 26px;
       font-weight: 700;
       color: var(--silver);
-      line-height: 1;
+      line-height: 1.2;
     }
 
     .status-stat-label {
@@ -295,7 +295,7 @@
     /* ─── LORE TIMELINE ────────────────────────────────────────────────── */
     .lore-entry {
       display: grid;
-      grid-template-columns: 80px 1fr;
+      grid-template-columns: 100px 1fr;
       gap: 0 20px;
       margin-bottom: 28px;
       position: relative;
@@ -304,7 +304,7 @@
     .lore-entry::after {
       content: '';
       position: absolute;
-      left: 80px;
+      left: 100px;
       top: 0; bottom: -28px;
       width: 1px;
       background: var(--border2);
@@ -372,7 +372,7 @@
       letter-spacing: 2px;
       text-transform: uppercase;
       color: var(--text-dim);
-      width: 80px;
+      min-width: 120px;
     }
 
     .threat-pips {
