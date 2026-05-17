@@ -283,7 +283,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 
 
 /* ══ DOSSIER OVERVIEW ══ */
-.dos-ab-bar{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;}
+.dos-ab-bar{display:flex;align-items:stretch;gap:10px;margin-bottom:8px;}
 .dos-ab-box{
   background:var(--panel2);
   border:1px solid var(--border2);
@@ -312,7 +312,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 /* ── Stat Bar — CSS grid with fixed columns ── */
 .dos-stat-bar{display:flex;gap:8px;align-items:stretch;margin-bottom:10px;}
 .dos-hp-ds-stack{display:flex;flex-direction:column;gap:8px;max-width:360px;margin-left:auto;flex-shrink:0;}
-.dos-stat{background:var(--panel2);border:1px solid var(--border2);border-top:2px solid var(--gold-dim);position:relative;padding:10px 4px 8px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;overflow:hidden;}
+.dos-stat{background:var(--panel2);border:1px solid var(--border2);border-top:2px solid var(--gold-dim);position:relative;padding:10px 4px 8px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;overflow:hidden;flex:1 1 72px;max-width:92px;}
 .dos-stat::before{content:'';position:absolute;top:4px;left:4px;width:7px;height:7px;border-top:1px solid rgba(200,164,74,.4);border-left:1px solid rgba(200,164,74,.4);pointer-events:none;}
 .dos-stat::after{content:'';position:absolute;bottom:4px;right:4px;width:7px;height:7px;border-bottom:1px solid rgba(200,164,74,.4);border-right:1px solid rgba(200,164,74,.4);pointer-events:none;}
 .dos-stat input{font-family:var(--font-label)!important;font-size:20pt!important;font-weight:700!important;color:var(--gold-light)!important;background:transparent!important;border:none!important;outline:none!important;text-align:center!important;width:60px!important;padding:0!important;}
@@ -492,14 +492,15 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .dos-def-chip.immune{background:rgba(139,100,26,.25);border-color:rgba(200,164,74,.6);color:var(--gold-light);}
 .dos-def-chip.vuln{background:rgba(139,26,26,.25);border-color:var(--red);color:#e07070;}
 
-/* ── HP row: full-width HP + death saves side by side ── */
-.dos-hp-row{display:flex;gap:10px;align-items:stretch;margin-bottom:8px;}
-.dos-hp-row .dos-hp-block{flex:1;}
-.dos-hp-row .dos-ds-block{flex:0 0 auto;min-width:160px;justify-content:center;}
+/* ── HP block in top band: natural width, no flex grow ── */
+.dos-ab-bar .dos-hp-block{flex:0 0 auto;}
 
-/* ── Combat strip: Initiative · AC · Conditions · Defenses ── */
-.dos-combat-strip{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px;}
-.dos-combat-strip .dos-cond-box,.dos-combat-strip .dos-def-box{flex:1;}
+/* ── Conditions + Defenses full-width row ── */
+.dos-cond-def-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
+
+/* ── Initiative + AC + Death Saves row ── */
+.dos-init-ac-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px;}
+.dos-init-ac-row .dos-ds-block{flex:1;}
 </style>
 </head>
 <body>
@@ -578,7 +579,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 </div>
 
 <div id="panel-dossier" style="padding:14px 18px 40px;">
-  <!-- Ability Scores + Speed + Prof Bonus Band -->
+  <!-- Ability Scores + Speed + Prof Bonus + HP Band -->
   <div class="dos-ab-bar">
 <div class="dos-ab-box"><span class="dos-ab-lbl">STR</span><div class="dos-ab-mod"><input type="text" id="str-mod" readonly placeholder="+0"></div><div class="dos-ab-score"><input type="number" id="str-score" value="10" oninput="calcMod('str')"></div></div>
 <div class="dos-ab-box"><span class="dos-ab-lbl">DEX</span><div class="dos-ab-mod"><input type="text" id="dex-mod" readonly placeholder="+0"></div><div class="dos-ab-score"><input type="number" id="dex-score" value="10" oninput="calcMod('dex')"></div></div>
@@ -588,9 +589,6 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 <div class="dos-ab-box"><span class="dos-ab-lbl">CHA</span><div class="dos-ab-mod"><input type="text" id="cha-mod" readonly placeholder="+0"></div><div class="dos-ab-score"><input type="number" id="cha-score" value="10" oninput="calcMod('cha')"></div></div>
     <div class="dos-stat"><input type="text" id="stat-speed" placeholder="35 ft"><span class="dos-stat-lbl">Speed</span></div>
     <div class="dos-stat"><input type="text" id="stat-prof" placeholder="+2"><span class="dos-stat-lbl">Prof Bonus</span></div>
-  </div>
-  <!-- HP Row: Hit Points + Death Saves -->
-  <div class="dos-hp-row">
     <div class="dos-hp-block">
       <div class="dos-hp-head">
         <span class="dos-hp-title">Hit Points</span>
@@ -612,38 +610,9 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
         </div>
       </div>
     </div>
-    <div class="dos-ds-block">
-      <div class="dos-ds-row">
-        <span class="dos-ds-lbl">Successes</span>
-        <div class="dos-ds-boxes">
-          <input type="checkbox" id="death-s1">
-          <input type="checkbox" id="death-s2">
-          <input type="checkbox" id="death-s3">
-        </div>
-      </div>
-      <div class="dos-ds-row">
-        <span class="dos-ds-lbl">Failures</span>
-        <div class="dos-ds-boxes">
-          <input type="checkbox" id="death-f1">
-          <input type="checkbox" id="death-f2">
-          <input type="checkbox" id="death-f3">
-        </div>
-      </div>
-      <span class="dos-stat-lbl" style="margin-top:1px;text-align:center;">Death Saves</span>
-    </div>
   </div>
-  <!-- Combat Strip: Initiative · AC · Conditions · Defenses -->
-  <div class="dos-combat-strip">
-    <input type="hidden" id="stat-ac">
-    <div class="dos-init-box">
-      <input type="text" id="stat-initiative" placeholder="+0">
-      <span class="dos-init-lbl">Initiative</span>
-    </div>
-    <div class="dos-ac-box">
-      <span class="dos-ac-val" id="ac-display-dossier">10</span>
-      <span id="ac-display-val" style="display:none;">10</span>
-      <span class="dos-ac-lbl">Armor Class</span>
-    </div>
+  <!-- Conditions + Defenses Row -->
+  <div class="dos-cond-def-row">
     <div class="dos-cond-box">
       <div style="font-family:var(--font-label);font-size:8pt;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Conditions</div>
       <div class="dos-cond-chips" id="cond-chips">
@@ -704,6 +673,38 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
         <span class="dos-def-chip" onclick="_defToggle(this,'vuln')">Psychic</span>
       </div>
       <textarea class="dos-textarea" rows="2" id="defenses-notes" placeholder="Other defenses…" style="margin-top:0;"></textarea>
+    </div>
+  </div>
+  <!-- Initiative + AC + Death Saves Row -->
+  <div class="dos-init-ac-row">
+    <input type="hidden" id="stat-ac">
+    <div class="dos-init-box">
+      <input type="text" id="stat-initiative" placeholder="+0">
+      <span class="dos-init-lbl">Initiative</span>
+    </div>
+    <div class="dos-ac-box">
+      <span class="dos-ac-val" id="ac-display-dossier">10</span>
+      <span id="ac-display-val" style="display:none;">10</span>
+      <span class="dos-ac-lbl">Armor Class</span>
+    </div>
+    <div class="dos-ds-block">
+      <div class="dos-ds-row">
+        <span class="dos-ds-lbl">Successes</span>
+        <div class="dos-ds-boxes">
+          <input type="checkbox" id="death-s1">
+          <input type="checkbox" id="death-s2">
+          <input type="checkbox" id="death-s3">
+        </div>
+      </div>
+      <div class="dos-ds-row">
+        <span class="dos-ds-lbl">Failures</span>
+        <div class="dos-ds-boxes">
+          <input type="checkbox" id="death-f1">
+          <input type="checkbox" id="death-f2">
+          <input type="checkbox" id="death-f3">
+        </div>
+      </div>
+      <span class="dos-stat-lbl" style="margin-top:1px;text-align:center;">Death Saves</span>
     </div>
   </div>
 
