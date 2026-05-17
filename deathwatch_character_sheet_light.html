@@ -1351,6 +1351,10 @@ function syncQuickActionsFromWargear() {
       }
     }
     var stat  = meta.stat || 'str';
+    // Finesse: automatically use whichever of STR or DEX is higher
+    if (Array.isArray(meta.mods) && meta.mods.indexOf('Finesse') !== -1) {
+      stat = _mod('dex') >= _mod('str') ? 'dex' : 'str';
+    }
     var hit   = fmt(_mod(stat) + pb);
     var dmg   = meta.dmg  || '—';
     var range = meta.range || '—';
