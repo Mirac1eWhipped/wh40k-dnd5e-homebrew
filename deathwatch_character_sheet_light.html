@@ -945,6 +945,17 @@ function syncQuickActionsFromWargear() {
     var ins  = wgRows[i].querySelectorAll('input');
     var name = ins[0] ? ins[0].value.trim() : '';
     if (!name) continue;
+    // Back-fill fields from REQ_ITEMS for weapons saved before shots/mods tracking
+    if (meta.id && typeof REQ_ITEMS !== 'undefined') {
+      var _ref = REQ_ITEMS.find(function(x){ return x.id === meta.id; });
+      if (_ref) {
+        if (!Array.isArray(meta.mods))  meta.mods = _ref.mods || [];
+        if (!meta.shots_max)            { meta.shots_max = _ref.shots || 0; }
+        if (meta.shots_cur === undefined) meta.shots_cur = meta.shots_max;
+        if (!meta.dmg)   meta.dmg   = _ref.dmg   || '';
+        if (!meta.wtype) meta.wtype = _ref.wtype  || '';
+      }
+    }
     var stat = meta.stat || 'str';
     var hit  = fmt(_mod(stat) + pb);
     var dmg  = meta.dmg  || '—';
