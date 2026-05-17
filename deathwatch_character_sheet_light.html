@@ -1585,23 +1585,23 @@ const DW_CLASS_PROFS = {
   'Tactical Operative': {
     saves:   ['Strength', 'Dexterity'],
     skills:  { count:3, list:['Athletics','Acrobatics','History','Insight','Intimidation','Perception','Stealth','Technology'] },
-    armor:   'All Armor & Shields (Astartes Training)',
-    weapons: 'All Simple & Martial Weapons (Astartes Training)',
+    armor:   'All Armor & Shields',
+    weapons: 'All Simple & Martial Weapons',
     tools:   '—',
     extra:   'Default armor pattern: Tacticus or Phobos'
   },
   'Close Combat Operative': {
     saves:   ['Strength', 'Constitution'],
     skills:  { count:2, list:['Acrobatics','Athletics','Insight','Intimidation','Perception','Survival'] },
-    armor:   'All Armor & Shields (Astartes Training)',
-    weapons: 'All Simple & Martial Weapons (Astartes Training)',
+    armor:   'All Armor & Shields',
+    weapons: 'All Simple & Martial Weapons',
     tools:   '—',
     extra:   'Default armor pattern: Tacticus'
   },
   'Gravis Operative': {
     saves:   ['Strength', 'Constitution'],
     skills:  { count:2, list:['Athletics','History','Intimidation','Perception','Survival','Technology'] },
-    armor:   'All Armor & Shields (Astartes Training)',
+    armor:   'All Armor & Shields',
     weapons: 'All Simple & Martial Weapons, Heavy Weapons, Gravis-pattern Weapons',
     tools:   '—',
     extra:   'Default armor pattern: Gravis'
@@ -1609,7 +1609,7 @@ const DW_CLASS_PROFS = {
   'Terminator': {
     saves:   ['Strength', 'Constitution'],
     skills:  { count:2, list:['Athletics','History','Insight','Intimidation','Perception'] },
-    armor:   'All Armor & Shields (Astartes Training) incl. Terminator Armor',
+    armor:   'All Armor & Shields incl. Terminator Armor',
     weapons: 'All Simple & Martial Weapons, Terminator Weapons (Storm Bolter, Assault Cannon, etc.)',
     tools:   '—',
     extra:   'Default armor pattern: Terminator'
@@ -1617,23 +1617,23 @@ const DW_CLASS_PROFS = {
   'Vanguard Operative': {
     saves:   ['Dexterity', 'Intelligence'],
     skills:  { count:4, list:['Acrobatics','Athletics','Deception','History','Insight','Investigation','Perception','Persuasion','Stealth','Technology'] },
-    armor:   'All Armor & Shields (Astartes Training)',
-    weapons: 'All Simple & Martial Weapons (Astartes Training)',
+    armor:   'All Armor & Shields',
+    weapons: 'All Simple & Martial Weapons',
     tools:   '—',
     extra:   'Default armor pattern: Phobos'
   },
   'Apothecary': {
     saves:   ['Constitution', 'Wisdom'],
     skills:  { count:3, list:['Athletics','History','Insight','Investigation','Medicine','Perception','Survival','Technology'] },
-    armor:   'All Armor & Shields (Astartes Training)',
-    weapons: 'All Simple & Martial Weapons (Astartes Training)',
+    armor:   'All Armor & Shields',
+    weapons: 'All Simple & Martial Weapons',
     tools:   'Narthecium (granted at Level 1)',
     extra:   'Default armor pattern: Tacticus'
   },
   'Chaplain': {
     saves:   ['Wisdom', 'Charisma'],
     skills:  { count:2, list:['Athletics','History','Insight','Intimidation','Persuasion','Religion'] },
-    armor:   'All Armor & Shields (Astartes Training)',
+    armor:   'All Armor & Shields',
     weapons: 'All Simple & Martial Weapons, Crozius Arcanum',
     tools:   '—',
     extra:   'Default armor pattern: Tacticus'
@@ -1641,7 +1641,7 @@ const DW_CLASS_PROFS = {
   'Librarian': {
     saves:   ['Intelligence', 'Wisdom'],
     skills:  { count:3, list:['History','Insight','Investigation','Medicine','Perception','Religion','Technology'] },
-    armor:   'All Armor & Shields (Astartes Training)',
+    armor:   'All Armor & Shields',
     weapons: 'All Simple & Martial Weapons, Force Sword, Force Staff',
     tools:   '—',
     extra:   'Default armor pattern: Tacticus'
@@ -1649,7 +1649,7 @@ const DW_CLASS_PROFS = {
   'Techmarine': {
     saves:   ['Intelligence', 'Constitution'],
     skills:  { count:2, list:['Athletics','History','Investigation','Perception','Technology'] },
-    armor:   'All Armor & Shields (Astartes Training)',
+    armor:   'All Armor & Shields',
     weapons: "All Simple & Martial Weapons, Omnissian Power Axe, Servo-Arm",
     tools:   "Smith's Tools, Tinker's Tools, Servo-Harness",
     extra:   'Default armor pattern: Tacticus'
@@ -2367,9 +2367,7 @@ const ASTARTES_TRAITS = [
   { badge:'Astartes', name:'Speed',                    body:'Your base walking speed is 35 feet.' },
   { badge:'Astartes', name:'Occulobe',                 body:'<strong>Darkvision.</strong> You can see in dim light within 60 ft as if it were bright light, and in darkness as if it were dim light. You cannot discern colour in darkness, only shades of grey.' },
   { badge:'Astartes', name:'Astartes Resilience',      body:'You have advantage on saving throws against disease and being poisoned, and resistance to poison damage. You can survive in a vacuum or airless environment for up to 10 minutes before suffering its effects.' },
-  { badge:'Astartes', name:'Transhuman Physiology',    body:'You recover from exhaustion twice as fast as normal creatures. A long rest requires only 4 hours (Catalepsean node trance) rather than 8, granting the same benefits. You require no food or water to survive, and you can breathe in toxic atmospheres and underwater without harm.' },
-  { badge:'Astartes', name:'Angels of Death',          body:'You gain proficiency in the Intimidation skill.' },
-  { badge:'Astartes', name:'Astartes Training',        body:'You are proficient with all armour (light, medium, and heavy), shields, and all weapons (simple and martial).' },
+  { badge:'Astartes', name:'Transhuman Physiology',    body:'You recover from exhaustion twice as fast as normal creatures. A resupply requires only 2 hours rather than 8, granting the same benefits. Due to the Catalepsean node, you may also spend time on your resupply learning new skills or engaging in light activities, such as gear maintenance or creating ammunition. You require no food or water to survive, and you can breathe in toxic atmospheres and underwater without harm.' },
   { badge:'Astartes', name:'Languages',                body:'You can speak, read, and write Low Gothic and Techna-Lingua.' }
 ];
 
