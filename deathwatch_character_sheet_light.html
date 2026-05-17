@@ -96,10 +96,10 @@ body{background:var(--bg-page);font-family:var(--font-body);color:var(--text);fo
 #panel-dossier{display:block !important;}
 
 /* ── Right-column tab system ── */
-.rc-tabs{display:flex;gap:0;border-bottom:1px solid var(--border2);margin-bottom:10px;flex-wrap:wrap;}
-.rc-tab-btn{padding:8px 14px;font-family:var(--font-label);font-size:8.5pt;letter-spacing:.18em;text-transform:uppercase;color:var(--silver-dim);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;white-space:nowrap;}
-.rc-tab-btn:hover{color:var(--gold);}
-.rc-tab-btn.active{color:var(--gold-light);border-bottom-color:var(--gold);}
+.rc-tabs{display:flex;gap:0;background:var(--panel2);border-bottom:2px solid var(--gold-dim);margin-bottom:10px;flex-wrap:wrap;border-radius:0;}
+.rc-tab-btn{padding:9px 14px;font-family:var(--font-label);font-size:8.5pt;letter-spacing:.18em;text-transform:uppercase;color:var(--silver-dim);cursor:pointer;border:none;background:none;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s;white-space:nowrap;}
+.rc-tab-btn:hover{color:var(--gold);background:rgba(200,164,74,.06);}
+.rc-tab-btn.active{color:var(--gold-light);border-bottom-color:var(--gold);background:rgba(200,164,74,.08);}
 .rc-tab-panel{display:none;}
 .rc-tab-panel.active{display:block;}
 
@@ -333,7 +333,17 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .dos-ds-boxes input[type=checkbox]{width:14px;height:14px;margin:0;cursor:pointer;flex-shrink:0;}
 .dos-3col{display:grid;grid-template-columns:210px 230px 1fr;gap:14px;}
 .dos-row{display:flex;align-items:center;gap:5px;padding:4px 2px;border-bottom:1px solid rgba(42,58,80,.3);}
-.dos-row input[type=checkbox]{width:12px;height:12px;accent-color:var(--gold);flex-shrink:0;cursor:pointer;}
+.dos-row input[type=checkbox]{
+  appearance:none;-webkit-appearance:none;
+  width:12px;height:12px;border-radius:50%;
+  border:2px solid var(--silver-dim);
+  background:transparent;cursor:pointer;flex-shrink:0;
+  transition:all .15s;
+}
+.dos-row input[type=checkbox]:checked{
+  background:var(--gold);border-color:var(--gold);
+  box-shadow:0 0 4px rgba(200,164,74,.4);
+}
 .exp-chk{appearance:none;-webkit-appearance:none;width:12px;height:12px;flex-shrink:0;cursor:pointer;position:relative;margin:0;}
 .exp-chk::after{content:'✦';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:10px;line-height:1;color:var(--border2);transition:color .12s;}
 .exp-chk:checked::after{color:var(--gold-light);}
@@ -397,8 +407,16 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .dos-atk-table tr:hover td input{border-bottom-color:var(--gold)!important;}
 .dos-textarea{width:100%;background:var(--panel2);border:1px solid var(--border2);color:var(--text);font-family:var(--font-body);font-size:10pt;outline:none;resize:none;padding:6px 8px;box-sizing:border-box;margin-top:4px;}
 
+/* ── HP Heal / Damage buttons ── */
+.dos-hp-btns{display:flex;gap:4px;margin-top:4px;padding-top:4px;border-top:1px solid var(--border);}
+.hp-action-btn{flex:1;font-family:var(--font-label);font-size:7.5pt;letter-spacing:.12em;text-transform:uppercase;padding:4px 6px;cursor:pointer;border:1px solid;transition:all .2s;}
+.heal-btn{background:rgba(60,140,80,.12);border-color:rgba(60,140,80,.4);color:#70c488;}
+.heal-btn:hover{background:rgba(60,140,80,.25);}
+.dmg-btn{background:rgba(160,50,50,.12);border-color:rgba(160,50,50,.4);color:#cc6060;}
+.dmg-btn:hover{background:rgba(160,50,50,.25);}
+
 /* ── Right column outer frame ── */
-.dos-rc-col{grid-row:1/3;background:var(--panel);border:1px solid var(--border2);border-top:2px solid var(--gold-dim);padding:12px;position:relative;box-shadow:inset 0 1px 0 rgba(200,164,74,.08);}
+.dos-rc-col{grid-row:1/3;grid-column:3;background:var(--panel);border:1px solid var(--border2);border-top:2px solid var(--gold-dim);padding:12px;position:relative;box-shadow:inset 0 1px 0 rgba(200,164,74,.08);}
 .dos-rc-col::before{content:'';position:absolute;top:5px;left:5px;width:12px;height:12px;border-top:1px solid rgba(200,164,74,.3);border-left:1px solid rgba(200,164,74,.3);pointer-events:none;}
 .dos-rc-col::after{content:'';position:absolute;bottom:5px;right:5px;width:12px;height:12px;border-bottom:1px solid rgba(200,164,74,.3);border-right:1px solid rgba(200,164,74,.3);pointer-events:none;}
 
@@ -516,6 +534,10 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
       <div class="dos-hp-temp">
         <input type="number" id="hp-temp" placeholder="—">
         <span class="dos-stat-lbl">Temp HP</span>
+      </div>
+      <div class="dos-hp-btns">
+        <button class="hp-action-btn heal-btn" onclick="_hpHeal()">+ Heal</button>
+        <button class="hp-action-btn dmg-btn" onclick="_hpDamage()">− Damage</button>
       </div>
     </div>
     <div class="dos-hd-block">
@@ -639,7 +661,20 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 
       <!-- ACTIONS tab -->
       <div class="rc-tab-panel active" id="rc-actions">
-        <!-- Actions Reference -->
+        <!-- Quick Actions — FIRST (attack table, matches D&D Beyond layout) -->
+        <div class="section" style="margin-bottom:8px;">
+          <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Quick Actions — Equipped Weapons</span></div>
+          <table class="dos-atk-table">
+            <thead><tr><th style="width:22px;padding:4px 2px;"></th><th>Armament</th><th style="text-align:center;">To Hit</th><th style="text-align:center;">Damage</th><th style="text-align:center;">Range</th><th style="text-align:center;">Mag</th></tr></thead>
+            <tbody id="quick-actions-tbody"><tr><td colspan="6" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">++ No weapons equipped — mark armaments as active in the Wargear panel ++</td></tr></tbody>
+          </table>
+        </div>
+        <!-- Ammunition — SECOND -->
+        <div class="section" style="margin-bottom:8px;">
+          <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Ammunition</span></div>
+          <div id="ammo-tracker-container"><div style="opacity:.4;font-size:9pt;padding:8px 4px;">No ammo tracked — add weapons from the Requisitorium or fill in the Wargear tab.</div></div>
+        </div>
+        <!-- Actions Reference — THIRD (reference material, less frequently needed) -->
         <div class="section" style="margin-bottom:8px;">
           <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Actions Reference</span><span style="font-family:var(--font-label);font-size:7pt;color:var(--text-dim);letter-spacing:.08em;margin-left:6px;">click for details</span></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:4px;">
@@ -667,19 +702,6 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
               <div class="act-ref-row" onclick="_actPopup(event,'rea','Class Feature','Your class, subclass, or a feat grants this reaction. Check your class features.')"><span class="act-badge rea">Rea</span><span class="act-ref-name">Class Feature</span></div>
             </div>
           </div>
-        </div>
-        <!-- Quick Actions -->
-        <div class="section" style="margin-bottom:8px;">
-          <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Quick Actions — Equipped Weapons</span></div>
-          <table class="dos-atk-table">
-            <thead><tr><th style="width:22px;padding:4px 2px;"></th><th>Armament</th><th style="text-align:center;">To Hit</th><th style="text-align:center;">Damage</th><th style="text-align:center;">Range</th><th style="text-align:center;">Mag</th></tr></thead>
-            <tbody id="quick-actions-tbody"><tr><td colspan="6" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">++ No weapons equipped — mark armaments as active in the Wargear panel ++</td></tr></tbody>
-          </table>
-        </div>
-        <!-- Ammunition -->
-        <div class="section">
-          <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Ammunition</span></div>
-          <div id="ammo-tracker-container"><div style="opacity:.4;font-size:9pt;padding:8px 4px;">No ammo tracked — add weapons from the Requisitorium or fill in the Wargear tab.</div></div>
         </div>
       </div>
 
@@ -1534,6 +1556,25 @@ async function _doSave() {
   } catch(e) { _status('error', e.message || 'Save failed'); console.error('Save error:', e); }
 }
 function _schedSave() { _status('saving'); clearTimeout(_saveTimer); _saveTimer = setTimeout(_doSave, 800); }
+function _hpHeal() {
+  var amt = parseInt(prompt('Heal amount:'));
+  if (isNaN(amt) || amt <= 0) return;
+  var cur = parseInt(document.getElementById('hp-cur').value) || 0;
+  var max = parseInt(document.getElementById('hp-max').value) || 0;
+  document.getElementById('hp-cur').value = max ? Math.min(cur + amt, max) : cur + amt;
+  _schedSave();
+}
+function _hpDamage() {
+  var amt = parseInt(prompt('Damage amount:'));
+  if (isNaN(amt) || amt <= 0) return;
+  var temp = parseInt(document.getElementById('hp-temp').value) || 0;
+  var cur = parseInt(document.getElementById('hp-cur').value) || 0;
+  var tempUsed = Math.min(temp, amt);
+  var remainder = amt - tempUsed;
+  document.getElementById('hp-temp').value = temp - tempUsed || '';
+  document.getElementById('hp-cur').value = Math.max(0, cur - remainder);
+  _schedSave();
+}
 async function _loadSheet() {
   if (!_loggedIn()) { _status('offline'); return; }
   try {
