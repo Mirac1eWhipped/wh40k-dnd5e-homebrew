@@ -267,14 +267,21 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .dos-atk-table td{padding:2px 4px;}
 .qa-mod-pill{display:inline-block;font-family:var(--font-label);font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-light);background:rgba(212,160,48,.12);border:1px solid rgba(212,160,48,.3);border-radius:3px;padding:1px 5px;margin:1px 2px 1px 0;white-space:nowrap;}
 /* ── Action reference cards ── */
-.act-ref-row{display:flex;align-items:flex-start;gap:7px;padding:4px 2px;border-bottom:1px solid var(--border);}
+.act-ref-row{display:flex;align-items:center;gap:4px;padding:2px 2px;border-bottom:1px solid var(--border);cursor:pointer;border-radius:2px;}
 .act-ref-row:last-child{border-bottom:none;}
-.act-badge{font-family:var(--font-label);font-size:6.5pt;letter-spacing:.08em;text-transform:uppercase;border-radius:3px;padding:2px 4px;white-space:nowrap;flex-shrink:0;margin-top:2px;}
+.act-ref-row:hover{background:rgba(212,160,48,.07);}
+.act-badge{font-family:var(--font-label);font-size:6pt;letter-spacing:.06em;text-transform:uppercase;border-radius:3px;padding:1px 3px;white-space:nowrap;flex-shrink:0;}
 .act-badge.act{background:rgba(212,160,48,.15);color:var(--gold);border:1px solid rgba(212,160,48,.35);}
 .act-badge.bon{background:rgba(80,140,200,.15);color:#7bb0d8;border:1px solid rgba(80,140,200,.35);}
 .act-badge.rea{background:rgba(180,60,60,.15);color:#cc6060;border:1px solid rgba(180,60,60,.35);}
-.act-ref-name{font-family:var(--font-label);font-size:8.5pt;color:var(--silver);display:block;}
-.act-ref-desc{font-size:7.5pt;color:var(--text-dim);display:block;margin-top:1px;line-height:1.35;}
+.act-ref-name{font-family:var(--font-label);font-size:7.5pt;color:var(--silver);}
+.act-col-hdr{font-family:var(--font-label);font-size:7pt;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);padding-bottom:3px;border-bottom:1px solid var(--border2);margin-bottom:2px;}
+/* ── Action popup ── */
+.act-popup-box{display:none;position:fixed;background:var(--panel);border:1px solid var(--gold-dim);border-radius:4px;padding:10px 13px;max-width:250px;z-index:600;box-shadow:0 6px 24px rgba(0,0,0,.75);}
+.act-popup-box.open{display:block;}
+.act-popup-badge{font-family:var(--font-label);font-size:7pt;letter-spacing:.08em;text-transform:uppercase;border-radius:3px;padding:2px 5px;}
+.act-popup-name{font-family:var(--font-label);font-size:10pt;color:var(--gold-light);display:block;margin:5px 0 5px;}
+.act-popup-desc{font-size:8.5pt;color:var(--text);line-height:1.5;}
 /* ── Shot tracker ── */
 .shot-tracker{display:flex;align-items:center;gap:2px;}
 .shot-btn{background:transparent;border:1px solid var(--gold-dim);color:var(--gold);font-size:10pt;width:18px;height:18px;cursor:pointer;border-radius:2px;padding:0;line-height:1;font-family:monospace;}
@@ -483,29 +490,34 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
       </div>
       <!-- Actions Reference -->
       <div class="section" style="margin-top:8px;">
-        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Actions</span></div>
-        <div class="act-ref-row"><span class="act-badge act">Act</span><div><span class="act-ref-name">Attack</span><span class="act-ref-desc">Make one weapon attack. Add PB + ability mod to hit; add ability mod to damage.</span></div></div>
-        <div class="act-ref-row"><span class="act-badge act">Act</span><div><span class="act-ref-name">Cast a Spell</span><span class="act-ref-desc">Cast a prepared spell with a 1-action casting time.</span></div></div>
-        <div class="act-ref-row"><span class="act-badge act">Act</span><div><span class="act-ref-name">Dash</span><span class="act-ref-desc">Gain extra movement equal to your speed this turn.</span></div></div>
-        <div class="act-ref-row"><span class="act-badge act">Act</span><div><span class="act-ref-name">Disengage</span><span class="act-ref-desc">Your movement doesn't provoke opportunity attacks this turn.</span></div></div>
-        <div class="act-ref-row"><span class="act-badge act">Act</span><div><span class="act-ref-name">Dodge</span><span class="act-ref-desc">Attacks against you have disadvantage; DEX saves gain advantage until your next turn.</span></div></div>
-        <div class="act-ref-row"><span class="act-badge act">Act</span><div><span class="act-ref-name">Help</span><span class="act-ref-desc">Give an ally advantage on their next attack roll or ability check.</span></div></div>
-        <div class="act-ref-row"><span class="act-badge act">Act</span><div><span class="act-ref-name">Hide</span><span class="act-ref-desc">Make a Stealth check to hide from enemies who can't clearly see you.</span></div></div>
-        <div class="act-ref-row"><span class="act-badge act">Act</span><div><span class="act-ref-name">Ready</span><span class="act-ref-desc">Declare a trigger and a reaction to use when it occurs before your next turn.</span></div></div>
-        <div class="act-ref-row"><span class="act-badge act">Act</span><div><span class="act-ref-name">Search</span><span class="act-ref-desc">Make a Perception or Investigation check to locate something hidden.</span></div></div>
-        <div class="act-ref-row"><span class="act-badge act">Act</span><div><span class="act-ref-name">Use an Object</span><span class="act-ref-desc">Interact with a second object this turn or activate a special item property.</span></div></div>
-      </div>
-      <div class="section" style="margin-top:6px;">
-        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Bonus Actions</span></div>
-        <div class="act-ref-row"><span class="act-badge bon">Bon</span><div><span class="act-ref-name">Off-Hand Attack</span><span class="act-ref-desc">Attack with a light weapon in your off-hand. No ability modifier added to damage.</span></div></div>
-        <div class="act-ref-row"><span class="act-badge bon">Bon</span><div><span class="act-ref-name">Cast a Spell</span><span class="act-ref-desc">Cast a prepared spell with a 1-bonus-action casting time.</span></div></div>
-        <div class="act-ref-row"><span class="act-badge bon">Bon</span><div><span class="act-ref-name">Class Feature</span><span class="act-ref-desc">Your class, subclass, or a feat may grant additional bonus actions.</span></div></div>
-      </div>
-      <div class="section" style="margin-top:6px;">
-        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Reactions</span></div>
-        <div class="act-ref-row"><span class="act-badge rea">Rea</span><div><span class="act-ref-name">Opportunity Attack</span><span class="act-ref-desc">When a hostile creature you can see leaves your reach, make one melee attack.</span></div></div>
-        <div class="act-ref-row"><span class="act-badge rea">Rea</span><div><span class="act-ref-name">Cast a Spell</span><span class="act-ref-desc">Cast a prepared spell with a 1-reaction casting time.</span></div></div>
-        <div class="act-ref-row"><span class="act-badge rea">Rea</span><div><span class="act-ref-name">Class Feature</span><span class="act-ref-desc">Your class, subclass, or a feat may grant additional reactions.</span></div></div>
+        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Actions Reference</span><span style="font-family:var(--font-label);font-size:7pt;color:var(--text-dim);letter-spacing:.08em;margin-left:6px;">click for details</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:4px;">
+          <div>
+            <div class="act-col-hdr">Actions</div>
+            <div class="act-ref-row" onclick="_actPopup(event,'act','Attack','Make one weapon attack. Add PB + ability mod to hit; add ability mod to damage.')"><span class="act-badge act">Act</span><span class="act-ref-name">Attack</span></div>
+            <div class="act-ref-row" onclick="_actPopup(event,'act','Cast a Spell','Cast a prepared spell with a 1-action casting time.')"><span class="act-badge act">Act</span><span class="act-ref-name">Cast a Spell</span></div>
+            <div class="act-ref-row" onclick="_actPopup(event,'act','Dash','Gain extra movement equal to your speed for this turn.')"><span class="act-badge act">Act</span><span class="act-ref-name">Dash</span></div>
+            <div class="act-ref-row" onclick="_actPopup(event,'act','Disengage','Your movement does not provoke opportunity attacks for the rest of your turn.')"><span class="act-badge act">Act</span><span class="act-ref-name">Disengage</span></div>
+            <div class="act-ref-row" onclick="_actPopup(event,'act','Dodge','Until your next turn: attacks against you have disadvantage, DEX saves have advantage.')"><span class="act-badge act">Act</span><span class="act-ref-name">Dodge</span></div>
+            <div class="act-ref-row" onclick="_actPopup(event,'act','Help','Give an ally advantage on their next attack roll or ability check before your next turn.')"><span class="act-badge act">Act</span><span class="act-ref-name">Help</span></div>
+            <div class="act-ref-row" onclick="_actPopup(event,'act','Hide','Make a Stealth check to hide from enemies who cannot clearly see you.')"><span class="act-badge act">Act</span><span class="act-ref-name">Hide</span></div>
+            <div class="act-ref-row" onclick="_actPopup(event,'act','Ready','Set a trigger condition and a reaction; the reaction fires when the trigger occurs.')"><span class="act-badge act">Act</span><span class="act-ref-name">Ready</span></div>
+            <div class="act-ref-row" onclick="_actPopup(event,'act','Search','Make a Perception or Investigation check to locate something hidden.')"><span class="act-badge act">Act</span><span class="act-ref-name">Search</span></div>
+            <div class="act-ref-row" onclick="_actPopup(event,'act','Use an Object','Interact with a second object or activate a special item property.')"><span class="act-badge act">Act</span><span class="act-ref-name">Use Object</span></div>
+          </div>
+          <div>
+            <div class="act-col-hdr">Bonus</div>
+            <div class="act-ref-row" onclick="_actPopup(event,'bon','Off-Hand Attack','Attack with a light weapon held in your off-hand. Do not add your ability modifier to the damage roll.')"><span class="act-badge bon">Bon</span><span class="act-ref-name">Off-Hand Atk</span></div>
+            <div class="act-ref-row" onclick="_actPopup(event,'bon','Cast a Spell','Cast a prepared spell with a casting time of 1 bonus action.')"><span class="act-badge bon">Bon</span><span class="act-ref-name">Cast a Spell</span></div>
+            <div class="act-ref-row" onclick="_actPopup(event,'bon','Class Feature','Your class, subclass, or a feat grants this bonus action. Check your class features.')"><span class="act-badge bon">Bon</span><span class="act-ref-name">Class Feature</span></div>
+          </div>
+          <div>
+            <div class="act-col-hdr">Reactions</div>
+            <div class="act-ref-row" onclick="_actPopup(event,'rea','Opportunity Attack','When a hostile creature you can see leaves your reach, make one melee weapon attack against it.')"><span class="act-badge rea">Rea</span><span class="act-ref-name">Opp. Attack</span></div>
+            <div class="act-ref-row" onclick="_actPopup(event,'rea','Cast a Spell','Cast a prepared spell with a casting time of 1 reaction.')"><span class="act-badge rea">Rea</span><span class="act-ref-name">Cast a Spell</span></div>
+            <div class="act-ref-row" onclick="_actPopup(event,'rea','Class Feature','Your class, subclass, or a feat grants this reaction. Check your class features.')"><span class="act-badge rea">Rea</span><span class="act-ref-name">Class Feature</span></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -954,8 +966,8 @@ function syncQuickActionsFromWargear() {
         if (!Array.isArray(meta.mods))  meta.mods = _ref.mods || [];
         if (!meta.shots_max)            { meta.shots_max = _ref.shots || 0; }
         if (meta.shots_cur === undefined) meta.shots_cur = meta.shots_max;
-        if (!meta.dmg)   meta.dmg   = _ref.dmg   || '';
-        if (!meta.wtype) meta.wtype = _ref.wtype  || '';
+        meta.dmg   = _ref.dmg   || meta.dmg   || '';
+        meta.wtype = _ref.wtype  || meta.wtype  || '';
       }
     }
     var stat = meta.stat || 'str';
@@ -1745,6 +1757,35 @@ function renderLineageTraits() {
     '</div>';
   }).join('');
 }
+
+/* ── Action popup ── */
+function _actPopup(e, type, name, desc) {
+  var box = document.getElementById('act-popup-box');
+  if (!box) return;
+  box.querySelector('.act-popup-badge').textContent = type === 'act' ? 'Action' : type === 'bon' ? 'Bonus Action' : 'Reaction';
+  box.querySelector('.act-popup-badge').className = 'act-popup-badge act-badge ' + type;
+  box.querySelector('.act-popup-name').textContent = name;
+  box.querySelector('.act-popup-desc').textContent = desc;
+  var x = Math.min(e.clientX + 10, window.innerWidth - 270);
+  var y = e.clientY + 10;
+  if (y + 140 > window.innerHeight) y = e.clientY - 150;
+  box.style.left = x + 'px';
+  box.style.top  = y + 'px';
+  box.classList.add('open');
+  e.stopPropagation();
+}
+document.addEventListener('click', function() {
+  var box = document.getElementById('act-popup-box');
+  if (box) box.classList.remove('open');
+});
 </script>
+
+<!-- Action detail popup -->
+<div class="act-popup-box" id="act-popup-box">
+  <span class="act-popup-badge act-badge act"></span>
+  <span class="act-popup-name"></span>
+  <span class="act-popup-desc"></span>
+</div>
+
 </body>
 </html>
