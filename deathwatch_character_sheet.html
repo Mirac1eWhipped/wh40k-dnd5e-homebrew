@@ -458,7 +458,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .dos-save-row .dos-sv-name{order:1;}
 .dos-save-row .dos-sv-val{order:2;justify-content:flex-end;}
 /* ── DDB-style skills: [circle][exp][value][name] ── */
-.dos-skill-row{display:grid;grid-template-columns:18px 14px 1fr 36px;align-items:center;gap:4px;padding:2px 2px;border-bottom:1px solid rgba(42,58,80,.3);}
+.dos-skill-row{display:grid;grid-template-columns:18px 14px 1fr 48px;align-items:center;gap:4px;padding:5px 2px;border-bottom:1px solid rgba(42,58,80,.3);}
 .dos-skill-row .dos-sv-name{order:1;}
 .dos-skill-row .dos-sv-val{order:2;justify-content:flex-end;}
 /* Proficiency circle (DDB-style filled circle) */
@@ -782,7 +782,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
           <span class="dos-col-hdr-lbl" style="width:18px;text-align:center;font-size:8pt;flex-shrink:0;" title="Proficiency">P</span>
           <span class="dos-col-hdr-exp" title="Expertise">E</span>
           <span class="dos-col-hdr-lbl" style="flex:1;">Skill</span>
-          <span class="dos-col-hdr-lbl" style="width:36px;text-align:right;flex-shrink:0;">Bonus</span>
+          <span class="dos-col-hdr-lbl" style="width:48px;text-align:right;flex-shrink:0;">Bonus</span>
         </div>
 <div class="dos-skill-row"><input type="checkbox" class="dos-prof-circle" id="skill-acrobatics-prof" onchange="onProfChange('acrobatics')"><input type="checkbox" class="exp-chk" id="skill-acrobatics-exp" title="Expertise" disabled onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="skill-acrobatics" placeholder="+0"></div><span class="dos-sv-name">Acrobatics<span class="dos-attr-abbr">DEX</span></span></div>
 <div class="dos-skill-row"><input type="checkbox" class="dos-prof-circle" id="skill-athletics-prof" onchange="onProfChange('athletics')"><input type="checkbox" class="exp-chk" id="skill-athletics-exp" title="Expertise" disabled onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="skill-athletics" placeholder="+0"></div><span class="dos-sv-name">Athletics<span class="dos-attr-abbr">STR</span></span></div>
