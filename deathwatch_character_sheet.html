@@ -230,7 +230,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .ac-formula{font-family:var(--font-label);font-size:9pt;color:var(--text-dim);margin-top:4px;}
 .ac-formula span{color:var(--gold-light);}
 .armor-row{display:grid;gap:6px;align-items:end;margin-top:8px;}
-.armor-row.r4{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 55px 54px;}
+.armor-row.r4{grid-template-columns:1fr 1fr;}
 .field-group select{font-family:var(--font-body);font-size:10pt;background:transparent;border:none;border-bottom:1px solid var(--line);color:var(--text);outline:none;padding:2px 0;width:100%;}
 .field-group select:focus{border-bottom-color:var(--gold);}
 
@@ -884,21 +884,21 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
                 </div>
                 <div style="flex:1;min-width:0;">
                   <div class="ac-formula" id="ac-formula-txt">Base <span id="acf-base">10</span> + DEX <span id="acf-dex">+0</span> + Other <span id="acf-other">+0</span></div>
-                  <div class="armor-row r4" style="margin-top:6px;">
-                    <div class="field-group"><label>Base AC</label><input type="number" id="armor-base-ac" placeholder="10" oninput="calcAC()"></div>
-                    <div class="field-group"><label>DEX Bonus</label>
-                      <select id="armor-dex-mod" onchange="calcAC()">
-                        <option value="full">Full DEX</option>
-                        <option value="max2">Max +2</option>
-                        <option value="none">None</option>
-                      </select>
-                    </div>
-                    <div class="field-group"><label>Other</label><input type="number" id="armor-bonus" placeholder="0" oninput="calcAC()"></div>
-                    <div class="field-group" style="align-items:center;display:flex;flex-direction:column;gap:2px;">
-                      <label style="text-align:center;">Shield +2</label>
-                      <input type="checkbox" id="armor-shield" onchange="calcAC()" style="width:16px;height:16px;margin-top:2px;">
-                    </div>
-                  </div>
+                </div>
+              </div>
+              <div class="armor-row r4">
+                <div class="field-group"><label>Base AC</label><input type="number" id="armor-base-ac" placeholder="10" oninput="calcAC()"></div>
+                <div class="field-group"><label>DEX Bonus</label>
+                  <select id="armor-dex-mod" onchange="calcAC()">
+                    <option value="full">Full DEX</option>
+                    <option value="max2">Max +2</option>
+                    <option value="none">None</option>
+                  </select>
+                </div>
+                <div class="field-group"><label>Other Bonus</label><input type="number" id="armor-bonus" placeholder="0" oninput="calcAC()"></div>
+                <div class="field-group" style="align-items:center;display:flex;flex-direction:column;gap:2px;">
+                  <label style="text-align:center;">Shield +2</label>
+                  <input type="checkbox" id="armor-shield" onchange="calcAC()" style="width:16px;height:16px;margin-top:2px;">
                 </div>
               </div>
               <div class="armor-row" style="grid-template-columns:1fr 80px;">
