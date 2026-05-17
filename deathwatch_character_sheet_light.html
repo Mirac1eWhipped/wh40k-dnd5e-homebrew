@@ -926,6 +926,10 @@ function onLevelChange() {
 /* ── Wargear equip / Quick Actions system ── */
 var _wargearMeta = [];
 
+/* ── Ammo clip tracker (independent from wargear inputs) ── */
+var _ammoClips = {};     // { rowIdx: currentClips }  — live dossier counter
+var _ammoTypeCache = {}; // { rowIdx: lastSeenType }  — detects type changes → resets counter
+
 function _wpnStatFromCat(cat) {
   return (cat === 'Primary Ranged' || cat === 'Secondary Ranged') ? 'dex' : 'str';
 }
@@ -1032,8 +1036,14 @@ function renderAmmoTracker() {
     var ins = row.querySelectorAll('input');
     var type = ins[0] ? ins[0].value.trim() : '';
     if (!type) return;
-    var cur = parseInt((ins[1] ? ins[1].value : '') || '0') || 0;
     var max = parseInt((ins[2] ? ins[2].value : '') || '0') || 0;
+    // Reset independent clip counter if ammo type changed in this row
+    if (_ammoTypeCache[idx] !== type) {
+      _ammoTypeCache[idx] = type;
+      _ammoClips[idx] = max; // initialise to max on first appearance or type change
+    }
+    if (_ammoClips[idx] === undefined) _ammoClips[idx] = max;
+    var cur = _ammoClips[idx];
     var isEmpty = cur === 0;
     html += '<div class="ammo-trk-row">'
       + '<span class="ammo-trk-name" title="'+type+'">'+type+'</span>'
@@ -1043,7 +1053,7 @@ function renderAmmoTracker() {
       + '<span class="ammo-sep">/</span>'
       + '<span class="ammo-max">'+max+'</span>'
       + '<button class="ammo-btn" onclick="_ammoInc('+idx+')">+</button>'
-      + '<button class="ammo-rl" onclick="_ammoRld('+idx+')" title="Reload clip">↺</button>'
+      + '<button class="ammo-rl" onclick="_ammoRld('+idx+')" title="Resupply to max">↺</button>'
       + '</div>'
       + '</div>';
   });
@@ -1051,21 +1061,17 @@ function renderAmmoTracker() {
   container.innerHTML = html;
 }
 function _ammoDec(idx) {
-  var rows = document.querySelectorAll('.wg-ammo-row');
-  if (!rows[idx]) return;
-  var ins = rows[idx].querySelectorAll('input');
-  var cur = parseInt((ins[1] ? ins[1].value : '') || '0') || 0;
-  if (cur > 0) { ins[1].value = cur - 1; ins[1].dispatchEvent(new Event('input')); ins[1].dispatchEvent(new Event('change')); }
+  var cur = (_ammoClips[idx] !== undefined) ? _ammoClips[idx] : 0;
+  if (cur > 0) _ammoClips[idx] = cur - 1;
   renderAmmoTracker(); _schedSave();
 }
 function _ammoInc(idx) {
   var rows = document.querySelectorAll('.wg-ammo-row');
   if (!rows[idx]) return;
   var ins = rows[idx].querySelectorAll('input');
-  var cur = parseInt((ins[1] ? ins[1].value : '') || '0') || 0;
   var max = parseInt((ins[2] ? ins[2].value : '') || '0') || 0;
-  var nv = max > 0 ? Math.min(cur + 1, max) : cur + 1;
-  ins[1].value = nv; ins[1].dispatchEvent(new Event('input')); ins[1].dispatchEvent(new Event('change'));
+  var cur = (_ammoClips[idx] !== undefined) ? _ammoClips[idx] : 0;
+  _ammoClips[idx] = (max > 0) ? Math.min(cur + 1, max) : cur + 1;
   renderAmmoTracker(); _schedSave();
 }
 function _ammoRld(idx) {
@@ -1073,7 +1079,7 @@ function _ammoRld(idx) {
   if (!rows[idx]) return;
   var ins = rows[idx].querySelectorAll('input');
   var max = parseInt((ins[2] ? ins[2].value : '') || '0') || 0;
-  ins[1].value = max; ins[1].dispatchEvent(new Event('input')); ins[1].dispatchEvent(new Event('change'));
+  _ammoClips[idx] = max;
   renderAmmoTracker(); _schedSave();
 }
 
@@ -1305,7 +1311,8 @@ async function _doSave() {
       var e = document.getElementById('skill-'+sk.id+'-exp');
       return e && e.checked;
     }).map(function(sk) { return sk.id; }),
-    wargear_meta: _wargearMeta
+    wargear_meta: _wargearMeta,
+    ammo_clips: _ammoClips
   };
   const name = _charName();
   try {
@@ -1369,6 +1376,9 @@ async function _loadSheet() {
       _wargearMeta.forEach(function(meta, i) {
         if (meta && meta.equipped && wgBtns[i]) wgBtns[i].classList.add('equipped');
       });
+    }
+    if (ext.ammo_clips && typeof ext.ammo_clips === 'object') {
+      _ammoClips = ext.ammo_clips;
     }
     STATS.forEach(s => calcMod(s));
     syncQuickActionsFromWargear();
