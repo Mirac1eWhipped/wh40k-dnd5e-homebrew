@@ -64,7 +64,7 @@ body{background:var(--bg-page);font-family:var(--font-body);color:var(--text);fo
 
 /* ── Sheet Header (D&D Beyond style) ── */
 .sheet-header{background:var(--panel);border-bottom:2px solid var(--gold-dim);padding:10px 18px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;position:sticky;top:38px;z-index:100;}
-.sh-portrait{width:60px;height:60px;border-radius:50%;border:2px solid var(--gold);background:var(--panel2);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--gold-dim);font-size:22pt;line-height:1;}
+.sh-portrait{width:68px;height:68px;border-radius:50%;border:2px solid var(--gold);background:var(--panel2);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--gold-dim);font-size:24pt;line-height:1;box-shadow:0 0 0 3px var(--panel),0 0 0 5px rgba(200,164,74,.28),0 0 18px rgba(200,164,74,.15);}
 .sh-identity{display:flex;flex-direction:column;gap:2px;}
 .sh-name-inp{font-family:var(--font-head);font-size:18pt;color:var(--gold-light);background:transparent;border:none;border-bottom:1px solid transparent;outline:none;padding:0;letter-spacing:.04em;text-shadow:0 0 12px rgba(200,164,74,.25);width:100%;}
 .sh-name-inp:focus{border-bottom-color:var(--gold);}
@@ -105,17 +105,51 @@ body{background:var(--bg-page);font-family:var(--font-body);color:var(--text);fo
 
 /* ── Combat mini-bar (Initiative / AC / Conditions) ── */
 .dos-combat-bar{display:grid;grid-template-columns:auto auto 1fr;gap:8px;margin-bottom:10px;align-items:flex-start;}
-.dos-init-box{background:var(--panel2);border:1px solid var(--border2);padding:8px 12px;text-align:center;min-width:90px;}
+
+/* Initiative — hexagonal frame (light theme: #341214 fill, #6e3032 stroke) */
+.dos-init-box{
+  background-color:var(--panel2);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 114'%3E%3Cpolygon points='50%2C2 98%2C27 98%2C87 50%2C112 2%2C87 2%2C27' fill='%23341214' stroke='%236e3032' stroke-width='2.5'/%3E%3Cpolygon points='50%2C10 90%2C32 90%2C83 50%2C105 10%2C83 10%2C32' fill='none' stroke='%234a1e20' stroke-width='1'/%3E%3C/svg%3E");
+  background-size:100% 100%;
+  background-repeat:no-repeat;
+  border:none;
+  padding:20px 8px 24px;
+  text-align:center;
+  min-width:92px;
+  min-height:106px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
 .dos-init-val{font-family:var(--font-label);font-size:28pt;font-weight:700;color:var(--gold-light);line-height:1;display:block;}
 .dos-init-lbl{font-family:var(--font-label);font-size:8pt;letter-spacing:.16em;text-transform:uppercase;color:var(--silver-dim);display:block;margin-top:2px;}
 .dos-init-box input{font-family:var(--font-label)!important;font-size:28pt!important;font-weight:700!important;color:var(--gold-light)!important;background:transparent!important;border:none!important;outline:none!important;text-align:center!important;width:80px!important;padding:0!important;line-height:1!important;}
-.dos-ac-box{background:var(--panel2);border:2px solid var(--gold-dim);padding:8px 12px;text-align:center;min-width:90px;}
+
+/* Armor Class — shield frame (light theme colors) */
+.dos-ac-box{
+  background-color:var(--panel2);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 116'%3E%3Cpath d='M4 4 L96 4 L96 74 L50 112 L4 74 Z' fill='%23341214' stroke='%23c8a44a' stroke-width='2.5'/%3E%3Cpath d='M11 11 L89 11 L89 72 L50 103 L11 72 Z' fill='none' stroke='%237a6228' stroke-width='1'/%3E%3C/svg%3E");
+  background-size:100% 100%;
+  background-repeat:no-repeat;
+  border:none;
+  padding:14px 14px 34px;
+  text-align:center;
+  min-width:100px;
+  min-height:116px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
 .dos-ac-val{font-family:var(--font-label);font-size:28pt;font-weight:700;color:var(--text);line-height:1;display:block;}
 .dos-ac-lbl{font-family:var(--font-label);font-size:8pt;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);display:block;margin-top:2px;}
 .dos-cond-box{background:var(--panel2);border:1px solid var(--border2);padding:6px 8px;}
 
 /* ── Section Block ── */
-.section{background:var(--panel);border:1px solid var(--border2);padding:10px 12px;margin-bottom:10px;box-sizing:border-box;}
+.section{background:var(--panel);border:1px solid var(--border2);padding:10px 12px;margin-bottom:10px;box-sizing:border-box;position:relative;}
+.section::before{content:'';position:absolute;top:4px;left:4px;width:10px;height:10px;border-top:1px solid rgba(200,164,74,.22);border-left:1px solid rgba(200,164,74,.22);pointer-events:none;}
+.section::after{content:'';position:absolute;bottom:4px;right:4px;width:10px;height:10px;border-bottom:1px solid rgba(200,164,74,.22);border-right:1px solid rgba(200,164,74,.22);pointer-events:none;}
 .sec-title{font-family:var(--font-label);font-size:9pt;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--gold-dim);padding-bottom:3px;margin-bottom:8px;}
 
 /* ── Field helpers ── */
@@ -248,11 +282,27 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 
 /* ══ DOSSIER OVERVIEW ══ */
 .dos-ab-bar{display:flex;gap:5px;margin-bottom:8px;}
-.dos-ab-box{background:var(--panel2);border:1px solid var(--border2);border-radius:2px;padding:10px 6px 8px;text-align:center;flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;box-shadow:0 1px 6px rgba(0,0,0,.35);}
+.dos-ab-box{
+  background:var(--panel2);
+  border:1px solid var(--border2);
+  border-top:2px solid var(--gold-dim);
+  border-radius:2px;
+  position:relative;
+  padding:10px 6px 10px;
+  text-align:center;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:2px;
+  box-shadow:0 2px 8px rgba(0,0,0,.45),inset 0 0 0 1px rgba(200,164,74,.04);
+}
+.dos-ab-box::before{content:'';position:absolute;top:4px;left:4px;width:7px;height:7px;border-top:1px solid rgba(200,164,74,.4);border-left:1px solid rgba(200,164,74,.4);pointer-events:none;}
+.dos-ab-box::after{content:'';position:absolute;bottom:4px;right:4px;width:7px;height:7px;border-bottom:1px solid rgba(200,164,74,.4);border-right:1px solid rgba(200,164,74,.4);pointer-events:none;}
 .dos-ab-lbl{font-family:var(--font-label);font-size:8.5pt;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:700;border-bottom:1px solid var(--border2);width:100%;padding-bottom:4px;margin-bottom:2px;}
 /* Modifier shown prominently, score below */
 .dos-ab-mod{order:1;}
-.dos-ab-mod input{font-family:var(--font-label)!important;font-size:26pt!important;font-weight:700!important;color:var(--gold-light)!important;background:transparent!important;border:none!important;outline:none!important;text-align:center!important;width:70px!important;padding:0!important;line-height:1!important;text-shadow:0 0 8px rgba(232,201,106,.3)!important;}
+.dos-ab-mod input{font-family:var(--font-label)!important;font-size:26pt!important;font-weight:700!important;color:var(--gold-light)!important;background:transparent!important;border:none!important;outline:none!important;text-align:center!important;width:70px!important;padding:0!important;line-height:1!important;text-shadow:0 0 10px rgba(232,201,106,.25)!important;}
 /* Score shown in small box below */
 .dos-ab-score{order:2;background:var(--panel);border:1px solid var(--border2);padding:2px 4px;margin-top:2px;width:52px;}
 .dos-ab-score input{font-family:var(--font-label)!important;font-size:10.5pt!important;color:var(--text)!important;background:transparent!important;border:none!important;outline:none!important;text-align:center!important;width:44px!important;padding:0!important;}
@@ -346,6 +396,22 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .dos-atk-table td input{font-size:10pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:3px 0!important;background:transparent!important;color:var(--text)!important;outline:none!important;width:100%!important;}
 .dos-atk-table tr:hover td input{border-bottom-color:var(--gold)!important;}
 .dos-textarea{width:100%;background:var(--panel2);border:1px solid var(--border2);color:var(--text);font-family:var(--font-body);font-size:10pt;outline:none;resize:none;padding:6px 8px;box-sizing:border-box;margin-top:4px;}
+
+/* ── Right column outer frame ── */
+.dos-rc-col{grid-row:1/3;background:var(--panel);border:1px solid var(--border2);border-top:2px solid var(--gold-dim);padding:12px;position:relative;box-shadow:inset 0 1px 0 rgba(200,164,74,.08);}
+.dos-rc-col::before{content:'';position:absolute;top:5px;left:5px;width:12px;height:12px;border-top:1px solid rgba(200,164,74,.3);border-left:1px solid rgba(200,164,74,.3);pointer-events:none;}
+.dos-rc-col::after{content:'';position:absolute;bottom:5px;right:5px;width:12px;height:12px;border-bottom:1px solid rgba(200,164,74,.3);border-right:1px solid rgba(200,164,74,.3);pointer-events:none;}
+
+/* ── Weapon type badges in quick actions ── */
+.qa-name-cell{display:flex;flex-direction:column;gap:2px;}
+.qa-meta-row{display:flex;gap:3px;flex-wrap:wrap;align-items:center;margin-top:1px;}
+.qa-wtype-badge{display:inline-block;font-family:var(--font-label);font-size:6.5pt;letter-spacing:.07em;text-transform:uppercase;border-radius:3px;padding:1px 4px;white-space:nowrap;}
+.qa-wtype-badge.wt-melee{background:rgba(180,60,60,.15);color:#cc7070;border:1px solid rgba(180,60,60,.3);}
+.qa-wtype-badge.wt-ranged{background:rgba(80,140,200,.14);color:#7ab0d8;border:1px solid rgba(80,140,200,.3);}
+.qa-wtype-badge.wt-heavy{background:rgba(150,80,200,.14);color:#b07ed0;border:1px solid rgba(150,80,200,.3);}
+.qa-wtype-badge.wt-pistol{background:rgba(80,180,120,.14);color:#70c490;border:1px solid rgba(80,180,120,.3);}
+.qa-wtype-badge.wt-other{background:rgba(150,130,80,.14);color:#c0a860;border:1px solid rgba(150,130,80,.3);}
+.qa-type-icon{width:20px;text-align:center;font-size:11pt;color:var(--silver-dim);flex-shrink:0;}
 </style>
 </head>
 <body>
@@ -543,7 +609,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
     </div>
 
     <!-- RIGHT: Combat mini-bar + right-column tabs (spans both rows) -->
-    <div style="grid-row:1/3;">
+    <div class="dos-rc-col">
       <!-- Combat mini-bar: Initiative | AC | Conditions -->
       <div class="dos-combat-bar">
         <div class="dos-init-box">
@@ -606,8 +672,8 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
         <div class="section" style="margin-bottom:8px;">
           <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Quick Actions — Equipped Weapons</span></div>
           <table class="dos-atk-table">
-            <thead><tr><th>Armament</th><th>To Hit</th><th>Damage</th><th>Range</th><th>Pattern</th><th>Special Rules</th><th>Magazine</th></tr></thead>
-            <tbody id="quick-actions-tbody"><tr><td colspan="7" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">++ No weapons equipped — mark armaments as active in the Wargear panel ++</td></tr></tbody>
+            <thead><tr><th style="width:22px;padding:4px 2px;"></th><th>Armament</th><th style="text-align:center;">To Hit</th><th style="text-align:center;">Damage</th><th style="text-align:center;">Range</th><th style="text-align:center;">Mag</th></tr></thead>
+            <tbody id="quick-actions-tbody"><tr><td colspan="6" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">++ No weapons equipped — mark armaments as active in the Wargear panel ++</td></tr></tbody>
           </table>
         </div>
         <!-- Ammunition -->
@@ -1087,7 +1153,7 @@ function syncQuickActionsFromWargear() {
     var wtype = meta.wtype || '';
     var mods = (Array.isArray(meta.mods) && meta.mods.length)
       ? meta.mods.map(function(m){ return '<span class="qa-mod-pill" onclick="_modPopup(event,\''+m.replace(/\\/g,'\\\\').replace(/'/g,"\\'")+'\')" title="'+m+'">'+m+'</span>'; }).join('')
-      : '<span style="opacity:.35;">—</span>';
+      : '';
     var sMax = meta.shots_max || 0;
     var sCur = (meta.shots_cur !== undefined) ? meta.shots_cur : sMax;
     var shots = sMax > 0
@@ -1098,17 +1164,32 @@ function syncQuickActionsFromWargear() {
           + '<button class="shot-rl" onclick="_shotRld('+i+')" title="Reload">↺</button>'
           + '</div>'
       : '<span style="opacity:.35;">—</span>';
+    // Determine weapon type icon + badge class
+    var wlo = wtype.toLowerCase();
+    var wIcon, wBadgeCls;
+    if (/melee|chainsword|power\s?fist|power\s?sword|knife|blade|axe|hammer|mace/i.test(wlo)) {
+      wIcon = '⚔'; wBadgeCls = 'wt-melee';
+    } else if (/heavy|lascannon|multi.melta|plasma cannon|auto.?cannon|missile/i.test(wlo)) {
+      wIcon = '⬡'; wBadgeCls = 'wt-heavy';
+    } else if (/pistol/i.test(wlo)) {
+      wIcon = '⊙'; wBadgeCls = 'wt-pistol';
+    } else if (/rapid|assault|bolt|rifle|gun|sniper|shotgun|stalker|grenade/i.test(wlo)) {
+      wIcon = '⊕'; wBadgeCls = 'wt-ranged';
+    } else {
+      wIcon = '◈'; wBadgeCls = 'wt-other';
+    }
+    var wtypeBadge = wtype ? '<span class="qa-wtype-badge '+wBadgeCls+'">'+wtype+'</span>' : '';
+    var metaRow = (wtypeBadge || mods) ? '<div class="qa-meta-row">'+wtypeBadge+mods+'</div>' : '';
     rows += '<tr>'
-      + '<td>'+name+'</td>'
+      + '<td style="text-align:center;color:var(--silver-dim);font-size:11pt;padding:3px 2px;">'+wIcon+'</td>'
+      + '<td><div class="qa-name-cell"><span style="font-family:var(--font-label);font-size:10pt;color:var(--text);">'+name+'</span>'+metaRow+'</div></td>'
       + '<td style="text-align:center;color:var(--gold-light);">'+hit+'</td>'
       + '<td style="text-align:center;">'+dmg+'</td>'
       + '<td style="text-align:center;">'+range+'</td>'
-      + '<td>'+wtype+'</td>'
-      + '<td>'+mods+'</td>'
       + '<td>'+shots+'</td>'
       + '</tr>';
   }
-  if (!rows) rows = '<tr><td colspan="7" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">++ No weapons equipped — mark armaments as active in the Wargear panel ++</td></tr>';
+  if (!rows) rows = '<tr><td colspan="6" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">++ No weapons equipped — mark armaments as active in the Wargear panel ++</td></tr>';
   tbody.innerHTML = rows;
   renderAmmoTracker();
 }
