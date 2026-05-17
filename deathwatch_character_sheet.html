@@ -63,16 +63,16 @@ body{background:var(--bg-page);font-family:var(--font-body);color:var(--text);fo
 .sheet-wrap{max-width:1060px;margin:0 auto;padding:50px 0 40px;}
 
 /* ── Sheet Header ── */
-.sheet-header{background:var(--bg);border-bottom:2px solid var(--gold-dim);padding:14px 22px 10px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;position:sticky;top:38px;z-index:100;}
-.sh-title-block{display:flex;flex-direction:column;gap:2px;}
-.sh-aquila{font-size:14pt;color:var(--gold);letter-spacing:.3em;line-height:1;}
-.sh-h1{font-family:var(--font-head);font-size:16pt;color:var(--gold-light);letter-spacing:.05em;text-shadow:0 0 14px rgba(200,164,74,.3);}
-.sh-sub{font-family:var(--font-label);font-size:9pt;color:var(--silver-dim);letter-spacing:.25em;text-transform:uppercase;}
+.sheet-header{background:var(--bg);border-bottom:2px solid var(--gold-dim);padding:7px 22px 7px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;position:sticky;top:38px;z-index:100;}
+.sh-title-block{display:flex;flex-direction:column;gap:1px;}
+.sh-aquila{font-size:9pt;color:var(--gold);letter-spacing:.3em;line-height:1;}
+.sh-h1{font-family:var(--font-head);font-size:12pt;color:var(--gold-light);letter-spacing:.05em;text-shadow:0 0 14px rgba(200,164,74,.3);}
+.sh-sub{font-family:var(--font-label);font-size:7pt;color:var(--silver-dim);letter-spacing:.2em;text-transform:uppercase;}
 .sh-fields{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;}
 .sh-field{display:flex;flex-direction:column;min-width:80px;}
 .sh-field.wide{min-width:140px;}
 .sh-field label{font-family:var(--font-label);font-size:9pt;letter-spacing:.18em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:2px;}
-.sh-field input,.sh-field select{background:transparent;border:none;border-bottom:1px solid var(--line);color:var(--text);font-family:var(--font-body);font-size:13pt;padding:1px 2px;outline:none;width:100%;}
+.sh-field input,.sh-field select{background:transparent;border:none;border-bottom:1px solid var(--line);color:var(--text);font-family:var(--font-body);font-size:11pt;padding:1px 2px;outline:none;width:100%;}
 .sh-field input:focus,.sh-field select:focus{border-bottom-color:var(--gold);}
 .sh-field select{-webkit-appearance:none;appearance:none;cursor:pointer;padding-right:18px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c8a44a'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 3px center;}
 .sh-field select option{background:var(--panel);color:var(--text);}
@@ -80,10 +80,10 @@ body{background:var(--bg-page);font-family:var(--font-body);color:var(--text);fo
 .sh-meta-row{display:flex;gap:8px;}
 .sh-meta-field{display:flex;flex-direction:column;align-items:center;background:var(--panel);border:1px solid var(--border2);padding:4px 8px;min-width:54px;}
 .sh-meta-field label{font-family:var(--font-label);font-size:9pt;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);}
-.sh-meta-field input{font-family:var(--font-label);font-size:16pt;font-weight:700;color:var(--text);background:transparent;border:none;outline:none;text-align:center;width:56px;}
+.sh-meta-field input{font-family:var(--font-label);font-size:13pt;font-weight:700;color:var(--text);background:transparent;border:none;outline:none;text-align:center;width:46px;}
 
 /* ── Tab Nav ── */
-.tab-nav{display:flex;background:var(--panel);border-bottom:1px solid var(--border2);position:sticky;top:calc(38px + 72px);z-index:90;overflow-x:auto;}
+.tab-nav{display:flex;background:var(--panel);border-bottom:1px solid var(--border2);position:sticky;top:calc(38px + 52px);z-index:90;overflow-x:auto;}
 .tab-btn{padding:11px 18px;font-family:var(--font-label);font-size:10pt;letter-spacing:.2em;text-transform:uppercase;color:var(--silver-dim);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;white-space:nowrap;}
 .tab-btn:hover{color:var(--gold);}
 .tab-btn.active{color:var(--gold-light);border-bottom-color:var(--gold);}
@@ -350,7 +350,6 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
         <option value="Imperial Fists">Imperial Fists</option>
       </select>
     </div>
-    <div class="sh-field"><label>Campaign</label><input type="text" id="char-campaign" placeholder="Kill Team: Jericho"></div>
     <div class="sh-field"><label>Player</label><input type="text" id="char-player" placeholder=""></div>
   </div>
   <div class="sh-meta">
@@ -459,21 +458,23 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
     </div>
     <!-- RIGHT: Hit Dice · Death Saves · Conditions · Quick Actions -->
     <div>
-      <div class="section">
-        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Hit Dice</span></div>
-        <div class="field-group" style="margin-bottom:4px;"><label>Type</label><input type="text" id="hd-type" placeholder="d8"></div>
-        <div class="g2">
-          <div class="field-group"><label>Total</label><input type="number" id="hd-total" placeholder="1"></div>
-          <div class="field-group"><label>Used</label><input type="number" id="hd-used" placeholder="0"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div class="section">
+          <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Hit Dice</span></div>
+          <div class="field-group" style="margin-bottom:4px;"><label>Type</label><input type="text" id="hd-type" placeholder="d8"></div>
+          <div class="g2">
+            <div class="field-group"><label>Total</label><input type="number" id="hd-total" placeholder="1"></div>
+            <div class="field-group"><label>Used</label><input type="number" id="hd-used" placeholder="0"></div>
+          </div>
         </div>
-      </div>
-      <div class="section" style="margin-top:8px;">
-        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Death Saving Throws</span></div>
-        <div class="death-row"><span class="death-lbl">Successes</span>
-          <input type="checkbox" id="death-s1"><input type="checkbox" id="death-s2"><input type="checkbox" id="death-s3">
-        </div>
-        <div class="death-row"><span class="death-lbl">Failures</span>
-          <input type="checkbox" id="death-f1"><input type="checkbox" id="death-f2"><input type="checkbox" id="death-f3">
+        <div class="section">
+          <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Death Saves</span></div>
+          <div class="death-row"><span class="death-lbl">Successes</span>
+            <input type="checkbox" id="death-s1"><input type="checkbox" id="death-s2"><input type="checkbox" id="death-s3">
+          </div>
+          <div class="death-row"><span class="death-lbl">Failures</span>
+            <input type="checkbox" id="death-f1"><input type="checkbox" id="death-f2"><input type="checkbox" id="death-f3">
+          </div>
         </div>
       </div>
       <div class="section" style="margin-top:8px;">
