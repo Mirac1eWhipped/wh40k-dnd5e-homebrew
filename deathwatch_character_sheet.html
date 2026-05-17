@@ -233,15 +233,27 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .dos-stat{background:var(--panel2);border:1px solid var(--border2);padding:6px 8px;text-align:center;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;}
 .dos-stat input{font-family:var(--font-label)!important;font-size:15pt!important;font-weight:700!important;color:var(--gold-light)!important;background:transparent!important;border:none!important;outline:none!important;text-align:center!important;width:80px!important;padding:0!important;}
 .dos-stat-lbl{font-family:var(--font-label);font-size:9pt;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);}
-.dos-hp-block{background:var(--panel2);border:1px solid var(--border2);padding:6px 12px;text-align:center;flex:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;}
+.dos-hp-block{background:var(--panel2);border:1px solid var(--border2);padding:6px 12px;text-align:center;flex:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;}
 .dos-hp-frac{display:flex;align-items:baseline;gap:4px;}
-.dos-hp-frac input{font-family:var(--font-label)!important;font-size:20pt!important;font-weight:700!important;color:var(--gold-light)!important;background:transparent!important;border:none!important;outline:none!important;text-align:center!important;width:62px!important;padding:0!important;}
-.dos-hp-fsep{font-family:var(--font-label);font-size:16pt;font-weight:300;color:var(--text-dim);line-height:1;}
+.dos-hp-frac input{font-family:var(--font-label)!important;font-size:15pt!important;font-weight:700!important;color:var(--gold-light)!important;background:transparent!important;border:none!important;outline:none!important;text-align:center!important;width:50px!important;padding:0!important;}
+.dos-hp-fsep{font-family:var(--font-label);font-size:12pt;font-weight:300;color:var(--text-dim);line-height:1;}
 .dos-hp-lbl{display:flex;align-items:center;gap:4px;font-family:var(--font-label);font-size:8pt;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);}
 .dos-hp-lbl span{width:62px;text-align:center;}
 .dos-hp-lbl .dos-hp-fsep-lbl{width:auto;color:transparent;font-size:8pt;}
 .dos-hp-temp{display:flex;align-items:center;gap:6px;margin-top:4px;padding-top:4px;border-top:1px solid var(--border);}
 .dos-hp-temp input{font-family:var(--font-label)!important;font-size:12pt!important;font-weight:600!important;color:var(--text)!important;background:transparent!important;border:none!important;border-bottom:1px solid var(--line)!important;outline:none!important;text-align:center!important;width:46px!important;padding:0!important;}
+/* Compact Hit Dice in stat bar */
+.dos-hd-block{background:var(--panel2);border:1px solid var(--border2);padding:5px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;flex-shrink:0;}
+.dos-hd-type{font-family:var(--font-label)!important;font-size:14pt!important;font-weight:700!important;color:var(--gold-light)!important;background:transparent!important;border:none!important;outline:none!important;text-align:center!important;width:44px!important;padding:0!important;}
+.dos-hd-frac{display:flex;align-items:center;gap:3px;}
+.dos-hd-sep{color:var(--text-dim);font-size:9pt;}
+.dos-hd-frac input{font-family:var(--font-label)!important;font-size:11pt!important;color:var(--text)!important;background:transparent!important;border:none!important;border-bottom:1px solid var(--line)!important;outline:none!important;text-align:center!important;width:26px!important;padding:0!important;}
+/* Compact Death Saves in stat bar */
+.dos-ds-block{background:var(--panel2);border:1px solid var(--border2);padding:5px 12px;display:flex;flex-direction:column;justify-content:center;gap:4px;flex-shrink:0;}
+.dos-ds-row{display:flex;align-items:center;gap:8px;}
+.dos-ds-lbl{font-family:var(--font-label);font-size:7.5pt;letter-spacing:.06em;text-transform:uppercase;color:var(--silver);width:56px;flex-shrink:0;}
+.dos-ds-boxes{display:flex;gap:6px;align-items:center;}
+.dos-ds-boxes input[type=checkbox]{width:14px;height:14px;margin:0;cursor:pointer;flex-shrink:0;}
 .dos-3col{display:grid;grid-template-columns:210px 230px 1fr;gap:14px;}
 .dos-row{display:flex;align-items:center;gap:5px;padding:4px 2px;border-bottom:1px solid rgba(42,58,80,.3);}
 .dos-row input[type=checkbox]{width:12px;height:12px;accent-color:var(--gold);flex-shrink:0;cursor:pointer;}
@@ -302,8 +314,6 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .ammo-max{font-family:var(--font-label);font-size:9pt;color:var(--text-dim);min-width:16px;text-align:center;}
 .ammo-rl{background:transparent;border:none;color:var(--text-dim);font-size:11pt;cursor:pointer;padding:0 2px;line-height:1;}
 .ammo-rl:hover{color:var(--gold);}
-/* ── Quick Actions + Ammo full-width panel ── */
-.qa-bottom{display:grid;grid-template-columns:1fr 220px;gap:10px;margin-top:10px;}
 .dos-atk-table td input{font-size:10pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:3px 0!important;background:transparent!important;color:var(--text)!important;outline:none!important;width:100%!important;}
 .dos-atk-table tr:hover td input{border-bottom-color:var(--gold)!important;}
 .dos-textarea{width:100%;background:var(--panel2);border:1px solid var(--border2);color:var(--text);font-family:var(--font-body);font-size:10pt;outline:none;resize:none;padding:6px 8px;box-sizing:border-box;margin-top:4px;}
@@ -404,6 +414,34 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
         <span class="dos-stat-lbl">Temp HP</span>
       </div>
     </div>
+    <div class="dos-hd-block">
+      <input type="text" id="hd-type" placeholder="d8" class="dos-hd-type">
+      <div class="dos-hd-frac">
+        <input type="number" id="hd-total" placeholder="1">
+        <span class="dos-hd-sep">/</span>
+        <input type="number" id="hd-used" placeholder="0">
+      </div>
+      <span class="dos-stat-lbl">Hit Dice</span>
+    </div>
+    <div class="dos-ds-block">
+      <div class="dos-ds-row">
+        <span class="dos-ds-lbl">Successes</span>
+        <div class="dos-ds-boxes">
+          <input type="checkbox" id="death-s1">
+          <input type="checkbox" id="death-s2">
+          <input type="checkbox" id="death-s3">
+        </div>
+      </div>
+      <div class="dos-ds-row">
+        <span class="dos-ds-lbl">Failures</span>
+        <div class="dos-ds-boxes">
+          <input type="checkbox" id="death-f1">
+          <input type="checkbox" id="death-f2">
+          <input type="checkbox" id="death-f3">
+        </div>
+      </div>
+      <span class="dos-stat-lbl" style="margin-top:1px;text-align:center;">Death Saves</span>
+    </div>
   </div>
   <!-- Three Columns -->
   <div class="dos-3col">
@@ -463,76 +501,58 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 <div class="dos-row"><input type="checkbox" id="skill-technology-prof" onchange="onProfChange('technology')"><input type="checkbox" class="exp-chk" id="skill-technology-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Technology</span><div class="dos-bonus"><input type="text" id="skill-technology" placeholder="+0"></div></div>
       </div>
     </div>
-    <!-- RIGHT: Hit Dice · Death Saves · Conditions · Quick Actions -->
+    <!-- RIGHT: Conditions · Actions Reference · Quick Actions · Ammo -->
     <div>
+      <!-- Conditions + Actions Reference side by side -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
         <div class="section">
-          <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Hit Dice</span></div>
-          <div class="field-group" style="margin-bottom:4px;"><label>Type</label><input type="text" id="hd-type" placeholder="d8"></div>
-          <div class="g2">
-            <div class="field-group"><label>Total</label><input type="number" id="hd-total" placeholder="1"></div>
-            <div class="field-group"><label>Used</label><input type="number" id="hd-used" placeholder="0"></div>
-          </div>
+          <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Conditions &amp; Status</span></div>
+          <textarea class="dos-textarea" rows="9" placeholder="Poisoned, Stunned, Burning, Pinned…"></textarea>
         </div>
         <div class="section">
-          <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Death Saves</span></div>
-          <div class="death-row"><span class="death-lbl">Successes</span>
-            <input type="checkbox" id="death-s1"><input type="checkbox" id="death-s2"><input type="checkbox" id="death-s3">
-          </div>
-          <div class="death-row"><span class="death-lbl">Failures</span>
-            <input type="checkbox" id="death-f1"><input type="checkbox" id="death-f2"><input type="checkbox" id="death-f3">
-          </div>
-        </div>
-      </div>
-      <div class="section" style="margin-top:8px;">
-        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Conditions &amp; Status</span></div>
-        <textarea class="dos-textarea" rows="3" placeholder="Poisoned, Stunned, Burning, Pinned…"></textarea>
-      </div>
-      <!-- Actions Reference -->
-      <div class="section" style="margin-top:8px;">
-        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Actions Reference</span><span style="font-family:var(--font-label);font-size:7pt;color:var(--text-dim);letter-spacing:.08em;margin-left:6px;">click for details</span></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:4px;">
-          <div>
-            <div class="act-col-hdr">Actions</div>
-            <div class="act-ref-row" onclick="_actPopup(event,'act','Attack','Make one weapon attack. Add PB + ability mod to hit; add ability mod to damage.')"><span class="act-badge act">Act</span><span class="act-ref-name">Attack</span></div>
-            <div class="act-ref-row" onclick="_actPopup(event,'act','Cast a Spell','Cast a prepared spell with a 1-action casting time.')"><span class="act-badge act">Act</span><span class="act-ref-name">Cast a Spell</span></div>
-            <div class="act-ref-row" onclick="_actPopup(event,'act','Dash','Gain extra movement equal to your speed for this turn.')"><span class="act-badge act">Act</span><span class="act-ref-name">Dash</span></div>
-            <div class="act-ref-row" onclick="_actPopup(event,'act','Disengage','Your movement does not provoke opportunity attacks for the rest of your turn.')"><span class="act-badge act">Act</span><span class="act-ref-name">Disengage</span></div>
-            <div class="act-ref-row" onclick="_actPopup(event,'act','Dodge','Until your next turn: attacks against you have disadvantage, DEX saves have advantage.')"><span class="act-badge act">Act</span><span class="act-ref-name">Dodge</span></div>
-            <div class="act-ref-row" onclick="_actPopup(event,'act','Help','Give an ally advantage on their next attack roll or ability check before your next turn.')"><span class="act-badge act">Act</span><span class="act-ref-name">Help</span></div>
-            <div class="act-ref-row" onclick="_actPopup(event,'act','Hide','Make a Stealth check to hide from enemies who cannot clearly see you.')"><span class="act-badge act">Act</span><span class="act-ref-name">Hide</span></div>
-            <div class="act-ref-row" onclick="_actPopup(event,'act','Ready','Set a trigger condition and a reaction; the reaction fires when the trigger occurs.')"><span class="act-badge act">Act</span><span class="act-ref-name">Ready</span></div>
-            <div class="act-ref-row" onclick="_actPopup(event,'act','Search','Make a Perception or Investigation check to locate something hidden.')"><span class="act-badge act">Act</span><span class="act-ref-name">Search</span></div>
-            <div class="act-ref-row" onclick="_actPopup(event,'act','Use an Object','Interact with a second object or activate a special item property.')"><span class="act-badge act">Act</span><span class="act-ref-name">Use Object</span></div>
-          </div>
-          <div>
-            <div class="act-col-hdr">Bonus</div>
-            <div class="act-ref-row" onclick="_actPopup(event,'bon','Off-Hand Attack','Attack with a light weapon held in your off-hand. Do not add your ability modifier to the damage roll.')"><span class="act-badge bon">Bon</span><span class="act-ref-name">Off-Hand Atk</span></div>
-            <div class="act-ref-row" onclick="_actPopup(event,'bon','Cast a Spell','Cast a prepared spell with a casting time of 1 bonus action.')"><span class="act-badge bon">Bon</span><span class="act-ref-name">Cast a Spell</span></div>
-            <div class="act-ref-row" onclick="_actPopup(event,'bon','Class Feature','Your class, subclass, or a feat grants this bonus action. Check your class features.')"><span class="act-badge bon">Bon</span><span class="act-ref-name">Class Feature</span></div>
-          </div>
-          <div>
-            <div class="act-col-hdr">Reactions</div>
-            <div class="act-ref-row" onclick="_actPopup(event,'rea','Opportunity Attack','When a hostile creature you can see leaves your reach, make one melee weapon attack against it.')"><span class="act-badge rea">Rea</span><span class="act-ref-name">Opp. Attack</span></div>
-            <div class="act-ref-row" onclick="_actPopup(event,'rea','Cast a Spell','Cast a prepared spell with a casting time of 1 reaction.')"><span class="act-badge rea">Rea</span><span class="act-ref-name">Cast a Spell</span></div>
-            <div class="act-ref-row" onclick="_actPopup(event,'rea','Class Feature','Your class, subclass, or a feat grants this reaction. Check your class features.')"><span class="act-badge rea">Rea</span><span class="act-ref-name">Class Feature</span></div>
+          <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Actions Reference</span><span style="font-family:var(--font-label);font-size:7pt;color:var(--text-dim);letter-spacing:.08em;margin-left:6px;">click for details</span></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-top:4px;">
+            <div>
+              <div class="act-col-hdr">Actions</div>
+              <div class="act-ref-row" onclick="_actPopup(event,'act','Attack','Make one weapon attack. Add PB + ability mod to hit; add ability mod to damage.')"><span class="act-badge act">Act</span><span class="act-ref-name">Attack</span></div>
+              <div class="act-ref-row" onclick="_actPopup(event,'act','Cast a Spell','Cast a prepared spell with a 1-action casting time.')"><span class="act-badge act">Act</span><span class="act-ref-name">Cast a Spell</span></div>
+              <div class="act-ref-row" onclick="_actPopup(event,'act','Dash','Gain extra movement equal to your speed for this turn.')"><span class="act-badge act">Act</span><span class="act-ref-name">Dash</span></div>
+              <div class="act-ref-row" onclick="_actPopup(event,'act','Disengage','Your movement does not provoke opportunity attacks for the rest of your turn.')"><span class="act-badge act">Act</span><span class="act-ref-name">Disengage</span></div>
+              <div class="act-ref-row" onclick="_actPopup(event,'act','Dodge','Until your next turn: attacks against you have disadvantage, DEX saves have advantage.')"><span class="act-badge act">Act</span><span class="act-ref-name">Dodge</span></div>
+              <div class="act-ref-row" onclick="_actPopup(event,'act','Help','Give an ally advantage on their next attack roll or ability check before your next turn.')"><span class="act-badge act">Act</span><span class="act-ref-name">Help</span></div>
+              <div class="act-ref-row" onclick="_actPopup(event,'act','Hide','Make a Stealth check to hide from enemies who cannot clearly see you.')"><span class="act-badge act">Act</span><span class="act-ref-name">Hide</span></div>
+              <div class="act-ref-row" onclick="_actPopup(event,'act','Ready','Set a trigger condition and a reaction; the reaction fires when the trigger occurs.')"><span class="act-badge act">Act</span><span class="act-ref-name">Ready</span></div>
+              <div class="act-ref-row" onclick="_actPopup(event,'act','Search','Make a Perception or Investigation check to locate something hidden.')"><span class="act-badge act">Act</span><span class="act-ref-name">Search</span></div>
+              <div class="act-ref-row" onclick="_actPopup(event,'act','Use an Object','Interact with a second object or activate a special item property.')"><span class="act-badge act">Act</span><span class="act-ref-name">Use Object</span></div>
+            </div>
+            <div>
+              <div class="act-col-hdr">Bonus</div>
+              <div class="act-ref-row" onclick="_actPopup(event,'bon','Off-Hand Attack','Attack with a light weapon held in your off-hand. Do not add your ability modifier to the damage roll.')"><span class="act-badge bon">Bon</span><span class="act-ref-name">Off-Hand Atk</span></div>
+              <div class="act-ref-row" onclick="_actPopup(event,'bon','Cast a Spell','Cast a prepared spell with a casting time of 1 bonus action.')"><span class="act-badge bon">Bon</span><span class="act-ref-name">Cast a Spell</span></div>
+              <div class="act-ref-row" onclick="_actPopup(event,'bon','Class Feature','Your class, subclass, or a feat grants this bonus action. Check your class features.')"><span class="act-badge bon">Bon</span><span class="act-ref-name">Class Feature</span></div>
+            </div>
+            <div>
+              <div class="act-col-hdr">Reactions</div>
+              <div class="act-ref-row" onclick="_actPopup(event,'rea','Opportunity Attack','When a hostile creature you can see leaves your reach, make one melee weapon attack against it.')"><span class="act-badge rea">Rea</span><span class="act-ref-name">Opp. Attack</span></div>
+              <div class="act-ref-row" onclick="_actPopup(event,'rea','Cast a Spell','Cast a prepared spell with a casting time of 1 reaction.')"><span class="act-badge rea">Rea</span><span class="act-ref-name">Cast a Spell</span></div>
+              <div class="act-ref-row" onclick="_actPopup(event,'rea','Class Feature','Your class, subclass, or a feat grants this reaction. Check your class features.')"><span class="act-badge rea">Rea</span><span class="act-ref-name">Class Feature</span></div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  <!-- ── Quick Actions + Ammo Tracker ── -->
-  <div class="qa-bottom">
-    <div class="section">
-      <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Quick Actions — Equipped Weapons</span></div>
-      <table class="dos-atk-table">
-        <thead><tr><th>Weapon</th><th>Hit</th><th>Dmg</th><th>Type</th><th>Modifiers</th><th>Shots</th></tr></thead>
-        <tbody id="quick-actions-tbody"><tr><td colspan="6" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">Equip weapons in the Wargear tab</td></tr></tbody>
-      </table>
-    </div>
-    <div class="section">
-      <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Ammunition</span></div>
-      <div id="ammo-tracker-container"><div style="opacity:.4;font-size:9pt;padding:8px 4px;">No ammo tracked — add weapons from the Requisitorium or fill in the Wargear tab.</div></div>
+      <!-- Quick Actions — full right column width -->
+      <div class="section" style="margin-top:8px;">
+        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Quick Actions — Equipped Weapons</span></div>
+        <table class="dos-atk-table">
+          <thead><tr><th>Weapon</th><th>Hit</th><th>Dmg</th><th>Type</th><th>Modifiers</th><th>Shots</th></tr></thead>
+          <tbody id="quick-actions-tbody"><tr><td colspan="6" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">Equip weapons in the Wargear tab</td></tr></tbody>
+        </table>
+      </div>
+      <!-- Ammunition — stacks below Quick Actions -->
+      <div class="section" style="margin-top:8px;">
+        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Ammunition</span></div>
+        <div id="ammo-tracker-container"><div style="opacity:.4;font-size:9pt;padding:8px 4px;">No ammo tracked — add weapons from the Requisitorium or fill in the Wargear tab.</div></div>
+      </div>
     </div>
   </div>
 </div>
