@@ -237,13 +237,13 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 /* ── WARGEAR TAB ── */
 .wg-equip-row{display:grid;grid-template-columns:22px 3fr 1fr 2fr;gap:6px;align-items:center;padding:3px 4px;border-bottom:1px solid var(--border);}
 .wg-equip-row:nth-child(even){background:rgba(13,16,24,.4);}
-.wg-equip-row input{font-size:12pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:2px 0!important;background:transparent!important;color:var(--text)!important;outline:none!important;width:100%!important;}
+.wg-equip-row input{font-family:var(--font-body)!important;font-size:12pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:2px 0!important;background:transparent!important;color:var(--text)!important;outline:none!important;width:100%!important;}
 .wg-equip-row input:focus{border-bottom-color:var(--gold)!important;}
 .wg-equip-btn{width:20px;height:20px;padding:0;background:transparent;border:1px solid var(--border2);border-radius:3px;color:var(--text-dim);font-size:11px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .wg-equip-btn:hover{border-color:var(--gold-dim);color:var(--gold-dim);}
 .wg-equip-btn.equipped{border-color:var(--gold);color:var(--gold);background:rgba(180,140,60,.15);}
 .wg-ammo-row{display:grid;grid-template-columns:2fr 1fr 1fr;gap:6px;align-items:center;padding:3px 4px;border-bottom:1px solid var(--border);}
-.wg-ammo-row input{font-size:12pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:2px 0!important;background:transparent!important;color:var(--text)!important;outline:none!important;width:100%!important;}
+.wg-ammo-row input{font-family:var(--font-body)!important;font-size:12pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:2px 0!important;background:transparent!important;color:var(--text)!important;outline:none!important;width:100%!important;}
 .wg-ammo-row input:focus{border-bottom-color:var(--gold)!important;}
 .cur-boxes{display:flex;gap:8px;flex-wrap:wrap;}
 .cur-box{background:var(--panel2);border:1px solid var(--border2);padding:6px 10px;text-align:center;min-width:80px;}
@@ -411,7 +411,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .ammo-trk-row{display:flex;align-items:center;justify-content:space-between;gap:4px;padding:3px 5px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;margin-bottom:3px;}
 .ammo-trk-name{font-family:var(--font-label);font-size:9pt;color:var(--silver);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .ammo-trk-ctrl{display:flex;align-items:center;gap:2px;flex-shrink:0;}
-.ammo-btn{background:transparent;border:1px solid var(--gold-dim);color:var(--gold);font-size:9pt;width:17px;height:17px;cursor:pointer;border-radius:2px;padding:0;line-height:1;font-family:monospace;}
+.ammo-btn{background:transparent;border:1px solid var(--gold-dim);color:var(--gold);font-size:9pt;width:17px;height:17px;cursor:pointer;border-radius:2px;padding:0;line-height:1;font-family:var(--font-label);}
 .ammo-btn:hover{background:rgba(212,160,48,.15);}
 .ammo-cur{font-family:var(--font-label);font-size:10pt;color:var(--gold-light);min-width:20px;text-align:center;}
 .ammo-cur.empty{color:#c03030;}
