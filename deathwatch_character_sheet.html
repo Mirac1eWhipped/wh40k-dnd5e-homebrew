@@ -511,7 +511,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
         </div>
         <div class="section">
           <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Actions Reference</span><span style="font-family:var(--font-label);font-size:7pt;color:var(--text-dim);letter-spacing:.08em;margin-left:6px;">click for details</span></div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-top:4px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:4px;">
             <div>
               <div class="act-col-hdr">Actions</div>
               <div class="act-ref-row" onclick="_actPopup(event,'act','Attack','Make one weapon attack. Add PB + ability mod to hit; add ability mod to damage.')"><span class="act-badge act">Act</span><span class="act-ref-name">Attack</span></div>
@@ -526,13 +526,11 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
               <div class="act-ref-row" onclick="_actPopup(event,'act','Use an Object','Interact with a second object or activate a special item property.')"><span class="act-badge act">Act</span><span class="act-ref-name">Use Object</span></div>
             </div>
             <div>
-              <div class="act-col-hdr">Bonus</div>
+              <div class="act-col-hdr">Bonus Actions</div>
               <div class="act-ref-row" onclick="_actPopup(event,'bon','Off-Hand Attack','Attack with a light weapon held in your off-hand. Do not add your ability modifier to the damage roll.')"><span class="act-badge bon">Bon</span><span class="act-ref-name">Off-Hand Atk</span></div>
               <div class="act-ref-row" onclick="_actPopup(event,'bon','Cast a Spell','Cast a prepared spell with a casting time of 1 bonus action.')"><span class="act-badge bon">Bon</span><span class="act-ref-name">Cast a Spell</span></div>
               <div class="act-ref-row" onclick="_actPopup(event,'bon','Class Feature','Your class, subclass, or a feat grants this bonus action. Check your class features.')"><span class="act-badge bon">Bon</span><span class="act-ref-name">Class Feature</span></div>
-            </div>
-            <div>
-              <div class="act-col-hdr">Reactions</div>
+              <div class="act-col-hdr" style="margin-top:6px;">Reactions</div>
               <div class="act-ref-row" onclick="_actPopup(event,'rea','Opportunity Attack','When a hostile creature you can see leaves your reach, make one melee weapon attack against it.')"><span class="act-badge rea">Rea</span><span class="act-ref-name">Opp. Attack</span></div>
               <div class="act-ref-row" onclick="_actPopup(event,'rea','Cast a Spell','Cast a prepared spell with a casting time of 1 reaction.')"><span class="act-badge rea">Rea</span><span class="act-ref-name">Cast a Spell</span></div>
               <div class="act-ref-row" onclick="_actPopup(event,'rea','Class Feature','Your class, subclass, or a feat grants this reaction. Check your class features.')"><span class="act-badge rea">Rea</span><span class="act-ref-name">Class Feature</span></div>
@@ -544,8 +542,8 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
       <div class="section" style="margin-top:8px;">
         <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Quick Actions — Equipped Weapons</span></div>
         <table class="dos-atk-table">
-          <thead><tr><th>Weapon</th><th>Hit</th><th>Dmg</th><th>Type</th><th>Modifiers</th><th>Shots</th></tr></thead>
-          <tbody id="quick-actions-tbody"><tr><td colspan="6" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">Equip weapons in the Wargear tab</td></tr></tbody>
+          <thead><tr><th>Armament</th><th>To Hit</th><th>Damage</th><th>Pattern</th><th>Special Rules</th><th>Magazine</th></tr></thead>
+          <tbody id="quick-actions-tbody"><tr><td colspan="6" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">++ No weapons equipped — mark armaments as active in the Wargear panel ++</td></tr></tbody>
         </table>
       </div>
       <!-- Ammunition — stacks below Quick Actions -->
@@ -619,11 +617,11 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
       <div class="sec-title" style="display:flex;align-items:center;">Equipment &amp; Wargear<button class="sreq-open-btn" onclick="_sreqOpen()">+ Requisitorium</button></div>
       <div style="display:grid;grid-template-columns:22px 3fr 1fr 2fr;gap:4px;padding:3px 4px;border-bottom:1px solid var(--gold-dim);">
         <span></span>
-        <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Item</span>
+        <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Wargear</span>
         <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Qty</span>
-        <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Notes</span>
+        <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Field Notes</span>
       </div>
-<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(0)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(0)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Designation…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes · disposition…"></div>
 <div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(1)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
 <div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(2)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
 <div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(3)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
@@ -643,18 +641,18 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
       <div class="section" style="margin-bottom:10px;">
         <div class="sec-title">Ammunition Tracking</div>
         <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:4px;padding:3px 4px;border-bottom:1px solid var(--gold-dim);">
-          <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Type</span>
-          <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Cur</span>
-          <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Max</span>
+          <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Ammunition Type</span>
+          <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">In Stock</span>
+          <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Capacity</span>
         </div>
-        <div class="wg-ammo-row"><input type="text" placeholder="Ammo type…"><input type="text" placeholder="Cur" style="text-align:center;width:60px;"><input type="text" placeholder="Max" style="text-align:center;width:60px;"></div>
-<div class="wg-ammo-row"><input type="text" placeholder="Ammo type…"><input type="text" placeholder="Cur" style="text-align:center;width:60px;"><input type="text" placeholder="Max" style="text-align:center;width:60px;"></div>
-<div class="wg-ammo-row"><input type="text" placeholder="Ammo type…"><input type="text" placeholder="Cur" style="text-align:center;width:60px;"><input type="text" placeholder="Max" style="text-align:center;width:60px;"></div>
-<div class="wg-ammo-row"><input type="text" placeholder="Ammo type…"><input type="text" placeholder="Cur" style="text-align:center;width:60px;"><input type="text" placeholder="Max" style="text-align:center;width:60px;"></div>
-<div class="wg-ammo-row"><input type="text" placeholder="Ammo type…"><input type="text" placeholder="Cur" style="text-align:center;width:60px;"><input type="text" placeholder="Max" style="text-align:center;width:60px;"></div>
-<div class="wg-ammo-row"><input type="text" placeholder="Ammo type…"><input type="text" placeholder="Cur" style="text-align:center;width:60px;"><input type="text" placeholder="Max" style="text-align:center;width:60px;"></div>
-<div class="wg-ammo-row"><input type="text" placeholder="Ammo type…"><input type="text" placeholder="Cur" style="text-align:center;width:60px;"><input type="text" placeholder="Max" style="text-align:center;width:60px;"></div>
-<div class="wg-ammo-row"><input type="text" placeholder="Ammo type…"><input type="text" placeholder="Cur" style="text-align:center;width:60px;"><input type="text" placeholder="Max" style="text-align:center;width:60px;"></div>
+        <div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
+<div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
+<div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
+<div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
+<div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
+<div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
+<div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
+<div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
 
       </div>
       <div class="section">
