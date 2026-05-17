@@ -283,7 +283,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 
 
 /* ══ DOSSIER OVERVIEW ══ */
-.dos-ab-bar{display:flex;justify-content:space-evenly;margin-bottom:8px;}
+.dos-ab-bar{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;}
 .dos-ab-box{
   background:var(--panel2);
   border:1px solid var(--border2);
@@ -292,8 +292,8 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
   position:relative;
   padding:5px 4px 6px;
   text-align:center;
-  flex:0 1 90px;
-  min-width:64px;
+  flex:1 1 72px;
+  max-width:92px;
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -311,8 +311,8 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .dos-ab-score{order:2;background:var(--panel);border:1px solid var(--border2);padding:2px 4px;margin-top:2px;width:42px;}
 .dos-ab-score input{font-family:var(--font-label)!important;font-size:10.5pt!important;color:var(--text)!important;background:transparent!important;border:none!important;outline:none!important;text-align:center!important;width:36px!important;padding:0!important;}
 /* ── Stat Bar — CSS grid with fixed columns ── */
-.dos-stat-bar{display:grid;grid-template-columns:72px 72px 72px 104px 1fr;gap:8px;margin-bottom:10px;align-items:stretch;}
-.dos-hp-ds-stack{display:flex;flex-direction:column;gap:8px;max-width:360px;}
+.dos-stat-bar{display:flex;gap:8px;align-items:stretch;margin-bottom:10px;}
+.dos-hp-ds-stack{display:flex;flex-direction:column;gap:8px;max-width:360px;margin-left:auto;flex-shrink:0;}
 /* Speed & Prof Bonus boxes */
 .dos-stat{background:var(--panel2);border:1px solid var(--border2);border-top:2px solid var(--gold-dim);position:relative;padding:10px 4px 8px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;overflow:hidden;}
 .dos-stat::before{content:'';position:absolute;top:4px;left:4px;width:7px;height:7px;border-top:1px solid rgba(200,164,74,.4);border-left:1px solid rgba(200,164,74,.4);pointer-events:none;}
@@ -588,22 +588,6 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 <div class="dos-ab-box"><span class="dos-ab-lbl">INT</span><div class="dos-ab-mod"><input type="text" id="int-mod" readonly placeholder="+0"></div><div class="dos-ab-score"><input type="number" id="int-score" value="10" oninput="calcMod('int')"></div></div>
 <div class="dos-ab-box"><span class="dos-ab-lbl">WIS</span><div class="dos-ab-mod"><input type="text" id="wis-mod" readonly placeholder="+0"></div><div class="dos-ab-score"><input type="number" id="wis-score" value="10" oninput="calcMod('wis')"></div></div>
 <div class="dos-ab-box"><span class="dos-ab-lbl">CHA</span><div class="dos-ab-mod"><input type="text" id="cha-mod" readonly placeholder="+0"></div><div class="dos-ab-score"><input type="number" id="cha-score" value="10" oninput="calcMod('cha')"></div></div>
-  </div>
-  <!-- Stat Bar: Speed · Prof · Initiative · AC · [HP / Death Saves stacked] -->
-  <div class="dos-stat-bar">
-    <!-- stat-ac hidden but kept for JS sync -->
-    <input type="hidden" id="stat-ac">
-    <div class="dos-stat"><input type="text" id="stat-speed" placeholder="35 ft"><span class="dos-stat-lbl">Speed</span></div>
-    <div class="dos-stat"><input type="text" id="stat-prof" placeholder="+2"><span class="dos-stat-lbl">Prof Bonus</span></div>
-    <div class="dos-init-box">
-      <input type="text" id="stat-initiative" placeholder="+0">
-      <span class="dos-init-lbl">Initiative</span>
-    </div>
-    <div class="dos-ac-box">
-      <span class="dos-ac-val" id="ac-display-dossier">10</span>
-      <span id="ac-display-val" style="display:none;">10</span>
-      <span class="dos-ac-lbl">Armor Class</span>
-    </div>
     <div class="dos-hp-ds-stack">
       <div class="dos-hp-block">
         <div class="dos-hp-head">
@@ -645,6 +629,22 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
         </div>
         <span class="dos-stat-lbl" style="margin-top:1px;text-align:center;">Death Saves</span>
       </div>
+    </div>
+  </div>
+  <!-- Stat Bar: Speed · Prof · Initiative · AC -->
+  <div class="dos-stat-bar">
+    <!-- stat-ac hidden but kept for JS sync -->
+    <input type="hidden" id="stat-ac">
+    <div class="dos-stat"><input type="text" id="stat-speed" placeholder="35 ft"><span class="dos-stat-lbl">Speed</span></div>
+    <div class="dos-stat"><input type="text" id="stat-prof" placeholder="+2"><span class="dos-stat-lbl">Prof Bonus</span></div>
+    <div class="dos-init-box">
+      <input type="text" id="stat-initiative" placeholder="+0">
+      <span class="dos-init-lbl">Initiative</span>
+    </div>
+    <div class="dos-ac-box">
+      <span class="dos-ac-val" id="ac-display-dossier">10</span>
+      <span id="ac-display-val" style="display:none;">10</span>
+      <span class="dos-ac-lbl">Armor Class</span>
     </div>
   </div>
 
