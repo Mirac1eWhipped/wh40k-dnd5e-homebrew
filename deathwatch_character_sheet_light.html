@@ -509,11 +509,9 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .dos-ab-bar .dos-hp-block{flex:0 0 auto;}
 .dos-ab-bar .dos-ds-block{flex:0 0 auto;}
 
-/* ── Conditions + Defenses full-width row ── */
-.dos-cond-def-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
-
-/* ── Initiative + AC row ── */
-.dos-init-ac-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px;}
+/* ── Initiative + AC + Conditions + Defenses combined row ── */
+.dos-status-row{display:flex;gap:8px;align-items:stretch;margin-bottom:10px;}
+.dos-status-row .dos-cond-box,.dos-status-row .dos-def-box{flex:1 1 0;min-width:0;}
 </style>
 </head>
 <body>
@@ -643,8 +641,18 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
       <span class="dos-stat-lbl" style="margin-top:1px;text-align:center;">Death Saves</span>
     </div>
   </div>
-  <!-- Conditions + Defenses Row -->
-  <div class="dos-cond-def-row">
+  <!-- Initiative + AC + Conditions + Defenses Row -->
+  <div class="dos-status-row">
+    <input type="hidden" id="stat-ac">
+    <div class="dos-init-box">
+      <input type="text" id="stat-initiative" placeholder="+0">
+      <span class="dos-init-lbl">Initiative</span>
+    </div>
+    <div class="dos-ac-box">
+      <span class="dos-ac-val" id="ac-display-dossier">10</span>
+      <span id="ac-display-val" style="display:none;">10</span>
+      <span class="dos-ac-lbl">Armor Class</span>
+    </div>
     <div class="dos-cond-box" id="dos-cond-box">
       <div class="dos-status-head">
         <span style="font-family:var(--font-label);font-size:8pt;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);">Conditions</span>
@@ -713,19 +721,6 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
         <span class="dos-def-chip" onclick="_defToggle(this,'vuln')">Psychic</span>
       </div>
       <textarea class="dos-textarea" rows="2" id="defenses-notes" placeholder="Other defenses…" style="margin-top:4px;"></textarea>
-    </div>
-  </div>
-  <!-- Initiative + AC Row -->
-  <div class="dos-init-ac-row">
-    <input type="hidden" id="stat-ac">
-    <div class="dos-init-box">
-      <input type="text" id="stat-initiative" placeholder="+0">
-      <span class="dos-init-lbl">Initiative</span>
-    </div>
-    <div class="dos-ac-box">
-      <span class="dos-ac-val" id="ac-display-dossier">10</span>
-      <span id="ac-display-val" style="display:none;">10</span>
-      <span class="dos-ac-lbl">Armor Class</span>
     </div>
   </div>
 
