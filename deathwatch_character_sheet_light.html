@@ -1583,75 +1583,75 @@ function renderFeatures() {
 /* ── Class Proficiency Data ── */
 const DW_CLASS_PROFS = {
   'Tactical Operative': {
-    saves:   ['Strength', 'Dexterity'],
-    skills:  { count:3, list:['Athletics','Acrobatics','History','Insight','Intimidation','Perception','Stealth','Technology'] },
-    armor:   'All Armor & Shields',
-    weapons: 'All Simple & Martial Weapons',
-    tools:   '—',
+    saves:   ['Dexterity', 'Wisdom'],
+    skills:  { count:4, list:['Acrobatics','Deception','History','Perception','Religion','Sleight of Hand','Stealth','Survival'] },
+    armor:   'Phobos Armor, Tacticus Armor',
+    weapons: 'Ranged Primary, Ranged Secondary, Physical Melee',
+    tools:   'Auspex',
     extra:   'Default armor pattern: Tacticus or Phobos'
   },
   'Close Combat Operative': {
     saves:   ['Strength', 'Constitution'],
-    skills:  { count:2, list:['Acrobatics','Athletics','Insight','Intimidation','Perception','Survival'] },
-    armor:   'All Armor & Shields',
-    weapons: 'All Simple & Martial Weapons',
-    tools:   '—',
+    skills:  { count:4, list:['Acrobatics','Athletics','History','Intimidation','Perception','Religion','Stealth'] },
+    armor:   'Phobos Armor, Tacticus Armor, Gravis Armor',
+    weapons: 'Ranged Secondary, Physical Melee, Power Melee (excl. Thunder Hammer)',
+    tools:   'Auspex',
     extra:   'Default armor pattern: Tacticus'
   },
   'Gravis Operative': {
     saves:   ['Strength', 'Constitution'],
-    skills:  { count:2, list:['Athletics','History','Intimidation','Perception','Survival','Technology'] },
-    armor:   'All Armor & Shields',
-    weapons: 'All Simple & Martial Weapons, Heavy Weapons, Gravis-pattern Weapons',
-    tools:   '—',
+    skills:  { count:3, list:['Athletics','History','Intimidation','Perception','Religion','Survival'] },
+    armor:   'Gravis Armor',
+    weapons: 'Ranged Primary, Ranged Secondary, Physical Melee, Power Melee (excl. Thunder Hammer & Lightning Claws)',
+    tools:   'Auspex',
     extra:   'Default armor pattern: Gravis'
   },
   'Terminator': {
     saves:   ['Strength', 'Constitution'],
-    skills:  { count:2, list:['Athletics','History','Insight','Intimidation','Perception'] },
-    armor:   'All Armor & Shields incl. Terminator Armor',
-    weapons: 'All Simple & Martial Weapons, Terminator Weapons (Storm Bolter, Assault Cannon, etc.)',
-    tools:   '—',
+    skills:  { count:3, list:['Athletics','History','Intimidation','Perception','Religion','Survival'] },
+    armor:   'Terminator Armor',
+    weapons: 'All Terminator Weapons, Ranged Primary & Secondary, Physical & Power Melee',
+    tools:   'Auspex',
     extra:   'Default armor pattern: Terminator'
   },
   'Vanguard Operative': {
-    saves:   ['Dexterity', 'Intelligence'],
-    skills:  { count:4, list:['Acrobatics','Athletics','Deception','History','Insight','Investigation','Perception','Persuasion','Stealth','Technology'] },
-    armor:   'All Armor & Shields',
-    weapons: 'All Simple & Martial Weapons',
-    tools:   '—',
+    saves:   ['Dexterity', 'Wisdom'],
+    skills:  { count:4, list:['Acrobatics','Deception','History','Perception','Religion','Sleight of Hand','Stealth','Survival'] },
+    armor:   'Phobos Armor',
+    weapons: 'Ranged Primary, Ranged Secondary, Physical Melee',
+    tools:   'Auspex',
     extra:   'Default armor pattern: Phobos'
   },
   'Apothecary': {
-    saves:   ['Constitution', 'Wisdom'],
-    skills:  { count:3, list:['Athletics','History','Insight','Investigation','Medicine','Perception','Survival','Technology'] },
-    armor:   'All Armor & Shields',
-    weapons: 'All Simple & Martial Weapons',
-    tools:   'Narthecium (granted at Level 1)',
+    saves:   ['Wisdom', 'Constitution'],
+    skills:  { count:3, list:['History','Insight','Medicine','Perception','Religion','Survival'] },
+    armor:   'Tacticus Armor, Gravis Armor',
+    weapons: 'Ranged Secondary, Physical Melee, Narthecium',
+    tools:   'Medicae Kit, Auspex',
     extra:   'Default armor pattern: Tacticus'
   },
   'Chaplain': {
     saves:   ['Wisdom', 'Charisma'],
-    skills:  { count:2, list:['Athletics','History','Insight','Intimidation','Persuasion','Religion'] },
-    armor:   'All Armor & Shields',
-    weapons: 'All Simple & Martial Weapons, Crozius Arcanum',
-    tools:   '—',
+    skills:  { count:3, list:['History','Insight','Intimidation','Perception','Persuasion','Religion'] },
+    armor:   'Phobos Armor, Tacticus Armor',
+    weapons: 'Ranged Secondary, Physical Melee, Power Melee, Crozius Arcanum',
+    tools:   'Auspex',
     extra:   'Default armor pattern: Tacticus'
   },
   'Librarian': {
     saves:   ['Intelligence', 'Wisdom'],
-    skills:  { count:3, list:['History','Insight','Investigation','Medicine','Perception','Religion','Technology'] },
-    armor:   'All Armor & Shields',
-    weapons: 'All Simple & Martial Weapons, Force Sword, Force Staff',
-    tools:   '—',
+    skills:  { count:3, list:['Arcana','History','Insight','Investigation','Perception','Religion'] },
+    armor:   'Phobos Armor, Tacticus Armor, Gravis Armor',
+    weapons: 'Ranged Secondary, Physical Melee, Force Sword, Force Staff',
+    tools:   'Auspex',
     extra:   'Default armor pattern: Tacticus'
   },
   'Techmarine': {
     saves:   ['Intelligence', 'Constitution'],
-    skills:  { count:2, list:['Athletics','History','Investigation','Perception','Technology'] },
-    armor:   'All Armor & Shields',
-    weapons: "All Simple & Martial Weapons, Omnissian Power Axe, Servo-Arm",
-    tools:   "Smith's Tools, Tinker's Tools, Servo-Harness",
+    skills:  { count:3, list:['Athletics','History','Investigation','Medicine','Perception','Technology'] },
+    armor:   'Tacticus Armor, Gravis Armor',
+    weapons: "Ranged Primary & Secondary, Physical & Power Melee, Omnissian Power Axe, Servo-Arm, Mechadendrites",
+    tools:   "Artificer's Tools, Auspex",
     extra:   'Default armor pattern: Tacticus'
   }
 };
