@@ -60,37 +60,59 @@ body{background:var(--bg-page);font-family:var(--font-body);color:var(--text);fo
 .auth-toggle:hover{color:var(--gold);}
 
 /* ── Sheet Wrap ── */
-.sheet-wrap{max-width:1060px;margin:0 auto;padding:50px 0 40px;}
+.sheet-wrap{max-width:1200px;margin:0 auto;padding:50px 0 40px;}
 
-/* ── Sheet Header ── */
-.sheet-header{background:var(--bg);border-bottom:2px solid var(--gold-dim);padding:7px 22px 7px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;position:sticky;top:38px;z-index:100;}
-.sh-title-block{display:flex;flex-direction:column;gap:1px;}
-.sh-aquila{font-size:9pt;color:var(--gold);letter-spacing:.3em;line-height:1;}
-.sh-h1{font-family:var(--font-head);font-size:12pt;color:var(--gold-light);letter-spacing:.05em;text-shadow:0 0 14px rgba(200,164,74,.3);}
-.sh-sub{font-family:var(--font-label);font-size:7pt;color:var(--silver-dim);letter-spacing:.2em;text-transform:uppercase;}
-.sh-fields{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;}
-.sh-field{display:flex;flex-direction:column;min-width:80px;}
-.sh-field.wide{min-width:140px;}
-.sh-field label{font-family:var(--font-label);font-size:9pt;letter-spacing:.18em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:2px;}
-.sh-field input,.sh-field select{background:transparent;border:none;border-bottom:1px solid var(--line);color:var(--text);font-family:var(--font-body);font-size:11pt;padding:1px 2px;outline:none;width:100%;}
-.sh-field input:focus,.sh-field select:focus{border-bottom-color:var(--gold);}
-.sh-field select{-webkit-appearance:none;appearance:none;cursor:pointer;padding-right:18px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c8a44a'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 3px center;}
-.sh-field select option{background:var(--panel);color:var(--text);}
-.sh-meta{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
-.sh-meta-row{display:flex;gap:8px;}
-.sh-meta-field{display:flex;flex-direction:column;align-items:center;background:var(--panel);border:1px solid var(--border2);padding:4px 8px;min-width:54px;}
-.sh-meta-field label{font-family:var(--font-label);font-size:9pt;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);}
-.sh-meta-field input{font-family:var(--font-label);font-size:13pt;font-weight:700;color:var(--text);background:transparent;border:none;outline:none;text-align:center;width:46px;}
+/* ── Sheet Header (D&D Beyond style) ── */
+.sheet-header{background:var(--panel);border-bottom:2px solid var(--gold-dim);padding:10px 18px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;position:sticky;top:38px;z-index:100;}
+.sh-portrait{width:60px;height:60px;border-radius:50%;border:2px solid var(--gold);background:var(--panel2);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--gold-dim);font-size:22pt;line-height:1;}
+.sh-identity{display:flex;flex-direction:column;gap:2px;}
+.sh-name-inp{font-family:var(--font-head);font-size:18pt;color:var(--gold-light);background:transparent;border:none;border-bottom:1px solid transparent;outline:none;padding:0;letter-spacing:.04em;text-shadow:0 0 12px rgba(200,164,74,.25);width:100%;}
+.sh-name-inp:focus{border-bottom-color:var(--gold);}
+.sh-details{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.sh-detail-field{display:flex;flex-direction:column;min-width:90px;}
+.sh-detail-field label{font-family:var(--font-label);font-size:8pt;letter-spacing:.18em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:1px;}
+.sh-detail-field input,.sh-detail-field select{background:transparent;border:none;border-bottom:1px solid var(--line);color:var(--text);font-family:var(--font-body);font-size:10pt;padding:1px 2px;outline:none;width:100%;}
+.sh-detail-field input:focus,.sh-detail-field select:focus{border-bottom-color:var(--gold);}
+.sh-detail-field select{-webkit-appearance:none;appearance:none;cursor:pointer;padding-right:16px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23c8a44a'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 2px center;}
+.sh-detail-field select option{background:var(--panel);color:var(--text);}
+.sh-meta-boxes{display:flex;gap:6px;align-items:center;}
+.sh-meta-box{display:flex;flex-direction:column;align-items:center;background:var(--panel2);border:1px solid var(--border2);padding:4px 8px;min-width:52px;}
+.sh-meta-box label{font-family:var(--font-label);font-size:8pt;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);}
+.sh-meta-box input{font-family:var(--font-label);font-size:12pt;font-weight:700;color:var(--text);background:transparent;border:none;outline:none;text-align:center;width:42px;}
+.sh-right-zone{display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
+.sh-dw-label{font-family:var(--font-head);font-size:11pt;color:var(--gold);letter-spacing:.18em;text-align:right;text-shadow:0 0 10px rgba(200,164,74,.3);}
+.sh-action-btns{display:flex;gap:6px;}
+.sh-rest-btn{background:transparent;border:1px solid var(--border2);color:var(--silver-dim);font-family:var(--font-label);font-size:8pt;letter-spacing:.14em;text-transform:uppercase;padding:5px 10px;cursor:pointer;transition:all .2s;}
+.sh-rest-btn:hover{border-color:var(--gold);color:var(--gold);}
 
-/* ── Tab Nav ── */
-.tab-nav{display:flex;background:var(--panel);border-bottom:1px solid var(--border2);position:sticky;top:calc(38px + 52px);z-index:90;overflow-x:auto;}
-.tab-btn{padding:11px 18px;font-family:var(--font-label);font-size:10pt;letter-spacing:.2em;text-transform:uppercase;color:var(--silver-dim);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;white-space:nowrap;}
-.tab-btn:hover{color:var(--gold);}
-.tab-btn.active{color:var(--gold-light);border-bottom-color:var(--gold);}
+/* ── Tab Nav (hidden — tabs moved into right column) ── */
+.tab-nav{display:none;}
+.tab-btn{display:none;}
 
-/* ── Tab Panels ── */
-.tab-panel{display:none;padding:18px 20px 40px;}
+/* ── Tab Panels — main panels always visible except abilities/notes which stay hidden ── */
+.tab-panel{display:none;padding:0;}
 .tab-panel.active{display:block;}
+/* panel-dossier is always visible as main layout */
+#panel-dossier{display:block !important;}
+
+/* ── Right-column tab system ── */
+.rc-tabs{display:flex;gap:0;border-bottom:1px solid var(--border2);margin-bottom:10px;flex-wrap:wrap;}
+.rc-tab-btn{padding:8px 14px;font-family:var(--font-label);font-size:8.5pt;letter-spacing:.18em;text-transform:uppercase;color:var(--silver-dim);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;white-space:nowrap;}
+.rc-tab-btn:hover{color:var(--gold);}
+.rc-tab-btn.active{color:var(--gold-light);border-bottom-color:var(--gold);}
+.rc-tab-panel{display:none;}
+.rc-tab-panel.active{display:block;}
+
+/* ── Combat mini-bar (Initiative / AC / Conditions) ── */
+.dos-combat-bar{display:grid;grid-template-columns:auto auto 1fr;gap:8px;margin-bottom:10px;align-items:flex-start;}
+.dos-init-box{background:var(--panel2);border:1px solid var(--border2);padding:8px 12px;text-align:center;min-width:90px;}
+.dos-init-val{font-family:var(--font-label);font-size:28pt;font-weight:700;color:var(--gold-light);line-height:1;display:block;}
+.dos-init-lbl{font-family:var(--font-label);font-size:8pt;letter-spacing:.16em;text-transform:uppercase;color:var(--silver-dim);display:block;margin-top:2px;}
+.dos-init-box input{font-family:var(--font-label)!important;font-size:28pt!important;font-weight:700!important;color:var(--gold-light)!important;background:transparent!important;border:none!important;outline:none!important;text-align:center!important;width:80px!important;padding:0!important;line-height:1!important;}
+.dos-ac-box{background:var(--panel2);border:2px solid var(--gold-dim);padding:8px 12px;text-align:center;min-width:90px;}
+.dos-ac-val{font-family:var(--font-label);font-size:28pt;font-weight:700;color:var(--text);line-height:1;display:block;}
+.dos-ac-lbl{font-family:var(--font-label);font-size:8pt;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);display:block;margin-top:2px;}
+.dos-cond-box{background:var(--panel2);border:1px solid var(--border2);padding:6px 8px;}
 
 /* ── Section Block ── */
 .section{background:var(--panel);border:1px solid var(--border2);padding:10px 12px;margin-bottom:10px;box-sizing:border-box;}
@@ -160,18 +182,10 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .atk-table td{padding:3px 6px;}
 .atk-table td input{font-size:10pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:2px 0!important;background:transparent!important;color:var(--text)!important;outline:none!important;width:100%!important;}
 .atk-table td input:focus{border-bottom-color:var(--gold)!important;}
-.atk-table td input[readonly]{color:var(--gold)!important;cursor:default!important;}
+.atk-table td input[readonly]{color:var(--gold-light)!important;cursor:default!important;}
 .atk-table td select{font-size:10pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:2px 0!important;background:var(--panel)!important;color:var(--text)!important;outline:none!important;width:100%!important;}
 .atk-table td select:focus{border-bottom-color:var(--gold)!important;}
-
-/* ── WARGEAR TAB ── */
-.wg-equip-row{display:grid;grid-template-columns:22px 3fr 1fr 2fr;gap:6px;align-items:center;padding:3px 4px;border-bottom:1px solid var(--border);}
-.wg-equip-row:nth-child(even){background:rgba(240,235,220,.4);}
-.wg-equip-row input{font-size:12pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:2px 0!important;background:transparent!important;color:var(--text)!important;outline:none!important;width:100%!important;}
-.wg-equip-row input:focus{border-bottom-color:var(--gold)!important;}
-.wg-equip-btn{width:20px;height:20px;padding:0;background:transparent;border:1px solid var(--border2);border-radius:3px;color:var(--text-dim);font-size:11px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.wg-equip-btn:hover{border-color:var(--gold-dim);color:var(--gold-dim);}
-.wg-equip-btn.equipped{border-color:var(--gold);color:var(--gold);background:rgba(180,140,60,.15);}
+/* ── ARMOR BLOCK ── */
 .ac-block{display:flex;align-items:center;gap:14px;background:var(--panel2);border:1px solid var(--gold-dim);padding:10px 14px;margin:8px 0;}
 .ac-shield{text-align:center;flex-shrink:0;}
 .ac-shield-num{font-family:var(--font-label);font-size:40pt;font-weight:700;color:var(--text);line-height:1;display:block;}
@@ -182,6 +196,15 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .armor-row.r4{grid-template-columns:1fr 1fr 70px auto;}
 .field-group select{font-family:var(--font-body);font-size:10pt;background:transparent;border:none;border-bottom:1px solid var(--line);color:var(--text);outline:none;padding:2px 0;width:100%;}
 .field-group select:focus{border-bottom-color:var(--gold);}
+
+/* ── WARGEAR TAB ── */
+.wg-equip-row{display:grid;grid-template-columns:22px 3fr 1fr 2fr;gap:6px;align-items:center;padding:3px 4px;border-bottom:1px solid var(--border);}
+.wg-equip-row:nth-child(even){background:rgba(13,16,24,.4);}
+.wg-equip-row input{font-size:12pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:2px 0!important;background:transparent!important;color:var(--text)!important;outline:none!important;width:100%!important;}
+.wg-equip-row input:focus{border-bottom-color:var(--gold)!important;}
+.wg-equip-btn{width:20px;height:20px;padding:0;background:transparent;border:1px solid var(--border2);border-radius:3px;color:var(--text-dim);font-size:11px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.wg-equip-btn:hover{border-color:var(--gold-dim);color:var(--gold-dim);}
+.wg-equip-btn.equipped{border-color:var(--gold);color:var(--gold);background:rgba(180,140,60,.15);}
 .wg-ammo-row{display:grid;grid-template-columns:2fr 1fr 1fr;gap:6px;align-items:center;padding:3px 4px;border-bottom:1px solid var(--border);}
 .wg-ammo-row input{font-size:12pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:2px 0!important;background:transparent!important;color:var(--text)!important;outline:none!important;width:100%!important;}
 .wg-ammo-row input:focus{border-bottom-color:var(--gold)!important;}
@@ -219,15 +242,20 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
   .sheet-wrap{padding:0!important;}
   .sheet-header{position:static!important;}
   .tab-panel{display:block!important;}
+  .rc-tab-panel{display:block!important;}
 }
 
 
 /* ══ DOSSIER OVERVIEW ══ */
 .dos-ab-bar{display:flex;gap:5px;margin-bottom:8px;}
-.dos-ab-box{background:var(--panel2);border:1px solid var(--border2);padding:8px 6px 6px;text-align:center;flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;}
-.dos-ab-lbl{font-family:var(--font-label);font-size:9pt;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:700;}
-.dos-ab-mod input{font-family:var(--font-label)!important;font-size:20pt!important;font-weight:700!important;color:var(--text)!important;background:transparent!important;border:none!important;outline:none!important;text-align:center!important;width:60px!important;padding:0!important;line-height:1.1!important;}
-.dos-ab-score input{font-family:var(--font-label)!important;font-size:11pt!important;color:var(--silver-dim)!important;background:transparent!important;border-bottom:1px solid var(--line)!important;border-top:none!important;border-left:none!important;border-right:none!important;outline:none!important;text-align:center!important;width:44px!important;padding:0!important;}
+.dos-ab-box{background:var(--panel2);border:1px solid var(--border2);border-radius:2px;padding:10px 6px 8px;text-align:center;flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;box-shadow:0 1px 6px rgba(0,0,0,.35);}
+.dos-ab-lbl{font-family:var(--font-label);font-size:8.5pt;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:700;border-bottom:1px solid var(--border2);width:100%;padding-bottom:4px;margin-bottom:2px;}
+/* Modifier shown prominently, score below */
+.dos-ab-mod{order:1;}
+.dos-ab-mod input{font-family:var(--font-label)!important;font-size:26pt!important;font-weight:700!important;color:var(--gold-light)!important;background:transparent!important;border:none!important;outline:none!important;text-align:center!important;width:70px!important;padding:0!important;line-height:1!important;text-shadow:0 0 8px rgba(232,201,106,.3)!important;}
+/* Score shown in small box below */
+.dos-ab-score{order:2;background:var(--panel);border:1px solid var(--border2);padding:2px 4px;margin-top:2px;width:52px;}
+.dos-ab-score input{font-family:var(--font-label)!important;font-size:10.5pt!important;color:var(--text)!important;background:transparent!important;border:none!important;outline:none!important;text-align:center!important;width:44px!important;padding:0!important;}
 .dos-stat-bar{display:flex;gap:5px;margin-bottom:8px;}
 .dos-stat{background:var(--panel2);border:1px solid var(--border2);padding:6px 8px;text-align:center;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;}
 .dos-stat input{font-family:var(--font-label)!important;font-size:15pt!important;font-weight:700!important;color:var(--gold-light)!important;background:transparent!important;border:none!important;outline:none!important;text-align:center!important;width:80px!important;padding:0!important;}
@@ -278,39 +306,39 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .dos-atk-table td{padding:3px 4px;}
 .dos-atk-table tbody tr{border-bottom:1px solid var(--border);}
 .dos-atk-table tbody tr:last-child{border-bottom:none;}
-.qa-mod-pill{display:inline-block;font-family:var(--font-label);font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);background:rgba(180,130,30,.10);border:1px solid rgba(180,130,30,.3);border-radius:3px;padding:1px 5px;margin:1px 2px 1px 0;white-space:nowrap;cursor:pointer;transition:background .15s;}.qa-mod-pill:hover{background:rgba(180,130,30,.25);}
+.qa-mod-pill{display:inline-block;font-family:var(--font-label);font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-light);background:rgba(212,160,48,.12);border:1px solid rgba(212,160,48,.3);border-radius:3px;padding:1px 5px;margin:1px 2px 1px 0;white-space:nowrap;cursor:pointer;transition:background .15s;}.qa-mod-pill:hover{background:rgba(212,160,48,.28);}
 /* ── Action reference cards ── */
 .act-ref-row{display:flex;align-items:center;gap:4px;padding:2px 2px;border-bottom:1px solid var(--border);cursor:pointer;border-radius:2px;}
 .act-ref-row:last-child{border-bottom:none;}
-.act-ref-row:hover{background:rgba(180,130,30,.08);}
+.act-ref-row:hover{background:rgba(212,160,48,.07);}
 .act-badge{font-family:var(--font-label);font-size:6pt;letter-spacing:.06em;text-transform:uppercase;border-radius:3px;padding:1px 3px;white-space:nowrap;flex-shrink:0;}
-.act-badge.act{background:rgba(180,130,30,.18);color:var(--gold);border:1px solid rgba(180,130,30,.4);}
-.act-badge.bon{background:rgba(60,120,180,.12);color:#4a8ec0;border:1px solid rgba(60,120,180,.35);}
-.act-badge.rea{background:rgba(160,40,40,.12);color:#b04040;border:1px solid rgba(160,40,40,.3);}
-.act-ref-name{font-family:var(--font-label);font-size:7.5pt;color:var(--text);}
+.act-badge.act{background:rgba(212,160,48,.15);color:var(--gold);border:1px solid rgba(212,160,48,.35);}
+.act-badge.bon{background:rgba(80,140,200,.15);color:#7bb0d8;border:1px solid rgba(80,140,200,.35);}
+.act-badge.rea{background:rgba(180,60,60,.15);color:#cc6060;border:1px solid rgba(180,60,60,.35);}
+.act-ref-name{font-family:var(--font-label);font-size:7.5pt;color:var(--silver);}
 .act-col-hdr{font-family:var(--font-label);font-size:7pt;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);padding-bottom:3px;border-bottom:1px solid var(--border2);margin-bottom:2px;}
 /* ── Action popup ── */
-.act-popup-box{display:none;position:fixed;background:var(--bg);border:1px solid var(--gold-dim);border-radius:4px;padding:10px 13px;max-width:250px;z-index:600;box-shadow:0 6px 24px rgba(0,0,0,.25);}
+.act-popup-box{display:none;position:fixed;background:var(--panel);border:1px solid var(--gold-dim);border-radius:4px;padding:10px 13px;max-width:250px;z-index:600;box-shadow:0 6px 24px rgba(0,0,0,.75);}
 .act-popup-box.open{display:block;}
 .act-popup-badge{font-family:var(--font-label);font-size:7pt;letter-spacing:.08em;text-transform:uppercase;border-radius:3px;padding:2px 5px;}
-.act-popup-name{font-family:var(--font-label);font-size:10pt;color:var(--gold);display:block;margin:5px 0 5px;}
+.act-popup-name{font-family:var(--font-label);font-size:10pt;color:var(--gold-light);display:block;margin:5px 0 5px;}
 .act-popup-desc{font-size:8.5pt;color:var(--text);line-height:1.5;}
 /* ── Shot tracker ── */
 .shot-tracker{display:flex;align-items:center;gap:2px;}
 .shot-btn{background:transparent;border:1px solid var(--gold-dim);color:var(--gold);font-size:9pt;width:16px;height:16px;cursor:pointer;border-radius:2px;padding:0;line-height:1;font-family:monospace;}
-.shot-btn:hover{background:rgba(180,130,30,.15);}
-.shot-disp{font-family:var(--font-label);font-size:9pt;color:var(--gold);min-width:30px;text-align:center;}
-.shot-disp.empty{color:#b03030;}
+.shot-btn:hover{background:rgba(212,160,48,.15);}
+.shot-disp{font-family:var(--font-label);font-size:9pt;color:var(--gold-light);min-width:30px;text-align:center;}
+.shot-disp.empty{color:#c03030;}
 .shot-rl{background:transparent;border:none;color:var(--text-dim);font-size:10pt;cursor:pointer;padding:0 1px;line-height:1;}
 .shot-rl:hover{color:var(--gold);}
 /* ── Ammo tracker ── */
-.ammo-trk-row{display:flex;align-items:center;justify-content:space-between;gap:4px;padding:3px 5px;background:rgba(0,0,0,.03);border:1px solid var(--border);border-radius:4px;margin-bottom:3px;}
-.ammo-trk-name{font-family:var(--font-label);font-size:9pt;color:var(--text);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ammo-trk-row{display:flex;align-items:center;justify-content:space-between;gap:4px;padding:3px 5px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:4px;margin-bottom:3px;}
+.ammo-trk-name{font-family:var(--font-label);font-size:9pt;color:var(--silver);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .ammo-trk-ctrl{display:flex;align-items:center;gap:2px;flex-shrink:0;}
 .ammo-btn{background:transparent;border:1px solid var(--gold-dim);color:var(--gold);font-size:9pt;width:17px;height:17px;cursor:pointer;border-radius:2px;padding:0;line-height:1;font-family:monospace;}
-.ammo-btn:hover{background:rgba(180,130,30,.15);}
-.ammo-cur{font-family:var(--font-label);font-size:10pt;color:var(--gold);min-width:20px;text-align:center;}
-.ammo-cur.empty{color:#b03030;}
+.ammo-btn:hover{background:rgba(212,160,48,.15);}
+.ammo-cur{font-family:var(--font-label);font-size:10pt;color:var(--gold-light);min-width:20px;text-align:center;}
+.ammo-cur.empty{color:#c03030;}
 .ammo-sep{color:var(--text-dim);font-size:9pt;}
 .ammo-max{font-family:var(--font-label);font-size:9pt;color:var(--text-dim);min-width:16px;text-align:center;}
 .ammo-rl{background:transparent;border:none;color:var(--text-dim);font-size:11pt;cursor:pointer;padding:0 2px;line-height:1;}
@@ -346,48 +374,57 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 <div class="sheet-wrap">
 
 <div class="sheet-header">
-  <div class="sh-title-block">
-    <span class="sh-aquila">✠ &nbsp; ✠</span>
-    <span class="sh-h1">Battle-Brother Dossier</span>
-    <span class="sh-sub">Deathwatch Kill Team · Jericho Reach Campaign</span>
-  </div>
-  <div class="sh-fields">
-    <div class="sh-field wide"><label>Operative Name</label><input type="text" id="char-name" placeholder="Enter name…"></div>
-    <div class="sh-field wide"><label>Class / Specialty</label><input type="text" id="char-class" placeholder="e.g. Tactical Operative"></div>
-    <div class="sh-field"><label>Chapter</label>
-      <select id="char-chapter" onchange="renderLineageTraits()">
-        <option value="">— Select Chapter —</option>
-        <option value="Dark Angels">Dark Angels</option>
-        <option value="Space Wolves">Space Wolves</option>
-        <option value="Salamanders">Salamanders</option>
-        <option value="Ultramarines">Ultramarines</option>
-        <option value="Blood Angels">Blood Angels</option>
-        <option value="Raven Guard">Raven Guard</option>
-        <option value="White Scars">White Scars</option>
-        <option value="Iron Hands">Iron Hands</option>
-        <option value="Imperial Fists">Imperial Fists</option>
-      </select>
+  <!-- Left: portrait + identity -->
+  <div style="display:flex;gap:12px;align-items:center;">
+    <div class="sh-portrait">✠</div>
+    <div class="sh-identity">
+      <input class="sh-name-inp" type="text" id="char-name" placeholder="Operative Name…">
+      <div class="sh-details">
+        <div class="sh-detail-field" style="min-width:160px;"><label>Class / Specialty</label><input type="text" id="char-class" placeholder="e.g. Tactical Operative"></div>
+        <div class="sh-detail-field"><label>Chapter</label>
+          <select id="char-chapter" onchange="renderLineageTraits()">
+            <option value="">— Chapter —</option>
+            <option value="Dark Angels">Dark Angels</option>
+            <option value="Space Wolves">Space Wolves</option>
+            <option value="Salamanders">Salamanders</option>
+            <option value="Ultramarines">Ultramarines</option>
+            <option value="Blood Angels">Blood Angels</option>
+            <option value="Raven Guard">Raven Guard</option>
+            <option value="White Scars">White Scars</option>
+            <option value="Iron Hands">Iron Hands</option>
+            <option value="Imperial Fists">Imperial Fists</option>
+          </select>
+        </div>
+        <div class="sh-detail-field" style="min-width:100px;"><label>Player</label><input type="text" id="char-player" placeholder=""></div>
+      </div>
     </div>
-    <div class="sh-field"><label>Player</label><input type="text" id="char-player" placeholder=""></div>
   </div>
-  <div class="sh-meta">
-    <div class="sh-meta-row">
-      <div class="sh-meta-field"><label>Level</label><input type="number" id="char-level" min="1" max="20" value="1" oninput="onLevelChange()"></div>
-      <div class="sh-meta-field"><label>Prof</label><input type="text" id="char-prof" placeholder="+2" style="width:48px;"></div>
-      <div class="sh-meta-field"><label>XP</label><input type="text" id="char-xp" placeholder="0"></div>
+  <!-- Center: meta boxes -->
+  <div class="sh-meta-boxes">
+    <div class="sh-meta-box"><label>Level</label><input type="number" id="char-level" min="1" max="20" value="1" oninput="onLevelChange()"></div>
+    <div class="sh-meta-box"><label>Prof</label><input type="text" id="char-prof" placeholder="+2" style="width:42px;"></div>
+    <div class="sh-meta-box"><label>XP</label><input type="text" id="char-xp" placeholder="0" style="width:56px;"></div>
+  </div>
+  <!-- Right: label + rest buttons -->
+  <div class="sh-right-zone">
+    <div class="sh-dw-label">✠ Deathwatch ✠</div>
+    <div class="sh-action-btns">
+      <button class="sh-rest-btn" onclick="alert('Short Rest taken.')">Short Rest</button>
+      <button class="sh-rest-btn" onclick="alert('Long Rest taken — HP and resources restored.')">Long Rest</button>
     </div>
   </div>
 </div>
 
-<div class="tab-nav">
-  <button class="tab-btn active" data-tab="dossier" onclick="showTab('dossier')">✠ Dossier & Combat</button>
-  <button class="tab-btn" data-tab="wargear" onclick="showTab('wargear')">⚙ Wargear</button>
-  <button class="tab-btn" data-tab="abilities" onclick="showTab('abilities')">⬡ Abilities</button>
-  <button class="tab-btn" data-tab="lore"    onclick="showTab('lore')">✦ Oaths &amp; Lore</button>
-  <button class="tab-btn" data-tab="notes"   onclick="showTab('notes')">✦ Field Notes</button>
+<!-- Hidden tab-nav kept for JS compatibility (showTab still works) -->
+<div class="tab-nav" style="display:none;">
+  <button class="tab-btn active" data-tab="dossier" onclick="showTab('dossier')">Dossier</button>
+  <button class="tab-btn" data-tab="wargear" onclick="showTab('wargear')">Wargear</button>
+  <button class="tab-btn" data-tab="abilities" onclick="showTab('abilities')">Abilities</button>
+  <button class="tab-btn" data-tab="lore" onclick="showTab('lore')">Lore</button>
+  <button class="tab-btn" data-tab="notes" onclick="showTab('notes')">Notes</button>
 </div>
 
-<div class="tab-panel active" id="panel-dossier">
+<div id="panel-dossier" style="padding:14px 18px 40px;">
   <!-- Ability Score Bar -->
   <div class="dos-ab-bar">
 <div class="dos-ab-box"><span class="dos-ab-lbl">STR</span><div class="dos-ab-mod"><input type="text" id="str-mod" readonly placeholder="+0"></div><div class="dos-ab-score"><input type="number" id="str-score" value="10" oninput="calcMod('str')"></div></div>
@@ -397,11 +434,11 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 <div class="dos-ab-box"><span class="dos-ab-lbl">WIS</span><div class="dos-ab-mod"><input type="text" id="wis-mod" readonly placeholder="+0"></div><div class="dos-ab-score"><input type="number" id="wis-score" value="10" oninput="calcMod('wis')"></div></div>
 <div class="dos-ab-box"><span class="dos-ab-lbl">CHA</span><div class="dos-ab-mod"><input type="text" id="cha-mod" readonly placeholder="+0"></div><div class="dos-ab-score"><input type="number" id="cha-score" value="10" oninput="calcMod('cha')"></div></div>
   </div>
-  <!-- Combat Quick-Stats -->
+  <!-- Stat Bar: Speed · HP · Hit Dice · Death Saves (AC & Initiative moved to right-col combat bar) -->
   <div class="dos-stat-bar">
-    <div class="dos-stat"><input type="text" id="stat-ac" placeholder="10" readonly><span class="dos-stat-lbl">Armor Class</span></div>
-    <div class="dos-stat"><input type="text" id="stat-initiative" placeholder="+2"><span class="dos-stat-lbl">Initiative</span></div>
-    <div class="dos-stat"><input type="text" placeholder="30 ft"><span class="dos-stat-lbl">Speed</span></div>
+    <!-- stat-ac hidden but kept for JS sync -->
+    <input type="hidden" id="stat-ac">
+    <div class="dos-stat"><input type="text" id="stat-speed" placeholder="35 ft"><span class="dos-stat-lbl">Speed</span></div>
     <div class="dos-stat"><input type="text" id="stat-prof" placeholder="+2"><span class="dos-stat-lbl">Prof Bonus</span></div>
     <div class="dos-hp-block">
       <div class="dos-hp-frac">
@@ -444,9 +481,10 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
       <span class="dos-stat-lbl" style="margin-top:1px;text-align:center;">Death Saves</span>
     </div>
   </div>
-  <!-- Three Columns -->
+
+  <!-- Three Columns: Left (saves/senses/profs) | Middle (skills) | Right (combat bar + tabs) -->
   <div class="dos-3col">
-    <!-- LEFT: Saves · Passives · Proficiencies -->
+    <!-- LEFT: Saves · Passives · Proficiencies (spans both rows) -->
     <div style="grid-row: 1/3;">
       <div class="section">
         <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Saving Throws</span></div>
@@ -475,6 +513,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
         <textarea class="dos-prof-ta" rows="1" placeholder="High Gothic, Low Gothic, Xenos…"></textarea>
       </div>
     </div>
+
     <!-- MIDDLE: Skills -->
     <div>
       <div class="section">
@@ -502,21 +541,46 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 <div class="dos-row"><input type="checkbox" id="skill-technology-prof" onchange="onProfChange('technology')"><input type="checkbox" class="exp-chk" id="skill-technology-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Technology</span><div class="dos-bonus"><input type="text" id="skill-technology" placeholder="+0"></div></div>
       </div>
     </div>
-    <!-- RIGHT: Conditions · Actions Reference -->
-    <div>
-      <!-- Conditions + Actions Reference side by side -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <div class="section">
-          <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Conditions &amp; Status</span></div>
-          <textarea class="dos-textarea" rows="9" placeholder="Poisoned, Stunned, Burning, Pinned…"></textarea>
+
+    <!-- RIGHT: Combat mini-bar + right-column tabs (spans both rows) -->
+    <div style="grid-row:1/3;">
+      <!-- Combat mini-bar: Initiative | AC | Conditions -->
+      <div class="dos-combat-bar">
+        <div class="dos-init-box">
+          <input type="text" id="stat-initiative" placeholder="+0">
+          <span class="dos-init-lbl">Initiative</span>
         </div>
-        <div class="section">
+        <div class="dos-ac-box">
+          <span class="dos-ac-val" id="ac-display-dossier">10</span>
+          <!-- ac-display-val hidden here, kept for JS that writes to it -->
+          <span id="ac-display-val" style="display:none;">10</span>
+          <span class="dos-ac-lbl">Armor Class</span>
+        </div>
+        <div class="dos-cond-box" style="flex:1;">
+          <div style="font-family:var(--font-label);font-size:8pt;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">Conditions &amp; Status</div>
+          <textarea class="dos-textarea" rows="4" placeholder="Poisoned, Stunned, Burning, Pinned…" style="margin-top:0;"></textarea>
+        </div>
+      </div>
+
+      <!-- Right-column tab nav -->
+      <div class="rc-tabs">
+        <button class="rc-tab-btn active" onclick="rcTab(this,'rc-actions')">Actions</button>
+        <button class="rc-tab-btn" onclick="rcTab(this,'rc-wargear')">Wargear</button>
+        <button class="rc-tab-btn" onclick="rcTab(this,'rc-requisitorium')">Requisitorium</button>
+        <button class="rc-tab-btn" onclick="rcTab(this,'rc-abilities')">Abilities</button>
+        <button class="rc-tab-btn" onclick="rcTab(this,'rc-notes')">Notes</button>
+      </div>
+
+      <!-- ACTIONS tab -->
+      <div class="rc-tab-panel active" id="rc-actions">
+        <!-- Actions Reference -->
+        <div class="section" style="margin-bottom:8px;">
           <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Actions Reference</span><span style="font-family:var(--font-label);font-size:7pt;color:var(--text-dim);letter-spacing:.08em;margin-left:6px;">click for details</span></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:4px;">
             <div>
               <div class="act-col-hdr">Actions</div>
               <div class="act-ref-row" onclick="_actPopup(event,'act','Attack','Make one weapon attack. Add PB + ability mod to hit; add ability mod to damage.')"><span class="act-badge act">Act</span><span class="act-ref-name">Attack</span></div>
-              <div class="act-ref-row" onclick="_actPopup(event,'act','Cast a Spell','Cast a prepared spell with a casting time of 1 action.')"><span class="act-badge act">Act</span><span class="act-ref-name">Cast a Spell</span></div>
+              <div class="act-ref-row" onclick="_actPopup(event,'act','Cast a Spell','Cast a prepared spell with a 1-action casting time.')"><span class="act-badge act">Act</span><span class="act-ref-name">Cast a Spell</span></div>
               <div class="act-ref-row" onclick="_actPopup(event,'act','Dash','Gain extra movement equal to your speed for this turn.')"><span class="act-badge act">Act</span><span class="act-ref-name">Dash</span></div>
               <div class="act-ref-row" onclick="_actPopup(event,'act','Disengage','Your movement does not provoke opportunity attacks for the rest of your turn.')"><span class="act-badge act">Act</span><span class="act-ref-name">Disengage</span></div>
               <div class="act-ref-row" onclick="_actPopup(event,'act','Dodge','Until your next turn: attacks against you have disadvantage, DEX saves have advantage.')"><span class="act-badge act">Act</span><span class="act-ref-name">Dodge</span></div>
@@ -538,93 +602,87 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <!-- BOTTOM: spans cols 2+3 — Quick Actions above, Ammunition below -->
-    <div style="grid-column: 2/4; margin-top:8px;">
-      <!-- Quick Actions -->
-      <div class="section">
-        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Quick Actions — Equipped Weapons</span></div>
-        <table class="dos-atk-table">
-          <thead><tr><th>Armament</th><th>To Hit</th><th>Damage</th><th>Range</th><th>Pattern</th><th>Special Rules</th><th>Magazine</th></tr></thead>
-          <tbody id="quick-actions-tbody"><tr><td colspan="7" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">++ No weapons equipped — mark armaments as active in the Wargear panel ++</td></tr></tbody>
-        </table>
-      </div>
-      <!-- Ammunition -->
-      <div class="section" style="margin-top:8px;">
-        <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Ammunition</span></div>
-        <div id="ammo-tracker-container"><div style="opacity:.4;font-size:9pt;padding:8px 4px;">No ammo tracked — add weapons from the Requisitorium or fill in the Wargear tab.</div></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="tab-panel" id="panel-wargear">
-  <div class="g2" style="margin-bottom:10px;">
-    <div class="section">
-      <div class="sec-title">Armor &amp; Protection</div>
-      <div style="display:flex;flex-direction:column;gap:7px;">
-        <div class="armor-row" style="grid-template-columns:1fr 1fr;">
-          <div class="field-group"><label>Armor Name</label><input type="text" id="armor-name" placeholder="e.g. Tacticus, Phobos…"></div>
-          <div class="field-group"><label>Armor Type</label>
-            <select id="armor-type" onchange="onArmorTypeChange()">
-              <option value="phobos">Phobos (12 + DEX)</option>
-              <option value="tacticus">Tacticus (16)</option>
-              <option value="gravis">Gravis (18)</option>
-              <option value="terminator">Terminator (20)</option>
-              <option value="custom">Custom</option>
-            </select>
-          </div>
+        <!-- Quick Actions -->
+        <div class="section" style="margin-bottom:8px;">
+          <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Quick Actions — Equipped Weapons</span></div>
+          <table class="dos-atk-table">
+            <thead><tr><th>Armament</th><th>To Hit</th><th>Damage</th><th>Range</th><th>Pattern</th><th>Special Rules</th><th>Magazine</th></tr></thead>
+            <tbody id="quick-actions-tbody"><tr><td colspan="7" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">++ No weapons equipped — mark armaments as active in the Wargear panel ++</td></tr></tbody>
+          </table>
         </div>
-        <div class="ac-block">
-          <div class="ac-shield">
-            <span class="ac-shield-num" id="ac-display-val">10</span>
-            <span class="ac-shield-lbl">Armor Class</span>
-          </div>
-          <div style="flex:1;">
-            <div class="ac-formula" id="ac-formula-txt">Base <span id="acf-base">10</span> + DEX <span id="acf-dex">+0</span> + Other <span id="acf-other">+0</span></div>
-            <div class="armor-row r4" style="margin-top:6px;">
-              <div class="field-group"><label>Base AC</label><input type="number" id="armor-base-ac" placeholder="10" oninput="calcAC()"></div>
-              <div class="field-group"><label>DEX Bonus</label>
-                <select id="armor-dex-mod" onchange="calcAC()">
-                  <option value="full">Full DEX</option>
-                  <option value="max2">Max +2</option>
-                  <option value="none">None</option>
-                </select>
+        <!-- Ammunition -->
+        <div class="section">
+          <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Ammunition</span></div>
+          <div id="ammo-tracker-container"><div style="opacity:.4;font-size:9pt;padding:8px 4px;">No ammo tracked — add weapons from the Requisitorium or fill in the Wargear tab.</div></div>
+        </div>
+      </div>
+
+      <!-- WARGEAR tab (content from panel-wargear) -->
+      <div class="rc-tab-panel" id="rc-wargear">
+        <div class="g2" style="margin-bottom:10px;">
+          <div class="section">
+            <div class="sec-title">Armor &amp; Protection</div>
+            <div style="display:flex;flex-direction:column;gap:7px;">
+              <div class="armor-row" style="grid-template-columns:1fr 1fr;">
+                <div class="field-group"><label>Armor Name</label><input type="text" id="armor-name" placeholder="e.g. Tacticus, Phobos…"></div>
+                <div class="field-group"><label>Armor Type</label>
+                  <select id="armor-type" onchange="onArmorTypeChange()">
+                    <option value="phobos">Phobos (12 + DEX)</option>
+                    <option value="tacticus">Tacticus (16)</option>
+                    <option value="gravis">Gravis (18)</option>
+                    <option value="terminator">Terminator (20)</option>
+                    <option value="custom">Custom</option>
+                  </select>
+                </div>
               </div>
-              <div class="field-group"><label>Other</label><input type="number" id="armor-bonus" placeholder="0" oninput="calcAC()"></div>
-              <div class="field-group" style="align-items:center;display:flex;flex-direction:column;gap:2px;">
-                <label style="white-space:nowrap;">Shield +2</label>
-                <input type="checkbox" id="armor-shield" onchange="calcAC()" style="width:16px;height:16px;margin-top:2px;">
+              <div class="ac-block">
+                <div class="ac-shield">
+                  <span class="ac-shield-num" id="ac-display-val-wg">10</span>
+                  <span class="ac-shield-lbl">Armor Class</span>
+                </div>
+                <div style="flex:1;">
+                  <div class="ac-formula" id="ac-formula-txt">Base <span id="acf-base">10</span> + DEX <span id="acf-dex">+0</span> + Other <span id="acf-other">+0</span></div>
+                  <div class="armor-row r4" style="margin-top:6px;">
+                    <div class="field-group"><label>Base AC</label><input type="number" id="armor-base-ac" placeholder="10" oninput="calcAC()"></div>
+                    <div class="field-group"><label>DEX Bonus</label>
+                      <select id="armor-dex-mod" onchange="calcAC()">
+                        <option value="full">Full DEX</option>
+                        <option value="max2">Max +2</option>
+                        <option value="none">None</option>
+                      </select>
+                    </div>
+                    <div class="field-group"><label>Other</label><input type="number" id="armor-bonus" placeholder="0" oninput="calcAC()"></div>
+                    <div class="field-group" style="align-items:center;display:flex;flex-direction:column;gap:2px;">
+                      <label style="white-space:nowrap;">Shield +2</label>
+                      <input type="checkbox" id="armor-shield" onchange="calcAC()" style="width:16px;height:16px;margin-top:2px;">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="armor-row" style="grid-template-columns:1fr 80px;">
+                <div class="field-group"><label>Special Properties</label><input type="text" id="armor-special" placeholder="e.g. Stealth disadvantage, Power field…"></div>
+                <div class="field-group"><label>Str Req.</label><input type="text" id="armor-str-req" placeholder="—"></div>
               </div>
             </div>
           </div>
+          <div class="section">
+            <div class="sec-title">Currency &amp; Requisition</div>
+            <div class="cur-boxes">
+              <div class="cur-box" style="flex:1;padding:14px 20px;"><input type="text" id="req-points" placeholder="0" style="font-size:20pt!important;"><span class="ab-lbl" style="font-size:9pt;margin-top:4px;">Requisition Points</span></div>
+            </div>
+            <div class="sec-title" style="margin-top:8px;">Commendations / Honors</div>
+            <textarea class="lined" rows="2" placeholder="Battle honors, campaign medals…"></textarea>
+          </div>
         </div>
-        <div class="armor-row" style="grid-template-columns:1fr 80px;">
-          <div class="field-group"><label>Special Properties</label><input type="text" id="armor-special" placeholder="e.g. Stealth disadvantage, Power field…"></div>
-          <div class="field-group"><label>Str Req.</label><input type="text" id="armor-str-req" placeholder="—"></div>
-        </div>
-      </div>
-    </div>
-    <div class="section">
-      <div class="sec-title">Currency &amp; Requisition</div>
-      <div class="cur-boxes">
-        <div class="cur-box" style="flex:1;padding:14px 20px;"><input type="text" id="req-points" placeholder="0" style="font-size:20pt!important;"><span class="ab-lbl" style="font-size:9pt;margin-top:4px;">Requisition Points</span></div>
-      </div>
-      <div class="sec-title" style="margin-top:8px;">Commendations / Honors</div>
-      <textarea class="lined" rows="2" placeholder="Battle honors, campaign medals…"></textarea>
-    </div>
-  </div>
-
-  <div class="g2">
-    <div class="section">
-      <div class="sec-title" style="display:flex;align-items:center;">Equipment &amp; Wargear<button class="sreq-open-btn" onclick="_sreqOpen()">+ Requisitorium</button></div>
-      <div style="display:grid;grid-template-columns:22px 3fr 1fr 2fr;gap:4px;padding:3px 4px;border-bottom:1px solid var(--gold-dim);">
-        <span></span>
-        <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Wargear</span>
-        <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Qty</span>
-        <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Field Notes</span>
-      </div>
+        <div class="g2">
+          <div class="section">
+            <div class="sec-title" style="display:flex;align-items:center;">Equipment &amp; Wargear<button class="sreq-open-btn" onclick="_sreqOpen()">+ Requisitorium</button></div>
+            <div style="display:grid;grid-template-columns:22px 3fr 1fr 2fr;gap:4px;padding:3px 4px;border-bottom:1px solid var(--gold-dim);">
+              <span></span>
+              <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Wargear</span>
+              <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Qty</span>
+              <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Field Notes</span>
+            </div>
 <div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(0)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Designation…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes · disposition…"></div>
 <div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(1)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
 <div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(2)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
@@ -639,162 +697,177 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 <div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(11)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
 <div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(12)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
 <div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(13)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-
-    </div>
-    <div>
-      <div class="section" style="margin-bottom:10px;">
-        <div class="sec-title">Ammunition Tracking</div>
-        <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:4px;padding:3px 4px;border-bottom:1px solid var(--gold-dim);">
-          <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Ammunition Type</span>
-          <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">In Stock</span>
-          <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Capacity</span>
-        </div>
-        <div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
-<div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
-<div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
-<div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
-<div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
-<div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
-<div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
-<div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
-
-      </div>
-      <div class="section">
-        <div class="sec-title">Stims, Explosives &amp; Consumables</div>
-        <div style="display:flex;flex-direction:column;gap:6px;">
-          <div class="g2">
-            <div class="field-group"><label>Medicae Stims</label><input type="text" placeholder="3 / 3"></div>
-            <div class="field-group"><label>Stim Type</label><input type="text" placeholder="Adrenal, Psychic…"></div>
           </div>
-          <div class="field-group"><label>Explosives</label><input type="text" placeholder="Frag x3, Krak x1, Smoke x2…"></div>
-          <div class="field-group"><label>Melta Charges</label><input type="text" placeholder="—"></div>
-          <div class="field-group"><label>Other Consumables</label><textarea class="lined" rows="3" placeholder=""></textarea></div>
+          <div>
+            <div class="section" style="margin-bottom:10px;">
+              <div class="sec-title">Ammunition Tracking</div>
+              <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:4px;padding:3px 4px;border-bottom:1px solid var(--gold-dim);">
+                <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Ammunition Type</span>
+                <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">In Stock</span>
+                <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Capacity</span>
+              </div>
+<div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
+<div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
+<div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
+<div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
+<div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
+<div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
+<div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
+<div class="wg-ammo-row"><input type="text" placeholder="Ammunition type…"><input type="text" placeholder="Stk" style="text-align:center;width:60px;"><input type="text" placeholder="Cap" style="text-align:center;width:60px;"></div>
+            </div>
+            <div class="section">
+              <div class="sec-title">Stims, Explosives &amp; Consumables</div>
+              <div style="display:flex;flex-direction:column;gap:6px;">
+                <div class="g2">
+                  <div class="field-group"><label>Medicae Stims</label><input type="text" placeholder="3 / 3"></div>
+                  <div class="field-group"><label>Stim Type</label><input type="text" placeholder="Adrenal, Psychic…"></div>
+                </div>
+                <div class="field-group"><label>Explosives</label><input type="text" placeholder="Frag x3, Krak x1, Smoke x2…"></div>
+                <div class="field-group"><label>Melta Charges</label><input type="text" placeholder="—"></div>
+                <div class="field-group"><label>Other Consumables</label><textarea class="lined" rows="3" placeholder=""></textarea></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
 
-<div class="tab-panel" id="panel-abilities">
-  <div class="section" style="margin-bottom:14px;">
-    <div class="sec-title">Spellcasting</div>
-    <div class="g3">
-      <div class="field-group"><label>Spellcasting Ability</label>
-        <select id="spell-ability">
-          <option value="">— None —</option>
-          <option value="str">Strength</option>
-          <option value="dex">Dexterity</option>
-          <option value="con">Constitution</option>
-          <option value="int">Intelligence</option>
-          <option value="wis">Wisdom</option>
-          <option value="cha">Charisma</option>
-        </select>
+      <!-- REQUISITORIUM tab -->
+      <div class="rc-tab-panel" id="rc-requisitorium">
+        <div class="section">
+          <div class="sec-title">Requisitorium</div>
+          <p style="font-family:var(--font-label);font-size:9pt;color:var(--silver-dim);letter-spacing:.1em;margin-bottom:10px;">Use the <strong style="color:var(--gold);">+ Requisitorium</strong> button in the Wargear tab to browse and add items.</p>
+          <button class="sreq-open-btn" onclick="_sreqOpen()" style="font-size:10pt;padding:6px 16px;">Open Requisitorium</button>
+        </div>
       </div>
-      <div class="field-group"><label>Spell Save DC</label><input type="text" id="spell-save-dc" readonly placeholder="—"></div>
-      <div class="field-group"><label>Spell Attack Bonus</label><input type="text" id="spell-atk-bonus" readonly placeholder="—"></div>
-    </div>
-  </div>
-  <div class="cls-selector">
-    <div>
-      <label>Specialty / Class</label>
-      <select id="cls-select" onchange="updateSubclassOpts()">
-        <option value="">— Select Class —</option>
-        <option value="Tactical Operative">Tactical Operative</option>
-<option value="Close Combat Operative">Close Combat Operative</option>
-<option value="Gravis Operative">Gravis Operative</option>
-<option value="Terminator">Terminator</option>
-<option value="Vanguard Operative">Vanguard Operative</option>
-<option value="Apothecary">Apothecary</option>
-<option value="Chaplain">Chaplain</option>
-<option value="Librarian">Librarian</option>
-<option value="Techmarine">Techmarine</option>
-      </select>
-    </div>
-    <div>
-      <label>Level</label>
-      <input type="number" id="feat-level" min="1" max="20" value="1" oninput="updateSubclassOpts()">
-    </div>
-    <div id="sub-wrap">
-      <label>Subclass</label>
-      <select id="sub-select" onchange="renderFeatures()">
-        <option value="">— Select Subclass —</option>
-      </select>
-    </div>
-  </div>
 
-  <div id="lineage-section" style="display:none;margin-bottom:16px;">
-    <div class="sec-title" style="margin-bottom:8px;">Lineage — Adeptus Astartes</div>
-    <div id="lineage-traits-list" class="feat-list"></div>
-  </div>
-
-  <div id="features-list" class="feat-list">
-    <div class="no-feats">Select a class and level to load abilities</div>
-  </div>
-
-  <div class="section" style="margin-top:14px;">
-    <div class="sec-title">Custom / Additional Features &amp; Notes</div>
-    <textarea class="lined" rows="8" placeholder="Additional class features, racial traits, feats, special abilities, blessings, bionic enhancements…"></textarea>
-  </div>
-</div>
-
-<div class="tab-panel" id="panel-lore">
-  <div class="lore-layout">
-    <div class="section">
-      <div class="sec-title">Personal Oath</div>
-      <textarea class="lined" rows="5" placeholder="The oath this operative swore before the Emperor — their unbreakable vow, their reason for fighting…"></textarea>
-    </div>
-    <div class="section">
-      <div class="sec-title">Personality Traits</div>
-      <textarea class="lined" rows="5" placeholder="How this operative carries themselves, their manner in the field, their habits and quirks…"></textarea>
-    </div>
-    <div class="section">
-      <div class="sec-title">Bonds</div>
-      <textarea class="lined" rows="4" placeholder="What does this operative fight for beyond duty? Brothers, civilians, a home world, a fallen mentor…"></textarea>
-    </div>
-    <div class="section">
-      <div class="sec-title">Ideals</div>
-      <textarea class="lined" rows="4" placeholder="The principles this operative holds above all else — honor, faith, duty, vengeance, survival…"></textarea>
-    </div>
-    <div class="section">
-      <div class="sec-title">Flaws &amp; Sins</div>
-      <textarea class="lined" rows="4" placeholder="Weaknesses, sins of pride, old wounds, phobias, the whispers of corruption…"></textarea>
-    </div>
-    <div class="section">
-      <div class="sec-title">Corruption Score</div>
-      <div class="g3">
-        <div class="field-group"><label>Current</label><input type="number" placeholder="0"></div>
-        <div class="field-group"><label>Threshold</label><input type="number" placeholder="10"></div>
-        <div class="field-group"><label>Cleansed</label><input type="number" placeholder="0"></div>
+      <!-- ABILITIES tab -->
+      <div class="rc-tab-panel" id="rc-abilities">
+        <div class="cls-selector">
+          <div>
+            <label>Specialty / Class</label>
+            <select id="cls-select" onchange="updateSubclassOpts()">
+              <option value="">— Select Class —</option>
+              <option value="Tactical Operative">Tactical Operative</option>
+              <option value="Close Combat Operative">Close Combat Operative</option>
+              <option value="Gravis Operative">Gravis Operative</option>
+              <option value="Terminator">Terminator</option>
+              <option value="Vanguard Operative">Vanguard Operative</option>
+              <option value="Apothecary">Apothecary</option>
+              <option value="Chaplain">Chaplain</option>
+              <option value="Librarian">Librarian</option>
+              <option value="Techmarine">Techmarine</option>
+            </select>
+          </div>
+          <div>
+            <label>Level</label>
+            <input type="number" id="feat-level" min="1" max="20" value="1" oninput="updateSubclassOpts()">
+          </div>
+          <div id="sub-wrap">
+            <label>Subclass</label>
+            <select id="sub-select" onchange="renderFeatures()">
+              <option value="">— Select Subclass —</option>
+            </select>
+          </div>
+        </div>
+        <div id="lineage-section" style="display:none;margin-bottom:16px;">
+          <div class="sec-title" style="margin-bottom:8px;">Lineage — Adeptus Astartes</div>
+          <div id="lineage-traits-list" class="feat-list"></div>
+        </div>
+        <div id="features-list" class="feat-list">
+          <div class="no-feats">Select a class and level to load abilities</div>
+        </div>
+        <div class="section" style="margin-top:14px;">
+          <div class="sec-title">Spellcasting / Psyker Powers</div>
+          <div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;margin-bottom:6px;">
+            <div class="field-group"><label>Casting Ability</label>
+              <select id="spell-ability">
+                <option value="">— None —</option>
+                <option value="int">Intelligence</option>
+                <option value="wis">Wisdom</option>
+                <option value="cha">Charisma</option>
+              </select>
+            </div>
+            <div class="field-group"><label>Spell Save DC</label>
+              <input type="text" id="spell-save-dc" readonly placeholder="—" style="width:44px;text-align:center;">
+            </div>
+            <div class="field-group"><label>Spell Attack</label>
+              <input type="text" id="spell-atk-bonus" readonly placeholder="—" style="width:44px;text-align:center;">
+            </div>
+          </div>
+        </div>
+        <div class="section" style="margin-top:14px;">
+          <div class="sec-title">Custom / Additional Features &amp; Notes</div>
+          <textarea class="lined" rows="8" placeholder="Additional class features, racial traits, feats, special abilities, blessings, bionic enhancements…"></textarea>
+        </div>
       </div>
-    </div>
-    <div class="section lore-full">
-      <div class="sec-title">Chapter History &amp; Background</div>
-      <textarea class="lined" rows="7" placeholder="Where did this operative come from? What battles shaped them before the Deathwatch? Why were they chosen?"></textarea>
-    </div>
-    <div class="section lore-full">
-      <div class="sec-title">Appearance &amp; Markings</div>
-      <textarea class="lined" rows="5" placeholder="Battle scars, bionic replacements, chapter tattoos, honor markings, kills tallied on armor…"></textarea>
-    </div>
-  </div>
-</div>
 
-<div class="tab-panel" id="panel-notes">
-  <div class="g2" style="margin-bottom:10px;">
-    <div class="section">
-      <div class="sec-title">Allies, Contacts &amp; Rivals</div>
-      <textarea class="lined" rows="12" placeholder="Fellow kill-team members, Inquisitorial contacts, chapter liaisons, Watch Captain, notable adversaries encountered…"></textarea>
-    </div>
-    <div class="section">
-      <div class="sec-title">Operational Log &amp; Mission Notes</div>
-      <textarea class="lined" rows="12" placeholder="Session notes, mission debriefs, clues gathered, objectives completed, casualties, decisions made…"></textarea>
-    </div>
-  </div>
-  <div class="section">
-    <div class="sec-title">General Notes</div>
-    <textarea class="lined" rows="10" placeholder="Anything else — loot to claim, rules reminders, DM notes, tactical plans…"></textarea>
-  </div>
-</div>
-</div>
+      <!-- NOTES tab (Lore + Field Notes merged) -->
+      <div class="rc-tab-panel" id="rc-notes">
+        <div class="lore-layout">
+          <div class="section">
+            <div class="sec-title">Personal Oath</div>
+            <textarea class="lined" rows="5" placeholder="The oath this operative swore before the Emperor — their unbreakable vow, their reason for fighting…"></textarea>
+          </div>
+          <div class="section">
+            <div class="sec-title">Personality Traits</div>
+            <textarea class="lined" rows="5" placeholder="How this operative carries themselves, their manner in the field, their habits and quirks…"></textarea>
+          </div>
+          <div class="section">
+            <div class="sec-title">Bonds</div>
+            <textarea class="lined" rows="4" placeholder="What does this operative fight for beyond duty? Brothers, civilians, a home world, a fallen mentor…"></textarea>
+          </div>
+          <div class="section">
+            <div class="sec-title">Ideals</div>
+            <textarea class="lined" rows="4" placeholder="The principles this operative holds above all else — honor, faith, duty, vengeance, survival…"></textarea>
+          </div>
+          <div class="section">
+            <div class="sec-title">Flaws &amp; Sins</div>
+            <textarea class="lined" rows="4" placeholder="Weaknesses, sins of pride, old wounds, phobias, the whispers of corruption…"></textarea>
+          </div>
+          <div class="section">
+            <div class="sec-title">Corruption Score</div>
+            <div class="g3">
+              <div class="field-group"><label>Current</label><input type="number" placeholder="0"></div>
+              <div class="field-group"><label>Threshold</label><input type="number" placeholder="10"></div>
+              <div class="field-group"><label>Cleansed</label><input type="number" placeholder="0"></div>
+            </div>
+          </div>
+          <div class="section lore-full">
+            <div class="sec-title">Chapter History &amp; Background</div>
+            <textarea class="lined" rows="7" placeholder="Where did this operative come from? What battles shaped them before the Deathwatch? Why were they chosen?"></textarea>
+          </div>
+          <div class="section lore-full">
+            <div class="sec-title">Appearance &amp; Markings</div>
+            <textarea class="lined" rows="5" placeholder="Battle scars, bionic replacements, chapter tattoos, honor markings, kills tallied on armor…"></textarea>
+          </div>
+        </div>
+        <div class="g2" style="margin-top:10px;margin-bottom:10px;">
+          <div class="section">
+            <div class="sec-title">Allies, Contacts &amp; Rivals</div>
+            <textarea class="lined" rows="10" placeholder="Fellow kill-team members, Inquisitorial contacts, chapter liaisons, Watch Captain, notable adversaries encountered…"></textarea>
+          </div>
+          <div class="section">
+            <div class="sec-title">Operational Log &amp; Mission Notes</div>
+            <textarea class="lined" rows="10" placeholder="Session notes, mission debriefs, clues gathered, objectives completed, casualties, decisions made…"></textarea>
+          </div>
+        </div>
+        <div class="section">
+          <div class="sec-title">General Notes</div>
+          <textarea class="lined" rows="8" placeholder="Anything else — loot to claim, rules reminders, DM notes, tactical plans…"></textarea>
+        </div>
+      </div>
+
+    </div><!-- end right col -->
+  </div><!-- end dos-3col -->
+</div><!-- end panel-dossier -->
+
+<!-- panel-wargear: empty stub preserved for JS tab-switching compatibility -->
+<div class="tab-panel" id="panel-wargear" style="display:none;"></div>
+
+<!-- Legacy stubs for JS tab-switching compatibility -->
+<div class="tab-panel" id="panel-abilities" style="display:none;"></div>
+<div class="tab-panel" id="panel-lore" style="display:none;"></div>
+<div class="tab-panel" id="panel-notes" style="display:none;"></div>
 <script src="req_items.js"></script>
 <style>
 #sreq-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:1000;align-items:center;justify-content:center;}
@@ -849,14 +922,25 @@ const _STYPE = 'dw_light';
 const DW_CLASSES = {"Tactical Operative": {"hitDice": "d8", "features": [{"level": 1, "level_str": "1st Level", "name": "Tactical Doctrine", "body": "At the start of each combat, choose one doctrine that persists until combat ends or you change it as a bonus action:\n• **Devastator Doctrine.** +1 to hit with all ranged weapons.\n• **Tactical Doctrine.** You suffer no penalty on ranged attacks when within melee range of a target. Your melee attacks deal +1d4 damage.\n• **Assault Doctrine.** After moving at least 10 ft before attacking, your next attack (ranged or melee) deals +1d6 damage."}, {"level": 2, "level_str": "2nd Level", "name": "Fire and Advance", "body": "Starting at 2nd level, you have mastered the art of fighting while on the move. When you use the Dash action on your turn, you may make one ranged weapon attack as a bonus action."}, {"level": 5, "level_str": "5th Level", "name": "Extra Attack", "body": "Starting at 5th level, when you take the Attack action, you can make 2 ranged or melee attacks instead of 1."}, {"level": 7, "level_str": "7th Level", "name": "Tactical Flexibility", "body": "Starting at 7th level, when you roll initiative, you may set your active Tactical Doctrine before the first round begins with no action required. Additionally, changing your active Doctrine now costs a free action once per turn rather than a bonus action."}, {"level": 11, "level_str": "11th Level", "name": "Sustained Fire", "body": "Starting at 11th level, when your first ranged attack on your turn hits, each subsequent ranged attack you make on that same turn gains +1 to hit, stacking up to a maximum of +3."}, {"level": 15, "level_str": "15th Level", "name": "Combat Veteran", "body": "Starting at 15th level, you have advantage on saving throws against being Frightened or Charmed. Additionally, once per turn when you miss an attack, you may reroll the attack die and take the new result."}, {"level": 18, "level_str": "18th Level", "name": "Adaptive Supremacy", "body": "Starting at 18th level, your mastery of the battlefield allows you to draw on multiple doctrines simultaneously. You may now benefit from two Tactical Doctrines at the same time."}, {"level": 20, "level_str": "20th Level — Paragon", "name": "Paragon of the Primarch", "body": "Starting at 20th level, once per resupply, for 1 minute you reach the apex of tactical mastery:\n• All attack rolls of 15 or higher automatically hit regardless of the target's AC.\n• You ignore cover bonuses on all attack rolls.\n• Your Tactical Doctrines cannot be suppressed or removed by any effect for the duration."}, {"level": 14, "level_str": "14th Level", "name": "Rites of Battle", "body": "Starting at 14th level, once per resupply as a bonus action, you invoke the oaths of your Chapter and steel the resolve of your brothers. All allies within 30 ft gain +1d6 to their next attack roll or saving throw. This bonus lasts until used or until the end of combat.\nAdditionally, allies who benefit from this bonus and score a hit on their triggering attack may immediately move up to 10 ft without provoking opportunity attacks as the momentum of the engagement shifts in your favor."}, {"level": 14, "level_str": "14th Level", "name": "Empyrean Conflagration", "body": "Starting at 14th level, once per resupply as an action, you push all three weapon systems to their absolute limit. Select one weapon of each type you are carrying — or apply all techniques to a single weapon if carrying only one type — and fire each in sequence as part of the same action. Each attack uses its respective technique automatically.\nCombined, the attacks deal weapon damage + 4d6 fire + 4d8 radiant in total across all hits. Any creature struck by two or more of the attacks must make a CON save (DC = 8 + Proficiency Bonus + DEX modifier) or be Stunned until the end of their next turn.\nIf a plasma weapon misfires, you take 2d8 radiant and that weapon is unusable until resupply. Flame and melta weapons used in this action consume all remaining ammo charges."}], "subclasses": {"Intercessor": [{"level": 3, "level_str": "3rd Level", "name": "Bolter Discipline", "body": "Starting at 3rd level, your bolter training goes beyond standard fire drills — you have learned to read enemy positioning and exploit momentary gaps in their defenses.\nWhen you hit a target with a bolt weapon, you may use your bonus action to fire a Suppression Burst at that same target or any creature within 5 ft of it. The creature must make a CON save (DC = 8 + Proficiency Bonus + DEX modifier) or be knocked Prone and have their movement speed reduced by 10 ft until the end of their next turn.\nAdditionally, your ballistic training allows you to read angles and trajectories that others cannot — you ignore half cover with bolt weapons."}, {"level": 6, "level_str": "6th Level", "name": "Combat Spacing", "body": "Starting at 6th level, you have drilled relentless fire-and-move patterns into muscle memory. You and allies who start their movement within 5 ft of you do not provoke opportunity attacks when disengaging.\nAdditionally, when an ally within 10 ft of you is hit by an attack, you may use your reaction to shout a warning — that ally may immediately move up to 5 ft without provoking opportunity attacks, potentially moving out of a blast radius or melee range before the damage resolves."}, {"level": 10, "level_str": "10th Level", "name": "Bolter Mastery", "body": "Starting at 10th level, your bolt weapon attacks score a critical hit on a 19 or 20. On a critical hit with a bolt weapon, the explosive bolt detonates inside the target — they must make a CON save (DC = 8 + Proficiency Bonus + DEX modifier) or suffer 1 Mortal Wound in addition to normal critical damage. This save cannot be made with advantage."}], "Hellblaster": [{"level": 3, "level_str": "3rd Level", "name": "Instruments of Annihilation", "body": "Starting at 3rd level, you gain proficiency with all Flame, Melta, and Plasma weapons and ignore movement penalties of Stationary variants of these weapons. You also unlock a unique technique for each weapon type:\n• **Flame — Purgation Wave.** When you fire a Flame weapon, you may choose to sustain the burn on a single 5 ft square or creature rather than sweeping the standard area. That target takes the weapon's full damage with no saving throw, and must succeed on a CON save (DC = 8 + Proficiency Bonus + DEX modifier) or be set Ablaze — taking 1d6 fire damage at the start of each of their turns until they use an action to extinguish the flames. This technique consumes 2 fuel charges instead of 1.\n• **Melta — Bore Shot.** When you fire a Melta weapon, you may concentrate the beam into a single focused point rather than a cone. The attack targets one creature only but deals +2d8 fire damage and ignores all damage resistances. This technique consumes 2 ammo charges and can only be declared if you are within the weapon's short range.\n• **Plasma — Supercharge.** When you fire a Plasma weapon, you may Supercharge it before rolling to hit. A Supercharged shot deals +2d8 radiant damage. If your attack roll (before modifiers) is a 1 or 2, the weapon vents dangerously — you take 1d8 radiant damage and lose all remaining attacks this turn."}, {"level": 6, "level_str": "6th Level", "name": "Tempered by Fire", "body": "Starting at 6th level, constant proximity to extreme heat and radiation hardens your body and sharpens your instincts. You gain resistance to fire and radiant damage. Each technique also improves:\n• **Purgation Wave.** The Ablaze condition now also imposes disadvantage on DEX saving throws while the target burns.\n• **Bore Shot.** On a kill with Bore Shot, the residual beam continues to the next creature in the firing line, dealing half the original damage with no saving throw.\n• **Supercharge.** The misfire threshold tightens to a natural 1 only, and the bonus damage increases to +3d8."}, {"level": 10, "level_str": "10th Level", "name": "Master of Destruction", "body": "Starting at 10th level, your understanding of these weapons reaches a level few Astartes ever achieve. Each technique unlocks a further effect:\n• **Purgation Wave.** You may now apply Purgation Wave to up to 2 adjacent targets simultaneously, both suffering the full focused burn and CON save. Fuel cost increases to 3 charges total.\n• **Bore Shot.** The beam now punches through any cover the target is using — Bore Shot attacks ignore all cover bonuses to AC.\n• **Supercharge.** On a hit against a target with 50 HP or fewer remaining, the shot automatically becomes a critical hit regardless of the roll."}]}}, "Close Combat Operative": {"hitDice": "d10", "features": [{"level": 1, "level_str": "1st Level", "name": "Combat Stances", "body": "At 1st level, you learn to channel your martial discipline through distinct Combat Stances. When you first gain this feature, choose one stance from the list below. You may learn an additional stance at 11th level. You can only benefit from one stance at a time, and you can change your active stance as a bonus action.\n• **Onslaught Stance.** When you move at least 10 feet before making a melee attack, you gain +2 to damage rolls for the remainder of your turn.\n• **Duelist Stance.** When you are engaged in melee with only one creature, you gain +2 to damage rolls against that creature.\n• **Executioner Stance.** You gain +1d4 to all melee damage rolls, but suffer –1 AC.\n• **Bastion Stance.** While you are within 5 feet of an ally, both you and that ally gain +1 AC.\n• **Phantom Stance.** You gain advantage on the first attack made from stealth, and that attack can critically strike on a roll of 19 or 20."}, {"level": 2, "level_str": "2nd Level", "name": "Adrenaline Surge", "body": "Starting at 2nd level, you can push yourself beyond your normal limits for a moment. On your turn, you can take one additional action.\nOnce you use this feature, you must finish a short rest or resupply before you can use it again. Starting at 18th level, you can use it twice before a rest or resupply, but only once on the same turn."}, {"level": 5, "level_str": "5th Level", "name": "Extra Attack", "body": "Starting at 5th level, when you take the Attack action, you can make 2 ranged or melee attacks instead of 1. The number of melee attacks increases to 3 when you reach 11th level in this class."}, {"level": 7, "level_str": "7th Level", "name": "Parry", "body": "Starting at 7th level, when hit by a melee attack, you may use your reaction to reduce the incoming damage by 1d8 + your Strength modifier.\nThis feature can be used a number of times equal to your proficiency bonus and resets on a short rest or resupply."}, {"level": 11, "level_str": "11th Level", "name": "Extra Melee Attack", "body": "Starting at 11th level, when you take the Attack action and have a melee weapon equipped, you can make 3 attacks with a melee weapon instead of 2.\nIf you choose to attack with a ranged weapon, you can still attack up to 2 times with it before utilizing the 3rd melee attack. You also learn an additional Combat Stance at this level."}, {"level": 15, "level_str": "15th Level", "name": "Emperor's Strike", "body": "Starting at 15th level, you have learned to focus the entirety of your martial discipline into a single, annihilating blow. When you take the Attack action on your turn, you may forgo all of your attacks to make one Emperor's Strike. Declare the strike before rolling. The strike has the following properties:\nYou may use this feature a number of times equal to your Proficiency Bonus per resupply.\n• The attack automatically ignores any damage resistances the target has. If the target has damage immunity to the weapon's damage type, it instead treats it as resistance.\n• On a hit, the attack deals weapon damage plus an additional 4d10 radiant damage, representing the divine wrath of the Emperor channeled through your blow.\n• If the attack roll meets or exceeds the target's AC by 5 or more, the target must succeed on a Constitution saving throw (DC = 8 + Proficiency Bonus + STR modifier) or become Stunned until the end of their next turn."}, {"level": 18, "level_str": "18th Level", "name": "Adrenaline Surge Improvement", "body": "Starting at 18th level, you gain an additional use of your Adrenaline Surge. Additionally, when you activate your Adrenaline Surge, you may move up to your full movement speed as part of that action."}, {"level": 20, "level_str": "20th Level — Paragon", "name": "Angel of Vengeance", "body": "Starting at 20th level, you become the Emperor's wrath incarnate. Once per resupply, for 1 minute (or until you are incapacitated), you gain all of the following:\n• Advantage on all attack rolls.\n• Melee hits deal an additional 2d8 radiant damage.\n• Enemies within 15 feet of you must succeed on a Wisdom saving throw (DC = 8 + Proficiency Bonus + CHA modifier) or be frightened of you until the end of their next turn.\n• You gain temporary hit points equal to your level."}], "subclasses": {"Assault": [{"level": 3, "level_str": "3rd Level", "name": "Aerial Assault", "body": "Starting at 3rd level, you gain proficiency with the Thunder Hammer and Lightning Claws. You also gain access to the standard Astartes Jump Pack for world traversal and combat.\nYou gain a vertical jump height and long jump distance equal to your movement speed.\nWhile in combat, you can use your Bonus Action to launch into the air and perform a Ground Pound. You may move up to your movement speed in any direction and slam a point within range. All creatures within a 5 ft radius of your landing point must make a DEX saving throw (DC = 8 + Proficiency Bonus + STR). Creatures that fail the save take melee damage based on your equipped weapon.\nThis feature can be used a number of times equal to your proficiency modifier."}, {"level": 6, "level_str": "6th Level", "name": "Angelic Ascension", "body": "Starting at 6th level, when you perform a Ground Pound, your Jump Pack flares up and disperses an area of flame around you as you take off. All creatures within a 5 ft radius of your takeoff point must make a DEX saving throw (DC = 8 + Proficiency Bonus + STR). Creatures that fail take 1d8 fire damage."}, {"level": 10, "level_str": "10th Level", "name": "Thunderous Impact", "body": "Starting at 10th level, when you perform a Ground Pound, your landing point radius increases from 5 ft to 10 ft.\nYour Ground Pound also deals an extra 2d6 thunder damage on impact."}, {"level": 14, "level_str": "14th Level", "name": "Angel of Fury", "body": "Starting at 14th level, your Jump Pack movement speed and Ground Pound range are now equal to double your movement speed."}], "Bladeguard": [{"level": 3, "level_str": "3rd Level", "name": "Shield of the Emperor", "body": "Starting at 3rd level, you gain proficiency with the Storm Shield. If you take the Attack action on your turn and land a melee attack successfully, you can use your bonus action to perform a Shield Bash, shoving the target 10 ft away from you.\nAdditionally, if you are wielding a Storm Shield and are subjected to an effect that allows you to make a DEX saving throw to take only half damage, you can use your reaction to take no damage instead if you succeed on the saving throw, interposing your shield between yourself and the source of the effect."}, {"level": 6, "level_str": "6th Level", "name": "Vow of Defiance", "body": "Starting at 6th level, you gain the ability to issue a divine challenge to all hostile creatures within range. All enemies within 15 ft of you must make a Wisdom saving throw (DC = 8 + Proficiency Bonus + CHA modifier). All targets that fail are compelled to focus their attacks on you until they succeed on a saving throw, which can only be made at the end of their turn. This effect lasts for 1 minute, until saved against, or until you are incapacitated.\nIf a compelled creature attempts to attack any target besides you, they have disadvantage on the attack, and you may use your reaction to make an attack against them, provided they are within range."}, {"level": 10, "level_str": "10th Level", "name": "Ceramite Bulwark", "body": "Starting at 10th level, as an action, you can enter the Bulwark Stance for 1 minute. While in this stance, you gain the following features:\nOnce you use this feature, you must complete a resupply before using it again.\n• You gain resistance to bludgeoning, piercing, and slashing damage.\n• Allies within 10 feet of you gain half cover (+2 AC) against ranged attacks.\n• You cannot move more than 10 feet per turn while maintaining this stance.\n• You can end this stance at any time (no action required)."}, {"level": 14, "level_str": "14th Level", "name": "Vigilant Sentinel", "body": "Starting at 14th level, your vigilance becomes absolute. You gain the following features:\n• You can no longer be surprised while conscious.\n• Creatures within 10 ft of you cannot gain advantage on attacks against you or your allies within range.\n• Creatures that start their turn within melee range of you have their total movement speed reduced by 10 ft until the end of their turn."}]}}, "Gravis Operative": {"hitDice": "d10", "features": [{"level": 1, "level_str": "Level 1", "name": "Fire Platform", "body": "At the start of each combat, you gain one of two stances based on how much you move each turn.\nForced movement does not count against your movement for either stance but breaks Ironclad Stance if it occurs.\n• **Suppression Stance** (moved half speed or less this turn): Your ranged attacks gain +1 to hit and ignore half cover on all ranged attacks.\n• **Ironclad Stance** (did not move at all this turn): All Suppression Stance bonuses apply, plus your ranged attacks deal +1 die of weapon damage and any creature you hit must make a STR saving throw (DC = 8 + Proficiency Bonus + STR modifier) or have their movement speed reduced to 0 until the end of their next turn."}, {"level": 2, "level_str": "Level 2", "name": "Gravis Resilience", "body": "While wearing Gravis Armor you cannot be knocked Prone involuntarily unless the source is a Large or larger creature or a vehicle. You count as one size larger for grappling and shoving, and have advantage on STR saving throws against effects that would move you against your will."}, {"level": 5, "level_str": "Level 5", "name": "Extra Attack", "body": "When you take the Attack action, you can make 2 ranged or melee attacks instead of 1."}, {"level": 7, "level_str": "Level 7", "name": "Iron Halo", "body": "Your Gravis armor is fitted with an Iron Halo — a powerful energy field generator that deflects incoming fire and projects a protective barrier around you and your brothers.\nAs a bonus action, you may activate your Iron Halo, gaining temporary hit points equal to 5 × your Proficiency Bonus. These follow all standard temporary HP rules — absorbing damage before regular HP, not stacking with other temporary HP sources, and not regenerating on their own.\nWhile the Iron Halo is active and temporary hit points remain, allies within 5ft directly behind you are treated as though they have total cover against ranged attacks. This protection ends immediately if the temporary hit points are reduced to 0 or the ally moves out of position.\nThe Iron Halo provides no protection against Mortal Wounds, psychic damage, or damage from sources within melee range of you. You may activate the Iron Halo a number of times equal to your Proficiency Bonus per resupply."}, {"level": 11, "level_str": "Level 11", "name": "Sustained Barrage", "body": "When you take the Attack action and are in Ironclad Stance, you may make one additional ranged attack as part of that action for a total of 3. Your attacks during Ironclad Stance also score a critical hit on a 19 or 20."}, {"level": 15, "level_str": "Level 15", "name": "Unyielding Platform", "body": "While in Ironclad Stance you gain resistance to all damage from ranged weapon attacks. When a creature attempts to force you to move, you may use your reaction to make a STR saving throw (DC = the effect's save DC + 2) — on a success you are not moved and remain in Ironclad Stance."}, {"level": 18, "level_str": "Level 18", "name": "Fortress of Firepower", "body": "Your presence on the battlefield becomes a suppressive force in itself. While you are in Ironclad Stance, any enemy that enters within 15ft of you must make a STR saving throw (DC = 8 + Proficiency Bonus + STR modifier) or immediately lose all remaining movement for that turn, stopped dead by the weight of fire and the crushing presence of your weapons platform.\nAdditionally, you may now re-enter Ironclad Stance even if forced movement was applied to you this turn, provided you did not willingly move."}, {"level": 20, "level_str": "Level 20", "name": "Omnissiah's Wrath — Class Paragon", "body": "Once per resupply, for 1 minute you become an unassailable weapons platform. You automatically enter Ironclad Stance regardless of whether you moved, and Ironclad Stance cannot be broken for the duration — no forced movement, effect, or damage can remove it.\nEvery hit you land reduces the target's AC by 1, stacking up to a maximum of −10 for the duration. Your weapons ignore all damage resistances and immunities for the duration."}, {"level": 14, "level_str": "Level 14", "name": "Apocalypse Ordnance", "body": "Once per resupply as an action, designate a point within 200ft. Every creature within a 40ft radius must make a DEX saving throw (DC = 8 + Proficiency Bonus + DEX modifier) or take 10d6 fire damage, or half on a success. Structures and vehicles within the radius take maximum damage automatically. The area becomes difficult terrain until cleared."}, {"level": 14, "level_str": "Level 14", "name": "Annihilation Protocol", "body": "Once per resupply, when you take the Attack action while in Ironclad Stance, you may activate Annihilation Protocol. For that action only, you may make one attack against every creature within your weapon's range that you can see, up to a maximum number of targets equal to your remaining charges + Proficiency Bonus. Each attack is rolled separately.\nAfter Annihilation Protocol resolves, you must finish a short rest or resupply before using Suppression or Ironclad Stance again — the sheer volume of fire depletes your targeting cogitator's reserves."}], "subclasses": {"Eradicator": [{"level": 3, "level_str": "Level 3", "name": "Ordnance Specialist", "body": "You gain proficiency with all Explosive weapons and thrown explosives. Your training grants the following: blast radius on all explosives you use increases by 5ft; the DEX save DC for all your explosives increases by your Proficiency Bonus instead of the weapon's standard DC; and you may throw grenades up to twice the listed range without penalty."}, {"level": 6, "level_str": "Level 6", "name": "Shaped Charges", "body": "When you fire a launcher weapon or throw a grenade, you may choose up to a number of creatures equal to your Proficiency Bonus within the blast radius to automatically succeed on their DEX saving throw, routing the explosion around them. This allows safe detonation in melee range of allies."}, {"level": 10, "level_str": "Level 10", "name": "Chain Detonation", "body": "When one of your explosives kills a creature, you may use your reaction to immediately throw a grenade or fire a launcher weapon. Additionally, if two or more of your explosives detonate within the same round within 20ft of each other, each deals +2d6 bonus damage to any creature caught in both blasts."}], "Devastator": [{"level": 3, "level_str": "Level 3", "name": "Heavy Weapons Platform", "body": "You gain proficiency with all Gravis-tagged and Heavy weapons. While in Suppression or Ironclad Stance, you ignore the Stationary modifier restriction on all Gravis-tagged and Heavy Ordinance weapons — your armor provides the stability platform these weapons require. Additionally, while in Ironclad Stance, your Gravis-tagged and Heavy Ordinance weapons gain one additional attack before reload."}, {"level": 6, "level_str": "Level 6", "name": "Covering Fire", "body": "As a bonus action you may lay down a suppressive barrage covering a 15ft wide corridor between you and a point within your weapon's range. Any creature that moves through that corridor this round must make a DEX saving throw (DC = 8 + Proficiency Bonus + DEX modifier) or take damage equal to one weapon damage die and have their movement speed halved until the end of their turn. This feature can be used a number of times equal to your Proficiency Bonus per resupply."}, {"level": 10, "level_str": "Level 10", "name": "Armour Bane", "body": "Your sustained heavy fire wears down even the most resilient targets. When you hit the same creature with a Gravis-tagged or Heavy Ordinance weapon two or more times in the same turn, the target's AC is reduced by 2 until the start of your next turn. This effect does not stack beyond −2."}]}}, "Terminator": {"hitDice": "d12", "features": [{"level": 1, "level_str": "Level 1", "name": "Tactical Dreadnought", "body": "Your Terminator Armor is not merely protection — it is a fortress. You gain the following permanent features while wearing Terminator Armor:\n• You are immune to the Prone condition.\n• When you are reduced to 0 HP but not killed outright, you may make a CON saving throw (DC 15) to drop to 1 HP instead. This triggers once per resupply.\n• **Ceramite Wall:** When you take damage you may use your reaction to reduce it by 1d10 + CON modifier. You may use this a number of times equal to your Proficiency Bonus per resupply."}, {"level": 2, "level_str": "Level 2", "name": "Unyielding Presence", "body": "Your sheer mass and grinding advance makes routing around you a dangerous proposition. When a creature within 10ft of you makes an attack against any target other than you, they make that attack roll with disadvantage. A creature may use their bonus action to steel themselves against your presence, suppressing this effect until the start of their next turn."}, {"level": 5, "level_str": "Level 5", "name": "Extra Attack", "body": "When you take the Attack action, you can make 2 ranged or melee attacks instead of 1."}, {"level": 7, "level_str": "Level 7", "name": "Personal Deep Strike", "body": "Your armor is fitted with a teleportation homer that locks onto specially coded deployment beacons. The Terminator or any ally may use their bonus action to place a Deployment Beacon at their current location. Up to 2 beacons may be active simultaneously — placing a third immediately deactivates the oldest.\nAs a bonus action on a subsequent turn, the Terminator may activate their teleportation homer to deep strike — teleporting instantly to an unoccupied space within 5ft of a chosen active beacon, regardless of distance or line of sight. Your arrival is devastating: all creatures within 5ft of your landing point must make a STR saving throw (DC = 8 + Proficiency Bonus + STR modifier) or be knocked Prone and pushed 5ft away.\nA beacon remains active after a deep strike and can be retrieved by moving into its space. Each beacon has AC 10 and 1 HP. You may deep strike a number of times equal to your Proficiency Bonus per resupply."}, {"level": 11, "level_str": "Level 11", "name": "Machine Spirit", "body": "The machine spirit of your Terminator Armor has fully awakened, acting as a semi-independent guardian that anticipates threats before you consciously register them. You gain one additional reaction per round that operates independently of your normal reaction. This Machine Spirit reaction can only be used for: Ceramite Wall, opportunity attacks, or any class or subclass feature that requires a reaction. You cannot use your Machine Spirit reaction and your normal reaction for the same triggering event.\nAdditionally, your Ceramite Wall damage reduction increases from 1d10 + CON to 2d10 + CON."}, {"level": 15, "level_str": "Level 15", "name": "Unstoppable", "body": "Your momentum in battle becomes impossible to arrest. You are immune to being Stunned, Paralyzed, and Frightened. Your movement cannot be reduced below 15ft by any effect while wearing Terminator Armor.\n**Iron Oath:** Once per resupply as a bonus action, you issue a direct challenge to all enemies within 30ft. Each must make a WIS saving throw (DC = 8 + Proficiency Bonus + STR modifier) or be compelled to target only you on their next turn and be unable to willingly move more than 5ft away from you until the start of your next turn."}, {"level": 18, "level_str": "Level 18", "name": "Living Relic", "body": "You have transcended the limitations of mortal warriors. Your maximum HP increases by 30. Your Strength and Constitution scores each increase by 4 and their maximums increase to 24. Your Ceramite Wall damage reduction increases from 2d10 + CON to 3d10 + CON. Additionally, your Machine Spirit fully matures — its independent reaction can now also be used for any saving throw reroll, not just the listed features."}, {"level": 20, "level_str": "Level 20", "name": "Indomitable — Class Paragon", "body": "Once per resupply as a bonus action, for 1 minute you become the apex of the Emperor's wrath made ceramite. Your Unyielding Presence expands — the disadvantage range increases from 10ft to 30ft and enemies can no longer suppress it with their bonus action for the duration. Your Personal Deep Strike recharges and may be used once more. Your Ceramite Wall triggers automatically once per round without costing either of your reactions. Any creature that hits you with a melee attack takes 1d10 thunder damage as your machine spirit retaliates."}, {"level": 14, "level_str": "Level 14", "name": "Last Wall", "body": "Once per resupply as a bonus action, you may plant yourself as the Last Wall for 1 minute. For the duration, when an ally within 10ft of you takes damage from a single hit, you may use your reaction to absorb all of that damage — reducing the ally's damage taken to 0 and taking the full amount yourself instead. You cannot be moved, knocked Prone, or incapacitated while Last Wall is active. If you are reduced to 0 HP while Last Wall is active, the feature ends but the Level 1 Tactical Dreadnought CON save triggers automatically with advantage."}, {"level": 14, "level_str": "Level 14", "name": "Termination Order", "body": "Once per resupply as a bonus action, you may issue a Termination Order on a creature you can see within 60ft — a sacred oath of annihilation bound into the machine spirit of your armor. For 1 minute or until the target is dead, you gain the following against that target:\nIf the target is still alive when the duration ends, you suffer one level of Exhaustion as the unfulfilled oath weighs on your machine spirit. If the target dies during the duration, you gain temporary HP equal to twice your level and may immediately issue a new Termination Order as a free action without expending another use.\n• Advantage on all attack rolls against them.\n• Your attacks deal an additional 3d8 damage on a hit.\n• Your attacks ignore their damage resistances and immunities.\n• You cannot be Frightened or Charmed while the Termination Order is active."}], "subclasses": {"Indomitus": [{"level": 3, "level_str": "Level 3", "name": "Bulwark of the Chapter", "body": "You become an immovable shield for your brothers. While you have not moved this turn, allies within 10ft of you gain +2 AC against all attacks. Additionally, once per turn when an ally within 10ft of you is hit by an attack, you may use your reaction to impose disadvantage on that attack roll — interposing yourself or your weapon between your ally and the incoming blow. You may use this reaction a number of times equal to your Proficiency Bonus per resupply."}, {"level": 6, "level_str": "Level 6", "name": "Retribution Protocols", "body": "When you use your reaction to impose disadvantage on an attack targeting an ally, you may immediately make one melee attack against the attacker if they are within your reach. Additionally, when an ally within 10ft of you is reduced to 0 HP, you may use your reaction to move up to your speed toward the source of the damage without provoking opportunity attacks."}, {"level": 10, "level_str": "Level 10", "name": "Indomitable Fortress", "body": "Your presence on the battlefield becomes a sacred oath of protection. Allies within 15ft of you gain advantage on saving throws against being Frightened or Charmed. Once per resupply as a bonus action, you may invoke **Oathbound** — designate up to 3 allies within 30ft. Until the start of your next turn, those allies cannot be reduced below 1 HP by any attack or effect. Any damage that would reduce them to 0 HP instead reduces them to 1 HP for the duration."}], "Tartaros": [{"level": 3, "level_str": "Level 3", "name": "Hunter's Stride", "body": "The sleeker Tartaros pattern armor allows for greater mobility than its Indomitus counterpart. You unlock the Dash action — you may Dash once per turn as a bonus action. Your movement speed penalty from Terminator Armor is reduced from −10ft to −5ft. Additionally, when you move at least 10ft toward a target before attacking, your first melee attack deals +2d6 damage representing the momentum of your charge."}, {"level": 6, "level_str": "Level 6", "name": "Kill Lock", "body": "You have been trained to identify and eliminate high-value targets with ruthless efficiency. As a bonus action, you may designate a creature you can see as your Marked Target. Against your Marked Target you gain +2 to hit and your attacks ignore their damage resistances. When you kill your Marked Target you may immediately designate a new one as a free action. You may have one Marked Target at a time."}, {"level": 10, "level_str": "Level 10", "name": "Apex Predator", "body": "Your hunter-killer training reaches its peak. When you hit your Marked Target, the target must make a WIS saving throw (DC = 8 + Proficiency Bonus + STR modifier) or become Frightened of you until the end of their next turn. Additionally, when your Marked Target attempts to move away from you, you may use your reaction to move up to your speed toward them without provoking opportunity attacks."}]}}, "Vanguard Operative": {"hitDice": "d8", "features": [{"level": 1, "level_str": "1st Level", "name": "Vanguard Expertise", "body": "At 1st level, as part of your specialized training, choose two skills that you are proficient in — you gain expertise in those skills, doubling your proficiency bonus for any ability check you make that uses either of the chosen proficiencies."}, {"level": 2, "level_str": "2nd Level", "name": "Adaptive Camelioline Cloak", "body": "Starting at 2nd level, your armor is equipped with an advanced camelioline cloak, capable of bending light, distorting outlines, and masking motion when properly engaged.\nAs an action, you may activate your camelioline cloak to become invisible for 1 minute. You also gain the ability to Hide even when only lightly obscured, such as by shadows, foliage, smoke, or battlefield debris.\nWhen you successfully Hide or use your camelioline cloak, you remain hidden until you move more than half your speed, make an attack, interact with an object, or take a clearly hostile action.\nYou can use this feature a number of times equal to your Proficiency Bonus per Resupply."}, {"level": 5, "level_str": "5th Level", "name": "Extra Attack", "body": "Starting at 5th level, when you take the Attack action, you can make 2 ranged or melee attacks instead of 1."}, {"level": 7, "level_str": "7th Level", "name": "Recon Directive", "body": "Starting at 7th level, your armor and camelioline cloak are modified to allow for a better range of movement to help gain the advantage in battle and to provide reconnaissance for your team.\nYou gain the ability to climb at your full movement speed and your movement sounds are dampened.\nWhile using your camelioline cloak, you are now allowed to move up to your full movement speed without losing your invisibility — this includes when you take the Dash action."}, {"level": 11, "level_str": "11th Level", "name": "Improved Chameleoline Cloak", "body": "Starting at 11th level, your camelioline cloak is upgraded to allow for more efficient operations.\nYour invisibility can now last up to 10 minutes outside of combat, and you may now interact with objects, open doors, or manipulate equipment without ending invisibility, provided the action is subtle and non-hostile."}, {"level": 15, "level_str": "15th Level", "name": "Specter Protocol", "body": "Starting at 15th level, your presence becomes increasingly difficult to perceive even while operating.\nWhile invisible via your camelioline cloak, you leave no tracks, sound, or obvious physical disturbances that would allow hostile entities to track your location.\nCreatures relying on non-magical senses such as hearing, smell, or vibration have disadvantage on detecting you unless you take a hostile action. Magical senses are not affected by this feature."}, {"level": 18, "level_str": "18th Level", "name": "Vanguard Supremacy", "body": "Starting at 18th level, once per resupply, at the start of combat or at the start of your turn, you may activate Vanguard Supremacy (no action required). For the next 1 minute:\n• Allies you can see may reposition up to 30 feet immediately without provoking opportunity attacks.\n• Enemies you can see cannot take reactions during this time.\n• You may use the Help action to provide advantage to your allies' attacks, provided the ally is within your vision."}, {"level": 20, "level_str": "20th Level — Paragon", "name": "The Emperor's Shadow", "body": "Starting at 20th level, you become the unseen hand of the Emperor, orchestrating the battlefield through perfect concealment, flawless timing, and absolute dominance of the shadows. Once per Resupply, you may invoke the Emperor's Shadow as an action. For 1 minute:\n• You are invisible, even while attacking or taking hostile actions. This invisibility cannot be broken by non-magical means. Magical effects that reveal invisibility still detect you but do not negate the other benefits of this feature.\n• You have advantage on all attack rolls against creatures that cannot see you. Attacks against creatures unaware of you deal maximum weapon damage on the first hit each turn.\n• You may use your Help action as a bonus action on allies who can see or hear you to grant advantage on their first attack each round. Those allies may also move up to 10 feet and make a single attack after the Help action is used on them."}, {"level": 14, "level_str": "14th Level", "name": "Shadow Takedown", "body": "When you drop a creature to 0 HP, you may use your reaction to hide and move half your speed. If you stay hidden until your next turn, you gain +2 AC until the start of the following turn and an additional 1d8 damage on your next attack."}, {"level": 14, "level_str": "14th Level", "name": "Upgraded Targeting Lattice", "body": "You gain an additional 1d8 damage against enemies marked by your Targeting Lattice.\nOnce per Resupply, you may utilize your Targeting Lattice to increase your accuracy against your marked target even further. Your next ranged attack against the marked target auto-hits, auto-crits, ignores damage resistances, and creates no audible report. If this shot successfully kills the target, you regain 1 expended use of your Targeting Lattice."}], "subclasses": {"Infiltrator": [{"level": 3, "level_str": "3rd Level", "name": "Scrambler Array", "body": "Your vox is modified to scramble nearby communications. Your presence jams all vox arrays within 20 ft. Enemies cannot call for aid while within 20 ft of you, and all allies within the field gain +1d6 to Stealth rolls."}, {"level": 6, "level_str": "6th Level", "name": "Silent Advance", "body": "You gain an extra 10 ft of movement. Similar to Cunning Action, you may use your bonus action to Dash, Hide, or Use an Object. After hiding, your first attack deals +1d8 damage."}, {"level": 10, "level_str": "10th Level", "name": "Flanking Protocol", "body": "When you and an ally flank the same target, both your first attacks each turn have advantage against the flanked target. You may move 10 ft after attacking the flanked target without provoking opportunity attacks. If you are within melee range of the target you are flanking, you may also use your bonus action to make an additional melee attack against the flanked enemy."}], "Eliminator": [{"level": 3, "level_str": "3rd Level", "name": "The Long Watch", "body": "Starting at 3rd level, you gain proficiency with Sniper and Scoped weapons. Additionally, if you move no more than half your speed on your turn, your first ranged attack that turn gains +2 to hit and deals one additional die of weapon damage (e.g. a Bolt Sniper Rifle deals an extra 1d12). This bonus applies regardless of whether you moved before or after the attack, as long as your total movement for the turn does not exceed half your speed. Forced movement from external sources does not count against this limit.\nThe Long Watch scales at later levels as your other subclass features unlock:\n• **Level 6 (Targeting Lattice):** The additional damage die increases to 2 dice.\n• **Level 10 (Ghostwalk):** The additional damage die increases to 3 dice, and your Long Watch attacks ignore half and three-quarters cover.\n• **Level 14 (Upgraded Targeting Lattice):** The additional damage die increases to 4 dice. If your Long Watch attack is also benefiting from Targeting Lattice, the target's damage resistances are suppressed until the end of your next turn."}, {"level": 6, "level_str": "6th Level", "name": "Targeting Lattice", "body": "You may utilize your armor's targeting relay to point out weak spots on enemy combatants. As a bonus action, you may apply a mark to a specific enemy within 600 ft. You and all allies gain +1d4 to hit that target until the start of your next turn. This feature can be used a number of times equal to your proficiency modifier per resupply."}, {"level": 10, "level_str": "10th Level", "name": "Ghostwalk", "body": "When you are targeted by an attack, detected by enemy sensors, or revealed from stealth, you may use your reaction to activate Ghost Walk. Until the start of your next turn:\nYou can use Ghost Walk a number of times equal to your proficiency bonus per resupply.\n• Your position cannot be marked, tracked, or locked by auspex, scopes, or targeting arrays.\n• You become heavily obscured to all enemies more than 15 feet away, and enemy attacks against you are made with disadvantage.\n• You may immediately move up to half your speed without provoking opportunity attacks.\n• If you end this movement in cover, shadow, or prone, you may immediately attempt a Stealth check to become hidden."}]}}, "Apothecary": {"hitDice": "d8", "features": [{"level": 1, "level_str": "Level 1", "name": "Narthecium Mastery", "body": "Your Narthecium training goes beyond standard proficiency. When you use it to restore HP, you roll 2d8 + WIS modifier instead of the standard 1d8 + WIS. Any remainder above the target's missing HP becomes temporary HP as normal.\nAdditionally, you can assess the condition of any creature within 5ft as a free action, immediately knowing their current HP total, any conditions affecting them, and whether they have any Mortal Wounds."}, {"level": 2, "level_str": "Level 2", "name": "Combat Stimms", "body": "You carry a selection of combat-grade stimulants. You begin each mission with a number of Stimm Doses equal to your Proficiency Bonus. As a bonus action, you may administer a stimm to yourself or an ally within 5ft. Choose one effect per dose:\n• **Adrenal Stimm:** The target gains advantage on STR checks and saving throws and +1d6 to melee damage rolls for 1 minute. At the end of the duration the target gains 1 level of Exhaustion.\n• **Coagulation Stimm:** The target immediately regains 2d6 HP and gains resistance to the next instance of piercing or slashing damage they receive before the end of their next turn.\n• **Focus Stimm:** The target gains advantage on their next attack roll and cannot be Surprised until the start of their next turn."}, {"level": 3, "level_str": "Level 3", "name": "Sacred Duty", "body": "You are trained in the most sacred responsibility of your office — the recovery and preservation of the gene-seed of fallen Astartes. When an Astartes ally is reduced to 0 HP and fails their death saves, you may use your reaction to extract their gene-seed before it degrades. The extracted gene-seed is a significant narrative resource at the GM's discretion.\nAdditionally, your deep knowledge of Astartes biology grants you expertise in Medicine and Insight checks — if you are already proficient in these skills, you may double your proficiency bonus when making checks with them."}, {"level": 5, "level_str": "Level 5", "name": "Chirurgeon's Instinct", "body": "You may use the Narthecium to heal as a bonus action rather than an action. When used this way the healing is reduced to 2d8 + WIS modifier. Your Narthecium stabilisation ability is also upgraded — you may now stabilise a downed ally within 10ft as a bonus action without moving to their space. This does not consume a Narthecium use."}, {"level": 6, "level_str": "Level 6", "name": "Resilience Aura", "body": "Your presence on the battlefield improves the biological resilience of nearby warriors. Allies within 10ft of you gain the following passive benefits:\n• Advantage on death saving throws.\n• Recover 1 additional HP when they receive healing from any source.\n• Resistance to poison damage."}, {"level": 7, "level_str": "Level 7", "name": "Biological Enhancement", "body": "Once per resupply per target as an action, you may perform a Biological Enhancement on a willing ally within 5ft. Choose one enhancement that lasts until the next resupply:\n• **Enhanced Catalepsean Node:** The target no longer suffers penalties from lack of rest and gains advantage on Perception checks.\n• **Enhanced Ossmodula:** The target's carrying capacity doubles and they count as one size larger for grappling and shoving.\n• **Enhanced Betcher's Gland:** The target may use a bonus action to spit acid — dealing 1d6 acid damage to a target within 10ft."}, {"level": 9, "level_str": "Level 9", "name": "Field Chirurgeon", "body": "You have mastered the treatment of catastrophic battlefield injuries. You may now treat Mortal Wounds in the field without requiring a Medicae Station. As an action, the standard Mortal Wound treatment DC is reduced from DC 15 + number of Mortal Wounds to DC 12 + number of Mortal Wounds. On a success you remove 1 Mortal Wound. On a failure, no Mortal Wound is removed but the target does not worsen. You may attempt this once per creature per short rest or resupply."}, {"level": 11, "level_str": "Level 11", "name": "Advanced Stimm Synthesis", "body": "Your stimm formulations improve significantly. Each effect upgrades:\nAdditionally, once per turn when an ally within 10ft drops to 0 HP, you may use your reaction to instantly stabilise them at 1 HP. This does not consume a Narthecium use.\n• **Adrenal Stimm:** Bonus damage increases to +2d6 and the Exhaustion penalty triggers at the end of the following round rather than immediately.\n• **Coagulation Stimm:** Healing increases to 3d6 and the resistance now applies to all damage from non-magical weapons until the start of your next turn.\n• **Focus Stimm:** The target gains advantage on their next two attack rolls and their movement cannot be reduced until the start of your next turn."}, {"level": 13, "level_str": "Level 13", "name": "Gene-Seed Resonance", "body": "Your proximity to multiple Astartes gene-seeds creates a subtle biological resonance that enhances group performance. While 2 or more Astartes allies are within 15ft of you, all of them — including you — gain +1 to attack rolls and saving throws.\nAdditionally, once per resupply, you may perform an emergency biological override on a creature within 5ft — removing all levels of Exhaustion they currently have."}, {"level": 14, "level_str": "Level 14", "name": "Aura of Fortitude", "body": "Your Resilience Aura extends from 10ft to 20ft. Allies within the aura also gain immunity to the Frightened condition and have their maximum HP increased by 10 while within range."}, {"level": 17, "level_str": "Level 17", "name": "Master Chirurgeon", "body": "Your Mortal Wound treatment reaches an unparalleled level of skill. You may now remove up to 2 Mortal Wounds per treatment action rather than 1. The DC from Field Chirurgeon is reduced by a further 2, bringing the treatment DC to DC 10 + number of Mortal Wounds.\nAdditionally, once per resupply, you may perform emergency surgery on a creature that has just dropped to 0 HP — as a reaction, that creature immediately stabilises and regains HP equal to your WIS modifier × 4."}, {"level": 18, "level_str": "Level 18", "name": "Living Aegis", "body": "Your Resilience Aura becomes a powerful passive field. Allies within 20ft also gain resistance to psychic damage and advantage on CON saving throws. Once per resupply as an action, you may pulse the aura — all allies within 20ft immediately recover 2d8 + WIS HP and have one condition of their choice removed."}, {"level": 20, "level_str": "Level 20", "name": "Miracle of the Primarch — Class Paragon", "body": "Once per resupply as an action, you may invoke the full might of your medical mastery and the Emperor's will. Choose one effect:\n• **Resurrection Protocol:** A fallen ally who died within the last minute is restored to life with HP equal to half their maximum. All their Mortal Wounds are removed. They return with 1 level of Exhaustion.\n• **Mass Stimm Surge:** All allies within 30ft immediately receive all three stimm effects simultaneously with no Exhaustion penalty, using the enhanced level 11 versions of each effect."}], "subclasses": {}}, "Chaplain": {"hitDice": "d8", "features": [{"level": 1, "level_str": "Level 1", "name": "Word of the Emperor", "body": "Your voice carries the weight of the Emperor's will. You gain proficiency with the Crozius Arcanum and its Faithful Strike modifier. You learn the art of the Litany — powerful invocations spoken as a bonus action that function at any range. You begin each resupply with Litany Charges equal to your Proficiency Bonus. You may not use a Litany and a Crozius Rite on the same turn — both require your bonus action.\nYou begin knowing three Litanies and learn one more at levels 5, 9, 13, and 17. See the Litanies section below."}, {"level": 1, "level_str": "Level 1", "name": "Emperor's Blessing", "body": "You may spend Emperor's Blessing Points to invoke Holy Powers from The Chaplain &amp; Holy Powers sheet, provided you meet the Devotion requirement for that power. Base Holy Spells (cantrips) are free and usable at will — they do not cost Emperor's Blessing Points. The save DC for all Holy Powers is 8 + Proficiency Bonus + CHA modifier. Emperor's Blessing Points reset on resupply."}, {"level": 2, "level_str": "Level 2", "name": "Crozius Rites", "body": "While wielding your Crozius Arcanum you may project the Emperor's judgment as a bonus action, choosing one target you can see within 30ft. You may not use a Crozius Rite and a Litany on the same turn. Choose one Rite:\nYou may use Crozius Rites a number of times equal to your Proficiency Bonus per resupply.\n• **Rite of Censure:** The target must make a WIS saving throw (DC = 8 + Prof Bonus + CHA modifier) or be Frightened of you until the end of their next turn.\n• **Rite of Purgation:** The target takes 2d6 radiant damage and cannot regain HP until the start of your next turn.\n• **Rite of Absolution:** One ally within 30ft immediately removes one condition affecting them as the Emperor's light cleanses them."}, {"level": 3, "level_str": "Level 3", "name": "Aura of Zeal", "body": "Your unwavering faith radiates outward as a permanent 10ft aura. Allies within the aura gain +1 to attack rolls and cannot be surprised while you are conscious. You personally gain +2 to attack rolls and advantage on saving throws against being Frightened or Charmed while your aura is active. The aura improves at levels 9 (15ft, allies +2, you +3) and 14 (20ft)."}, {"level": 5, "level_str": "Level 5", "name": "Extra Attack", "body": "When you take the Attack action you can make 2 attacks instead of 1."}, {"level": 6, "level_str": "Level 6", "name": "Empowered Litanies", "body": "When you use a Litany you may choose to empower it by spending 2 Emperor's Blessing Points to double its effect for that use: Litany of Hate deals +2d4 damage; Litany of Faith grants advantage on two saving throws; Litany of Endurance doubles temporary HP granted; Litany of Wrath applies maximum damage to the next two hits instead of one."}, {"level": 11, "level_str": "Level 11", "name": "Divine Wrath", "body": "Once per turn as a bonus action while wielding your Crozius Arcanum, you may spend 3 Emperor's Blessing Points to project a burst of holy energy. All enemies within 15ft of you must make a CON saving throw (DC = 8 + Proficiency Bonus + CHA modifier) or take 2d8 radiant damage."}, {"level": 13, "level_str": "Level 13", "name": "Oathbound", "body": "You become immune to both the Frightened and Charmed conditions — no force in the galaxy can shake the faith of the Emperor's spiritual guardian. Allies within your Aura of Zeal cannot be Charmed and have advantage on saving throws against Corruption effects."}, {"level": 14, "level_str": "Level 14", "name": "Aura of Redemption", "body": "Your Aura of Zeal expands to 20ft. Additionally, once per resupply when an ally within your aura would drop to 0 HP, you may use your reaction to spend 5 Emperor's Blessing Points — the damage is reduced to 0 and the ally remains at 1 HP, bolstered by the Emperor's grace."}, {"level": 17, "level_str": "Level 17", "name": "Voice of Dominion", "body": "Your Litany Charges increase to Proficiency Bonus + CHA modifier per resupply. Crozius Rites no longer consume uses — they are free to activate every time, limited only by the bonus action economy."}, {"level": 18, "level_str": "Level 18", "name": "Vessel of the Emperor", "body": "Your faith has transformed you into a living conduit of the Emperor's will. You gain resistance to psychic and radiant damage. Your CHA score increases by 2 and its maximum increases to 22. All Holy Powers cast through Emperor's Blessing cost 2 fewer points (minimum 1)."}, {"level": 20, "level_str": "Level 20", "name": "Eternal Crusade — Class Paragon", "body": "Once per resupply as an action, for 1 minute you become the Emperor's voice made manifest. All Litanies require no Litany Charges for the duration. Your Aura of Zeal expands to 30ft — allies gain +4 to attack rolls and you gain +5. All allies within the aura gain immunity to Frightened and Charmed for the duration. Your Crozius Arcanum deals an additional 2d8 radiant damage on every hit. Enemies that start their turn within 15ft of you must make a WIS saving throw (DC = 8 + Proficiency Bonus + CHA modifier) or be Frightened until the end of their turn."}], "subclasses": {}}, "Librarian": {"hitDice": "d6", "features": [{"level": 1, "level_str": "Level 1", "name": "Psyker Awakening", "body": "Your mind has been opened to the Warp under the careful tutelage of your Chapter's Librarius. You gain proficiency with the Force Sword and Force Staff and their Warp Conduit modifier. You may spend Warp Resilience Points to manifest Warp Powers from The Librarian &amp; Psychic Powers sheet. Base Warp Spells are free and usable at will.\nYour Psyker Ranking begins at 1, giving access to all Rank 1 Advanced Warp Powers. You unlock Rank 2 at level 7 and Rank 3 at level 14. The save DC for all Warp Powers is 8 + Proficiency Bonus + INT modifier. Warp Resilience Points reset on resupply."}, {"level": 2, "level_str": "Level 2", "name": "Force Weapon Mastery", "body": "Your Force weapon becomes a conduit for your psychic will. When you hit with a Force Sword or Force Staff, you may spend 2 Warp Resilience Points to trigger a Psychic Strike — dealing an additional 2d6 psychic damage beyond the weapon's standard Warp Conduit bonus. This does not trigger a Perils of the Warp check. The Psychic Strike bonus damage increases to 3d6 at level 7 and 4d6 at level 14."}, {"level": 3, "level_str": "Level 3", "name": "Warp Sense", "body": "Your connection to the Warp grants supernatural awareness of nearby threats. You can detect the presence of psykers, daemons, and warp-corrupted entities within 60ft as a free action — you sense their presence but not their exact location unless they are within line of sight. You have advantage on saving throws against psychic damage and warp-based effects."}, {"level": 5, "level_str": "Level 5", "name": "Warp Conduit", "body": "Your force weapon and your psychic abilities feed one another in combat. You add your INT modifier to all damage rolls made with Advanced Warp Powers.\nAdditionally, when you hit a creature with your Force Sword or Force Staff, your next Advanced Warp Power manifested before the end of your next turn costs 2 fewer Warp Resilience Points (minimum 1). This reduction can only apply once per turn."}, {"level": 6, "level_str": "Level 6", "name": "Psychic Cleansing", "body": "During a short rest you may enter a deep meditative trance and spend Warp Resilience Points to purge Corruption from your mind and soul. For every 5 Warp Resilience Points spent, reduce your Corruption score by 1. You may not reduce your Corruption below the threshold of your current Corruption tier — Corruption can be managed but not fully erased without narrative intervention from a Chaplain or Inquisitor."}, {"level": 7, "level_str": "Level 7", "name": "Psyker Ranking 2", "body": "You unlock access to all Rank 2 Advanced Warp Powers from The Librarian &amp; Psychic Powers sheet. Your Psychic Strike bonus damage increases from 2d6 to 3d6."}, {"level": 9, "level_str": "Level 9", "name": "Deny the Witch", "body": "When a creature within 60ft of you casts a spell or manifests a psychic power, you may use your reaction and spend Warp Resilience Points equal to the power's cost (minimum 4) to attempt to nullify it. The caster must make an INT saving throw (DC = 8 + Proficiency Bonus + INT modifier). On a failure the power is completely negated. On a success your Warp Resilience Points are still spent but the power proceeds. You may use this feature a number of times equal to your Proficiency Bonus per resupply."}, {"level": 11, "level_str": "Level 11", "name": "Psychic Hood", "body": "Your psychic hood filters the most dangerous warp energies before they can overwhelm your mind. The Perils of the Warp WIS save DC is reduced by 2 — now 8 + the number of points spent above 5 (down from 10). You gain resistance to psychic damage."}, {"level": 13, "level_str": "Level 13", "name": "Warp Shield", "body": "As a reaction when you or an ally within 30ft would take damage, you may spend 4 Warp Resilience Points to project a psychic barrier — reducing the incoming damage by 2d10 + INT modifier. This does not trigger a Perils of the Warp check."}, {"level": 14, "level_str": "Level 14", "name": "Psyker Ranking 3", "body": "You attain mastery of the most powerful and dangerous warp abilities available to the Adeptus Astartes. You unlock access to all Rank 3 Advanced Warp Powers from The Librarian &amp; Psychic Powers sheet. Your Psychic Strike bonus damage increases from 3d6 to 4d6."}, {"level": 17, "level_str": "Level 17", "name": "Warp Mastery", "body": "Your control over the Warp and your own psychic resilience reaches its apex. Your Psychic Cleansing cost reduces from 5 Warp Resilience Points per Corruption to 3 Warp Resilience Points per Corruption. Your Deny the Witch feature no longer costs Warp Resilience Points to activate — it is free to use, limited only by your reaction and your Proficiency Bonus uses per resupply."}, {"level": 18, "level_str": "Level 18", "name": "Mind Fortress", "body": "Your psychic defenses become virtually impenetrable. You are immune to psychic damage and the Charmed condition. Your INT score increases by 2 and its maximum increases to 22. The Perils of the Warp save DC is reduced by a further 2 — now 6 + the number of points spent above 5."}, {"level": 20, "level_str": "Level 20", "name": "Herald of the Warp — Class Paragon", "body": "Once per resupply as an action, for 1 minute you become a conduit of pure psychic power. All Warp Powers cost half their normal Warp Resilience Points for the duration (rounded up). Perils of the Warp checks are not required for the duration — your mastery is absolute. Your Psychic Strike deals maximum damage automatically — no roll required.\nEnemies within 15ft of you must make a WIS saving throw (DC = 8 + Proficiency Bonus + INT modifier) at the start of each of their turns or be Stunned until the end of their next turn as your psychic presence overwhelms their minds."}], "subclasses": {}}, "Techmarine": {"hitDice": "d8", "features": [{"level": 1, "level_str": "Level 1", "name": "Machine Communion", "body": "Your training in the ways of the Omnissiah allows you to commune with machine spirits and interface with technology on an instinctive level. You can sense the operational status of any mechanical device within 30ft as a free action — including damage level, fuel, ammunition, and any malfunctions present. You have advantage on all checks made to repair, operate, or disable mechanical devices, vehicles, and weapons.\nWhen you wield the Omnissian Power Axe, it acts as a conduit for your mechanicus abilities. A number of times equal to your Proficiency Bonus per resupply, after hitting with the axe you may channel a burst of machine spirit energy through the strike, dealing an additional 2d6 lightning damage."}, {"level": 2, "level_str": "Level 2", "name": "Field Repairs", "body": "As a bonus action, you may perform a Field Repair on yourself or an ally within 5ft. Choose one effect:\nYou may use Field Repairs a number of times equal to your Proficiency Bonus per resupply.\n• **Armour Patch:** The target regains 1d8 + INT modifier HP as you seal breaches in their armour plating. This improves to 2d8 + INT at level 11.\n• **Weapon Maintenance:** Until the start of your next turn, the target's next attack roll is made with advantage and deals +1d6 damage.\n• **Jam Clear:** Instantly clear a weapon malfunction or jam at no cost, restoring full function."}, {"level": 3, "level_str": "Level 3", "name": "Servo-Arm Mastery", "body": "Your servo-harness becomes a fully integrated weapons and utility platform. You may construct or rebuild a Servo-Arm in the field given basic materials and 1 hour of work. Your Servo-Arm damage increases to 1d8 + INT modifier. On your turn, you may make one attack with your Servo-Arm as a bonus action. Your Servo-Arm can grapple creatures up to Large size while allowing you to attack normally with your other weapons.\n**Servo-Harness Weapon Mount:** You may mount any Bolt or Plasma ranged weapon onto your servo-harness shoulder mount (not Gravis or Heavy Ordinance). A weapon mounted this way is fired as part of your Attack action — it counts as one of your attacks for the turn but requires no hands to operate. The mounted weapon uses your INT modifier for attack and damage rolls. You may swap a mounted weapon during a resupply."}, {"level": 5, "level_str": "Level 5", "name": "Extra Attack", "body": "When you take the Attack action you can make 2 attacks instead of 1. The shoulder mount weapon counts as one of these attacks if fired on the same turn."}, {"level": 6, "level_str": "Level 6", "name": "Mechanicus Enhancement", "body": "Your mastery of wargear allows you to enhance a weapon or piece of armour during a resupply or between missions. You may apply one of the following enhancements to a single item — one enhancement may be active per item at a time:\n• **Blessed Ammunition:** A ranged weapon's damage increases by 1 die (e.g. 1d8 becomes 2d8) for the duration.\n• **Reinforced Plating:** A suit of armour gains +1 AC for the duration.\n• **Machine Spirit Awakening:** A weapon gains the Disruption Field modifier — its attacks ignore non-magical weapon resistance.\n• **Overcharged Power Cell:** A power or energy weapon deals +1d6 lightning damage on each hit for the duration."}, {"level": 7, "level_str": "Level 7", "name": "Turret Emplacement", "body": "You may spend 10 minutes constructing a Tarantula Turret from available materials. The turret is a stationary construct with AC 14 and HP equal to 5 × your Proficiency Bonus. It occupies a 5ft space and cannot move. On initiative count 20 each round, the turret fires at the nearest enemy within 60ft — dealing 2d8 piercing damage on a hit (attack roll = your INT modifier + Proficiency Bonus). You may have one active turret at a time. Constructing a new one deactivates the previous. The turret is destroyed when reduced to 0 HP or at the end of the mission."}, {"level": 9, "level_str": "Level 9", "name": "System Override", "body": "Your communion with machine spirits extends to enemy technology. As an action, you may attempt to override a mechanical system you can see within 30ft — a vehicle, turret, automated weapon, door, or any other mechanical device. Make an INT check (DC set by the GM based on complexity). On a success you gain control of the system for 1 minute. On a failure you cannot attempt the same system again until the next resupply. You may use this feature a number of times equal to your Proficiency Bonus per resupply."}, {"level": 11, "level_str": "Level 11", "name": "Field Repairs Improvement", "body": "Your Armour Patch healing increases from 1d8 + INT to 2d8 + INT. Additionally, Field Repairs gains a new option:\n• **Emergency Augmetic:** You install a temporary bionic replacement for a damaged limb or organ, removing one Mortal Wound from the target immediately. The augmetic lasts until the next resupply, at which point it can be made permanent during downtime at no additional cost."}, {"level": 13, "level_str": "Level 13", "name": "Mechadendrite Interface", "body": "Your Mechadendrites become fully integrated combat and utility tools. You may construct and equip up to 3 Mechadendrite arms simultaneously. Each Mechadendrite can independently perform one of the following on your turn without consuming your action or bonus action:\n• Interact with an object within 5ft.\n• Make a single attack (1d4 + INT piercing damage).\n• Perform a Field Repair.\n• Carry or manipulate an item up to 10 lbs."}, {"level": 14, "level_str": "Level 14", "name": "Omnissiah's Sight", "body": "Your Machine Communion deepens. The lightning burst from your Machine Communion feature increases from 2d6 to 3d6. Additionally, once per resupply as an action, you may project your consciousness into a mechanical system within 60ft. For up to 1 minute you perceive through the machine's sensors and can operate it remotely. While projecting you are unaware of your physical surroundings."}, {"level": 17, "level_str": "Level 17", "name": "Master of the Forge", "body": "Your Mechanicus Enhancements reach master craftsman level. You may now apply two Mechanicus Enhancements simultaneously to the same item. Additionally, once per resupply during a short rest, you may perform a full weapon or armour overhaul on one item — the target item gains all four Mechanicus Enhancement effects simultaneously until the next resupply."}, {"level": 18, "level_str": "Level 18", "name": "Living Machine", "body": "Years of self-modification have blurred the line between warrior and machine. You gain resistance to lightning and psychic damage. Your INT score increases by 2 and its maximum increases to 22. You are immune to the Poisoned condition and disease.\nYour maintenance trance now counts as both a short rest and a long rest for the purpose of recovering class features and abilities — in 1 hour of trance you recover everything a full resupply of rest would normally provide. This does not replace the need for a resupply to restock ammunition and equipment."}, {"level": 20, "level_str": "Level 20", "name": "Omnissiah's Avatar — Class Paragon", "body": "Once per resupply as an action, for 1 minute you become a vessel of the Machine God's will. All mechanical devices within 30ft of you come under your direct control — enemy vehicles, turrets, automated weapons, and drones cease functioning or turn against their operators at the GM's discretion.\nYour Machine Communion lightning burst triggers automatically on every attack without consuming a use. Your Servo-Arm gains the Shatter modifier for the duration. All allies within 15ft gain +2 AC as their armour responds to your machine spirit's protective field."}], "subclasses": {}}};
 
 
-/* ── Tab system ── */
+/* ── Tab system (legacy top-level tabs, kept for JS compatibility) ── */
 function showTab(name) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => {
+    if (p.id !== 'panel-dossier') p.classList.remove('active');
+  });
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   const panel = document.getElementById('panel-' + name);
   const btn   = document.querySelector('[data-tab="' + name + '"]');
   if (panel) panel.classList.add('active');
   if (btn)   btn.classList.add('active');
+}
+
+/* ── Right-column tab system ── */
+function rcTab(btn, panelId) {
+  document.querySelectorAll('.rc-tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.rc-tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  var panel = document.getElementById(panelId);
+  if (panel) panel.classList.add('active');
 }
 
 /* ── Ability modifier calc ── */
@@ -878,7 +962,6 @@ const _SKILLS = [
   {id:'survival',        stat:'wis'},
   {id:'technology',      stat:'int'},
 ];
-
 function _recalcDerived() {
   const lvl = parseInt(document.getElementById('char-level').value) || 1;
   const pb  = Math.ceil(lvl / 4) + 1;
@@ -929,7 +1012,6 @@ function _recalcDerived() {
   syncQuickActionsFromWargear();
   calcAC();
 }
-
 function calcMod(s) {
   const score = parseInt(document.getElementById(s+'-score').value);
   const el    = document.getElementById(s+'-mod');
@@ -1018,7 +1100,7 @@ function syncQuickActionsFromWargear() {
       : '<span style="opacity:.35;">—</span>';
     rows += '<tr>'
       + '<td>'+name+'</td>'
-      + '<td style="text-align:center;color:var(--gold);">'+hit+'</td>'
+      + '<td style="text-align:center;color:var(--gold-light);">'+hit+'</td>'
       + '<td style="text-align:center;">'+dmg+'</td>'
       + '<td style="text-align:center;">'+range+'</td>'
       + '<td>'+wtype+'</td>'
@@ -1138,8 +1220,13 @@ function calcAC() {
   var other  = parseInt((document.getElementById('armor-bonus')||{}).value) || 0;
   var shield = (document.getElementById('armor-shield')||{}).checked ? 2 : 0;
   var total  = base + dexBonus + other + shield;
+  // Update all AC display mirrors
   var dispEl = document.getElementById('ac-display-val');
   if (dispEl) dispEl.textContent = total;
+  var dispElWg = document.getElementById('ac-display-val-wg');
+  if (dispElWg) dispElWg.textContent = total;
+  var dispDos = document.getElementById('ac-display-dossier');
+  if (dispDos) dispDos.textContent = total;
   var acEl = document.getElementById('stat-ac');
   if (acEl) acEl.value = total;
   var fBase  = document.getElementById('acf-base');
@@ -1763,7 +1850,7 @@ const CHAPTER_HERITAGE = {
     { badge:'Heritage', name:'Mechadendrite Interface', body:'You gain proficiency with servo-arms and mechadendrite arms. You gain a retractable mechadendrite arm that can manipulate tools. You have advantage on skill checks involving tools you are proficient with.' }
   ],
   'Imperial Fists': [
-    { badge:'Heritage', name:'Phalanx',             body:'If a creature within 10 ft of you takes damage, you can use your reaction to move 10 ft and take the attack instead. Roll 1d6 and reduce the damage by that amount. Can be used a number of times equal to your proficiency modifier; resets on a resupply.' },
+    { badge:'Heritage', name:'Phalanx',            body:'If a creature within 10 ft of you takes damage, you can use your reaction to move 10 ft and take the attack instead. Roll 1d6 and reduce the damage by that amount. Can be used a number of times equal to your proficiency modifier; resets on a resupply.' },
     { badge:'Heritage', name:'Defend the Imperium', body:'You gain +1 AC if you have not moved on your turn (excluding Terminator Armour). You cannot be forcibly moved by any effect that moves you less than 10 ft. The Phalanx reaction movement does not affect this ability.' }
   ]
 };
