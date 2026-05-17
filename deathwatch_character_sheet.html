@@ -267,6 +267,14 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .feat-card-body li{margin-bottom:3px;}
 .feat-card-body strong{color:var(--gold-light);font-family:var(--font-label);font-size:12pt;}
 .no-feats{font-family:var(--font-label);font-size:9pt;letter-spacing:.2em;color:var(--silver-dim);text-align:center;padding:30px;text-transform:uppercase;}
+/* ── Class Proficiency Block ── */
+#cls-profs-block{background:var(--panel2);border:1px solid var(--border2);padding:10px 14px;margin-bottom:12px;}
+.cls-profs-grid{display:grid;gap:0;}
+.cls-profs-row{display:grid;grid-template-columns:110px 1fr;gap:8px;align-items:baseline;padding:4px 0;border-bottom:1px solid rgba(42,58,80,.35);}
+.cls-profs-row:last-child{border-bottom:none;}
+.cls-profs-lbl{font-family:var(--font-label);font-size:7.5pt;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);white-space:nowrap;}
+.cls-profs-val{font-family:var(--font-body);font-size:10.5pt;color:var(--text);}
+.cls-profs-extra{font-family:var(--font-label);font-size:7.5pt;letter-spacing:.1em;text-transform:uppercase;color:var(--silver-dim);margin-top:6px;padding-top:5px;border-top:1px solid var(--border2);}
 .sub-badge{display:inline-block;font-family:var(--font-label);font-size:9pt;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);background:rgba(200,164,74,.1);border:1px solid var(--gold-dim);padding:1px 6px;margin-left:6px;}
 
 /* ── LORE TAB ── */
@@ -1011,6 +1019,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
             </select>
           </div>
         </div>
+        <div id="cls-profs-block" style="display:none;"></div>
         <div id="lineage-section" style="display:none;margin-bottom:16px;">
           <div class="sec-title" style="margin-bottom:8px;">Lineage — Adeptus Astartes</div>
           <div id="lineage-traits-list" class="feat-list"></div>
@@ -1582,6 +1591,103 @@ function renderFeatures() {
   }).join('');
 }
 
+/* ── Class Proficiency Data ── */
+const DW_CLASS_PROFS = {
+  'Tactical Operative': {
+    saves:   ['Strength', 'Dexterity'],
+    skills:  { count:3, list:['Athletics','Acrobatics','History','Insight','Intimidation','Perception','Stealth','Technology'] },
+    armor:   'All Armor & Shields (Astartes Training)',
+    weapons: 'All Simple & Martial Weapons (Astartes Training)',
+    tools:   '—',
+    extra:   'Default armor pattern: Tacticus or Phobos'
+  },
+  'Close Combat Operative': {
+    saves:   ['Strength', 'Constitution'],
+    skills:  { count:2, list:['Acrobatics','Athletics','Insight','Intimidation','Perception','Survival'] },
+    armor:   'All Armor & Shields (Astartes Training)',
+    weapons: 'All Simple & Martial Weapons (Astartes Training)',
+    tools:   '—',
+    extra:   'Default armor pattern: Tacticus'
+  },
+  'Gravis Operative': {
+    saves:   ['Strength', 'Constitution'],
+    skills:  { count:2, list:['Athletics','History','Intimidation','Perception','Survival','Technology'] },
+    armor:   'All Armor & Shields (Astartes Training)',
+    weapons: 'All Simple & Martial Weapons, Heavy Weapons, Gravis-pattern Weapons',
+    tools:   '—',
+    extra:   'Default armor pattern: Gravis'
+  },
+  'Terminator': {
+    saves:   ['Strength', 'Constitution'],
+    skills:  { count:2, list:['Athletics','History','Insight','Intimidation','Perception'] },
+    armor:   'All Armor & Shields (Astartes Training) incl. Terminator Armor',
+    weapons: 'All Simple & Martial Weapons, Terminator Weapons (Storm Bolter, Assault Cannon, etc.)',
+    tools:   '—',
+    extra:   'Default armor pattern: Terminator'
+  },
+  'Vanguard Operative': {
+    saves:   ['Dexterity', 'Intelligence'],
+    skills:  { count:4, list:['Acrobatics','Athletics','Deception','History','Insight','Investigation','Perception','Persuasion','Stealth','Technology'] },
+    armor:   'All Armor & Shields (Astartes Training)',
+    weapons: 'All Simple & Martial Weapons (Astartes Training)',
+    tools:   '—',
+    extra:   'Default armor pattern: Phobos'
+  },
+  'Apothecary': {
+    saves:   ['Constitution', 'Wisdom'],
+    skills:  { count:3, list:['Athletics','History','Insight','Investigation','Medicine','Perception','Survival','Technology'] },
+    armor:   'All Armor & Shields (Astartes Training)',
+    weapons: 'All Simple & Martial Weapons (Astartes Training)',
+    tools:   'Narthecium (granted at Level 1)',
+    extra:   'Default armor pattern: Tacticus'
+  },
+  'Chaplain': {
+    saves:   ['Wisdom', 'Charisma'],
+    skills:  { count:2, list:['Athletics','History','Insight','Intimidation','Persuasion','Religion'] },
+    armor:   'All Armor & Shields (Astartes Training)',
+    weapons: 'All Simple & Martial Weapons, Crozius Arcanum',
+    tools:   '—',
+    extra:   'Default armor pattern: Tacticus'
+  },
+  'Librarian': {
+    saves:   ['Intelligence', 'Wisdom'],
+    skills:  { count:3, list:['History','Insight','Investigation','Medicine','Perception','Religion','Technology'] },
+    armor:   'All Armor & Shields (Astartes Training)',
+    weapons: 'All Simple & Martial Weapons, Force Sword, Force Staff',
+    tools:   '—',
+    extra:   'Default armor pattern: Tacticus'
+  },
+  'Techmarine': {
+    saves:   ['Intelligence', 'Constitution'],
+    skills:  { count:2, list:['Athletics','History','Investigation','Perception','Technology'] },
+    armor:   'All Armor & Shields (Astartes Training)',
+    weapons: "All Simple & Martial Weapons, Omnissian Power Axe, Servo-Arm",
+    tools:   "Smith's Tools, Tinker's Tools, Servo-Harness",
+    extra:   'Default armor pattern: Tacticus'
+  }
+};
+
+function _renderClassProfs(cls) {
+  var block = document.getElementById('cls-profs-block');
+  if (!block) return;
+  var p = DW_CLASS_PROFS[cls];
+  if (!p) { block.style.display = 'none'; return; }
+  var rows = [
+    ['Saving Throws', p.saves.join(', ')],
+    ['Skills',        'Choose ' + p.skills.count + ' from: ' + p.skills.list.join(', ')],
+    ['Armor',         p.armor],
+    ['Weapons',       p.weapons],
+    ['Tools',         p.tools]
+  ];
+  var html = '<div class="sec-title" style="margin-bottom:6px;">Class Proficiencies</div>'
+    + '<div class="cls-profs-grid">'
+    + rows.map(function(r){ return '<div class="cls-profs-row"><span class="cls-profs-lbl">'+r[0]+'</span><span class="cls-profs-val">'+r[1]+'</span></div>'; }).join('')
+    + '</div>'
+    + (p.extra ? '<div class="cls-profs-extra">'+p.extra+'</div>' : '');
+  block.innerHTML = html;
+  block.style.display = '';
+}
+
 function updateSubclassOpts() {
   const clsEl  = document.getElementById('cls-select');
   const lvlEl  = document.getElementById('feat-level');
@@ -1590,6 +1696,7 @@ function updateSubclassOpts() {
   if (!clsEl || !subEl || !subWrap) return;
 
   const cls = clsEl.value;
+  _renderClassProfs(cls);
   const lvl = parseInt(lvlEl ? lvlEl.value : 1) || 1;
   const DATA = (typeof DW_CLASSES !== 'undefined') ? DW_CLASSES : DND_CLASSES;
   const data = DATA[cls];
