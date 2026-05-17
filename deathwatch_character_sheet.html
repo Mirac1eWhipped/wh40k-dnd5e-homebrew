@@ -447,6 +447,44 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .qa-wtype-badge.wt-pistol{background:rgba(80,180,120,.14);color:#70c490;border:1px solid rgba(80,180,120,.3);}
 .qa-wtype-badge.wt-other{background:rgba(150,130,80,.14);color:#c0a860;border:1px solid rgba(150,130,80,.3);}
 .qa-type-icon{width:20px;text-align:center;font-size:11pt;color:var(--silver-dim);flex-shrink:0;}
+
+/* ── DDB-style saves: [circle][value][name] ── */
+.dos-save-row{display:grid;grid-template-columns:18px 44px 1fr;align-items:center;gap:5px;padding:4px 2px;border-bottom:1px solid rgba(42,58,80,.3);}
+/* ── DDB-style skills: [circle][exp][value][name] ── */
+.dos-skill-row{display:grid;grid-template-columns:18px 14px 44px 1fr;align-items:center;gap:4px;padding:3px 2px;border-bottom:1px solid rgba(42,58,80,.3);}
+/* Proficiency circle (DDB-style filled circle) */
+.dos-prof-circle{appearance:none;-webkit-appearance:none;width:14px;height:14px;border-radius:50%;border:2px solid var(--silver-dim);background:transparent;cursor:pointer;flex-shrink:0;transition:all .15s;margin:0;}
+.dos-prof-circle:checked{background:var(--gold);border-color:var(--gold);box-shadow:0 0 5px rgba(200,164,74,.5);}
+/* Bonus value — right-aligned, prominent */
+.dos-sv-val{display:flex;justify-content:flex-end;padding-right:2px;}
+.dos-sv-val input{font-family:var(--font-label)!important;font-size:10.5pt!important;font-weight:700!important;color:var(--gold-light)!important;background:transparent!important;border:none!important;outline:none!important;text-align:right!important;width:40px!important;padding:0!important;}
+.dos-sv-name{font-family:var(--font-label);font-size:9pt;color:var(--silver);overflow:hidden;text-overflow:ellipsis;}
+.dos-attr-abbr{font-family:var(--font-label);font-size:7.5pt;color:var(--text-dim);margin-left:4px;letter-spacing:.06em;}
+/* ── Inspiration + Proficiency Bonus panel ── */
+.dos-insp-prof-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.dos-insp-box,.dos-pb-box{background:var(--panel2);border:1px solid var(--border2);border-top:2px solid var(--gold-dim);padding:8px;text-align:center;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;}
+.dos-insp-box{cursor:pointer;transition:border-top-color .2s;}
+.dos-insp-box:hover{border-top-color:var(--gold);}
+.dos-insp-box::before,.dos-pb-box::before{content:'';position:absolute;top:3px;left:3px;width:6px;height:6px;border-top:1px solid rgba(200,164,74,.35);border-left:1px solid rgba(200,164,74,.35);pointer-events:none;}
+.dos-insp-box::after,.dos-pb-box::after{content:'';position:absolute;bottom:3px;right:3px;width:6px;height:6px;border-bottom:1px solid rgba(200,164,74,.35);border-right:1px solid rgba(200,164,74,.35);pointer-events:none;}
+.dos-insp-pip{width:22px;height:22px;border-radius:50%;border:2px solid var(--gold-dim);background:transparent;transition:all .2s;pointer-events:none;}
+.dos-insp-box.active{border-top-color:var(--gold);}
+.dos-insp-box.active .dos-insp-pip{background:var(--gold);border-color:var(--gold);box-shadow:0 0 8px rgba(200,164,74,.6);}
+.dos-insp-box.active .dos-insp-lbl{color:var(--gold);}
+.dos-insp-lbl,.dos-pb-lbl{font-family:var(--font-label);font-size:7.5pt;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);}
+.dos-pb-val{font-family:var(--font-label);font-size:18pt;font-weight:700;color:var(--gold-light);}
+/* ── Condition chips ── */
+.dos-cond-chips{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:6px;}
+.dos-cond-chip{font-family:var(--font-label);font-size:7pt;letter-spacing:.06em;text-transform:uppercase;padding:3px 6px;border:1px solid var(--border2);color:var(--text-dim);background:transparent;cursor:pointer;border-radius:2px;transition:all .15s;user-select:none;}
+.dos-cond-chip:hover{border-color:rgba(139,26,26,.6);color:#cc8080;}
+.dos-cond-chip.active{background:rgba(139,26,26,.28);border-color:var(--red);color:#e07070;}
+/* ── Senses rows ── */
+.dos-sense-row{display:flex;align-items:center;gap:6px;padding:4px 6px;background:var(--panel2);border:1px solid var(--border2);border-top:none;margin-top:-1px;}
+.dos-sense-row:first-of-type{border-top:1px solid var(--border2);}
+.dos-sense-icon{width:16px;text-align:center;font-size:10pt;color:var(--silver-dim);flex-shrink:0;}
+.dos-sense-val input{font-family:var(--font-label)!important;font-size:11pt!important;font-weight:700!important;color:var(--gold-light)!important;background:transparent!important;border:none!important;border-bottom:1px solid var(--line)!important;outline:none!important;text-align:center!important;width:44px!important;padding:0!important;}
+.dos-sense-name{font-family:var(--font-label);font-size:9pt;color:var(--silver);flex:1;}
+.dos-sense-unit{font-family:var(--font-label);font-size:8pt;color:var(--silver-dim);}
 </style>
 </head>
 <body>
@@ -596,20 +634,32 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
   <div class="dos-3col">
     <!-- LEFT: Saves · Passives · Proficiencies (spans both rows) -->
     <div style="grid-row: 1/3;">
+      <!-- Inspiration + Proficiency Bonus (DDB-style) -->
+      <div class="dos-insp-prof-row">
+        <div class="dos-insp-box" id="insp-box" onclick="_toggleInspiration()" title="Click to toggle Inspiration">
+          <div class="dos-insp-pip" id="insp-pip"></div>
+          <span class="dos-insp-lbl">Inspiration</span>
+        </div>
+        <div class="dos-pb-box">
+          <span class="dos-pb-val" id="pb-display">+2</span>
+          <span class="dos-pb-lbl">Proficiency</span>
+        </div>
+      </div>
       <div class="section">
         <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Saving Throws</span></div>
-<div class="dos-row"><input type="checkbox" id="save-str-prof"><span class="dos-attr-tag">STR</span><span class="dos-row-name">Strength Save</span><div class="dos-bonus"><input type="text" id="save-str" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="save-dex-prof"><span class="dos-attr-tag">DEX</span><span class="dos-row-name">Dexterity Save</span><div class="dos-bonus"><input type="text" id="save-dex" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="save-con-prof"><span class="dos-attr-tag">CON</span><span class="dos-row-name">Constitution Save</span><div class="dos-bonus"><input type="text" id="save-con" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="save-int-prof"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Intelligence Save</span><div class="dos-bonus"><input type="text" id="save-int" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="save-wis-prof"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Wisdom Save</span><div class="dos-bonus"><input type="text" id="save-wis" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="save-cha-prof"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Charisma Save</span><div class="dos-bonus"><input type="text" id="save-cha" placeholder="+0"></div></div>
+<div class="dos-save-row"><input type="checkbox" class="dos-prof-circle" id="save-str-prof" onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="save-str" placeholder="+0"></div><span class="dos-sv-name">Strength</span></div>
+<div class="dos-save-row"><input type="checkbox" class="dos-prof-circle" id="save-dex-prof" onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="save-dex" placeholder="+0"></div><span class="dos-sv-name">Dexterity</span></div>
+<div class="dos-save-row"><input type="checkbox" class="dos-prof-circle" id="save-con-prof" onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="save-con" placeholder="+0"></div><span class="dos-sv-name">Constitution</span></div>
+<div class="dos-save-row"><input type="checkbox" class="dos-prof-circle" id="save-int-prof" onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="save-int" placeholder="+0"></div><span class="dos-sv-name">Intelligence</span></div>
+<div class="dos-save-row"><input type="checkbox" class="dos-prof-circle" id="save-wis-prof" onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="save-wis" placeholder="+0"></div><span class="dos-sv-name">Wisdom</span></div>
+<div class="dos-save-row"><input type="checkbox" class="dos-prof-circle" id="save-cha-prof" onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="save-cha" placeholder="+0"></div><span class="dos-sv-name">Charisma</span></div>
       </div>
       <div class="section" style="margin-top:8px;">
         <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Senses</span></div>
-        <div class="dos-passive-row"><div class="dos-passive-val"><input type="text" id="passive-perception" placeholder="10"></div><span class="dos-passive-name">Passive Perception</span><span class="dos-passive-attr">WIS</span></div>
-        <div class="dos-passive-row"><div class="dos-passive-val"><input type="text" id="passive-investigation" placeholder="10"></div><span class="dos-passive-name">Passive Investigation</span><span class="dos-passive-attr">INT</span></div>
-        <div class="dos-passive-row"><div class="dos-passive-val"><input type="text" id="passive-insight" placeholder="10"></div><span class="dos-passive-name">Passive Insight</span><span class="dos-passive-attr">WIS</span></div>
+        <div class="dos-sense-row" style="border-top:1px solid var(--border2);"><span class="dos-sense-icon">👁</span><div class="dos-sense-val"><input type="text" id="darkvision" placeholder="—"></div><span class="dos-sense-name">Darkvision</span><span class="dos-sense-unit">ft.</span></div>
+        <div class="dos-sense-row"><span class="dos-sense-icon">◎</span><div class="dos-sense-val"><input type="text" id="passive-perception" placeholder="10"></div><span class="dos-sense-name">Passive Perception</span><span class="dos-sense-unit">WIS</span></div>
+        <div class="dos-sense-row"><span class="dos-sense-icon">◎</span><div class="dos-sense-val"><input type="text" id="passive-investigation" placeholder="10"></div><span class="dos-sense-name">Passive Investigation</span><span class="dos-sense-unit">INT</span></div>
+        <div class="dos-sense-row"><span class="dos-sense-icon">◎</span><div class="dos-sense-val"><input type="text" id="passive-insight" placeholder="10"></div><span class="dos-sense-name">Passive Insight</span><span class="dos-sense-unit">WIS</span></div>
       </div>
       <div class="section" style="margin-top:8px;">
         <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Proficiencies &amp; Training</span></div>
@@ -634,21 +684,21 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
           <span class="dos-col-hdr-lbl" style="flex:1;">Skill</span>
           <span class="dos-col-hdr-lbl">Bonus</span>
         </div>
-<div class="dos-row"><input type="checkbox" id="skill-acrobatics-prof" onchange="onProfChange('acrobatics')"><input type="checkbox" class="exp-chk" id="skill-acrobatics-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">DEX</span><span class="dos-row-name">Acrobatics</span><div class="dos-bonus"><input type="text" id="skill-acrobatics" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-athletics-prof" onchange="onProfChange('athletics')"><input type="checkbox" class="exp-chk" id="skill-athletics-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">STR</span><span class="dos-row-name">Athletics</span><div class="dos-bonus"><input type="text" id="skill-athletics" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-deception-prof" onchange="onProfChange('deception')"><input type="checkbox" class="exp-chk" id="skill-deception-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Deception</span><div class="dos-bonus"><input type="text" id="skill-deception" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-history-prof" onchange="onProfChange('history')"><input type="checkbox" class="exp-chk" id="skill-history-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">INT</span><span class="dos-row-name">History</span><div class="dos-bonus"><input type="text" id="skill-history" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-insight-prof" onchange="onProfChange('insight')"><input type="checkbox" class="exp-chk" id="skill-insight-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Insight</span><div class="dos-bonus"><input type="text" id="skill-insight" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-intimidation-prof" onchange="onProfChange('intimidation')"><input type="checkbox" class="exp-chk" id="skill-intimidation-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Intimidation</span><div class="dos-bonus"><input type="text" id="skill-intimidation" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-investigation-prof" onchange="onProfChange('investigation')"><input type="checkbox" class="exp-chk" id="skill-investigation-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Investigation</span><div class="dos-bonus"><input type="text" id="skill-investigation" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-medicine-prof" onchange="onProfChange('medicine')"><input type="checkbox" class="exp-chk" id="skill-medicine-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Medicine</span><div class="dos-bonus"><input type="text" id="skill-medicine" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-perception-prof" onchange="onProfChange('perception')"><input type="checkbox" class="exp-chk" id="skill-perception-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Perception</span><div class="dos-bonus"><input type="text" id="skill-perception" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-persuasion-prof" onchange="onProfChange('persuasion')"><input type="checkbox" class="exp-chk" id="skill-persuasion-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">CHA</span><span class="dos-row-name">Persuasion</span><div class="dos-bonus"><input type="text" id="skill-persuasion" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-religion-prof" onchange="onProfChange('religion')"><input type="checkbox" class="exp-chk" id="skill-religion-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Religion</span><div class="dos-bonus"><input type="text" id="skill-religion" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-sleight-of-hand-prof" onchange="onProfChange('sleight-of-hand')"><input type="checkbox" class="exp-chk" id="skill-sleight-of-hand-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">DEX</span><span class="dos-row-name">Sleight of Hand</span><div class="dos-bonus"><input type="text" id="skill-sleight-of-hand" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-stealth-prof" onchange="onProfChange('stealth')"><input type="checkbox" class="exp-chk" id="skill-stealth-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">DEX</span><span class="dos-row-name">Stealth</span><div class="dos-bonus"><input type="text" id="skill-stealth" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-survival-prof" onchange="onProfChange('survival')"><input type="checkbox" class="exp-chk" id="skill-survival-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">WIS</span><span class="dos-row-name">Survival</span><div class="dos-bonus"><input type="text" id="skill-survival" placeholder="+0"></div></div>
-<div class="dos-row"><input type="checkbox" id="skill-technology-prof" onchange="onProfChange('technology')"><input type="checkbox" class="exp-chk" id="skill-technology-exp" title="Expertise" disabled onchange="_recalcDerived()"><span class="dos-attr-tag">INT</span><span class="dos-row-name">Technology</span><div class="dos-bonus"><input type="text" id="skill-technology" placeholder="+0"></div></div>
+<div class="dos-skill-row"><input type="checkbox" class="dos-prof-circle" id="skill-acrobatics-prof" onchange="onProfChange('acrobatics')"><input type="checkbox" class="exp-chk" id="skill-acrobatics-exp" title="Expertise" disabled onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="skill-acrobatics" placeholder="+0"></div><span class="dos-sv-name">Acrobatics<span class="dos-attr-abbr">DEX</span></span></div>
+<div class="dos-skill-row"><input type="checkbox" class="dos-prof-circle" id="skill-athletics-prof" onchange="onProfChange('athletics')"><input type="checkbox" class="exp-chk" id="skill-athletics-exp" title="Expertise" disabled onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="skill-athletics" placeholder="+0"></div><span class="dos-sv-name">Athletics<span class="dos-attr-abbr">STR</span></span></div>
+<div class="dos-skill-row"><input type="checkbox" class="dos-prof-circle" id="skill-deception-prof" onchange="onProfChange('deception')"><input type="checkbox" class="exp-chk" id="skill-deception-exp" title="Expertise" disabled onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="skill-deception" placeholder="+0"></div><span class="dos-sv-name">Deception<span class="dos-attr-abbr">CHA</span></span></div>
+<div class="dos-skill-row"><input type="checkbox" class="dos-prof-circle" id="skill-history-prof" onchange="onProfChange('history')"><input type="checkbox" class="exp-chk" id="skill-history-exp" title="Expertise" disabled onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="skill-history" placeholder="+0"></div><span class="dos-sv-name">History<span class="dos-attr-abbr">INT</span></span></div>
+<div class="dos-skill-row"><input type="checkbox" class="dos-prof-circle" id="skill-insight-prof" onchange="onProfChange('insight')"><input type="checkbox" class="exp-chk" id="skill-insight-exp" title="Expertise" disabled onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="skill-insight" placeholder="+0"></div><span class="dos-sv-name">Insight<span class="dos-attr-abbr">WIS</span></span></div>
+<div class="dos-skill-row"><input type="checkbox" class="dos-prof-circle" id="skill-intimidation-prof" onchange="onProfChange('intimidation')"><input type="checkbox" class="exp-chk" id="skill-intimidation-exp" title="Expertise" disabled onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="skill-intimidation" placeholder="+0"></div><span class="dos-sv-name">Intimidation<span class="dos-attr-abbr">CHA</span></span></div>
+<div class="dos-skill-row"><input type="checkbox" class="dos-prof-circle" id="skill-investigation-prof" onchange="onProfChange('investigation')"><input type="checkbox" class="exp-chk" id="skill-investigation-exp" title="Expertise" disabled onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="skill-investigation" placeholder="+0"></div><span class="dos-sv-name">Investigation<span class="dos-attr-abbr">INT</span></span></div>
+<div class="dos-skill-row"><input type="checkbox" class="dos-prof-circle" id="skill-medicine-prof" onchange="onProfChange('medicine')"><input type="checkbox" class="exp-chk" id="skill-medicine-exp" title="Expertise" disabled onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="skill-medicine" placeholder="+0"></div><span class="dos-sv-name">Medicine<span class="dos-attr-abbr">WIS</span></span></div>
+<div class="dos-skill-row"><input type="checkbox" class="dos-prof-circle" id="skill-perception-prof" onchange="onProfChange('perception')"><input type="checkbox" class="exp-chk" id="skill-perception-exp" title="Expertise" disabled onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="skill-perception" placeholder="+0"></div><span class="dos-sv-name">Perception<span class="dos-attr-abbr">WIS</span></span></div>
+<div class="dos-skill-row"><input type="checkbox" class="dos-prof-circle" id="skill-persuasion-prof" onchange="onProfChange('persuasion')"><input type="checkbox" class="exp-chk" id="skill-persuasion-exp" title="Expertise" disabled onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="skill-persuasion" placeholder="+0"></div><span class="dos-sv-name">Persuasion<span class="dos-attr-abbr">CHA</span></span></div>
+<div class="dos-skill-row"><input type="checkbox" class="dos-prof-circle" id="skill-religion-prof" onchange="onProfChange('religion')"><input type="checkbox" class="exp-chk" id="skill-religion-exp" title="Expertise" disabled onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="skill-religion" placeholder="+0"></div><span class="dos-sv-name">Religion<span class="dos-attr-abbr">INT</span></span></div>
+<div class="dos-skill-row"><input type="checkbox" class="dos-prof-circle" id="skill-sleight-of-hand-prof" onchange="onProfChange('sleight-of-hand')"><input type="checkbox" class="exp-chk" id="skill-sleight-of-hand-exp" title="Expertise" disabled onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="skill-sleight-of-hand" placeholder="+0"></div><span class="dos-sv-name">Sleight of Hand<span class="dos-attr-abbr">DEX</span></span></div>
+<div class="dos-skill-row"><input type="checkbox" class="dos-prof-circle" id="skill-stealth-prof" onchange="onProfChange('stealth')"><input type="checkbox" class="exp-chk" id="skill-stealth-exp" title="Expertise" disabled onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="skill-stealth" placeholder="+0"></div><span class="dos-sv-name">Stealth<span class="dos-attr-abbr">DEX</span></span></div>
+<div class="dos-skill-row"><input type="checkbox" class="dos-prof-circle" id="skill-survival-prof" onchange="onProfChange('survival')"><input type="checkbox" class="exp-chk" id="skill-survival-exp" title="Expertise" disabled onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="skill-survival" placeholder="+0"></div><span class="dos-sv-name">Survival<span class="dos-attr-abbr">WIS</span></span></div>
+<div class="dos-skill-row"><input type="checkbox" class="dos-prof-circle" id="skill-technology-prof" onchange="onProfChange('technology')"><input type="checkbox" class="exp-chk" id="skill-technology-exp" title="Expertise" disabled onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="skill-technology" placeholder="+0"></div><span class="dos-sv-name">Technology<span class="dos-attr-abbr">INT</span></span></div>
       </div>
     </div>
 
@@ -667,8 +717,25 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
           <span class="dos-ac-lbl">Armor Class</span>
         </div>
         <div class="dos-cond-box" style="flex:1;">
-          <div style="font-family:var(--font-label);font-size:8pt;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">Conditions &amp; Status</div>
-          <textarea class="dos-textarea" rows="4" placeholder="Poisoned, Stunned, Burning, Pinned…" style="margin-top:0;"></textarea>
+          <div style="font-family:var(--font-label);font-size:8pt;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Conditions</div>
+          <div class="dos-cond-chips" id="cond-chips">
+            <span class="dos-cond-chip" onclick="_condToggle(this)">Blinded</span>
+            <span class="dos-cond-chip" onclick="_condToggle(this)">Charmed</span>
+            <span class="dos-cond-chip" onclick="_condToggle(this)">Deafened</span>
+            <span class="dos-cond-chip" onclick="_condToggle(this)">Exhausted</span>
+            <span class="dos-cond-chip" onclick="_condToggle(this)">Frightened</span>
+            <span class="dos-cond-chip" onclick="_condToggle(this)">Grappled</span>
+            <span class="dos-cond-chip" onclick="_condToggle(this)">Invisible</span>
+            <span class="dos-cond-chip" onclick="_condToggle(this)">Paralyzed</span>
+            <span class="dos-cond-chip" onclick="_condToggle(this)">Poisoned</span>
+            <span class="dos-cond-chip" onclick="_condToggle(this)">Prone</span>
+            <span class="dos-cond-chip" onclick="_condToggle(this)">Restrained</span>
+            <span class="dos-cond-chip" onclick="_condToggle(this)">Stunned</span>
+            <span class="dos-cond-chip" onclick="_condToggle(this)">Unconscious</span>
+            <span class="dos-cond-chip" onclick="_condToggle(this)">Burning</span>
+            <span class="dos-cond-chip" onclick="_condToggle(this)">Pinned</span>
+          </div>
+          <textarea class="dos-textarea" rows="2" id="conditions-notes" placeholder="Other conditions…" style="margin-top:0;"></textarea>
         </div>
       </div>
 
@@ -1080,6 +1147,8 @@ function _recalcDerived() {
   if (profEl) profEl.value = pbFmt;
   const statProfEl = document.getElementById('stat-prof');
   if (statProfEl) statProfEl.value = pbFmt;
+  const pbDispEl = document.getElementById('pb-display');
+  if (pbDispEl) pbDispEl.textContent = pbFmt;
   function _mod(s) {
     const sc = parseInt((document.getElementById(s+'-score')||{}).value);
     return isNaN(sc) ? 0 : Math.floor((sc - 10) / 2);
@@ -1550,7 +1619,10 @@ async function _doSave() {
       return e && e.checked;
     }).map(function(sk) { return sk.id; }),
     wargear_meta: _wargearMeta,
-    ammo_clips: _ammoClips
+    ammo_clips: _ammoClips,
+    inspiration: _inspiration,
+    conditions: Array.from(document.querySelectorAll('.dos-cond-chip.active')).map(function(c){ return c.textContent; }),
+    conditions_notes: (document.getElementById('conditions-notes') || {value:''}).value
   };
   const name = _charName();
   try {
@@ -1578,6 +1650,19 @@ async function _doSave() {
   } catch(e) { _status('error', e.message || 'Save failed'); console.error('Save error:', e); }
 }
 function _schedSave() { _status('saving'); clearTimeout(_saveTimer); _saveTimer = setTimeout(_doSave, 800); }
+/* ── Inspiration toggle ── */
+var _inspiration = false;
+function _toggleInspiration() {
+  _inspiration = !_inspiration;
+  var box = document.getElementById('insp-box');
+  if (box) box.classList.toggle('active', _inspiration);
+  _schedSave();
+}
+/* ── Condition chip toggle ── */
+function _condToggle(chip) {
+  chip.classList.toggle('active');
+  _schedSave();
+}
 function _hpHeal() {
   var amt = parseInt(prompt('Heal amount:'));
   if (isNaN(amt) || amt <= 0) return;
@@ -1636,6 +1721,20 @@ async function _loadSheet() {
     }
     if (ext.ammo_clips && typeof ext.ammo_clips === 'object') {
       _ammoClips = ext.ammo_clips;
+    }
+    if (ext.inspiration) {
+      _inspiration = true;
+      var inspBox = document.getElementById('insp-box');
+      if (inspBox) inspBox.classList.add('active');
+    }
+    if (ext.conditions && Array.isArray(ext.conditions)) {
+      document.querySelectorAll('.dos-cond-chip').forEach(function(chip) {
+        if (ext.conditions.indexOf(chip.textContent) !== -1) chip.classList.add('active');
+      });
+    }
+    if (ext.conditions_notes) {
+      var cnEl = document.getElementById('conditions-notes');
+      if (cnEl) cnEl.value = ext.conditions_notes;
     }
     STATS.forEach(s => calcMod(s));
     syncQuickActionsFromWargear();
