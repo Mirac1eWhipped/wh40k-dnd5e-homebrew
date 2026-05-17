@@ -265,7 +265,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .dos-atk-table{width:100%;border-collapse:collapse;margin-top:4px;}
 .dos-atk-table thead th{font-family:var(--font-label);font-size:9pt;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);padding:4px 6px;border-bottom:1px solid var(--gold-dim);text-align:left;}
 .dos-atk-table td{padding:2px 4px;}
-.qa-mod-pill{display:inline-block;font-family:var(--font-label);font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-light);background:rgba(212,160,48,.12);border:1px solid rgba(212,160,48,.3);border-radius:3px;padding:1px 5px;margin:1px 2px 1px 0;white-space:nowrap;}
+.qa-mod-pill{display:inline-block;font-family:var(--font-label);font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-light);background:rgba(212,160,48,.12);border:1px solid rgba(212,160,48,.3);border-radius:3px;padding:1px 5px;margin:1px 2px 1px 0;white-space:nowrap;cursor:pointer;transition:background .15s;}.qa-mod-pill:hover{background:rgba(212,160,48,.28);}
 /* ── Action reference cards ── */
 .act-ref-row{display:flex;align-items:center;gap:4px;padding:2px 2px;border-bottom:1px solid var(--border);cursor:pointer;border-radius:2px;}
 .act-ref-row:last-child{border-bottom:none;}
@@ -976,7 +976,7 @@ function syncQuickActionsFromWargear() {
     if (dmg !== '—') { dmg = dmg + ' ' + fmt(_mod(stat)); }
     var wtype = meta.wtype || '';
     var mods = (Array.isArray(meta.mods) && meta.mods.length)
-      ? meta.mods.map(function(m){ return '<span class="qa-mod-pill">'+m+'</span>'; }).join('')
+      ? meta.mods.map(function(m){ return '<span class="qa-mod-pill" onclick="_modPopup(event,\''+m.replace(/\\/g,'\\\\').replace(/'/g,"\\'")+'\')" title="'+m+'">'+m+'</span>'; }).join('')
       : '<span style="opacity:.35;">—</span>';
     var sMax = meta.shots_max || 0;
     var sCur = (meta.shots_cur !== undefined) ? meta.shots_cur : sMax;
@@ -1765,6 +1765,22 @@ function _actPopup(e, type, name, desc) {
   box.querySelector('.act-popup-badge').textContent = type === 'act' ? 'Action' : type === 'bon' ? 'Bonus Action' : 'Reaction';
   box.querySelector('.act-popup-badge').className = 'act-popup-badge act-badge ' + type;
   box.querySelector('.act-popup-name').textContent = name;
+  box.querySelector('.act-popup-desc').textContent = desc;
+  var x = Math.min(e.clientX + 10, window.innerWidth - 270);
+  var y = e.clientY + 10;
+  if (y + 140 > window.innerHeight) y = e.clientY - 150;
+  box.style.left = x + 'px';
+  box.style.top  = y + 'px';
+  box.classList.add('open');
+  e.stopPropagation();
+}
+function _modPopup(e, modName) {
+  var box = document.getElementById('act-popup-box');
+  if (!box) return;
+  var desc = (typeof WEAPON_MODS !== 'undefined' && WEAPON_MODS[modName]) || 'No description available.';
+  box.querySelector('.act-popup-badge').textContent = 'Modifier';
+  box.querySelector('.act-popup-badge').className = 'act-popup-badge act-badge act';
+  box.querySelector('.act-popup-name').textContent = modName;
   box.querySelector('.act-popup-desc').textContent = desc;
   var x = Math.min(e.clientX + 10, window.innerWidth - 270);
   var y = e.clientY + 10;
