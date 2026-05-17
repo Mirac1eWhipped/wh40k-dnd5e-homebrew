@@ -504,15 +504,15 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .dos-def-chip.immune{background:rgba(139,100,26,.25);border-color:rgba(200,164,74,.6);color:var(--gold-light);}
 .dos-def-chip.vuln{background:rgba(139,26,26,.25);border-color:var(--red);color:#e07070;}
 
-/* ── HP block in top band: natural width, no flex grow ── */
+/* ── HP block + Death Saves in top band: natural width, no flex grow ── */
 .dos-ab-bar .dos-hp-block{flex:0 0 auto;}
+.dos-ab-bar .dos-ds-block{flex:0 0 auto;}
 
 /* ── Conditions + Defenses full-width row ── */
 .dos-cond-def-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;}
 
-/* ── Initiative + AC + Death Saves row ── */
+/* ── Initiative + AC row ── */
 .dos-init-ac-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px;}
-.dos-init-ac-row .dos-ds-block{flex:1;}
 </style>
 </head>
 <body>
@@ -622,6 +622,25 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
         </div>
       </div>
     </div>
+    <div class="dos-ds-block">
+      <div class="dos-ds-row">
+        <span class="dos-ds-lbl">Successes</span>
+        <div class="dos-ds-boxes">
+          <input type="checkbox" id="death-s1">
+          <input type="checkbox" id="death-s2">
+          <input type="checkbox" id="death-s3">
+        </div>
+      </div>
+      <div class="dos-ds-row">
+        <span class="dos-ds-lbl">Failures</span>
+        <div class="dos-ds-boxes">
+          <input type="checkbox" id="death-f1">
+          <input type="checkbox" id="death-f2">
+          <input type="checkbox" id="death-f3">
+        </div>
+      </div>
+      <span class="dos-stat-lbl" style="margin-top:1px;text-align:center;">Death Saves</span>
+    </div>
   </div>
   <!-- Conditions + Defenses Row -->
   <div class="dos-cond-def-row">
@@ -687,7 +706,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
       <textarea class="dos-textarea" rows="2" id="defenses-notes" placeholder="Other defenses…" style="margin-top:0;"></textarea>
     </div>
   </div>
-  <!-- Initiative + AC + Death Saves Row -->
+  <!-- Initiative + AC Row -->
   <div class="dos-init-ac-row">
     <input type="hidden" id="stat-ac">
     <div class="dos-init-box">
@@ -698,25 +717,6 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
       <span class="dos-ac-val" id="ac-display-dossier">10</span>
       <span id="ac-display-val" style="display:none;">10</span>
       <span class="dos-ac-lbl">Armor Class</span>
-    </div>
-    <div class="dos-ds-block">
-      <div class="dos-ds-row">
-        <span class="dos-ds-lbl">Successes</span>
-        <div class="dos-ds-boxes">
-          <input type="checkbox" id="death-s1">
-          <input type="checkbox" id="death-s2">
-          <input type="checkbox" id="death-s3">
-        </div>
-      </div>
-      <div class="dos-ds-row">
-        <span class="dos-ds-lbl">Failures</span>
-        <div class="dos-ds-boxes">
-          <input type="checkbox" id="death-f1">
-          <input type="checkbox" id="death-f2">
-          <input type="checkbox" id="death-f3">
-        </div>
-      </div>
-      <span class="dos-stat-lbl" style="margin-top:1px;text-align:center;">Death Saves</span>
     </div>
   </div>
 
