@@ -302,8 +302,8 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .ammo-max{font-family:var(--font-label);font-size:9pt;color:var(--text-dim);min-width:18px;text-align:center;}
 .ammo-rl{background:transparent;border:none;color:var(--text-dim);font-size:13pt;cursor:pointer;padding:0 2px;line-height:1;}
 .ammo-rl:hover{color:var(--gold);}
-/* ── Quick Actions bottom panel ── */
-.qa-bottom{display:grid;grid-template-columns:1fr 260px;gap:10px;margin-top:10px;}
+/* ── Quick Actions + Ammo sub-grid (inside right column) ── */
+.qa-sub-grid{display:grid;grid-template-columns:1fr 190px;gap:10px;margin-top:8px;}
 .dos-atk-table td input{font-size:10pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:3px 0!important;background:transparent!important;color:var(--text)!important;outline:none!important;width:100%!important;}
 .dos-atk-table tr:hover td input{border-bottom-color:var(--gold)!important;}
 .dos-textarea{width:100%;background:var(--panel2);border:1px solid var(--border2);color:var(--text);font-family:var(--font-body);font-size:10pt;outline:none;resize:none;padding:6px 8px;box-sizing:border-box;margin-top:4px;}
@@ -519,20 +519,20 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  <!-- ── Quick Actions + Ammo Tracker ── -->
-  <div class="qa-bottom">
-    <div class="section">
-      <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Quick Actions — Equipped Weapons</span></div>
-      <table class="dos-atk-table">
-        <thead><tr><th>Weapon</th><th>Hit</th><th>Dmg</th><th>Type</th><th>Modifiers</th><th>Shots</th></tr></thead>
-        <tbody id="quick-actions-tbody"><tr><td colspan="6" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">Equip weapons in the Wargear tab</td></tr></tbody>
-      </table>
-    </div>
-    <div class="section">
-      <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Ammunition</span></div>
-      <div id="ammo-tracker-container"><div style="opacity:.4;font-size:9pt;padding:8px 4px;">No ammo tracked — add weapons from the Requisitorium or fill in the Wargear tab.</div></div>
+      <!-- ── Quick Actions + Ammo Tracker ── -->
+      <div class="qa-sub-grid">
+        <div class="section">
+          <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Quick Actions — Equipped Weapons</span></div>
+          <table class="dos-atk-table">
+            <thead><tr><th>Weapon</th><th>Hit</th><th>Dmg</th><th>Type</th><th>Modifiers</th><th>Shots</th></tr></thead>
+            <tbody id="quick-actions-tbody"><tr><td colspan="6" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">Equip weapons in the Wargear tab</td></tr></tbody>
+          </table>
+        </div>
+        <div class="section">
+          <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Ammunition</span></div>
+          <div id="ammo-tracker-container"><div style="opacity:.4;font-size:9pt;padding:8px 4px;">No ammo tracked — add weapons from the Requisitorium or fill in the Wargear tab.</div></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
