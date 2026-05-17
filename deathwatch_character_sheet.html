@@ -502,6 +502,15 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .dos-def-chip.resist{background:rgba(26,100,139,.25);border-color:rgba(74,139,200,.6);color:#7ab0d8;}
 .dos-def-chip.immune{background:rgba(139,100,26,.25);border-color:rgba(200,164,74,.6);color:var(--gold-light);}
 .dos-def-chip.vuln{background:rgba(139,26,26,.25);border-color:var(--red);color:#e07070;}
+
+/* ── HP row: full-width HP + death saves side by side ── */
+.dos-hp-row{display:flex;gap:10px;align-items:stretch;margin-bottom:8px;}
+.dos-hp-row .dos-hp-block{flex:1;}
+.dos-hp-row .dos-ds-block{flex:0 0 auto;min-width:160px;justify-content:center;}
+
+/* ── Combat strip: Initiative · AC · Conditions · Defenses ── */
+.dos-combat-strip{display:flex;gap:8px;align-items:flex-start;margin-bottom:10px;}
+.dos-combat-strip .dos-cond-box,.dos-combat-strip .dos-def-box{flex:1;}
 </style>
 </head>
 <body>
@@ -580,7 +589,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 </div>
 
 <div id="panel-dossier" style="padding:14px 18px 40px;">
-  <!-- Ability Score Bar -->
+  <!-- Ability Scores + Speed + Prof Bonus Band -->
   <div class="dos-ab-bar">
 <div class="dos-ab-box"><span class="dos-ab-lbl">STR</span><div class="dos-ab-mod"><input type="text" id="str-mod" readonly placeholder="+0"></div><div class="dos-ab-score"><input type="number" id="str-score" value="10" oninput="calcMod('str')"></div></div>
 <div class="dos-ab-box"><span class="dos-ab-lbl">DEX</span><div class="dos-ab-mod"><input type="text" id="dex-mod" readonly placeholder="+0"></div><div class="dos-ab-score"><input type="number" id="dex-score" value="10" oninput="calcMod('dex')"></div></div>
@@ -588,55 +597,55 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 <div class="dos-ab-box"><span class="dos-ab-lbl">INT</span><div class="dos-ab-mod"><input type="text" id="int-mod" readonly placeholder="+0"></div><div class="dos-ab-score"><input type="number" id="int-score" value="10" oninput="calcMod('int')"></div></div>
 <div class="dos-ab-box"><span class="dos-ab-lbl">WIS</span><div class="dos-ab-mod"><input type="text" id="wis-mod" readonly placeholder="+0"></div><div class="dos-ab-score"><input type="number" id="wis-score" value="10" oninput="calcMod('wis')"></div></div>
 <div class="dos-ab-box"><span class="dos-ab-lbl">CHA</span><div class="dos-ab-mod"><input type="text" id="cha-mod" readonly placeholder="+0"></div><div class="dos-ab-score"><input type="number" id="cha-score" value="10" oninput="calcMod('cha')"></div></div>
-    <div class="dos-hp-ds-stack">
-      <div class="dos-hp-block">
-        <div class="dos-hp-head">
-          <span class="dos-hp-title">Hit Points</span>
-          <div class="dos-hp-btns">
-            <button class="hp-action-btn heal-btn" onclick="_hpHeal()">+ Heal</button>
-            <button class="hp-action-btn dmg-btn" onclick="_hpDamage()">− Damage</button>
-          </div>
-        </div>
-        <div class="dos-hp-main-row">
-          <input type="number" id="hp-cur" class="dos-hp-cur-inp" placeholder="—">
-          <span class="dos-hp-fsep">/</span>
-          <div class="dos-hp-max-grp">
-            <input type="number" id="hp-max" placeholder="—">
-            <span class="dos-hp-grp-lbl">Max</span>
-          </div>
-          <div class="dos-hp-temp-grp">
-            <input type="number" id="hp-temp" placeholder="0">
-            <span class="dos-hp-grp-lbl">Temp</span>
-          </div>
-        </div>
-      </div>
-      <div class="dos-ds-block">
-        <div class="dos-ds-row">
-          <span class="dos-ds-lbl">Successes</span>
-          <div class="dos-ds-boxes">
-            <input type="checkbox" id="death-s1">
-            <input type="checkbox" id="death-s2">
-            <input type="checkbox" id="death-s3">
-          </div>
-        </div>
-        <div class="dos-ds-row">
-          <span class="dos-ds-lbl">Failures</span>
-          <div class="dos-ds-boxes">
-            <input type="checkbox" id="death-f1">
-            <input type="checkbox" id="death-f2">
-            <input type="checkbox" id="death-f3">
-          </div>
-        </div>
-        <span class="dos-stat-lbl" style="margin-top:1px;text-align:center;">Death Saves</span>
-      </div>
-    </div>
-  </div>
-  <!-- Stat Bar: Speed · Prof · Initiative · AC -->
-  <div class="dos-stat-bar">
-    <!-- stat-ac hidden but kept for JS sync -->
-    <input type="hidden" id="stat-ac">
     <div class="dos-stat"><input type="text" id="stat-speed" placeholder="35 ft"><span class="dos-stat-lbl">Speed</span></div>
     <div class="dos-stat"><input type="text" id="stat-prof" placeholder="+2"><span class="dos-stat-lbl">Prof Bonus</span></div>
+  </div>
+  <!-- HP Row: Hit Points + Death Saves -->
+  <div class="dos-hp-row">
+    <div class="dos-hp-block">
+      <div class="dos-hp-head">
+        <span class="dos-hp-title">Hit Points</span>
+        <div class="dos-hp-btns">
+          <button class="hp-action-btn heal-btn" onclick="_hpHeal()">+ Heal</button>
+          <button class="hp-action-btn dmg-btn" onclick="_hpDamage()">− Damage</button>
+        </div>
+      </div>
+      <div class="dos-hp-main-row">
+        <input type="number" id="hp-cur" class="dos-hp-cur-inp" placeholder="—">
+        <span class="dos-hp-fsep">/</span>
+        <div class="dos-hp-max-grp">
+          <input type="number" id="hp-max" placeholder="—">
+          <span class="dos-hp-grp-lbl">Max</span>
+        </div>
+        <div class="dos-hp-temp-grp">
+          <input type="number" id="hp-temp" placeholder="0">
+          <span class="dos-hp-grp-lbl">Temp</span>
+        </div>
+      </div>
+    </div>
+    <div class="dos-ds-block">
+      <div class="dos-ds-row">
+        <span class="dos-ds-lbl">Successes</span>
+        <div class="dos-ds-boxes">
+          <input type="checkbox" id="death-s1">
+          <input type="checkbox" id="death-s2">
+          <input type="checkbox" id="death-s3">
+        </div>
+      </div>
+      <div class="dos-ds-row">
+        <span class="dos-ds-lbl">Failures</span>
+        <div class="dos-ds-boxes">
+          <input type="checkbox" id="death-f1">
+          <input type="checkbox" id="death-f2">
+          <input type="checkbox" id="death-f3">
+        </div>
+      </div>
+      <span class="dos-stat-lbl" style="margin-top:1px;text-align:center;">Death Saves</span>
+    </div>
+  </div>
+  <!-- Combat Strip: Initiative · AC · Conditions · Defenses -->
+  <div class="dos-combat-strip">
+    <input type="hidden" id="stat-ac">
     <div class="dos-init-box">
       <input type="text" id="stat-initiative" placeholder="+0">
       <span class="dos-init-lbl">Initiative</span>
@@ -645,6 +654,67 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
       <span class="dos-ac-val" id="ac-display-dossier">10</span>
       <span id="ac-display-val" style="display:none;">10</span>
       <span class="dos-ac-lbl">Armor Class</span>
+    </div>
+    <div class="dos-cond-box">
+      <div style="font-family:var(--font-label);font-size:8pt;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Conditions</div>
+      <div class="dos-cond-chips" id="cond-chips">
+        <span class="dos-cond-chip" onclick="_condToggle(this)">Blinded</span>
+        <span class="dos-cond-chip" onclick="_condToggle(this)">Charmed</span>
+        <span class="dos-cond-chip" onclick="_condToggle(this)">Deafened</span>
+        <span class="dos-cond-chip" onclick="_condToggle(this)">Exhausted</span>
+        <span class="dos-cond-chip" onclick="_condToggle(this)">Frightened</span>
+        <span class="dos-cond-chip" onclick="_condToggle(this)">Grappled</span>
+        <span class="dos-cond-chip" onclick="_condToggle(this)">Invisible</span>
+        <span class="dos-cond-chip" onclick="_condToggle(this)">Paralyzed</span>
+        <span class="dos-cond-chip" onclick="_condToggle(this)">Poisoned</span>
+        <span class="dos-cond-chip" onclick="_condToggle(this)">Prone</span>
+        <span class="dos-cond-chip" onclick="_condToggle(this)">Restrained</span>
+        <span class="dos-cond-chip" onclick="_condToggle(this)">Stunned</span>
+        <span class="dos-cond-chip" onclick="_condToggle(this)">Unconscious</span>
+        <span class="dos-cond-chip" onclick="_condToggle(this)">Burning</span>
+        <span class="dos-cond-chip" onclick="_condToggle(this)">Pinned</span>
+      </div>
+      <textarea class="dos-textarea" rows="2" id="conditions-notes" placeholder="Other conditions…" style="margin-top:0;"></textarea>
+    </div>
+    <div class="dos-def-box">
+      <div style="font-family:var(--font-label);font-size:8pt;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Defenses</div>
+      <div style="font-family:var(--font-label);font-size:7pt;letter-spacing:.1em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:3px;">Resistances</div>
+      <div class="dos-def-chips" id="def-resist-chips">
+        <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Bludgeoning</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Piercing</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Slashing</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Fire</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Cold</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Lightning</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Radiant</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Poison</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Psychic</span>
+      </div>
+      <div style="font-family:var(--font-label);font-size:7pt;letter-spacing:.1em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:3px;">Immunities</div>
+      <div class="dos-def-chips" id="def-immune-chips">
+        <span class="dos-def-chip" onclick="_defToggle(this,'immune')">Bludgeoning</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'immune')">Piercing</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'immune')">Slashing</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'immune')">Fire</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'immune')">Cold</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'immune')">Lightning</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'immune')">Radiant</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'immune')">Poison</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'immune')">Psychic</span>
+      </div>
+      <div style="font-family:var(--font-label);font-size:7pt;letter-spacing:.1em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:3px;">Vulnerabilities</div>
+      <div class="dos-def-chips" id="def-vuln-chips">
+        <span class="dos-def-chip" onclick="_defToggle(this,'vuln')">Bludgeoning</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'vuln')">Piercing</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'vuln')">Slashing</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'vuln')">Fire</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'vuln')">Cold</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'vuln')">Lightning</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'vuln')">Radiant</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'vuln')">Poison</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'vuln')">Psychic</span>
+      </div>
+      <textarea class="dos-textarea" rows="2" id="defenses-notes" placeholder="Other defenses…" style="margin-top:0;"></textarea>
     </div>
   </div>
 
@@ -715,73 +785,8 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
       </div>
     </div>
 
-    <!-- RIGHT: Combat mini-bar + right-column tabs (spans both rows) -->
+    <!-- RIGHT: Tab content (spans both rows) -->
     <div class="dos-rc-col">
-      <!-- Combat mini-bar: Conditions | Defenses -->
-      <div class="dos-combat-bar">
-        <div class="dos-cond-box" style="flex:1;">
-          <div style="font-family:var(--font-label);font-size:8pt;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Conditions</div>
-          <div class="dos-cond-chips" id="cond-chips">
-            <span class="dos-cond-chip" onclick="_condToggle(this)">Blinded</span>
-            <span class="dos-cond-chip" onclick="_condToggle(this)">Charmed</span>
-            <span class="dos-cond-chip" onclick="_condToggle(this)">Deafened</span>
-            <span class="dos-cond-chip" onclick="_condToggle(this)">Exhausted</span>
-            <span class="dos-cond-chip" onclick="_condToggle(this)">Frightened</span>
-            <span class="dos-cond-chip" onclick="_condToggle(this)">Grappled</span>
-            <span class="dos-cond-chip" onclick="_condToggle(this)">Invisible</span>
-            <span class="dos-cond-chip" onclick="_condToggle(this)">Paralyzed</span>
-            <span class="dos-cond-chip" onclick="_condToggle(this)">Poisoned</span>
-            <span class="dos-cond-chip" onclick="_condToggle(this)">Prone</span>
-            <span class="dos-cond-chip" onclick="_condToggle(this)">Restrained</span>
-            <span class="dos-cond-chip" onclick="_condToggle(this)">Stunned</span>
-            <span class="dos-cond-chip" onclick="_condToggle(this)">Unconscious</span>
-            <span class="dos-cond-chip" onclick="_condToggle(this)">Burning</span>
-            <span class="dos-cond-chip" onclick="_condToggle(this)">Pinned</span>
-          </div>
-          <textarea class="dos-textarea" rows="2" id="conditions-notes" placeholder="Other conditions…" style="margin-top:0;"></textarea>
-        </div>
-        <div class="dos-def-box">
-          <div style="font-family:var(--font-label);font-size:8pt;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Defenses</div>
-          <div style="font-family:var(--font-label);font-size:7pt;letter-spacing:.1em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:3px;">Resistances</div>
-          <div class="dos-def-chips" id="def-resist-chips">
-            <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Bludgeoning</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Piercing</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Slashing</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Fire</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Cold</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Lightning</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Radiant</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Poison</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Psychic</span>
-          </div>
-          <div style="font-family:var(--font-label);font-size:7pt;letter-spacing:.1em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:3px;">Immunities</div>
-          <div class="dos-def-chips" id="def-immune-chips">
-            <span class="dos-def-chip" onclick="_defToggle(this,'immune')">Bludgeoning</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'immune')">Piercing</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'immune')">Slashing</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'immune')">Fire</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'immune')">Cold</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'immune')">Lightning</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'immune')">Radiant</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'immune')">Poison</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'immune')">Psychic</span>
-          </div>
-          <div style="font-family:var(--font-label);font-size:7pt;letter-spacing:.1em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:3px;">Vulnerabilities</div>
-          <div class="dos-def-chips" id="def-vuln-chips">
-            <span class="dos-def-chip" onclick="_defToggle(this,'vuln')">Bludgeoning</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'vuln')">Piercing</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'vuln')">Slashing</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'vuln')">Fire</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'vuln')">Cold</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'vuln')">Lightning</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'vuln')">Radiant</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'vuln')">Poison</span>
-            <span class="dos-def-chip" onclick="_defToggle(this,'vuln')">Psychic</span>
-          </div>
-          <textarea class="dos-textarea" rows="2" id="defenses-notes" placeholder="Other defenses…" style="margin-top:0;"></textarea>
-        </div>
-      </div>
-
       <!-- Right-column tab nav -->
       <div class="rc-tabs">
         <button class="rc-tab-btn active" onclick="rcTab(this,'rc-actions')">Actions</button>
