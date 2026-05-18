@@ -2112,6 +2112,31 @@
   function _stopSyncPolling() {
     if (_syncPollInterval) { clearInterval(_syncPollInterval); _syncPollInterval = null; }
   }
+  // ── Deduplicate roster in localStorage ───────────────────────
+  // Removes entries sharing the same cloudId or playerUid+sheetFile.
+  // Called on startup (before first render) and at the end of every sync.
+  function _cleanupRosterDupes() {
+    var roster = loadRoster();
+    var seenCloudId      = {};
+    var seenPlayerSheet  = {};
+    var cleaned = roster.filter(function(op) {
+      // Remove exact cloudId duplicates
+      if (op.cloudId) {
+        if (seenCloudId[op.cloudId]) return false;
+        seenCloudId[op.cloudId] = true;
+      }
+      // Remove playerUid+sheetFile duplicates (keeps first occurrence)
+      if (op.playerUid && op.sheetFile) {
+        var key = op.playerUid + ':' + op.sheetFile;
+        if (seenPlayerSheet[key]) return false;
+        seenPlayerSheet[key] = true;
+      }
+      return true;
+    });
+    if (cleaned.length !== roster.length) { saveRoster(cleaned); return true; }
+    return false;
+  }
+
   async function _syncRosterFromCloud() {
     if (!_portalLoggedIn()) return;
     // Prevent overlapping sync calls — a slow network response could otherwise
@@ -2128,6 +2153,20 @@
       if (!Array.isArray(rows)) return;
       var roster = loadRoster();
       var changed = false;
+
+      // Step 1: Backfill playerUid on old entries that have a cloudId but were
+      // stored before playerUid was tracked.  Without this, the fallback match
+      // (playerUid + sheetFile) can't find them and a second card gets added.
+      var cloudIdToRow = {};
+      rows.forEach(function(row) { if (row.id) cloudIdToRow[row.id] = row; });
+      roster.forEach(function(op) {
+        if (op.cloudId && !op.playerUid && cloudIdToRow[op.cloudId]) {
+          op.playerUid = cloudIdToRow[op.cloudId].user_id;
+          changed = true;
+        }
+      });
+
+      // Step 2: Process each cloud row — find existing entry or create a new one
       rows.forEach(function(row) {
         var sheetFile = SHEET_TYPE_MAP[row.sheet_type];
         if (!sheetFile) return;
@@ -2138,7 +2177,7 @@
           if (roster[j].cloudId === row.id) { existing = roster[j]; break; }
         }
         // Fallback match: by playerUid + sheetFile so that a manually-added
-        // entry (no cloudId yet) gets merged instead of creating a duplicate card
+        // entry (or one whose cloudId changed) gets merged instead of duplicated
         if (!existing && row.user_id) {
           for (var j = 0; j < roster.length; j++) {
             if (roster[j].playerUid === row.user_id && roster[j].sheetFile === sheetFile) {
@@ -2177,19 +2216,26 @@
           changed = true;
         }
       });
-      // Dedup pass: if multiple roster entries share the same playerUid+sheetFile
-      // (e.g. from duplicate DB rows created by a prior race condition), keep only
-      // the first one so the GM doesn't see two cards for the same player
+
+      // Step 3: Dedup pass — collapse any remaining duplicates by cloudId or
+      // playerUid+sheetFile (catches anything that slipped through above)
+      var seenCloudId     = {};
       var seenPlayerSheet = {};
       var beforeLen = roster.length;
       roster = roster.filter(function(op) {
-        if (!op.playerUid || !op.sheetFile) return true; // local-only entries kept as-is
-        var key = op.playerUid + ':' + op.sheetFile;
-        if (seenPlayerSheet[key]) return false;
-        seenPlayerSheet[key] = true;
+        if (op.cloudId) {
+          if (seenCloudId[op.cloudId]) return false;
+          seenCloudId[op.cloudId] = true;
+        }
+        if (op.playerUid && op.sheetFile) {
+          var key = op.playerUid + ':' + op.sheetFile;
+          if (seenPlayerSheet[key]) return false;
+          seenPlayerSheet[key] = true;
+        }
         return true;
       });
       if (roster.length !== beforeLen) changed = true;
+
       if (changed) { saveRoster(roster); renderRoster(); }
     } catch(e) { console.error('Roster sync error:', e); }
     finally { _syncInProgress = false; }
@@ -2197,6 +2243,9 @@
 
   // ── Init ─────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function() {
+    // Clean up any duplicates already in localStorage before the first render
+    // so players never see duplicates even for a moment while sync is in flight
+    _cleanupRosterDupes();
     renderRoster();
     _syncRosterFromCloud();
     if (_portalLoggedIn()) _startSyncPolling();
