@@ -1997,11 +1997,27 @@
     });
   }
 
-  function deleteOperative(id) {
+  async function deleteOperative(id) {
     if (!confirm('Remove this operative from the roster?')) return;
-    var data = loadRoster().filter(function(op) { return op.id !== id; });
+    var roster = loadRoster();
+    var op = roster.find(function(o) { return o.id === id; });
+    var data = roster.filter(function(o) { return o.id !== id; });
     saveRoster(data);
     renderRoster();
+    // If this operative has a cloud record, delete it from Supabase too
+    // so the sync loop does not re-add it on next poll
+    if (op && op.cloudId && _portalLoggedIn()) {
+      try {
+        await fetch(_PAB_URL + '/rest/v1/characters?id=eq.' + op.cloudId, {
+          method: 'DELETE',
+          headers: {
+            'apikey': _PAB_KEY,
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + _portalToken()
+          }
+        });
+      } catch(e) { console.error('Cloud delete error:', e); }
+    }
   }
 
   // ── Sheet picker ─────────────────────────────────────────────
