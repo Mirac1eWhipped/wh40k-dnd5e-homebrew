@@ -2104,6 +2104,7 @@
     'dnd5e_light':'dnd5e_character_sheet_light.html'
   };
   var _syncPollInterval = null;
+  var _syncInProgress   = false;
   function _startSyncPolling() {
     if (_syncPollInterval) return;
     _syncPollInterval = setInterval(_syncRosterFromCloud, 30000);
@@ -2113,6 +2114,10 @@
   }
   async function _syncRosterFromCloud() {
     if (!_portalLoggedIn()) return;
+    // Prevent overlapping sync calls — a slow network response could otherwise
+    // cause two concurrent syncs that each add the same cloud row independently
+    if (_syncInProgress) return;
+    _syncInProgress = true;
     try {
       var r = await fetch(_PAB_URL + '/rest/v1/characters?select=id,user_id,name,sheet_type,extra', {
         method: 'GET',
@@ -2128,8 +2133,19 @@
         if (!sheetFile) return;
         var ext = row.extra || {};
         var existing = null;
+        // Primary match: by cloudId
         for (var j = 0; j < roster.length; j++) {
           if (roster[j].cloudId === row.id) { existing = roster[j]; break; }
+        }
+        // Fallback match: by playerUid + sheetFile so that a manually-added
+        // entry (no cloudId yet) gets merged instead of creating a duplicate card
+        if (!existing && row.user_id) {
+          for (var j = 0; j < roster.length; j++) {
+            if (roster[j].playerUid === row.user_id && roster[j].sheetFile === sheetFile) {
+              existing = roster[j];
+              break;
+            }
+          }
         }
         if (!existing) {
           roster.push({
@@ -2149,6 +2165,7 @@
           changed = true;
         } else {
           existing.cloudId = row.id;
+          existing.playerUid = row.user_id;
           if (row.name) existing.name = row.name;
           if (ext.chapter !== undefined) existing.chapter = ext.chapter;
           if (ext.op_class !== undefined) existing.operativeClass = ext.op_class;
@@ -2160,8 +2177,22 @@
           changed = true;
         }
       });
+      // Dedup pass: if multiple roster entries share the same playerUid+sheetFile
+      // (e.g. from duplicate DB rows created by a prior race condition), keep only
+      // the first one so the GM doesn't see two cards for the same player
+      var seenPlayerSheet = {};
+      var beforeLen = roster.length;
+      roster = roster.filter(function(op) {
+        if (!op.playerUid || !op.sheetFile) return true; // local-only entries kept as-is
+        var key = op.playerUid + ':' + op.sheetFile;
+        if (seenPlayerSheet[key]) return false;
+        seenPlayerSheet[key] = true;
+        return true;
+      });
+      if (roster.length !== beforeLen) changed = true;
       if (changed) { saveRoster(roster); renderRoster(); }
     } catch(e) { console.error('Roster sync error:', e); }
+    finally { _syncInProgress = false; }
   }
 
   // ── Init ─────────────────────────────────────────────────────

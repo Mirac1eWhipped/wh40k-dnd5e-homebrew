@@ -1726,6 +1726,7 @@ const _SURL = 'https://uggazjqvwyndpcxrkazx.supabase.co';
 const _SKEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnZ2F6anF2d3luZHBjeHJrYXp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4MTcxOTAsImV4cCI6MjA5NDM5MzE5MH0.6dcsbi-lzQJUQS5UZTVg-tI_mFuy8yfAlfWsf0ennpU';
 var _saveTimer = null;
 var _charId    = null;
+var _saving    = false;
 
 function _authHdr() {
   const t = localStorage.getItem('supa_tok');
@@ -1797,6 +1798,10 @@ function _status(s, m) {
   if (lbl) lbl.textContent = m || MAP[s][1];
 }
 async function _doSave() {
+  // Guard against concurrent saves — if already in flight, reschedule for after it finishes
+  if (_saving) { _schedSave(); return; }
+  _saving = true;
+  try {
   if (!_loggedIn()) { _status('offline'); return; }
   const vals = _fields().map(f => f.value);
   const chks = _checkboxes().map(c => c.checked);
@@ -1859,6 +1864,7 @@ async function _doSave() {
     }
     _status('saved');
   } catch(e) { _status('error', e.message || 'Save failed'); console.error('Save error:', e); }
+  } finally { _saving = false; }
 }
 function _schedSave() { _status('saving'); clearTimeout(_saveTimer); _saveTimer = setTimeout(_doSave, 800); }
 /* ── Inspiration toggle ── */
