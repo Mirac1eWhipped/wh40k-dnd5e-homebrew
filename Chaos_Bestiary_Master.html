@@ -1,0 +1,1792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chaos Undivided Bestiary — Warhammer 40K × D&D 5E Homebrew</title>
+<style>
+  :root {
+    --dark-red: #58180d;
+    --gold: #c9a227;
+    --parchment: #fdf5e6;
+    --parchment-dark: #f0ddb0;
+    --parchment-mid: #f5ead0;
+    --ink: #1a0a00;
+    --body-bg: #dcc99a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Palatino Linotype', Palatino, 'Book Antiqua', serif; background: var(--body-bg); color: var(--ink); padding: 20px; }
+  .cover { background: var(--dark-red); color: var(--parchment); text-align: center; padding: 60px 40px; max-width: 860px; margin: 0 auto 40px; border: 4px solid var(--gold); border-radius: 4px; box-shadow: 0 6px 20px rgba(0,0,0,.5); }
+  .cover h1 { font-size: 2.6em; letter-spacing: .08em; margin-bottom: 8px; }
+  .cover h2 { font-size: 1.2em; font-weight: normal; font-style: italic; color: var(--gold); margin-bottom: 20px; }
+  .cover p { font-size: .95em; line-height: 1.7; color: #e8d8b4; max-width: 600px; margin: 0 auto; }
+  .toc { background: var(--parchment); border: 2px solid var(--gold); border-top: 4px solid var(--dark-red); max-width: 860px; margin: 0 auto 40px; padding: 24px 30px; border-radius: 4px; }
+  .toc h2 { color: var(--dark-red); font-size: 1.4em; border-bottom: 2px solid var(--gold); padding-bottom: 8px; margin-bottom: 16px; }
+  .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 30px; }
+  .toc-entry { display: flex; justify-content: space-between; font-size: .9em; padding: 3px 0; border-bottom: 1px dotted #c9a22755; }
+  .toc-entry .name { color: var(--ink); }
+  .toc-entry .cr { color: var(--dark-red); font-weight: bold; font-size: .85em; }
+  .cr-section-header { max-width: 860px; margin: 30px auto 10px; background: var(--dark-red); color: var(--gold); padding: 6px 16px; font-size: 1em; font-weight: bold; letter-spacing: .12em; text-transform: uppercase; border-radius: 3px; }
+  .creature-entry { max-width: 860px; margin: 0 auto 36px; }
+  .description { background: var(--parchment-mid); border-left: 4px solid var(--dark-red); border-right: 1px solid var(--gold); border-top: 1px solid var(--gold); padding: 14px 18px; font-size: .93em; line-height: 1.7; color: #2a0e00; }
+  .description h3 { color: var(--dark-red); font-size: 1.15em; margin-bottom: 6px; letter-spacing: .04em; }
+  .description p { margin-bottom: 8px; }
+  .description p:last-child { margin-bottom: 0; }
+  .stat-block { background: var(--parchment); border: 1px solid var(--gold); border-top: none; border-bottom: 4px solid var(--dark-red); border-radius: 0 0 4px 4px; box-shadow: 3px 4px 12px rgba(0,0,0,.3); }
+  .stat-block-header { background: var(--dark-red); color: var(--parchment); padding: 9px 14px 7px; display: flex; justify-content: space-between; align-items: flex-start; }
+  .creature-name { font-size: 1.45em; font-weight: bold; margin: 0; }
+  .creature-type { font-style: italic; font-size: .88em; margin: 2px 0 0; }
+  .cr-badge { background: var(--gold); color: var(--ink); border-radius: 4px; padding: 2px 9px; font-size: .82em; font-weight: bold; white-space: nowrap; margin-top: 4px; }
+  .stat-body { padding: 0 14px 12px; }
+  hr.div { border: none; border-top: 2px solid var(--gold); margin: 7px 0; }
+  .top-stats p { margin: 3px 0; font-size: .93em; }
+  .ability-grid { display: flex; justify-content: space-around; text-align: center; background: var(--parchment-dark); border: 1px solid var(--gold); border-radius: 3px; padding: 6px 0; margin: 7px 0; }
+  .ability-grid .lbl { font-weight: bold; color: var(--dark-red); text-transform: uppercase; font-size: .72em; }
+  .ability-grid .val { font-size: 1.05em; }
+  .bottom-stats p { margin: 2px 0; font-size: .88em; }
+  h3.section-head { color: var(--dark-red); font-size: 1em; margin: 9px 0 3px; border-bottom: 1px solid var(--gold); padding-bottom: 2px; text-transform: uppercase; letter-spacing: .05em; }
+  .entry { margin: 5px 0; font-size: .91em; line-height: 1.55; }
+  .entry-name { font-weight: bold; font-style: italic; color: var(--dark-red); }
+  .flavor { font-style: italic; color: #555; font-size: .87em; border-left: 3px solid var(--gold); margin: 8px 0 0; padding: 4px 10px; background: var(--parchment-mid); }
+  .legendary-note { font-size: .88em; font-style: italic; margin: 4px 0 6px; color: #3a1500; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>CHAOS UNDIVIDED BESTIARY</h1>
+  <h2>Warhammer 40,000 &times; Dungeons &amp; Dragons 5th Edition &mdash; Homebrew</h2>
+  <p>Not all who serve Chaos bow to a single god. Some warlords are too proud, too ambitious, or simply too useful to be claimed by any one Ruinous Power — and so they are claimed by all four, or by none. These are the Chaos Undivided: Heretic Astartes warbands and their mortal followers who carry the eight-pointed star, who fight in Chaos's name without submitting to a patron's specific aesthetic. They are no less dangerous for their eclecticism. A Chaos Lord who answers to all four gods is one who can make deals with all four, draw from all four, and be constrained by none. Entries are arranged from lowest to highest Challenge Rating, from the desperate Chaos Cultist to the transcendent Daemon Prince.<br><br>
+  <em>These are fan-made rules for personal use only.</em></p>
+</div>
+
+<div class="toc" style="margin-bottom:20px;">
+  <h2 style="font-size:1.1em; margin-bottom:10px;">Designer's Notes: Key Chaos Undivided Mechanics</h2>
+  <p style="font-size:.9em; line-height:1.7; color:#2a0e00; margin-bottom:8px;"><strong>Chaos Power Armor.</strong> The corrupted plate worn by Heretic Astartes is both tougher and stranger than its Loyalist equivalent. It grants resistance to bludgeoning, piercing, and slashing damage from nonmagical weapons, and critical hits from such weapons become normal hits. However, the Warp energy suffusing it renders the wearer visible to psychic senses — a Chaos Space Marine's armor actually makes them easier to detect via psyker abilities, not harder.</p>
+  <p style="font-size:.9em; line-height:1.7; color:#2a0e00; margin-bottom:8px;"><strong>Warp Mutation.</strong> Chaos creatures who have been sufficiently exposed to the Immaterium develop random mutations that can trigger at key moments. When a Chaos creature with Warp Mutation is reduced to half its maximum hit points for the first time in combat, roll a d6 on the Mutation table: 1 — Bone Spurs (all melee attacks deal +3 piercing damage); 2 — Iron Hide (gains resistance to one damage type of the GM's choice); 3 — Extra Eyes (advantage on Perception checks and can't be surprised); 4 — Warp Shriek (each creature within 20 ft. makes a DC 12 Wisdom save or is frightened until end of its next turn); 5 — Regenerating Flesh (regains 5 HP at the start of each turn); 6 — Unnatural Speed (speed increases by 15 ft. and gains one additional melee attack per turn).</p>
+  <p style="font-size:.9em; line-height:1.7; color:#2a0e00; margin-bottom:8px;"><strong>Bolt Weapons.</strong> Bolters, bolt pistols, and their variants fire self-propelled mass-reactive rounds that detonate inside the target. On a hit, the target must succeed on a Constitution saving throw (DC listed per weapon) or take additional piercing damage at the start of its next turn as the round detonates. Creatures in sealed void suits or heavily constructed armor (AC 18+) have advantage on this save.</p>
+  <p style="font-size:.9em; line-height:1.7; color:#2a0e00;"><strong>Daemon Prince Ascension.</strong> At the GM's discretion, a Chaos Lord who deals the killing blow on a creature of CR 10 or higher may be offered Daemonhood by the Chaos Gods. If the Chaos Lord accepts and succeeds on a DC 18 Charisma saving throw, it immediately transforms into a Daemon Prince and uses that stat block for the remainder of the encounter. If it fails the saving throw, it instead becomes a Chaos Spawn.</p>
+</div>
+
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <div class="toc-grid">
+    <div class="toc-entry"><span class="name">Chaos Cultist</span><span class="cr">CR 1/8</span></div>
+    <div class="toc-entry"><span class="name">Venomcrawler</span><span class="cr">CR 7</span></div>
+    <div class="toc-entry"><span class="name">Traitor Guard</span><span class="cr">CR 1/2</span></div>
+    <div class="toc-entry"><span class="name">Chaos Vindicator</span><span class="cr">CR 7</span></div>
+    <div class="toc-entry"><span class="name">Dark Apostle</span><span class="cr">CR 3</span></div>
+    <div class="toc-entry"><span class="name">Obliterator</span><span class="cr">CR 8</span></div>
+    <div class="toc-entry"><span class="name">Chaos Rhino</span><span class="cr">CR 3</span></div>
+    <div class="toc-entry"><span class="name">Master of Possession</span><span class="cr">CR 8</span></div>
+    <div class="toc-entry"><span class="name">Chaos Aspiring Champion</span><span class="cr">CR 4</span></div>
+    <div class="toc-entry"><span class="name">Predator</span><span class="cr">CR 8</span></div>
+    <div class="toc-entry"><span class="name">Warpsmith</span><span class="cr">CR 4</span></div>
+    <div class="toc-entry"><span class="name">Helbrute</span><span class="cr">CR 9</span></div>
+    <div class="toc-entry"><span class="name">Chaos Raptors</span><span class="cr">CR 4</span></div>
+    <div class="toc-entry"><span class="name">Exalted Champion</span><span class="cr">CR 9</span></div>
+    <div class="toc-entry"><span class="name">Chaos Bikers</span><span class="cr">CR 5</span></div>
+    <div class="toc-entry"><span class="name">Maulerfiend</span><span class="cr">CR 10</span></div>
+    <div class="toc-entry"><span class="name">Chaos Space Marine</span><span class="cr">CR 5</span></div>
+    <div class="toc-entry"><span class="name">Forgefiend</span><span class="cr">CR 10</span></div>
+    <div class="toc-entry"><span class="name">Chaos Spawn</span><span class="cr">CR 5</span></div>
+    <div class="toc-entry"><span class="name">Chaos Lord</span><span class="cr">CR 11</span></div>
+    <div class="toc-entry"><span class="name">Havocs</span><span class="cr">CR 5</span></div>
+    <div class="toc-entry"><span class="name">Chaos Land Raider</span><span class="cr">CR 11</span></div>
+    <div class="toc-entry"><span class="name">Possessed Chaos Space Marine</span><span class="cr">CR 6</span></div>
+    <div class="toc-entry"><span class="name">Defiler</span><span class="cr">CR 12</span></div>
+    <div class="toc-entry"><span class="name">Chosen</span><span class="cr">CR 6</span></div>
+    <div class="toc-entry"><span class="name">Lord Discordant</span><span class="cr">CR 13</span></div>
+    <div class="toc-entry"><span class="name">Warp Talons</span><span class="cr">CR 6</span></div>
+    <div class="toc-entry"><span class="name">Chaos Lord in Terminator Armor</span><span class="cr">CR 13</span></div>
+    <div class="toc-entry"><span class="name">Chaos Terminator</span><span class="cr">CR 7</span></div>
+    <div class="toc-entry"><span class="name">Daemon Prince</span><span class="cr">CR 14</span></div>
+    <div class="toc-entry"><span class="name">Chaos Sorcerer</span><span class="cr">CR 7</span></div>
+    <div class="toc-entry"><span class="name">&nbsp;</span><span class="cr">&nbsp;</span></div>
+  </div>
+</div>
+
+<!-- ═══ CR 1/8 ═══ -->
+<div class="cr-section-header">Challenge Rating 1/8</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Chaos Cultist</h3>
+    <p>Chaos Cultists are the wretched vanguard of any Chaos incursion — ordinary mortals who have surrendered their sanity, loyalty, and often their humanity in exchange for the hollow promise of power, transcendence, or simply survival. They come from every walk of life: factory workers, planetary militia deserters, nobles driven mad by forbidden texts, and entire populations subverted by generations of hidden worship. By the time they take up arms for the Ruinous Powers, they have burned every bridge behind them.</p>
+    <p>In battle, Cultists are expendable. Their commanders send them in waves to exhaust ammunition, trigger killzones, and draw the attention of elite defenders while Chaos Space Marines maneuver into position. Individual Cultists are poorly equipped and poorly trained, but they feel no fear, they do not rout, and there are always more of them than anyone expects. A planet that has been subverted for long enough can field millions.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Chaos Cultist</p><p class="creature-type">Medium Humanoid (any), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 1/8</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 11 (improvised armor)</p>
+        <p><strong>Hit Points</strong> 9 (2d8)</p>
+        <p><strong>Speed</strong> 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">CON</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">INT</div><div class="val">8 (−1)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">7 (−2)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">9 (−1)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Condition Immunities</strong> frightened</p>
+        <p><strong>Senses</strong> passive Perception 8</p>
+        <p><strong>Languages</strong> Low Gothic</p>
+        <p><strong>Challenge</strong> 1/8 (25 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +2</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Dark Devotion.</span> The Cultist is immune to the frightened condition. When it dies within 30 feet of a Chaos Space Marine or higher-ranking Chaos servant, that creature regains 2 hit points as the death feeds its patron.</div>
+      <div class="entry"><span class="entry-name">Pack Tactics.</span> The Cultist has advantage on attack rolls against a creature if at least one of the Cultist's allies is within 5 feet of the target and the ally isn't incapacitated.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Autopistol.</span> <em>Ranged Weapon Attack:</em> +3 to hit, range 40/120 ft., one target. <em>Hit:</em> 4 (1d6 + 1) piercing damage.</div>
+      <div class="entry"><span class="entry-name">Crude Blade.</span> <em>Melee Weapon Attack:</em> +2 to hit, reach 5 ft., one target. <em>Hit:</em> 3 (1d4 + 1) slashing damage.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 1/2 ═══ -->
+<div class="cr-section-header">Challenge Rating 1/2</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Traitor Guard</h3>
+    <p>Not every soldier in the armies of Chaos is a screaming fanatic with improvised weapons. The Traitor Guard — variously called Renegade Militia, Apostate Regiments, or simply Turncoats — are defected Imperial Guardsmen who have brought their training, equipment, and sometimes their entire regimental command structure with them when they crossed over to Chaos. They still fire in disciplined volleys. They still dig defensive positions. They still obey orders. The difference is whose orders they obey, and what those orders ask of them.</p>
+    <p>Traitor Guard are considerably more dangerous than Chaos Cultists for exactly this reason. A cultist is a fanatical civilian with a knife. A Traitor Guard veteran is a soldier with years of combat experience, standard-issue flak armor, a functioning lasgun, and the ingrained habit of covering their squad's advance. Chaos warlords who inherit intact Traitor Guard regiments treat them as valuable assets — not quite as valuable as Chaos Space Marines, but as close as mortal soldiers can get.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Traitor Guard</p><p class="creature-type">Medium Humanoid (any), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 1/2</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 13 (flak armor)</p>
+        <p><strong>Hit Points</strong> 16 (3d8 + 3)</p>
+        <p><strong>Speed</strong> 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">11 (+0)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">13 (+1)</div></div>
+        <div><div class="lbl">CON</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">INT</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">8 (−1)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Skills</strong> Athletics +2, Perception +2</p>
+        <p><strong>Condition Immunities</strong> frightened</p>
+        <p><strong>Senses</strong> passive Perception 12</p>
+        <p><strong>Languages</strong> Low Gothic</p>
+        <p><strong>Challenge</strong> 1/2 (100 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +2</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Military Discipline.</span> The Traitor Guard has advantage on saving throws against the frightened condition while within 15 feet of at least one other non-incapacitated Traitor Guard.</div>
+      <div class="entry"><span class="entry-name">Fire Discipline.</span> When three or more Traitor Guard target the same creature with ranged attacks on the same turn, each gains a +1 bonus to the attack roll per additional attacker beyond the first, up to a maximum of +3.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Traitor Guard makes two attacks: one Lasgun and one Combat Knife, or two Lasgun attacks.</div>
+      <div class="entry"><span class="entry-name">Lasgun.</span> <em>Ranged Weapon Attack:</em> +3 to hit, range 80/320 ft., one target. <em>Hit:</em> 5 (1d8 + 1) radiant damage.</div>
+      <div class="entry"><span class="entry-name">Combat Knife.</span> <em>Melee Weapon Attack:</em> +2 to hit, reach 5 ft., one target. <em>Hit:</em> 3 (1d4 + 1) piercing damage.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Tactical Reposition.</span> The Traitor Guard moves up to 15 feet without provoking opportunity attacks, provided it ends this movement adjacent to a piece of cover or another Traitor Guard.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 3 ═══ -->
+<div class="cr-section-header">Challenge Rating 3</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Dark Apostle</h3>
+    <p>A Dark Apostle is a Chaos Space Marine who has abandoned the battlefield disciplines of the Legiones Astartes in favor of something the Emperor spent ten thousand years trying to eradicate: faith. They are the priests of the Long War, the orators whose sermons can send a mob of frightened Cultists charging into autocannon fire with fervor rather than compulsion, the figures who maintain the spiritual infrastructure of a Chaos warband between engagements. Their armor is plastered with heretical scripture and chains of skulls. They carry corrupted crozius staves that crackle with Warp energy. They are never, under any circumstances, quiet.</p>
+    <p>In combat a Dark Apostle fights at the center of the warband, close enough that every nearby warrior can hear the litanies and feel the Warp energy rolling off the Apostle's conviction. They are not the most dangerous individual combatants a Chaos force fields — that honor goes to the Chaos Lord and the Daemon Prince — but they may be the most dangerous force multiplier. An inspired mob of Chaos Cultists fighting under a Dark Apostle's blessing is considerably more lethal than a rabble would suggest.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Dark Apostle</p><p class="creature-type">Medium Humanoid (Heretic Astartes), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 3</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 16 (Chaos power armor)</p>
+        <p><strong>Hit Points</strong> 65 (10d8 + 20)</p>
+        <p><strong>Speed</strong> 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">13 (+1)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">15 (+2)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">17 (+3)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Wis +4, Cha +5</p>
+        <p><strong>Skills</strong> Intimidation +5, Persuasion +5, Religion +3</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, and slashing from nonmagical weapons</p>
+        <p><strong>Condition Immunities</strong> frightened</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 12</p>
+        <p><strong>Languages</strong> Low Gothic, High Gothic, Legion Cant</p>
+        <p><strong>Challenge</strong> 3 (700 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +2</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Astartes Physiology.</span> Advantage on Constitution saving throws. Can hold breath for 1 hour.</div>
+      <div class="entry"><span class="entry-name">Unholy Litanies.</span> At the start of each of the Dark Apostle's turns, each friendly Chaos creature within 30 feet that can hear it gains a +2 bonus to attack rolls and saving throws until the start of the Apostle's next turn.</div>
+      <div class="entry"><span class="entry-name">Warp Preacher.</span> Hostile creatures that start their turn within 10 feet of the Dark Apostle must succeed on a DC 13 Wisdom saving throw or be rattled — they have disadvantage on the next attack roll they make before the end of their turn.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Dark Apostle makes two Corrupted Crozius attacks.</div>
+      <div class="entry"><span class="entry-name">Corrupted Crozius.</span> <em>Melee Weapon Attack:</em> +6 to hit, reach 5 ft., one target. <em>Hit:</em> 10 (1d12 + 4) bludgeoning damage plus 4 (1d8) necrotic damage. On a hit, the target must succeed on a DC 13 Constitution saving throw or become poisoned until the end of its next turn as Warp-taint seeps into the wound.</div>
+      <div class="entry"><span class="entry-name">Dark Prayers (Recharge 5–6).</span> The Dark Apostle invokes the Ruinous Powers in a fervent burst. Each friendly Chaos creature within 30 feet that can hear it immediately regains 7 (2d6) hit points and becomes immune to the frightened condition for 1 minute.</div>
+      <hr class="div">
+      <h3 class="section-head">Reactions</h3>
+      <div class="entry"><span class="entry-name">Martyr's Fury.</span> When the Dark Apostle takes damage, it can use its reaction to cause one friendly Chaos creature within 30 feet that can see it to immediately move up to its speed toward the source of the damage as a reaction.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>Chaos Rhino</h3>
+    <p>The Chaos Rhino is the workhorse of the Traitor Legions — a rugged, boxy armored personnel carrier that has been hauling Heretic Astartes into battle for ten thousand years and shows no signs of stopping. What was once a reliable Imperial transport has, through millennia of Warp exposure and deliberate corruption, become something half-machine and half-vessel-of-Chaos. The hull is tattooed with eight-pointed stars and devotional scripture. The exhaust ports breathe something that smells faintly wrong. The engine note, at idle, sounds almost like a voice.</p>
+    <p>In battle the Rhino does what it has always done: close the gap. It drives into enemy lines under fire, drops its assault ramp, and disgorges a squad of Chaos Space Marines directly into melee range before any defender has time to reposition. Its twin-linked bolter emplacement lays down suppressive fire on the way in. Its dozer blade clears everything in front of it. It is not a sophisticated weapon — but then, few problems in the Long War require sophistication.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Chaos Rhino</p><p class="creature-type">Large Vehicle (Heretic Astartes), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 3</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 15 (corrupted ceramite hull)</p>
+        <p><strong>Hit Points</strong> 80 (10d12 + 20)</p>
+        <p><strong>Speed</strong> 50 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">8 (−1)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">3 (−4)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">6 (−2)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">1 (−5)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Damage Immunities</strong> poison, psychic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, petrified, poisoned, prone, stunned</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 8</p>
+        <p><strong>Languages</strong> —</p>
+        <p><strong>Challenge</strong> 3 (700 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +2</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Vehicle Frame.</span> The Chaos Rhino is immune to the grappled, restrained, paralyzed, petrified, and poisoned conditions. It cannot benefit from healing spells; only mechanical repair effects restore its hit points.</div>
+      <div class="entry"><span class="entry-name">Chaos Armor Plates.</span> Critical hits against the Rhino from nonmagical attacks become normal hits.</div>
+      <div class="entry"><span class="entry-name">Transport.</span> The Chaos Rhino can carry up to 10 Medium or smaller creatures as passengers. Passengers can disembark when the Rhino moves adjacent to them using the Deployment Ramp bonus action.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Chaos Rhino makes two Twin Bolter attacks, or one Twin Bolter attack and one Dozer Blade attack.</div>
+      <div class="entry"><span class="entry-name">Twin Bolter.</span> <em>Ranged Weapon Attack:</em> +4 to hit, range 80/320 ft., one target. <em>Hit:</em> 9 (2d6 + 2) piercing damage. On a hit, DC 13 Constitution saving throw or take 3 (1d6) additional piercing damage at the start of its next turn as the bolt round detonates.</div>
+      <div class="entry"><span class="entry-name">Dozer Blade.</span> <em>Melee Weapon Attack:</em> +6 to hit, reach 5 ft., one target. <em>Hit:</em> 13 (2d8 + 4) bludgeoning damage. On a hit, the target is pushed up to 10 feet away from the Rhino.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Deployment Ramp.</span> The Chaos Rhino opens its assault ramp. Up to 5 passengers may disembark into unoccupied spaces within 5 feet of the Rhino. Passengers who disembark this way may immediately move up to half their speed without provoking opportunity attacks.</div>
+      <hr class="div">
+      <h3 class="section-head">Reactions</h3>
+      <div class="entry"><span class="entry-name">Smoke Launchers (3/Day).</span> When the Chaos Rhino is targeted by a ranged attack, it can use its reaction to deploy smoke. The attacker makes its attack roll with disadvantage, and the Rhino has half cover until the start of its next turn.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 4 ═══ -->
+<div class="cr-section-header">Challenge Rating 4</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Warpsmith</h3>
+    <p>A Warpsmith is what happens when a Chaos Space Marine with the Techmarine's gift for machine-bonding has spent centuries in the Warp, and both he and the machines he tends have absorbed the corruption of the Immaterium until neither is entirely recognizable as what they were. Where a Loyalist Techmarine maintains and repairs, a Warpsmith corrupts and perverts. They walk the battlefield wreathed in mechadendrites that crackle with eldritch energy, capable of repairing their own machines mid-engagement, disabling enemy vehicles with a touch, and calling down the obliterating fire of their servo-automata on whatever the warband needs destroyed next.</p>
+    <p>Warpsmiths are deeply practical individuals in a faction that tends toward excess and transcendence — they believe that a properly maintained and properly corrupted war machine is more reliable than a daemon patron's blessing, and history has largely vindicated them on this point. They hate Loyalist Techmarines with a professional contempt that is entirely separate from the ordinary hatred most Heretic Astartes feel, and they reserve special attention for enemy vehicles, which they view as machines that have been allowed to remain clean.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Warpsmith</p><p class="creature-type">Medium Humanoid (Heretic Astartes), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 4</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 17 (Chaos power armor)</p>
+        <p><strong>Hit Points</strong> 78 (12d8 + 24)</p>
+        <p><strong>Speed</strong> 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">17 (+3)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">10 (+0)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Int +5, Con +4</p>
+        <p><strong>Skills</strong> Arcana +5, Athletics +6, Investigation +5</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, and slashing from nonmagical weapons; lightning</p>
+        <p><strong>Condition Immunities</strong> frightened</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 11</p>
+        <p><strong>Languages</strong> Low Gothic, High Gothic, Techna-Lingua (corrupted)</p>
+        <p><strong>Challenge</strong> 4 (1,100 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +2</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Astartes Physiology.</span> Advantage on Constitution saving throws. Can hold breath for 1 hour.</div>
+      <div class="entry"><span class="entry-name">Machine Affinity.</span> The Warpsmith has advantage on attack rolls against constructs and vehicles. Its mechadendrite attacks deal double damage to objects and structures.</div>
+      <div class="entry"><span class="entry-name">Corrupted Repair.</span> As a bonus action, the Warpsmith can spend a charge (3 charges, recharging on a short rest) to restore 14 (4d6) hit points to a friendly construct or vehicle within 10 feet. Creatures repaired this way gain the Corrupted tag — their attacks deal +2 necrotic damage until they are repaired by a non-Chaos engineer.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Warpsmith makes one Mechadendrite Lash attack and one Power Axe attack, or two Mechadendrite Lash attacks.</div>
+      <div class="entry"><span class="entry-name">Power Axe.</span> <em>Melee Weapon Attack:</em> +6 to hit, reach 5 ft., one target. <em>Hit:</em> 13 (2d8 + 4) slashing damage. This attack ignores resistance to slashing damage from armor.</div>
+      <div class="entry"><span class="entry-name">Mechadendrite Lash.</span> <em>Melee Weapon Attack:</em> +6 to hit, reach 10 ft., one target. <em>Hit:</em> 9 (2d4 + 4) piercing damage plus 7 (2d6) lightning damage. On a hit, a construct or vehicle takes maximum lightning damage from this attack and must succeed on a DC 13 Constitution saving throw or have its speed reduced by 10 feet until the start of its next turn.</div>
+      <div class="entry"><span class="entry-name">Machine Curse (Recharge 5–6).</span> The Warpsmith targets one construct, vehicle, or creature wearing power armor within 30 feet. The target must succeed on a DC 13 Constitution saving throw or become cursed: it deals only half damage with its mechanical systems (ranged attacks, vehicle weapons, powered melee weapons) until a <em>remove curse</em> spell or similar effect is applied. A creature can repeat the saving throw at the end of each of its turns.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>Chaos Raptors</h3>
+    <p>Chaos Raptors are jump-pack assault troops who have fully embraced the predator fantasy their equipment enables. Where Loyalist Assault Marines descend in controlled formation, Raptors fall on their prey screaming, spinning, firing pistols in every direction and crashing into melee with a force that has broken heavier lines than theirs. They have cultivated their own cultural identity within the Traitor Legions, a mythology of the hunt that some have taken so literally they file their teeth and compete to see who can bring down the most impressive quarry in a single engagement.</p>
+    <p>Jump pack technology in Chaos hands is, like everything else, both more and less reliable than the Loyalist version. The packs burn hotter, accelerate faster, and have a documented tendency to explode if maintained according to standard protocols rather than the idiosyncratic rituals each Raptor develops. The Raptors themselves consider this proof of the packs' character. Everything worth flying with, they say, tries to kill you.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Chaos Raptors</p><p class="creature-type">Medium Humanoid (Heretic Astartes), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 4</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 16 (Chaos power armor)</p>
+        <p><strong>Hit Points</strong> 65 (10d8 + 20)</p>
+        <p><strong>Speed</strong> 30 ft., fly 60 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">11 (+0)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">11 (+0)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">10 (+0)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +6, Dex +5</p>
+        <p><strong>Skills</strong> Athletics +6, Perception +2</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, and slashing from nonmagical weapons</p>
+        <p><strong>Condition Immunities</strong> frightened</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 12</p>
+        <p><strong>Languages</strong> Low Gothic, Legion Cant</p>
+        <p><strong>Challenge</strong> 4 (1,100 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +2</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Astartes Physiology.</span> Advantage on Constitution saving throws. Can hold breath for 1 hour.</div>
+      <div class="entry"><span class="entry-name">Jump Pack Assault.</span> If the Raptor flies at least 30 feet straight toward a target immediately before hitting it with a melee attack, the target must succeed on a DC 14 Strength saving throw or be knocked prone. If the target is prone, the Raptor's Chainsword deals an additional 7 (2d6) slashing damage.</div>
+      <div class="entry"><span class="entry-name">Warp-Touched Armor.</span> Critical hits against the Raptor from nonmagical weapons become normal hits.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Chaos Raptor makes one Bolt Pistol attack and one Chainsword attack.</div>
+      <div class="entry"><span class="entry-name">Bolt Pistol.</span> <em>Ranged Weapon Attack:</em> +6 to hit, range 40/160 ft., one target. <em>Hit:</em> 8 (1d10 + 3) piercing damage. On a hit, DC 13 Constitution saving throw or take 5 (1d10) additional piercing damage at the start of its next turn as the bolt detonates.</div>
+      <div class="entry"><span class="entry-name">Chainsword.</span> <em>Melee Weapon Attack:</em> +6 to hit, reach 5 ft., one target. <em>Hit:</em> 11 (2d6 + 4) slashing damage.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Assault Pack.</span> The Raptor uses its jump pack to reposition, flying up to half its flying speed without provoking opportunity attacks. It can use this movement before or after its attacks.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>Chaos Aspiring Champion</h3>
+    <p>An Aspiring Champion is the squad leader of a Chaos Space Marine unit — a position earned not through appointment but through the simple and final method of being the last one left alive with a credible claim to it. They have killed their predecessors, inspired or intimidated their squadmates into obedience, and drawn enough of the Chaos Gods' attention that their weapons are beginning to develop personalities and their armor has started to whisper. They are not yet Chosen, not yet old enough to be called veterans in any meaningful sense of the word, but they are ambitious in the particular Chaos fashion: they would like to become Chaos Lords, they understand that this requires surviving, and they are prepared to do absolutely anything necessary to accomplish both goals.</p>
+    <p>In combat, an Aspiring Champion pushes to the front. Status in a Chaos warband is measured in kills, and an Aspiring Champion who lets his squad do his killing for him will not remain an Aspiring Champion for long. They fight with a focused savagery that differentiates them from the rank-and-file — not reckless, but hungry in a way that makes them push harder and recover faster than ordinary Chaos Space Marines.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Chaos Aspiring Champion</p><p class="creature-type">Medium Humanoid (Heretic Astartes), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 4</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 17 (Chaos power armor)</p>
+        <p><strong>Hit Points</strong> 84 (13d8 + 26)</p>
+        <p><strong>Speed</strong> 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">13 (+1)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">14 (+2)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +7, Con +4</p>
+        <p><strong>Skills</strong> Athletics +7, Intimidation +4, Perception +3</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, and slashing from nonmagical weapons</p>
+        <p><strong>Condition Immunities</strong> frightened</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 13</p>
+        <p><strong>Languages</strong> Low Gothic, High Gothic, Legion Cant</p>
+        <p><strong>Challenge</strong> 4 (1,100 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +2</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Astartes Physiology.</span> Advantage on Constitution saving throws. Can hold breath for 1 hour.</div>
+      <div class="entry"><span class="entry-name">Kill Tally.</span> When the Aspiring Champion kills a creature of CR 1 or higher, it gains advantage on its next attack roll before the end of its next turn as the killing feeds its patron's hunger.</div>
+      <div class="entry"><span class="entry-name">Warp-Touched Armor.</span> Critical hits against the Aspiring Champion from nonmagical weapons become normal hits.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Aspiring Champion makes two weapon attacks.</div>
+      <div class="entry"><span class="entry-name">Bolter.</span> <em>Ranged Weapon Attack:</em> +7 to hit, range 80/320 ft., one target. <em>Hit:</em> 13 (2d8 + 4) piercing damage. On a hit, DC 14 Constitution save or take 4 (1d8) additional piercing damage at the start of its next turn as the bolt round detonates.</div>
+      <div class="entry"><span class="entry-name">Power Sword.</span> <em>Melee Weapon Attack:</em> +7 to hit, reach 5 ft., one target. <em>Hit:</em> 14 (2d8 + 5) slashing damage. This attack ignores resistance to slashing damage from nonmagical armor.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Champion's Challenge.</span> The Aspiring Champion singles out one creature within 60 feet it can see. Until the start of the Champion's next turn, the target has disadvantage on attack rolls against creatures other than the Champion, and the Champion deals an extra 7 (2d6) damage to the target with weapon attacks.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 5 ═══ -->
+<div class="cr-section-header">Challenge Rating 5</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Chaos Space Marine</h3>
+    <p>A Chaos Space Marine is what ten millennia of war, Warp exposure, and hatred produce when they are given a genetically engineered superhuman body and pointed at everything they once swore to protect. The Heretic Astartes who fought in the Horus Heresy are ancient by mortal standards — the oldest veterans remember the Emperor's face, the sound of his voice, what it felt like to believe. That memory curdled long ago into something that drives them harder than any ideology: pure, focused, undying resentment.</p>
+    <p>In battle they fight with the same discipline and lethality as their Loyalist counterparts, with two additions: they do not restrain themselves, and they do not stop. Bolters fire until the barrel glows. Chainblades swing until the teeth are stripped. A Chaos Space Marine does not break, does not surrender, and does not feel the fear that would prompt either. The only variable is which god — if any — they have pledged themselves to, which determines exactly what kind of nightmare they have become.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Chaos Space Marine</p><p class="creature-type">Medium Humanoid (Heretic Astartes), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 5</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 17 (Chaos power armor)</p>
+        <p><strong>Hit Points</strong> 91 (14d8 + 28)</p>
+        <p><strong>Speed</strong> 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CON</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">INT</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">11 (+0)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">12 (+1)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +8, Con +7</p>
+        <p><strong>Skills</strong> Athletics +8, Intimidation +4, Perception +3</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, and slashing from nonmagical weapons</p>
+        <p><strong>Condition Immunities</strong> frightened</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 13</p>
+        <p><strong>Languages</strong> Low Gothic, High Gothic, Legion Cant</p>
+        <p><strong>Challenge</strong> 5 (1,800 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Astartes Physiology.</span> Advantage on Constitution saving throws. Can hold breath for 1 hour and doesn't need to eat or drink more than once per week.</div>
+      <div class="entry"><span class="entry-name">Warp-Touched Armor.</span> While wearing Chaos power armor, critical hits against the Chaos Space Marine from nonmagical weapons become normal hits.</div>
+      <div class="entry"><span class="entry-name">Brutal Assault.</span> Once per turn, when the Chaos Space Marine hits a creature with its Chainsword, it can deal an additional 7 (2d6) slashing damage.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> Two Bolter attacks or one Bolter and one Chainsword attack.</div>
+      <div class="entry"><span class="entry-name">Bolter.</span> <em>Ranged Weapon Attack:</em> +5 to hit, range 80/320 ft., one target. <em>Hit:</em> 11 (2d8 + 2) piercing damage. On a hit, DC 14 Constitution save or take 4 (1d8) additional piercing damage at the start of its next turn as the bolt round detonates.</div>
+      <div class="entry"><span class="entry-name">Chainsword.</span> <em>Melee Weapon Attack:</em> +8 to hit, reach 5 ft., one target. <em>Hit:</em> 12 (2d6 + 5) slashing damage.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Unrelenting Aggression.</span> The Chaos Space Marine moves up to half its speed toward a hostile creature without provoking opportunity attacks.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>Chaos Spawn</h3>
+    <p>A Chaos Spawn is what happens when the gifts of the Ruinous Powers become too numerous to contain in a single body — when a Chaos champion's mutations accumulate past the point of any coherent form. What was once a human or Astartes becomes a writhing mass of mismatched limbs, sensory organs, maws, and lashing appendages, the mind within it long since dissolved into inarticulate hunger. The Spawn retains just enough cognition to pursue and attack, and nothing else.</p>
+    <p>Champions of Chaos know what the Spawn represents: a cautionary example and, sometimes, a weapon. Some warlords collect pens of them and release them ahead of their warbands as shock troops or living obstacles. The Spawn cannot be given orders. It can only be pointed. There is something darkly appropriate about a being consumed by the Warp becoming, in the end, a tool of those who have not yet been similarly consumed.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Chaos Spawn</p><p class="creature-type">Large Monstrosity (Chaos), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 5</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 14 (natural armor)</p>
+        <p><strong>Hit Points</strong> 105 (14d10 + 28)</p>
+        <p><strong>Speed</strong> 40 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">3 (−4)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">6 (−2)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">4 (−3)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, and slashing from nonmagical weapons; psychic</p>
+        <p><strong>Condition Immunities</strong> charmed, frightened, prone</p>
+        <p><strong>Senses</strong> Blindsight 10 ft., Darkvision 60 ft., passive Perception 8</p>
+        <p><strong>Languages</strong> —</p>
+        <p><strong>Challenge</strong> 5 (1,800 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Mutant Resilience.</span> At the start of each of its turns, roll a d6. On a 5 or 6, the Chaos Spawn regains 7 (2d6) hit points as warp energy knits its mutating flesh together.</div>
+      <div class="entry"><span class="entry-name">Chaotic Form.</span> At the start of each of its turns, the Spawn gains one of the following randomly determined mutations (roll d4): 1 — Extra Limbs (makes one additional Smash attack this turn); 2 — Spined Hide (any creature that hits it with a melee attack takes 4 piercing damage); 3 — Eyeless Sensing (gains Truesight 30 ft. until start of next turn); 4 — Venomous Secretions (its Smash attacks deal an additional 4 poison damage until the start of its next turn).</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Chaos Spawn makes two Smash attacks and one Lashing Appendage attack.</div>
+      <div class="entry"><span class="entry-name">Smash.</span> <em>Melee Weapon Attack:</em> +8 to hit, reach 5 ft., one target. <em>Hit:</em> 12 (2d6 + 5) bludgeoning damage.</div>
+      <div class="entry"><span class="entry-name">Lashing Appendage.</span> <em>Melee Weapon Attack:</em> +8 to hit, reach 15 ft., one target. <em>Hit:</em> 9 (1d8 + 5) slashing damage and the target is grappled (escape DC 15) and restrained until the grapple ends. The Spawn can't use the Lashing Appendage against another target while it has a creature grappled.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>Havocs</h3>
+    <p>Havocs are Chaos Space Marines who have specialized entirely in heavy weapons — soldiers who have traded the mobility and versatility of the standard tactical role for the ability to destroy vehicles, fortifications, and concentrated infantry formations from positions that most armies would consider outside effective range. They are the Traitor Legion's answer to the problem of things that won't die when you shoot them normally. When a warband encounters enemy armor, walls, or anything that requires firepower measured in kilowatts, the Havocs are called forward.</p>
+    <p>Each Havoc chooses a weapon that matches their temperament and their idea of what destruction looks like. Lascannon operators tend toward patience — they wait, they track, they make each shot count. Heavy bolter crews are the opposite, pinning entire squads in place with sustained fire that nobody sane would walk through. Missile launcher Havocs are pragmatists who appreciate versatility. Autocannon Havocs are, in the assessment of their fellow Heretic Astartes, probably enjoying this too much. All of them are extremely effective.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Havocs</p><p class="creature-type">Medium Humanoid (Heretic Astartes), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 5</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 17 (Chaos power armor)</p>
+        <p><strong>Hit Points</strong> 85 (13d8 + 26)</p>
+        <p><strong>Speed</strong> 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">13 (+1)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">10 (+0)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +7, Con +5</p>
+        <p><strong>Skills</strong> Athletics +7, Perception +4</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, and slashing from nonmagical weapons</p>
+        <p><strong>Condition Immunities</strong> frightened</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 14</p>
+        <p><strong>Languages</strong> Low Gothic, High Gothic, Legion Cant</p>
+        <p><strong>Challenge</strong> 5 (1,800 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Astartes Physiology.</span> Advantage on Constitution saving throws. Can hold breath for 1 hour.</div>
+      <div class="entry"><span class="entry-name">Heavy Weapon Specialist.</span> The Havoc does not suffer disadvantage on ranged attack rolls when an enemy is within 5 feet of it. Being lightly obscured does not impose disadvantage on its ranged attacks.</div>
+      <div class="entry"><span class="entry-name">Warp-Touched Armor.</span> Critical hits against the Havoc from nonmagical weapons become normal hits.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Havoc makes attacks using one of its heavy weapon profiles below.</div>
+      <div class="entry"><span class="entry-name">Lascannon.</span> <em>Ranged Weapon Attack:</em> +6 to hit, range 150/600 ft., one target. <em>Hit:</em> 27 (4d12 + 1) radiant damage. This attack ignores half and three-quarters cover.</div>
+      <div class="entry"><span class="entry-name">Autocannon (2 Attacks).</span> <em>Ranged Weapon Attack:</em> +6 to hit, range 80/320 ft., one target per attack. <em>Hit:</em> 15 (4d6 + 1) piercing damage per hit.</div>
+      <div class="entry"><span class="entry-name">Missile Launcher.</span> <em>Ranged Weapon Attack:</em> +6 to hit, range 200/800 ft. <strong>Frag Missile:</strong> 15-foot radius, DC 14 Dexterity save, 14 (4d6) piercing damage (half on success). <strong>Krak Missile:</strong> one target, 28 (6d8 + 1) piercing damage.</div>
+      <div class="entry"><span class="entry-name">Heavy Bolter (3 Attacks).</span> <em>Ranged Weapon Attack:</em> +6 to hit, range 80/320 ft., one target per attack. <em>Hit:</em> 7 (2d6) piercing damage per hit. On each hit, DC 13 Constitution save or take 3 (1d6) additional piercing damage from bolt detonation at the start of the target's next turn.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Suppressing Fire.</span> If the Havoc used its Heavy Bolter this turn, it can designate one creature it hit within 80 feet. That creature's speed is halved until the start of the Havoc's next turn as bolt rounds track across its path.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>Chaos Bikers</h3>
+    <p>Chaos Space Marines on bikes are terrifying in a very specific way — they combine the durability and lethality of a standard Heretic Astartes with the speed and momentum of a vehicle, and they enjoy it. The bikes themselves are as corrupted as everything else in Chaos service: the engines burn promethium that smells wrong, the exhaust manifolds are decorated with trophies, and the machines have developed a visceral enthusiasm for impact that occasionally overrides their riders' intentions in instructive and lethal ways. The Bikers encourage this. A machine that wants to hit things is, in their estimation, a machine they can work with.</p>
+    <p>In tactical terms, Chaos Bikers fill the flanking and harassment role — they are too fast for most infantry to engage directly and too durable to be easily suppressed. They appear on the edges of an engagement, tear apart isolated units, and are gone before the main defensive response can redirect. Experienced commanders facing a Chaos warband with a Biker contingent spend a significant fraction of their attention wondering where the Bikers currently are, which is precisely the point.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Chaos Bikers</p><p class="creature-type">Medium Humanoid (Heretic Astartes), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 5</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 17 (Chaos power armor + bike frame)</p>
+        <p><strong>Hit Points</strong> 90 (12d10 + 24)</p>
+        <p><strong>Speed</strong> 30 ft. (60 ft. while mounted on Chaos Bike)</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">11 (+0)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">10 (+0)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +8, Con +5</p>
+        <p><strong>Skills</strong> Athletics +8, Perception +3</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, and slashing from nonmagical weapons</p>
+        <p><strong>Condition Immunities</strong> frightened, prone (while mounted)</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 13</p>
+        <p><strong>Languages</strong> Low Gothic, Legion Cant</p>
+        <p><strong>Challenge</strong> 5 (1,800 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Astartes Physiology.</span> Advantage on Constitution saving throws. Can hold breath for 1 hour.</div>
+      <div class="entry"><span class="entry-name">Mounted Assault.</span> If the Chaos Biker moves at least 20 feet straight toward a target before hitting it with a melee attack, the target must succeed on a DC 14 Strength saving throw or be knocked 10 feet away and fall prone. If the target is Large or smaller and fails the save, the Biker's Chainsword deals an additional 7 (2d6) slashing damage.</div>
+      <div class="entry"><span class="entry-name">High Speed Evasion.</span> While mounted, the Chaos Biker can take the Disengage action as a bonus action. It cannot be grappled while mounted on its bike.</div>
+      <div class="entry"><span class="entry-name">Warp-Touched Armor.</span> Critical hits against the Chaos Biker from nonmagical weapons become normal hits.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Chaos Biker makes one Twin Bolt Pistol attack and one Chainsword attack, or two Twin Bolt Pistol attacks.</div>
+      <div class="entry"><span class="entry-name">Twin Bolt Pistol.</span> <em>Ranged Weapon Attack:</em> +7 to hit, range 60/240 ft., up to two targets within 5 feet of each other. <em>Hit:</em> 9 (1d10 + 4) piercing damage per target. On a hit, DC 13 Constitution save or take 5 (1d10) additional piercing damage at the start of the target's next turn from bolt detonation.</div>
+      <div class="entry"><span class="entry-name">Chainsword.</span> <em>Melee Weapon Attack:</em> +8 to hit, reach 5 ft., one target. <em>Hit:</em> 12 (2d6 + 5) slashing damage.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 6 ═══ -->
+<div class="cr-section-header">Challenge Rating 6</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Possessed Chaos Space Marine</h3>
+    <p>The Possessed are Chaos Space Marines who have willingly — or sometimes unwillingly — allowed a daemon to inhabit their body alongside their own consciousness. The results are as unpredictable as the Warp itself. Some retain something like a mind, the daemon and the Marine fused into a single coherent predator. Others become entirely animal, the original occupant scoured away, leaving only the daemon's rage wearing a power-armored shell. In either case, the body that results is something that should not physically exist: bulging with unnatural muscle, sprouting claws and tendrils from the joints, its power armor fused to the flesh beneath.</p>
+    <p>The Possessed fight with an abandon that even regular Chaos Space Marines find unsettling. They take wounds that would kill three times over and keep coming, the daemon within patching the damage with raw warp energy, demanding more. When one finally falls, it is rarely because the body gave out — it is because something finally managed to expel the daemon from the flesh, leaving behind a rapidly cooling corpse.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Possessed Chaos Space Marine</p><p class="creature-type">Medium Fiend (Heretic Astartes), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 6</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 16 (fused power armor)</p>
+        <p><strong>Hit Points</strong> 119 (14d8 + 56)</p>
+        <p><strong>Speed</strong> 40 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">22 (+6)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CON</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">INT</div><div class="val">9 (−1)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">9 (−1)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">10 (+0)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +9, Con +7</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, slashing from nonmagical weapons; fire, lightning</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., Truesight 30 ft., passive Perception 9</p>
+        <p><strong>Languages</strong> Low Gothic, Daemonic</p>
+        <p><strong>Challenge</strong> 6 (2,300 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Daemonic Fortitude.</span> When first reduced to 0 HP in combat, roll a d6. On a 4 or higher, it drops to 1 HP instead as the inhabiting daemon fights to remain in realspace.</div>
+      <div class="entry"><span class="entry-name">Warp Regeneration.</span> At the start of its turn, regains 5 HP if it has at least 1 HP and hasn't taken radiant or psychic damage since its last turn.</div>
+      <div class="entry"><span class="entry-name">Daemon Within.</span> Advantage on saving throws against spells and other magical effects.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Possessed makes three Daemon Claw attacks.</div>
+      <div class="entry"><span class="entry-name">Daemon Claw.</span> <em>Melee Weapon Attack:</em> +9 to hit, reach 5 ft., one target. <em>Hit:</em> 13 (2d6 + 6) slashing damage plus 5 (1d10) psychic damage. If the target is a humanoid, it must succeed on a DC 15 Wisdom saving throw or be frightened of the Possessed until the end of its next turn.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Warp Surge.</span> The Possessed teleports up to 30 feet to an unoccupied space it can see. Immediately after teleporting, it can make one Daemon Claw attack against a creature within reach.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>Chosen</h3>
+    <p>The Chosen are veterans of the Long War in the truest sense — Chaos Space Marines who have survived ten thousand years of continuous warfare and accumulated enough experience, mutation, and favor from the Ruinous Powers to be entrusted with the warband's most significant weapons and most critical objectives. They wear their extra layers of corruption and battle-honor openly: baroque trophy racks, fused daemonic runes in their armor plating, blades that have names older than most Imperial worlds. They are the inner circle, the elite cadre, the soldiers the Chaos Lord sends when he wants something destroyed with certainty rather than probability.</p>
+    <p>What sets the Chosen apart from ordinary Chaos Space Marines is not merely longevity but synthesis — they have absorbed every lesson ten millennia of war has to offer and discarded the lessons that got their fellow warriors killed. They know exactly when to advance and when to wait. They have dueled champions of every Chapter in the Imperium and learned the tells of every fighting style. They are, in the judgment of those who have faced them and survived, exactly as dangerous as they believe themselves to be.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Chosen</p><p class="creature-type">Medium Humanoid (Heretic Astartes), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 6</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 17 (Chaos power armor, relic-inscribed)</p>
+        <p><strong>Hit Points</strong> 110 (13d8 + 52)</p>
+        <p><strong>Speed</strong> 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CON</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">INT</div><div class="val">13 (+1)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">11 (+0)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">13 (+1)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +8, Con +7</p>
+        <p><strong>Skills</strong> Athletics +8, Intimidation +4, Perception +3</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, slashing from nonmagical weapons; fire</p>
+        <p><strong>Condition Immunities</strong> frightened</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 13</p>
+        <p><strong>Languages</strong> Low Gothic, High Gothic, Legion Cant</p>
+        <p><strong>Challenge</strong> 6 (2,300 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Astartes Physiology.</span> Advantage on Constitution saving throws. Can hold breath for 1 hour.</div>
+      <div class="entry"><span class="entry-name">Veterans of the Long War.</span> The Chosen has advantage on attack rolls and saving throws during the first round of combat. Additionally, it cannot be surprised.</div>
+      <div class="entry"><span class="entry-name">Relic Weapons.</span> The Chosen's weapon attacks count as magical for the purpose of overcoming resistance and immunity to nonmagical attacks.</div>
+      <div class="entry"><span class="entry-name">Warp-Touched Armor.</span> Critical hits against the Chosen from nonmagical weapons become normal hits.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Chosen makes three weapon attacks.</div>
+      <div class="entry"><span class="entry-name">Relic Bolter.</span> <em>Ranged Weapon Attack:</em> +7 to hit, range 80/320 ft., one target. <em>Hit:</em> 13 (2d8 + 4) piercing damage. On a hit, DC 14 Constitution saving throw or take 4 (1d8) additional piercing damage from bolt detonation at the start of its next turn.</div>
+      <div class="entry"><span class="entry-name">Power Sword.</span> <em>Melee Weapon Attack:</em> +8 to hit, reach 5 ft., one target. <em>Hit:</em> 14 (2d8 + 5) slashing damage. This attack ignores resistance to slashing damage granted by nonmagical armor or natural armor.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Mark for Death.</span> The Chosen designates one creature it can see within 60 feet. Until the start of the Chosen's next turn, all friendly Chaos creatures within 30 feet have advantage on the first attack roll they make against that creature each turn.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>Warp Talons</h3>
+    <p>Warp Talons are what Chaos Raptors become when the Warp has had long enough to finish what it started. Where Raptors still carry bolters and maintain some semblance of ranged tactical thought, Warp Talons have abandoned every weapon that isn't a lightning claw and every tactical concept that doesn't reduce to "close with the enemy as fast as possible and remove them from existence." They descend from teleportation rifts rather than conventional jump packs — not flying in but simply appearing, announced by a flash of blinding Warp light that leaves every nearby enemy reorienting in the wrong direction while the Warp Talons are already in melee range.</p>
+    <p>The lightning claws they carry are artifacts as much as weapons — ancient blades that have absorbed decades of combat and Warp exposure until they crackle with energies that don't follow the conventional physics of electrical discharge. They hit hard enough to puncture power armor, and they hit fast enough that by the time a defender's armor registers the impact, the second claw is already in motion.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Warp Talons</p><p class="creature-type">Medium Fiend (Heretic Astartes), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 6</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 17 (fused power armor)</p>
+        <p><strong>Hit Points</strong> 110 (13d8 + 52)</p>
+        <p><strong>Speed</strong> 30 ft., fly 60 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">CON</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">INT</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">10 (+0)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +8, Dex +6, Con +7</p>
+        <p><strong>Skills</strong> Athletics +8, Perception +3</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, slashing from nonmagical weapons; lightning</p>
+        <p><strong>Condition Immunities</strong> frightened</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 13</p>
+        <p><strong>Languages</strong> Low Gothic, Legion Cant</p>
+        <p><strong>Challenge</strong> 6 (2,300 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Warp Descent.</span> Instead of flying normally, Warp Talons teleport to their destination. When a Warp Talon uses its fly speed to move, it teleports rather than physically traveling. Each creature within 10 feet of the Warp Talon's arrival point must succeed on a DC 14 Dexterity saving throw or be blinded until the start of the Warp Talon's next turn as a blaze of Warp-light erupts at the landing point.</div>
+      <div class="entry"><span class="entry-name">Lightning Claw Mastery.</span> The Warp Talon scores a critical hit on a roll of 19 or 20. On a critical hit with its Lightning Claws, it deals an additional 7 (2d6) lightning damage.</div>
+      <div class="entry"><span class="entry-name">Warp-Touched Armor.</span> Critical hits against the Warp Talon from nonmagical weapons become normal hits.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Warp Talon makes three Lightning Claw attacks.</div>
+      <div class="entry"><span class="entry-name">Lightning Claws.</span> <em>Melee Weapon Attack:</em> +8 to hit, reach 5 ft., one target. <em>Hit:</em> 12 (2d6 + 5) slashing damage plus 9 (2d8) lightning damage. This attack ignores resistance to slashing damage from nonmagical armor and natural armor.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Warp Strike.</span> The Warp Talon teleports up to 30 feet to an unoccupied space within 5 feet of a creature it can see, then makes one Lightning Claw attack against that creature with advantage.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 7 ═══ -->
+<div class="cr-section-header">Challenge Rating 7</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Chaos Terminator</h3>
+    <p>Chaos Terminators are the most heavily armed and armored infantry in any Traitor Legion warband. They wear Tactical Dreadnought Armor — the same pattern as Loyalist Terminators, recovered from the arsenals of the Horus Heresy or plundered from battlefields over ten millennia — corrupted by Warp exposure until the armor itself has become something alive. The ceramite plates flex and breathe. The eye lenses glow with colors that shouldn't exist. The auto-senses are haunted by voices.</p>
+    <p>None of this makes them less lethal. If anything, it makes them more so. A Chaos Terminator Squad teleporting into the middle of an enemy formation carries enough firepower to level a fortification and enough close-combat weaponry to dismember whatever the guns don't finish. They are patient in the way that ancient, unkillable things are patient — not because they are calm, but because they have been doing this long enough to know there is no hurry.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Chaos Terminator</p><p class="creature-type">Medium Humanoid (Heretic Astartes), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 7</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 19 (Terminator armor)</p>
+        <p><strong>Hit Points</strong> 136 (16d8 + 64)</p>
+        <p><strong>Speed</strong> 25 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">22 (+6)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CON</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">INT</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">11 (+0)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">13 (+1)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +9, Con +7, Wis +3</p>
+        <p><strong>Skills</strong> Athletics +9, Intimidation +4, Perception +3</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, and slashing from nonmagical weapons</p>
+        <p><strong>Condition Immunities</strong> frightened</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 13</p>
+        <p><strong>Languages</strong> Low Gothic, High Gothic, Legion Cant</p>
+        <p><strong>Challenge</strong> 7 (2,900 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Teleport Strike (1/day).</span> At the start of combat or at the start of its turn, the Chaos Terminator can teleport up to 60 feet to an unoccupied space it can see. If it attacks in the same turn it teleports, it has advantage on the first attack roll.</div>
+      <div class="entry"><span class="entry-name">Terminator Armor.</span> Critical hits from nonmagical attacks become normal hits. The Terminator cannot be knocked prone against its will.</div>
+      <div class="entry"><span class="entry-name">Astartes Physiology.</span> Advantage on Constitution saving throws.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Chaos Terminator makes two weapon attacks.</div>
+      <div class="entry"><span class="entry-name">Combi-Bolter.</span> <em>Ranged Weapon Attack:</em> +5 to hit, range 80/320 ft., one target. <em>Hit:</em> 18 (4d8) piercing damage. DC 15 Constitution save or take 9 (2d8) additional piercing damage as the bolt detonates.</div>
+      <div class="entry"><span class="entry-name">Power Fist.</span> <em>Melee Weapon Attack:</em> +9 to hit, reach 5 ft., one target. <em>Hit:</em> 20 (4d6 + 6) bludgeoning damage. Ignores resistance to bludgeoning damage. On a hit, the target's armor AC bonus is reduced by 1 (minimum +0) until repaired.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>Chaos Sorcerer</h3>
+    <p>A Chaos Sorcerer is an Astartes psyker who refused to be lobotomized, chained, or destroyed by the Imperium's terror of the psychic gift — and who found, in Chaos, a patron willing to let him use it. Where the Loyalist Librarian channels his powers with rigid discipline, treating the Warp as a dangerous tool to be handled carefully, the Chaos Sorcerer plunges both hands in and pulls out whatever he can reach. The power output is greater. The collateral damage is considerable. The long-term consequences for the Sorcerer's physical and mental integrity are not something he concerns himself with, because his patron gods have repeatedly demonstrated that the consequences of excessive caution are worse.</p>
+    <p>Chaos Sorcerers serve as both artillery and force multipliers — capable of annihilating enemy squads with warp fire, twisting minds with psychic compulsions, and empowering nearby allies with eldritch blessings that standard bolter rounds cannot provide. Ancient Sorcerers have been known to rewrite probability in localized areas, a talent their warband commanders find extremely useful and their enemies find philosophically disturbing.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Chaos Sorcerer</p><p class="creature-type">Medium Humanoid (Heretic Astartes), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 7</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 16 (Chaos power armor)</p>
+        <p><strong>Hit Points</strong> 104 (16d8 + 32)</p>
+        <p><strong>Speed</strong> 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">16 (+3)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Int +7, Wis +5, Cha +6</p>
+        <p><strong>Skills</strong> Arcana +7, History +7, Intimidation +6, Perception +5</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, and slashing from nonmagical weapons; psychic</p>
+        <p><strong>Condition Immunities</strong> frightened</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 15</p>
+        <p><strong>Languages</strong> Low Gothic, High Gothic, Daemonic</p>
+        <p><strong>Challenge</strong> 7 (2,900 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Astartes Physiology.</span> Advantage on Constitution saving throws. Can hold breath for 1 hour.</div>
+      <div class="entry"><span class="entry-name">Warp Sight.</span> The Sorcerer cannot be surprised and can see invisible creatures and objects as if they were visible.</div>
+      <div class="entry"><span class="entry-name">Chaos Spellcasting.</span> The Sorcerer is an 8th-level spellcaster. Its spellcasting ability is Intelligence (spell save DC 15, +7 to hit with spell attacks). At will: <em>detect magic, minor illusion</em>; 3/day each: <em>fireball</em> (4d6 fire damage, DC 15 Dex), <em>fear</em> (DC 15 Wis), <em>counterspell</em>; 1/day each: <em>dominate person</em> (DC 15 Wis), <em>banishment</em> (reflavored as Warp Rift, DC 15 Cha).</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Chaos Sorcerer makes one Force Staff attack and casts one cantrip or uses one Warp Bolt, or makes two Warp Bolt attacks.</div>
+      <div class="entry"><span class="entry-name">Force Staff.</span> <em>Melee Weapon Attack:</em> +6 to hit, reach 5 ft., one target. <em>Hit:</em> 9 (2d6 + 3) bludgeoning damage plus 9 (2d8) psychic damage.</div>
+      <div class="entry"><span class="entry-name">Warp Bolt.</span> <em>Ranged Spell Attack:</em> +7 to hit, range 120 ft., one target. <em>Hit:</em> 17 (3d10 + 1) psychic damage. The target must succeed on a DC 15 Intelligence saving throw or be stunned until the end of its next turn as warp energy overloads its mind.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Warp Phase.</span> The Sorcerer teleports up to 30 feet to an unoccupied space it can see, leaving a momentary afterimage of crackling purple fire at its departure point.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>Venomcrawler</h3>
+    <p>The Venomcrawler is a daemon engine built not for brute firepower but for psychic predation — a many-legged construct that hunts the spiritual effluence of psykers and possession rituals the way a predator hunts blood in the water. Its excuciator cannon fires bolts of condensed psychic agony, and when it kills, it doesn't merely destroy its target; it feeds, drawing the expended soul-energy back into itself and the possession rituals of whatever Master of Possession it serves. Chaos warlords who field both Venomcrawlers and Masters of Possession quickly discover that the combination is more than the sum of its parts.</p>
+    <p>Venomcrawlers are unsettling even by the standards of Chaos Daemon Engines. They move with a fluid, purposeful speed that doesn't match their bulk, and they have a tendency to cluster around places where the Warp-boundary is thin — the aftermath of rituals, the sites of recent daemon summonings, and occasionally just the corners of rooms where nobody has been for a while and something feels wrong. Mechanically, they resemble nothing so much as a very large spider. This is not a coincidence.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Venomcrawler</p><p class="creature-type">Large Fiend (Daemon Engine), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 7</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 16 (daemonic plating)</p>
+        <p><strong>Hit Points</strong> 115 (11d10 + 55)</p>
+        <p><strong>Speed</strong> 40 ft., climb 40 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CON</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">INT</div><div class="val">5 (−3)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">6 (−2)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +8, Con +8</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, slashing from nonmagical weapons; cold, lightning</p>
+        <p><strong>Damage Immunities</strong> fire, poison, psychic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, petrified, poisoned</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 10</p>
+        <p><strong>Languages</strong> Daemonic (cannot speak)</p>
+        <p><strong>Challenge</strong> 7 (2,900 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Daemon Engine.</span> The Venomcrawler cannot benefit from healing spells; it regains hit points only through mechanical repair or its Psychic Drain trait.</div>
+      <div class="entry"><span class="entry-name">Spider Climb.</span> The Venomcrawler can climb difficult surfaces, including upside down on ceilings, without needing to make an ability check.</div>
+      <div class="entry"><span class="entry-name">Warp Attunement.</span> While within 60 feet of a friendly Chaos Sorcerer or Master of Possession, the Venomcrawler gains a +2 bonus to attack rolls and gains 10 temporary hit points at the start of each of its turns.</div>
+      <div class="entry"><span class="entry-name">Psychic Drain.</span> Whenever a creature within 30 feet of the Venomcrawler casts a spell of 1st level or higher, the Venomcrawler regains 7 (2d6) hit points as it absorbs the leaking psy-energy.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Venomcrawler makes two Warp Claw attacks and uses its Excuciator Cannon.</div>
+      <div class="entry"><span class="entry-name">Warp Claw.</span> <em>Melee Weapon Attack:</em> +8 to hit, reach 10 ft., one target. <em>Hit:</em> 14 (2d8 + 5) slashing damage plus 9 (2d8) psychic damage.</div>
+      <div class="entry"><span class="entry-name">Excuciator Cannon.</span> <em>Ranged Weapon Attack:</em> +6 to hit, range 60 ft., one target. <em>Hit:</em> 22 (4d10) psychic damage. On a hit, the target must succeed on a DC 15 Intelligence saving throw or be stunned until the end of its next turn as the cannon overloads its mind with synthesized psychic agony. After firing, the Venomcrawler regains 5 hit points from absorbed psy-feedback.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>Chaos Vindicator</h3>
+    <p>The Chaos Vindicator is the answer to the question of what you bring when you need a wall gone. Its demolisher cannon — a short-barreled siege weapon of terrifying caliber — was designed to reduce fortifications to rubble in a single engagement, and in Chaos service it has been pressed into this role on hundreds of worlds across ten thousand years of continuous warfare. The shell it fires is not a precision weapon. It is a geological event at close range. Defenders behind cover do not survive a direct hit. Defenders near a direct hit survive only if something very solid is between them and the impact point.</p>
+    <p>Chaos Vindicators advance slowly, which is appropriate — there is no tactical advantage to rushing, and the Vindicator's crew are generally content to take their time dismantling whatever is in front of them before moving on to the next thing. The daemon bound into the demolisher cannon itself has developed an aesthetic preference for certain types of structures, which the crew have learned to accommodate. It fires more enthusiastically at fortified positions. Against open formations in the field it can require some encouragement.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Chaos Vindicator</p><p class="creature-type">Large Vehicle (Heretic Astartes), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 7</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 17 (reinforced siege hull)</p>
+        <p><strong>Hit Points</strong> 130 (10d20 + 30)</p>
+        <p><strong>Speed</strong> 40 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">22 (+6)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">6 (−2)</div></div>
+        <div><div class="lbl">CON</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">INT</div><div class="val">6 (−2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">6 (−2)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">1 (−5)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +9, Con +6</p>
+        <p><strong>Damage Immunities</strong> fire, poison, psychic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, petrified, poisoned, prone, stunned</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 8</p>
+        <p><strong>Languages</strong> —</p>
+        <p><strong>Challenge</strong> 7 (2,900 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Vehicle Frame.</span> The Chaos Vindicator is immune to the grappled, restrained, paralyzed, petrified, and poisoned conditions. It cannot benefit from healing spells; only mechanical repair effects restore its hit points.</div>
+      <div class="entry"><span class="entry-name">Chaos Armor Plates.</span> Critical hits against the Vindicator from nonmagical attacks become normal hits.</div>
+      <div class="entry"><span class="entry-name">Siege Shield.</span> While stationary (having not moved on its last turn), the Vindicator has three-quarters cover from attacks originating from its front arc (within the 90-degree cone ahead of it).</div>
+      <div class="entry"><span class="entry-name">Breacher.</span> The Vindicator deals double damage to objects, structures, and vehicles. It ignores the cover bonus granted to targets who are behind walls or partial structures if the Demolisher Cannon hits the structure directly.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Chaos Vindicator uses its Demolisher Cannon once and its Combi-Bolter once.</div>
+      <div class="entry"><span class="entry-name">Demolisher Cannon.</span> <em>Ranged Weapon Attack:</em> +9 to hit, range 40/80 ft., one point. <em>Hit:</em> Each creature within a 15-foot radius of the target point must make a DC 18 Dexterity saving throw, taking 42 (12d6) bludgeoning damage on a failed save, or half as much on a successful one. Objects and structures automatically fail this save and take maximum damage. The explosion leaves the area difficult terrain until cleared.</div>
+      <div class="entry"><span class="entry-name">Combi-Bolter.</span> <em>Ranged Weapon Attack:</em> +9 to hit, range 80/320 ft., one target. <em>Hit:</em> 13 (2d8 + 4) piercing damage. DC 14 Constitution save or take 4 (1d8) additional piercing damage from bolt detonation at the start of its next turn.</div>
+      <hr class="div">
+      <h3 class="section-head">Reactions</h3>
+      <div class="entry"><span class="entry-name">Armor of Contempt.</span> When hit by a ranged attack that deals fewer than 20 damage after applying resistances, the Vindicator reduces that damage to 0. This reaction can only be used once per attacker per turn.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 8 ═══ -->
+<div class="cr-section-header">Challenge Rating 8</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Obliterator</h3>
+    <p>Obliterators are a singular horror unique to the forces of Chaos — Chaos Space Marines so thoroughly merged with their weapons and with the Warp that they can no longer be categorized as either human or machine. Their bodies have absorbed and integrated dozens of weapon systems, which push through their skin as needed, the flesh reforming around the weapon as it is used and then withdrawing it back into the mass when a different weapon is required. An Obliterator wading toward a fortified position is its own one-man armoury, cycling through lascannons, meltaguns, autocannons, and plasma guns as the tactical situation demands.</p>
+    <p>They are slow — their sheer mass makes speed impractical — but in their experience, speed is rarely the variable that determines an outcome. Sustained firepower and the inability to be meaningfully wounded are. Obliterators have both in abundance.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Obliterator</p><p class="creature-type">Large Fiend (Heretic Astartes), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 8</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 18 (natural/fused armor)</p>
+        <p><strong>Hit Points</strong> 161 (17d10 + 68)</p>
+        <p><strong>Speed</strong> 20 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">22 (+6)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">8 (−1)</div></div>
+        <div><div class="lbl">CON</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">INT</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">8 (−1)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +9, Con +7</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, slashing from nonmagical weapons; cold, lightning</p>
+        <p><strong>Damage Immunities</strong> fire, poison</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, poisoned, prone</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 10</p>
+        <p><strong>Languages</strong> Low Gothic (rarely speaks)</p>
+        <p><strong>Challenge</strong> 8 (3,900 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Living Arsenal.</span> At the start of each of its turns, the Obliterator chooses which weapon profile it uses from the options below. It can change profiles freely each turn.</div>
+      <div class="entry"><span class="entry-name">Daemonic Resilience.</span> While the Obliterator has more than half its maximum hit points, critical hits from nonmagical attacks become normal hits.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Obliterator makes two weapon attacks using its chosen Living Arsenal profile.</div>
+      <div class="entry"><span class="entry-name">Lascannon Arm.</span> <em>Ranged Weapon Attack:</em> +6 to hit, range 150/600 ft., one target. <em>Hit:</em> 27 (4d12) radiant damage. Ignores half and three-quarters cover.</div>
+      <div class="entry"><span class="entry-name">Twin Meltagun.</span> <em>Ranged Weapon Attack:</em> +6 to hit, range 20/60 ft., one target. <em>Hit:</em> 28 (8d6) fire damage. Targets within 20 feet take an additional 14 (4d6) fire damage and must make a DC 15 Constitution save or have their AC reduced by 1 until repaired.</div>
+      <div class="entry"><span class="entry-name">Fleshmetal Fists.</span> <em>Melee Weapon Attack:</em> +9 to hit, reach 5 ft., one target. <em>Hit:</em> 22 (3d10 + 6) bludgeoning damage. DC 17 Strength saving throw or knocked prone.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>Master of Possession</h3>
+    <p>A Master of Possession is a specialist whose role within a Chaos warband is entirely focused on one thing: tearing the boundary between the Warp and realspace sufficiently thin that daemons can pour through, inhabit available vessels, and be directed with something approaching tactical precision. They are part sorcerer, part warden, part negotiator — negotiation with entities that view mortal flesh as a welcome intrusion is, admittedly, a one-sided affair, but the Master of Possession has techniques that amount to coercion when pure persuasion fails.</p>
+    <p>In battle they work at the interface between the material and the immaterial. They can drag daemon-essence into nearby Chaos Space Marines, briefly supercharging them with warp-born fury. They can bind a daemon into an enemy, turning a valuable soldier into a liability. Their staff crackles with possessing energy that leaves spiritual burn marks on everything it touches. They are not, as a rule, front-line combatants — but the things they do to the front line from a safe distance are worse than anything a chainsword can accomplish.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Master of Possession</p><p class="creature-type">Medium Humanoid (Heretic Astartes), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 8</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 16 (Chaos power armor)</p>
+        <p><strong>Hit Points</strong> 130 (20d8 + 40)</p>
+        <p><strong>Speed</strong> 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">CON</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">18 (+4)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Wis +5, Cha +7</p>
+        <p><strong>Skills</strong> Arcana +6, Intimidation +7, Religion +6</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, and slashing from nonmagical weapons; necrotic</p>
+        <p><strong>Condition Immunities</strong> frightened</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., Truesight 30 ft., passive Perception 12</p>
+        <p><strong>Languages</strong> Low Gothic, High Gothic, Daemonic</p>
+        <p><strong>Challenge</strong> 8 (3,900 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Astartes Physiology.</span> Advantage on Constitution saving throws. Can hold breath for 1 hour.</div>
+      <div class="entry"><span class="entry-name">Daemonic Conduit.</span> Any friendly daemon or Possessed creature within 60 feet of the Master of Possession gains a +2 bonus to attack rolls and saving throws.</div>
+      <div class="entry"><span class="entry-name">Warp-Touched Armor.</span> Critical hits against the Master of Possession from nonmagical weapons become normal hits.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Master of Possession makes two Staff of Possession attacks, or one Staff of Possession attack and uses Infuse Daemonhood.</div>
+      <div class="entry"><span class="entry-name">Staff of Possession.</span> <em>Melee Weapon Attack:</em> +7 to hit, reach 5 ft., one target. <em>Hit:</em> 13 (2d8 + 4) bludgeoning damage plus 10 (3d6) necrotic damage. On a hit, the target must succeed on a DC 15 Charisma saving throw or be under the effect of <em>bane</em> for 1 minute (saving throw at end of each of its turns to end the effect).</div>
+      <div class="entry"><span class="entry-name">Daemonic Possession (1/Day).</span> The Master of Possession targets a creature it can see within 60 feet. The target must succeed on a DC 15 Charisma saving throw or be possessed by a minor daemon for 1 hour. While possessed, the creature is compelled to use its action to make melee attacks against the nearest creature each turn (ally or enemy). A possessed creature can repeat the saving throw at the end of each of its turns. This ability has no effect on undead or constructs.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Infuse Daemonhood.</span> One friendly Chaos creature within 60 feet gains 15 temporary hit points and advantage on its next attack roll as the Master of Possession briefly fills it with daemon-essence.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>Predator</h3>
+    <p>The Chaos Predator is the standard main battle tank of the Traitor Legions, derived from the same Rhino chassis that serves as their primary transport but upgunned with a turret-mounted autocannon or lascannon and optional sponson weapons that give it full anti-infantry and anti-armor capability in a single hull. Millennia of Warp exposure have done to the Predator what they have done to everything else in Chaos service: made it strange. The hull breathes. The barrel of the autocannon has been welded shut between engagements on several documented occasions and opened itself again when the crew attempted to repair it. The machine spirit within is, by any reasonable assessment, daemonic.</p>
+    <p>None of this makes it less effective. On the contrary. A Chaos Predator that has absorbed sufficient battlefield experience and Warp energy develops something that functions as tactical intuition, anticipating enemy movements in ways that pure ballistic calculation cannot explain. Experienced Chaos commanders treat veteran Predators as allies rather than tools, which the Predators — if they are sentient enough to have opinions — presumably find an appropriate degree of respect.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Predator</p><p class="creature-type">Large Vehicle (Heretic Astartes), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 8</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 17 (corrupted ceramite hull)</p>
+        <p><strong>Hit Points</strong> 150 (12d20 + 36)</p>
+        <p><strong>Speed</strong> 40 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">22 (+6)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">6 (−2)</div></div>
+        <div><div class="lbl">CON</div><div class="val">17 (+3)</div></div>
+        <div><div class="lbl">INT</div><div class="val">6 (−2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">6 (−2)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">1 (−5)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +9, Con +6</p>
+        <p><strong>Damage Immunities</strong> fire, poison, psychic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, petrified, poisoned, prone, stunned</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 8</p>
+        <p><strong>Languages</strong> —</p>
+        <p><strong>Challenge</strong> 8 (3,900 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +3</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Vehicle Frame.</span> The Predator is immune to the grappled, restrained, paralyzed, petrified, and poisoned conditions. It cannot benefit from healing spells; only mechanical repair effects restore its hit points.</div>
+      <div class="entry"><span class="entry-name">Chaos Armor Plates.</span> Critical hits against the Predator from nonmagical attacks become normal hits.</div>
+      <div class="entry"><span class="entry-name">Tank Hunter.</span> The Predator has advantage on attack rolls against creatures that are wearing or mounted within metal armor (AC 15+, including vehicles and power armor wearers).</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Predator uses its Predator Autocannon once and its Lascannon Sponsons once, or uses its Predator Autocannon twice (full burst).</div>
+      <div class="entry"><span class="entry-name">Predator Autocannon.</span> <em>Ranged Weapon Attack:</em> +9 to hit, range 120/480 ft., up to two targets within 10 feet of each other. <em>Hit:</em> 18 (3d8 + 6) piercing damage per target. Alternatively, the Predator can target a single creature for a full burst: 35 (6d8 + 6) piercing damage.</div>
+      <div class="entry"><span class="entry-name">Lascannon Sponsons.</span> <em>Ranged Weapon Attack:</em> +9 to hit, range 150/600 ft., one target. <em>Hit:</em> 27 (4d12 + 1) radiant damage. This attack ignores half and three-quarters cover. The Predator can target a different creature with each sponson if it has both sponsons active.</div>
+      <div class="entry"><span class="entry-name">Combi-Bolter.</span> <em>Ranged Weapon Attack:</em> +9 to hit, range 80/320 ft., one target. <em>Hit:</em> 13 (2d8 + 4) piercing damage. DC 14 Constitution save or take 4 (1d8) additional piercing damage from bolt detonation at the start of its next turn.</div>
+      <hr class="div">
+      <h3 class="section-head">Reactions</h3>
+      <div class="entry"><span class="entry-name">Smoke Launchers (3/Day).</span> When the Predator is targeted by a ranged attack, it can use its reaction to deploy smoke. The attacker makes its attack roll with disadvantage, and the Predator gains half cover until the start of its next turn.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 9 ═══ -->
+<div class="cr-section-header">Challenge Rating 9</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Helbrute</h3>
+    <p>A Helbrute is the Chaos counterpart to the Loyalist Dreadnought — but where a Loyalist warrior entombed in a Dreadnought sarcophagus is honored and sustained in dreamless sleep between battles, the occupant of a Helbrute was sealed inside as punishment, or as the only alternative to death, and has been awake for most of the centuries since. The isolation, pain, and Warp corruption have curdled whatever the occupant once was into something that screams inside its metal shell when not in combat and simply destroys everything in reach when it is.</p>
+    <p>Helbrutes are deliberately kept in a state of near-insanity by their warbands. A calm Helbrute is a controlled weapon. A maddened one is an unstoppable engine, and Chaos commanders find the latter considerably more useful. The screaming that echoes from inside the hull before engagement is not a warning. It is, by this point, the opening note of something the enemy should not wait around to hear the rest of.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Helbrute</p><p class="creature-type">Large Fiend (Vehicle, Heretic Astartes), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 9</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 18 (corrupted ceramite hull)</p>
+        <p><strong>Hit Points</strong> 178 (17d10 + 85)</p>
+        <p><strong>Speed</strong> 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">24 (+7)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">8 (−1)</div></div>
+        <div><div class="lbl">CON</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">INT</div><div class="val">7 (−2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">8 (−1)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">6 (−2)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +11, Con +9</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, slashing from nonmagical weapons</p>
+        <p><strong>Damage Immunities</strong> fire, poison, psychic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, poisoned, prone, stunned</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 9</p>
+        <p><strong>Languages</strong> Low Gothic (incoherent screaming)</p>
+        <p><strong>Challenge</strong> 9 (5,000 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +4</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Siege Walker.</span> The Helbrute can move through the space of a Medium or smaller creature. Each creature it moves through must make a DC 18 Strength saving throw or be knocked prone and take 11 (2d10) bludgeoning damage.</div>
+      <div class="entry"><span class="entry-name">Berserk Frenzy.</span> When reduced to half its maximum hit points or fewer, the Helbrute enters a berserk frenzy. While frenzied, its speed increases by 10 feet, it has advantage on melee attack rolls, and it must use its action to make melee attacks against the nearest creature each turn (ally or enemy).</div>
+      <div class="entry"><span class="entry-name">Vehicle Frame.</span> Immune to grappled, restrained, paralyzed, petrified, and poisoned conditions. Cannot benefit from healing spells; only mechanical repair effects restore its hit points.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> One Multi-Melta (or Missile Launcher) and one Power Fist Arm, or two Power Fist Arm attacks.</div>
+      <div class="entry"><span class="entry-name">Multi-Melta.</span> <em>Ranged Weapon Attack:</em> +7 to hit, range 30/60 ft., one target. <em>Hit:</em> 35 (10d6) fire damage. Targets within 30 feet take maximum damage. Creatures within 5 feet of the target: DC 16 Dexterity save or take 10 (3d6) fire damage.</div>
+      <div class="entry"><span class="entry-name">Missile Launcher.</span> <em>Ranged Weapon Attack:</em> +7 to hit, range 200/800 ft. Frag: 15-foot radius, DC 16 Dexterity save, 17 (5d6) piercing damage (half on success). Krak: one target, 33 (6d10) piercing damage.</div>
+      <div class="entry"><span class="entry-name">Power Fist Arm.</span> <em>Melee Weapon Attack:</em> +11 to hit, reach 10 ft., one target. <em>Hit:</em> 29 (4d10 + 7) bludgeoning damage. DC 19 Strength saving throw or be hurled 20 feet in a direction of the Helbrute's choosing and knocked prone.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>Exalted Champion</h3>
+    <p>An Exalted Champion occupies the rung of the Chaos hierarchy between the elite Chosen and the commanding Chaos Lord — experienced enough to lead significant elements of a warband, capable enough to hold their own against most elite opponents, and ambitious enough that their Chaos Lord watches them carefully. They have survived long enough to collect relic weapons, daemonic blessings, and a kill count that most Imperial commanders would refuse to believe. They have not yet achieved the full power of a Chaos Lord, but the gap is narrowing with every engagement.</p>
+    <p>In battle an Exalted Champion leads by example in the most direct way possible — they get to the hardest part of the fight first and demonstrate that it can be broken. Every warrior nearby who watches an Exalted Champion drag a vehicle crew out of their hatch or take a plasma overcharge in the chest and keep fighting absorbs a lesson that no sermon or threat can deliver: this is what the Chaos Gods make of those who persist. The effect on the surrounding warband's aggression is consistent and dramatic.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Exalted Champion</p><p class="creature-type">Medium Humanoid (Heretic Astartes), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 9</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 18 (Chaos power armor + daemonic trophies)</p>
+        <p><strong>Hit Points</strong> 152 (16d8 + 80)</p>
+        <p><strong>Speed</strong> 35 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">22 (+6)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CON</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">INT</div><div class="val">13 (+1)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">16 (+3)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +10, Con +9, Cha +7</p>
+        <p><strong>Skills</strong> Athletics +10, Intimidation +7, Perception +5</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, slashing from nonmagical weapons; necrotic</p>
+        <p><strong>Condition Immunities</strong> frightened</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 15</p>
+        <p><strong>Languages</strong> Low Gothic, High Gothic, Legion Cant, Daemonic</p>
+        <p><strong>Challenge</strong> 9 (5,000 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +4</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Astartes Physiology.</span> Advantage on Constitution saving throws. Can hold breath for 1 hour.</div>
+      <div class="entry"><span class="entry-name">Battle-Hardened.</span> The Exalted Champion cannot be surprised and has advantage on Strength saving throws. It cannot be frightened.</div>
+      <div class="entry"><span class="entry-name">Warlord's Inspiration.</span> Friendly Chaos creatures within 30 feet of the Exalted Champion that can see it add 1d4 to their damage rolls on weapon attacks.</div>
+      <div class="entry"><span class="entry-name">Warp-Touched Armor.</span> Critical hits against the Exalted Champion from nonmagical weapons become normal hits.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Exalted Champion makes three weapon attacks.</div>
+      <div class="entry"><span class="entry-name">Master-Crafted Blade.</span> <em>Melee Weapon Attack:</em> +10 to hit, reach 5 ft., one target. <em>Hit:</em> 20 (3d8 + 7) slashing damage plus 7 (2d6) necrotic damage. On a critical hit, the target's maximum hit points are reduced by 7 until it finishes a long rest.</div>
+      <div class="entry"><span class="entry-name">Bolt Pistol.</span> <em>Ranged Weapon Attack:</em> +6 to hit, range 40/160 ft., one target. <em>Hit:</em> 8 (1d10 + 3) piercing damage. DC 13 Constitution save or take 5 (1d10) additional piercing damage from bolt detonation at the start of its next turn.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Inspiring Slaughter.</span> When the Exalted Champion reduces a creature of CR 2 or higher to 0 hit points, one friendly Chaos creature within 30 feet that can see it can immediately make one weapon attack as a reaction.</div>
+      <hr class="div">
+      <h3 class="section-head">Reactions</h3>
+      <div class="entry"><span class="entry-name">Champion's Parry.</span> When a melee attack hits the Exalted Champion, it can add +4 to its AC against that attack, potentially causing the attack to miss.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 10 ═══ -->
+<div class="cr-section-header">Challenge Rating 10</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Maulerfiend</h3>
+    <p>A Maulerfiend is a Daemon Engine built for one purpose: closing the gap between itself and the heaviest armored target on the battlefield and reducing it to scrap through pure, savage melee. Where most Daemon Engines carry weapons, the Maulerfiend's weapons are its body — massive crushing claws, lashing flail-like lasher tendrils that wrap around limbs and weapon barrels alike, and the sheer kinetic mass of a daemon fused into a multi-tonne mechanical body sprinting at speeds that should be physically impossible given that mass. It does not slow down to aim. It accelerates to the point of impact.</p>
+    <p>Maulerfiends are notoriously difficult to direct. The daemon within them has a singular vision of what constitutes a satisfying engagement — find the biggest thing in the area and pull it apart — and Chaos commanders who attempt to redirect that fury toward less satisfying targets do so with the understanding that the Maulerfiend may simply ignore them. The ones who have learned to work with this limitation position their Maulerfiends so that the biggest thing in the area is also the most tactically important thing in the area. Surprisingly often, this works.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Maulerfiend</p><p class="creature-type">Large Fiend (Daemon Engine), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 10</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 17 (daemonic plating)</p>
+        <p><strong>Hit Points</strong> 178 (17d10 + 85)</p>
+        <p><strong>Speed</strong> 50 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">24 (+7)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">CON</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">INT</div><div class="val">6 (−2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">8 (−1)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">10 (+0)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +11, Con +9</p>
+        <p><strong>Skills</strong> Athletics +11</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, slashing from nonmagical weapons; cold, lightning</p>
+        <p><strong>Damage Immunities</strong> fire, poison, psychic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, petrified, poisoned, prone</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 9</p>
+        <p><strong>Languages</strong> Daemonic (cannot speak)</p>
+        <p><strong>Challenge</strong> 10 (5,900 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +4</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Daemon Engine.</span> The Maulerfiend cannot benefit from healing spells; it regains hit points only through mechanical repair or daemonic regeneration. It is immune to the charmed, exhaustion, frightened, and paralyzed conditions.</div>
+      <div class="entry"><span class="entry-name">Savage Charge.</span> If the Maulerfiend moves at least 20 feet straight toward a target before attacking, the target must succeed on a DC 19 Strength saving throw or be knocked prone. If the target is prone, the Maulerfiend's Crushing Claw deals an extra 14 (4d6) bludgeoning damage.</div>
+      <div class="entry"><span class="entry-name">Magic Resistance.</span> The Maulerfiend has advantage on saving throws against spells and other magical effects.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Maulerfiend makes two Crushing Claw attacks and one Lasher Tendril attack.</div>
+      <div class="entry"><span class="entry-name">Crushing Claw.</span> <em>Melee Weapon Attack:</em> +11 to hit, reach 10 ft., one target. <em>Hit:</em> 20 (3d8 + 7) bludgeoning damage. If the target is a vehicle or construct, it takes maximum damage. On a critical hit, the target's armor AC bonus is reduced by 2 (minimum +0) as plating buckles and tears.</div>
+      <div class="entry"><span class="entry-name">Lasher Tendril.</span> <em>Melee Weapon Attack:</em> +11 to hit, reach 15 ft., one target. <em>Hit:</em> 14 (2d6 + 7) slashing damage and the target is grappled (escape DC 19) and restrained until the grapple ends. If the target is a creature, it is also disarmed — one weapon or item it holds is knocked to the ground at its feet. The Maulerfiend can grapple up to two creatures simultaneously.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Daemonic Frenzy.</span> When the Maulerfiend reduces a creature to 0 hit points with a Crushing Claw attack, it can immediately move up to half its speed and make one additional Crushing Claw attack.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>Forgefiend</h3>
+    <p>Where the Maulerfiend closes range to destroy, the Forgefiend stands back and annihilates from a distance. It is built around its weapons — massive Hades Autocannons or ectoplasmic projectors that are integrated directly into the daemon-flesh of the machine, loaded by internal mechanisms that should not fit inside the volume they occupy. The Forgefiend itself is as much a weapons platform as it is a creature, the daemon within it existing primarily as the animating intelligence of an armored firebase that walks on six legs and never needs to reload in any conventional sense.</p>
+    <p>Forgefiends occupy a specific tactical niche in Chaos warbands: the thing you deploy when you need sustained fire against enemy armor or formations and you don't want to expose it to direct assault. They are durable enough to absorb a significant amount of incoming fire, capable enough to engage targets at considerable range, and possessed of a daemon's indifference to suppression that makes them continue firing with complete serenity through conditions that would send any sane artillery crew to cover.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Forgefiend</p><p class="creature-type">Large Fiend (Daemon Engine), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 10</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 16 (daemonic plating)</p>
+        <p><strong>Hit Points</strong> 168 (16d10 + 80)</p>
+        <p><strong>Speed</strong> 35 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CON</div><div class="val">20 (+5)</div></div>
+        <div><div class="lbl">INT</div><div class="val">7 (−2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">8 (−1)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">9 (−1)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +9, Con +9</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, slashing from nonmagical weapons; cold</p>
+        <p><strong>Damage Immunities</strong> fire, poison, psychic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, petrified, poisoned, prone</p>
+        <p><strong>Senses</strong> Darkvision 120 ft., passive Perception 9</p>
+        <p><strong>Languages</strong> Daemonic (cannot speak)</p>
+        <p><strong>Challenge</strong> 10 (5,900 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +4</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Daemon Engine.</span> The Forgefiend cannot benefit from healing spells; it regains hit points only through mechanical repair or daemonic regeneration. It is immune to the charmed, exhaustion, frightened, and paralyzed conditions.</div>
+      <div class="entry"><span class="entry-name">Relentless Fire.</span> The Forgefiend does not suffer disadvantage on ranged attack rolls caused by being within 5 feet of a hostile creature. Difficult terrain does not slow its movement while it is targeting a creature at range.</div>
+      <div class="entry"><span class="entry-name">Magic Resistance.</span> The Forgefiend has advantage on saving throws against spells and other magical effects.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Forgefiend makes four Hades Autocannon attacks, or two Ectoplasm Cannon attacks (choose one weapon profile each turn).</div>
+      <div class="entry"><span class="entry-name">Hades Autocannon (×4).</span> <em>Ranged Weapon Attack:</em> +9 to hit, range 80/320 ft., one target per attack. <em>Hit:</em> 14 (2d8 + 5) piercing damage. All four attacks may target the same creature or be split across multiple targets.</div>
+      <div class="entry"><span class="entry-name">Ectoplasm Cannon (×2).</span> <em>Ranged Weapon Attack:</em> +9 to hit, range 40/160 ft., one target per attack. <em>Hit:</em> 22 (4d8 + 5) necrotic damage. Targets hit must succeed on a DC 17 Constitution saving throw or have their maximum hit points reduced by the necrotic damage dealt until they finish a long rest. This effect cannot reduce a creature's maximum HP below 1.</div>
+      <hr class="div">
+      <h3 class="section-head">Reactions</h3>
+      <div class="entry"><span class="entry-name">Opportunistic Barrage.</span> When a creature within 80 feet stands up from prone or moves out of cover within the Forgefiend's sight, it can use its reaction to make one Hades Autocannon attack against that creature.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 11 ═══ -->
+<div class="cr-section-header">Challenge Rating 11</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Chaos Lord</h3>
+    <p>A Chaos Lord is a Chaos Space Marine who has survived long enough, and killed enough, and pleased his patron deity enough that he has risen above the rank-and-file of the Traitor Legions and seized command of a warband through a combination of raw power, strategic acuity, and the kind of casual violence that discourages rivals from pressing their objections. They are ancient in the way all Chaos Space Marines are ancient — centuries of Warp travel have stretched their lives past any natural span — but Chaos Lords are the survivors of that attrition, the ones who bent the process to their will rather than being consumed by it.</p>
+    <p>Each Chaos Lord is unique. Some are battlefield commanders of genuine brilliance, the Warp having sharpened rather than eroded their tactical minds. Some are pure berserkers who simply cannot be stopped. Some have made such effective bargains with their patron gods that they carry daemonic weapons and wear armor that was forged in the Immaterium. All of them are dangerous beyond what their statistics alone can convey — they are the survivors of ten thousand battles, and they know exactly how to win the one they are currently in.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Chaos Lord</p><p class="creature-type">Medium Humanoid (Heretic Astartes), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 11</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 18 (chaos power armor + dark blessing)</p>
+        <p><strong>Hit Points</strong> 195 (26d8 + 78)</p>
+        <p><strong>Speed</strong> 35 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">22 (+6)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CON</div><div class="val">16 (+3)</div></div>
+        <div><div class="lbl">INT</div><div class="val">15 (+2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">18 (+4)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +10, Con +7, Wis +5, Cha +8</p>
+        <p><strong>Skills</strong> Athletics +10, Intimidation +8, Perception +5</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, slashing from nonmagical weapons; necrotic</p>
+        <p><strong>Condition Immunities</strong> charmed, frightened</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 15</p>
+        <p><strong>Languages</strong> Low Gothic, High Gothic, Legion Cant, Daemonic</p>
+        <p><strong>Challenge</strong> 11 (7,200 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +4</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Dark Blessing.</span> When the Chaos Lord makes a saving throw, it can add a d6 to the result (no action required). It can use this feature 4/day, regaining uses on a short rest.</div>
+      <div class="entry"><span class="entry-name">Veteran of Eternity.</span> Cannot be surprised. Advantage on initiative rolls.</div>
+      <div class="entry"><span class="entry-name">Lord of the Warband.</span> Friendly Chaos creatures within 30 feet that can hear the Chaos Lord have advantage on saves against being frightened and gain a +2 bonus to damage rolls.</div>
+      <div class="entry"><span class="entry-name">Warp-Blessed Form.</span> Regains 10 HP at the start of its turn if it has at least 1 HP and hasn't taken radiant damage since its last turn.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Chaos Lord makes three weapon attacks.</div>
+      <div class="entry"><span class="entry-name">Daemon Weapon.</span> <em>Melee Weapon Attack:</em> +10 to hit, reach 5 ft., one target. <em>Hit:</em> 17 (2d10 + 6) slashing damage plus 11 (2d10) necrotic damage. On a critical hit, the target's maximum HP is reduced by 5 until a long rest.</div>
+      <div class="entry"><span class="entry-name">Bolt Pistol.</span> <em>Ranged Weapon Attack:</em> +6 to hit, range 50/200 ft., one target. <em>Hit:</em> 9 (1d10 + 4) piercing damage. DC 14 Constitution save or take an additional 5 (1d10) piercing damage from internal detonation.</div>
+      <hr class="div">
+      <h3 class="section-head">Legendary Actions</h3>
+      <p class="legendary-note">The Chaos Lord can take 3 legendary actions, choosing from the options below. Only one legendary action option can be used at a time and only at the end of another creature's turn. The Chaos Lord regains spent legendary actions at the start of its turn.</p>
+      <div class="entry"><span class="entry-name">Strike (1 Action).</span> The Chaos Lord makes one Daemon Weapon attack.</div>
+      <div class="entry"><span class="entry-name">Issue Command (1 Action).</span> One friendly Chaos creature within 30 feet can immediately move up to half its speed or make one weapon attack as a reaction.</div>
+      <div class="entry"><span class="entry-name">Dark Pact (2 Actions).</span> The Chaos Lord calls upon the Ruinous Powers. It regains 20 HP and its next attack this round deals an additional 14 (4d6) necrotic damage.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>Chaos Land Raider</h3>
+    <p>The Land Raider is the supreme battle tank of the Adeptus Astartes, and in Chaos service it is all of that and something more — a ten-thousand-year-old war machine that has absorbed so much Warp energy in that time that the distinction between daemon engine and conventional vehicle has become somewhat academic. The machine spirit within is not merely a sophisticated automatic system; it has opinions, preferences, and what can only be described as territorial instincts. Chaos Land Raiders are known to fire at targets their crew didn't indicate, to reroute around positions they apparently consider disadvantageous, and to protect crew members they consider worthwhile with a ferocity that goes beyond programming.</p>
+    <p>As a transport it is unmatched — it can carry Terminator-armored warriors directly into close assault and deploy them through armored assault ramps while twin lascannons suppress the defensive response. As a battle tank it is simply one of the most dangerous armored vehicles a ground force can face. The combination of these two roles in a single hull is what makes the Land Raider worth its weight in any engagement where it appears.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Chaos Land Raider</p><p class="creature-type">Huge Vehicle (Heretic Astartes), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 11</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 18 (reinforced ceramite hull)</p>
+        <p><strong>Hit Points</strong> 230 (20d20 + 40)</p>
+        <p><strong>Speed</strong> 40 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">26 (+8)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">4 (−3)</div></div>
+        <div><div class="lbl">CON</div><div class="val">15 (+2)</div></div>
+        <div><div class="lbl">INT</div><div class="val">6 (−2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">6 (−2)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">1 (−5)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +12, Con +6</p>
+        <p><strong>Damage Immunities</strong> fire, poison, psychic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, petrified, poisoned, prone, stunned</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 8</p>
+        <p><strong>Languages</strong> —</p>
+        <p><strong>Challenge</strong> 11 (7,200 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +4</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Vehicle Frame.</span> The Chaos Land Raider is immune to the grappled, restrained, paralyzed, petrified, and poisoned conditions. It cannot benefit from healing spells; only mechanical repair effects restore its hit points.</div>
+      <div class="entry"><span class="entry-name">Chaos Armor Plates.</span> Critical hits against the Land Raider from nonmagical attacks become normal hits.</div>
+      <div class="entry"><span class="entry-name">Transport.</span> The Land Raider can carry up to 12 Medium or smaller creatures as passengers, including those in Terminator armor. Passengers can disembark via the Assault Ramp bonus action.</div>
+      <div class="entry"><span class="entry-name">Daemonic Machine Spirit.</span> At the start of each of its turns, if the Land Raider has at least 1 HP, roll a d6. On a 6, it regains 10 hit points as the daemon within asserts itself and forces the hull to knit together. Additionally, the Land Raider cannot be stunned by vehicle weapon strikes.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Land Raider uses its Twin Lascannons twice, or uses its Twin Lascannons once and its Twin Heavy Bolters once.</div>
+      <div class="entry"><span class="entry-name">Twin Lascannons.</span> <em>Ranged Weapon Attack:</em> +12 to hit, range 150/600 ft., one target. <em>Hit:</em> 28 (4d12 + 2) radiant damage. This attack ignores half and three-quarters cover. The Land Raider may fire each side's lascannons at a different target.</div>
+      <div class="entry"><span class="entry-name">Twin Heavy Bolters.</span> <em>Ranged Weapon Attack:</em> +12 to hit, range 80/320 ft., up to three targets within 15 feet of each other. <em>Hit:</em> 9 (2d8) piercing damage per target. On each hit, DC 15 Constitution save or take 4 (1d8) additional piercing damage from bolt detonation at the start of the target's next turn.</div>
+      <hr class="div">
+      <h3 class="section-head">Bonus Actions</h3>
+      <div class="entry"><span class="entry-name">Assault Ramp.</span> The Land Raider opens its assault ramp. Up to 6 passengers may disembark into unoccupied spaces within 5 feet of the vehicle and immediately move up to half their speed without provoking opportunity attacks.</div>
+      <hr class="div">
+      <h3 class="section-head">Reactions</h3>
+      <div class="entry"><span class="entry-name">Smoke Launchers (3/Day).</span> When the Land Raider is targeted by a ranged attack, it can use its reaction to deploy smoke. The attacker makes its attack roll with disadvantage, and the Land Raider has half cover until the start of its next turn.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 12 ═══ -->
+<div class="cr-section-header">Challenge Rating 12</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Defiler</h3>
+    <p>The Defiler is a walking battle-engine of unique and unsettling design — a daemon fused into a chassis that combines a battle cannon with the body plan of something that has too many legs and no hesitation about using them. It was the invention of the Dark Mechanicus during the Horus Heresy, an answer to the question of what you get when you take the firepower of an artillery piece and give it the ability to defend itself in close combat. The answer is something that has dominated siege warfare in the Traitor Legions for ten thousand years and shows no signs of becoming obsolete.</p>
+    <p>Fighting a Defiler requires simultaneously solving two incompatible tactical problems: staying out of range of its battle cannon, which rules out any position more than a kilometer distant, and staying out of reach of its power scourge and claw, which rules out anything within charging range. The ground in between those two zones is called the engagement window, and experienced commanders fight Defilers by refusing to stay in it for more than a few seconds at a time. This is easier to say than it is to execute when the Defiler is also faster than it looks.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Defiler</p><p class="creature-type">Huge Fiend (Daemon Engine), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 12</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 18 (daemonic hull plating)</p>
+        <p><strong>Hit Points</strong> 228 (24d12 + 72)</p>
+        <p><strong>Speed</strong> 40 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">26 (+8)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CON</div><div class="val">17 (+3)</div></div>
+        <div><div class="lbl">INT</div><div class="val">8 (−1)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">9 (−1)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">12 (+1)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +12, Con +7</p>
+        <p><strong>Skills</strong> Athletics +12, Perception +3</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, slashing from nonmagical weapons; cold, lightning</p>
+        <p><strong>Damage Immunities</strong> fire, poison, psychic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, petrified, poisoned, prone, stunned</p>
+        <p><strong>Senses</strong> Darkvision 120 ft., passive Perception 13</p>
+        <p><strong>Languages</strong> Daemonic</p>
+        <p><strong>Challenge</strong> 12 (8,400 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +4</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Daemon Engine.</span> The Defiler cannot benefit from healing spells; it regains hit points only through mechanical repair or daemonic regeneration (regains 10 HP at the start of its turn if it has at least 1 HP and hasn't taken radiant damage since its last turn).</div>
+      <div class="entry"><span class="entry-name">Siege Platform.</span> The Defiler ignores half and three-quarters cover when making ranged attacks. Ranged attacks against the Defiler have disadvantage while it is in difficult terrain or among ruins (it uses the cover for stability rather than concealment).</div>
+      <div class="entry"><span class="entry-name">Magic Resistance.</span> The Defiler has advantage on saving throws against spells and other magical effects.</div>
+      <div class="entry"><span class="entry-name">Multi-Limbed.</span> The Defiler can make opportunity attacks using both its Power Scourge and its Battle Claw. It cannot be flanked.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Defiler uses its Battle Cannon once, then makes one Power Scourge attack and one Battle Claw attack. Alternatively, it can forgo the Battle Cannon to make two Power Scourge attacks and one Battle Claw attack.</div>
+      <div class="entry"><span class="entry-name">Battle Cannon.</span> <em>Ranged Weapon Attack:</em> +12 to hit, range 200/800 ft., one target. <em>Hit:</em> 39 (6d10 + 8) bludgeoning damage. On a hit, each creature within 10 feet of the target must succeed on a DC 20 Dexterity saving throw or take 21 (6d6) piercing damage from shrapnel (half on success).</div>
+      <div class="entry"><span class="entry-name">Reaper Autocannon.</span> <em>Ranged Weapon Attack:</em> +12 to hit, range 80/320 ft., up to three targets within 15 feet of each other. <em>Hit:</em> 13 (2d8 + 4) piercing damage per target.</div>
+      <div class="entry"><span class="entry-name">Power Scourge.</span> <em>Melee Weapon Attack:</em> +12 to hit, reach 15 ft., one target. <em>Hit:</em> 22 (4d6 + 8) slashing damage. On a hit, the target is grappled (escape DC 20) and restrained until the grapple ends.</div>
+      <div class="entry"><span class="entry-name">Battle Claw.</span> <em>Melee Weapon Attack:</em> +12 to hit, reach 10 ft., one target. <em>Hit:</em> 30 (4d10 + 8) bludgeoning damage. If the target is grappled, this attack deals an additional 21 (6d6) bludgeoning damage.</div>
+      <hr class="div">
+      <h3 class="section-head">Legendary Actions</h3>
+      <p class="legendary-note">The Defiler can take 2 legendary actions, choosing from the options below. Only one option can be used at a time and only at the end of another creature's turn. Spent legendary actions are regained at the start of the Defiler's turn.</p>
+      <div class="entry"><span class="entry-name">Scourge Strike (1 Action).</span> The Defiler makes one Power Scourge attack.</div>
+      <div class="entry"><span class="entry-name">Suppressive Fire (2 Actions).</span> The Defiler fires its Reaper Autocannon in a sweeping arc. Each creature in a 30-foot cone must succeed on a DC 16 Dexterity saving throw or take 18 (4d8) piercing damage and have its speed halved until the end of its next turn (half damage and no speed reduction on success).</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 13 ═══ -->
+<div class="cr-section-header">Challenge Rating 13</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Lord Discordant</h3>
+    <p>The Lord Discordant is a Chaos Lord who has formed a symbiotic bond with a Helstalker — a scorpion-legged daemon engine of considerable size and temperament — to a degree that "rider" is no longer the accurate word for what he is. The two have merged into a single tactical entity, the daemon engine responding to its rider's intent before conscious instruction is given, the rider's strategic capability directing a physical platform that combines vehicle-grade resilience with the speed and aggression of a hunting predator. They are, together, something the Imperium does not have a satisfactory counter to in most ground engagements.</p>
+    <p>Lords Discordant specialize in corrupting and destroying enemy war machines, but they extend this expertise to command: every daemon engine in their vicinity fights harder under their presence, the lord's mastery of machine-daemonics resonating through nearby constructs in ways that functioning auguries register as a broadcast signal and less mechanical observers register as something like music. Enemy vehicles, meanwhile, experience something like the opposite — systemic failures, corrupted systems, components developing fractures that the onboard machine spirits experience as compulsion toward sabotage.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Lord Discordant</p><p class="creature-type">Large Fiend (Heretic Astartes, Daemon Engine), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 13</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 18 (daemonic hull + power armor)</p>
+        <p><strong>Hit Points</strong> 212 (17d10 + 119)</p>
+        <p><strong>Speed</strong> 40 ft., climb 30 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">24 (+7)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CON</div><div class="val">24 (+7)</div></div>
+        <div><div class="lbl">INT</div><div class="val">15 (+2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">18 (+4)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +12, Con +12, Cha +9</p>
+        <p><strong>Skills</strong> Athletics +12, Intimidation +9, Perception +6</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, slashing from nonmagical weapons; fire, lightning</p>
+        <p><strong>Damage Immunities</strong> poison, psychic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, poisoned</p>
+        <p><strong>Senses</strong> Truesight 30 ft., Darkvision 60 ft., passive Perception 16</p>
+        <p><strong>Languages</strong> Low Gothic, High Gothic, Daemonic</p>
+        <p><strong>Challenge</strong> 13 (10,000 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +5</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Astartes Physiology.</span> Advantage on Constitution saving throws.</div>
+      <div class="entry"><span class="entry-name">Fused Rider.</span> The Lord Discordant and his Helstalker function as a single creature. Critical hits against it from nonmagical attacks become normal hits. When the Lord Discordant drops below half its maximum HP, the Helstalker enters a frenzy: its speed increases by 15 feet and it gains advantage on Scuttling Legs attacks.</div>
+      <div class="entry"><span class="entry-name">Daemonic Unification.</span> Friendly daemon engines and Possessed creatures within 60 feet of the Lord Discordant gain a +2 bonus to attack rolls and AC.</div>
+      <div class="entry"><span class="entry-name">Machine Corruption Aura.</span> Enemy vehicles and constructs that start their turn within 30 feet of the Lord Discordant must succeed on a DC 17 Constitution saving throw or have their speed reduced by 10 feet and suffer disadvantage on their next attack roll as their systems are corrupted by machine-daemonic interference.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Lord Discordant makes one Techno-virus Injector attack, one Impaler Chainglaive attack, and one Scuttling Legs attack.</div>
+      <div class="entry"><span class="entry-name">Impaler Chainglaive.</span> <em>Melee Weapon Attack:</em> +12 to hit, reach 10 ft., one target. <em>Hit:</em> 25 (4d8 + 7) slashing damage plus 11 (2d10) necrotic damage.</div>
+      <div class="entry"><span class="entry-name">Techno-virus Injector.</span> <em>Melee Weapon Attack:</em> +12 to hit, reach 5 ft., one target. <em>Hit:</em> 16 (2d8 + 7) piercing damage plus 14 (4d6) necrotic damage. The target must succeed on a DC 20 Constitution saving throw or become Corroded for 1 minute: its weapons deal −2 damage, its armor provides −1 AC, and it has disadvantage on Strength checks. A Corroded creature can repeat the save at the end of each of its turns.</div>
+      <div class="entry"><span class="entry-name">Scuttling Legs (Helstalker).</span> <em>Melee Weapon Attack:</em> +12 to hit, reach 10 ft., up to two targets. <em>Hit:</em> 20 (2d12 + 7) piercing damage per target.</div>
+      <hr class="div">
+      <h3 class="section-head">Legendary Actions</h3>
+      <p class="legendary-note">The Lord Discordant can take 3 legendary actions, choosing from the options below. Only one option at a time, at the end of another creature's turn. Spent actions are regained at the start of its turn.</p>
+      <div class="entry"><span class="entry-name">Scourge Strike (1 Action).</span> The Lord Discordant makes one Impaler Chainglaive attack.</div>
+      <div class="entry"><span class="entry-name">Reaper's Advance (2 Actions).</span> The Lord Discordant moves up to its speed toward a creature without provoking opportunity attacks and makes one Impaler Chainglaive attack.</div>
+      <div class="entry"><span class="entry-name">System Override (3 Actions).</span> One friendly daemon engine within 60 feet that the Lord Discordant can see immediately takes its full turn (all actions, bonus actions, and movement) out of its normal initiative order.</div>
+    </div>
+  </div>
+</div>
+
+<div class="creature-entry">
+  <div class="description">
+    <h3>Chaos Lord in Terminator Armor</h3>
+    <p>Some Chaos Lords have survived long enough to recover or plunder a suit of Terminator armor, and have worn it long enough that the suit has bonded to them in the distinctly Chaos fashion — not the dormant machine spirit of a Loyalist suit, but something awake and invested in the survival of the being it encases. A Chaos Lord in Terminator Armor is among the most individually durable entities a ground force can encounter: the armor soaks damage that would kill an unprotected Chaos Lord twice over, and the Lord within has the experience to use that durability tactically rather than simply standing in place and absorbing punishment.</p>
+    <p>They teleport. This is the fact that defines every tactical engagement that includes one. A Chaos Lord in Terminator Armor who is engaged at one point on the line can be at a completely different point on the line four seconds later, and the defenders at the new point are generally not ready for this. The armor's teleportation system was designed for strategic insertion behind enemy lines; that it can also be used to ambush command elements, assassinate support weapons, and appear behind prepared defensive positions is something that every Chaos Lord in Terminator Armor has thoroughly explored.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Chaos Lord in Terminator Armor</p><p class="creature-type">Medium Humanoid (Heretic Astartes), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 13</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 20 (Terminator armor + dark blessing)</p>
+        <p><strong>Hit Points</strong> 210 (20d8 + 120)</p>
+        <p><strong>Speed</strong> 25 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">24 (+7)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">10 (+0)</div></div>
+        <div><div class="lbl">CON</div><div class="val">22 (+6)</div></div>
+        <div><div class="lbl">INT</div><div class="val">15 (+2)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">12 (+1)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">18 (+4)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +12, Con +11, Wis +6, Cha +9</p>
+        <p><strong>Skills</strong> Athletics +12, Intimidation +9, Perception +6</p>
+        <p><strong>Damage Resistances</strong> bludgeoning, piercing, slashing from nonmagical weapons; necrotic</p>
+        <p><strong>Condition Immunities</strong> charmed, frightened, prone</p>
+        <p><strong>Senses</strong> Darkvision 60 ft., passive Perception 16</p>
+        <p><strong>Languages</strong> Low Gothic, High Gothic, Legion Cant, Daemonic</p>
+        <p><strong>Challenge</strong> 13 (10,000 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +5</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Terminator Armor.</span> Critical hits from nonmagical attacks become normal hits. The Chaos Lord in Terminator Armor cannot be knocked prone against its will.</div>
+      <div class="entry"><span class="entry-name">Dark Blessing.</span> When making a saving throw, the Lord can add a d6 to the result. It can use this feature 4/day, regaining uses on a short rest.</div>
+      <div class="entry"><span class="entry-name">Veteran of Eternity.</span> Cannot be surprised. Advantage on initiative rolls.</div>
+      <div class="entry"><span class="entry-name">Lord of the Warband.</span> Friendly Chaos creatures within 30 feet that can hear the Lord have advantage on saving throws against being frightened and gain a +2 bonus to damage rolls.</div>
+      <div class="entry"><span class="entry-name">Warp-Blessed Form.</span> Regains 10 HP at the start of its turn if it has at least 1 HP and hasn't taken radiant damage since its last turn.</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> The Chaos Lord makes three weapon attacks.</div>
+      <div class="entry"><span class="entry-name">Daemon Weapon.</span> <em>Melee Weapon Attack:</em> +12 to hit, reach 5 ft., one target. <em>Hit:</em> 20 (2d12 + 7) slashing damage plus 11 (2d10) necrotic damage. On a critical hit, the target's maximum HP is reduced by 7 until a long rest.</div>
+      <div class="entry"><span class="entry-name">Combi-Plasma.</span> <em>Ranged Weapon Attack:</em> +5 to hit, range 80/320 ft., one target. Standard: <em>Hit:</em> 14 (3d8 + 2) fire damage. Supercharge: <em>Hit:</em> 23 (5d8 + 2) fire damage, but if the Lord rolls a 1 on any damage die, it takes 5 fire damage from plasma feedback.</div>
+      <hr class="div">
+      <h3 class="section-head">Legendary Actions</h3>
+      <p class="legendary-note">The Chaos Lord in Terminator Armor can take 3 legendary actions, choosing from the options below. Only one option at a time, at the end of another creature's turn. Spent actions are regained at the start of its turn.</p>
+      <div class="entry"><span class="entry-name">Strike (1 Action).</span> The Lord makes one Daemon Weapon attack.</div>
+      <div class="entry"><span class="entry-name">Issue Command (1 Action).</span> One friendly Chaos creature within 30 feet can immediately move up to half its speed or make one weapon attack as a reaction.</div>
+      <div class="entry"><span class="entry-name">Teleport Strike (2 Actions).</span> The Lord teleports up to 60 feet to an unoccupied space it can see, then immediately makes one Daemon Weapon attack with advantage against a creature within reach.</div>
+      <div class="entry"><span class="entry-name">Unstoppable (3 Actions).</span> The Lord moves up to its full speed and makes two Daemon Weapon attacks. This movement does not provoke opportunity attacks.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CR 14 ═══ -->
+<div class="cr-section-header">Challenge Rating 14</div>
+<div class="creature-entry">
+  <div class="description">
+    <h3>Daemon Prince</h3>
+    <p>A Daemon Prince is the ultimate reward offered by the Chaos Gods to their mortal champions: the final transaction in a lifetime of service, murder, and sacrifice. The champion's mortal body is torn apart and rebuilt as something divine — a being of living Warp energy encased in a physical form of terrifying power. They retain their memories, their personality, and their tactical capabilities, combined now with the supernatural resilience and strength of a true daemon. They do not age. They do not tire. They are not afraid of anything in the material realm, because they have seen what lives beyond it.</p>
+    <p>A Daemon Prince Undivided serves all four gods — or none of them, which amounts to the same thing from the perspective of a mortal on the wrong end of its daemon blade. They carry the favor of every Ruinous Power simultaneously, drawing on each as the moment demands. This makes them versatile in a way their god-specific counterparts are not: capable of sorcery, of brutal melee dominance, of command and of terror, often in the same engagement. They are the apex of what Chaos aspires to produce from mortal flesh.</p>
+  </div>
+  <div class="stat-block">
+    <div class="stat-block-header">
+      <div><p class="creature-name">Daemon Prince</p><p class="creature-type">Large Fiend (Daemon), Chaotic Evil</p></div>
+      <div class="cr-badge">CR 14</div>
+    </div>
+    <div class="stat-body">
+      <div class="top-stats">
+        <p><strong>Armor Class</strong> 19 (natural armor)</p>
+        <p><strong>Hit Points</strong> 225 (18d10 + 126)</p>
+        <p><strong>Speed</strong> 40 ft., fly 80 ft.</p>
+      </div>
+      <hr class="div">
+      <div class="ability-grid">
+        <div><div class="lbl">STR</div><div class="val">26 (+8)</div></div>
+        <div><div class="lbl">DEX</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CON</div><div class="val">24 (+7)</div></div>
+        <div><div class="lbl">INT</div><div class="val">18 (+4)</div></div>
+        <div><div class="lbl">WIS</div><div class="val">14 (+2)</div></div>
+        <div><div class="lbl">CHA</div><div class="val">20 (+5)</div></div>
+      </div>
+      <hr class="div">
+      <div class="bottom-stats">
+        <p><strong>Saving Throws</strong> Str +13, Con +12, Int +9, Cha +10</p>
+        <p><strong>Skills</strong> Athletics +13, Intimidation +10, Perception +7</p>
+        <p><strong>Damage Resistances</strong> cold, lightning; bludgeoning, piercing, slashing from nonmagical, non-blessed weapons</p>
+        <p><strong>Damage Immunities</strong> fire, poison, psychic</p>
+        <p><strong>Condition Immunities</strong> charmed, exhaustion, frightened, paralyzed, poisoned</p>
+        <p><strong>Senses</strong> Truesight 120 ft., passive Perception 17</p>
+        <p><strong>Languages</strong> All languages it knew in life, Daemonic</p>
+        <p><strong>Challenge</strong> 14 (11,500 XP) &nbsp;|&nbsp; <strong>Proficiency Bonus</strong> +5</p>
+      </div>
+      <hr class="div">
+      <h3 class="section-head">Traits</h3>
+      <div class="entry"><span class="entry-name">Magic Resistance.</span> Advantage on saving throws against spells and other magical effects.</div>
+      <div class="entry"><span class="entry-name">Innate Spellcasting.</span> Charisma-based (spell save DC 18, +10 to hit). At will: <em>detect magic, darkness</em>; 3/day each: <em>dispel magic, fear</em>; 1/day each: <em>dominate monster, finger of death</em>.</div>
+      <div class="entry"><span class="entry-name">Warp Presence.</span> Any creature that starts its turn within 30 feet of the Daemon Prince must succeed on a DC 18 Wisdom saving throw or be frightened until the start of its next turn.</div>
+      <div class="entry"><span class="entry-name">Banishment Resistance.</span> When first reduced to 0 HP in combat, roll a d6. On a 4 or higher, the Daemon Prince drops to 1 HP instead as its essence fights to remain in realspace.</div>
+      <div class="entry"><span class="entry-name">Undivided Favor.</span> The Daemon Prince draws on all four Ruinous Powers simultaneously. At the start of each of its turns, it gains one of the following benefits (GM's choice or roll d4): 1 — Khorne's Strength (advantage on melee attack rolls this turn); 2 — Nurgle's Resilience (regains 15 HP); 3 — Tzeentch's Sight (advantage on all saving throws until start of its next turn); 4 — Slaanesh's Speed (speed increases by 20 ft. and doesn't provoke opportunity attacks this turn).</div>
+      <hr class="div">
+      <h3 class="section-head">Actions</h3>
+      <div class="entry"><span class="entry-name">Multiattack.</span> Two Daemon Blade attacks and one Warp Talon, or casts one spell and makes two Daemon Blade attacks.</div>
+      <div class="entry"><span class="entry-name">Daemon Blade.</span> <em>Melee Weapon Attack:</em> +13 to hit, reach 10 ft., one target. <em>Hit:</em> 21 (2d12 + 8) slashing damage plus 11 (2d10) necrotic damage.</div>
+      <div class="entry"><span class="entry-name">Warp Talon.</span> <em>Melee Weapon Attack:</em> +13 to hit, reach 10 ft., one target. <em>Hit:</em> 17 (2d8 + 8) piercing damage. DC 18 Constitution saving throw or the target's maximum HP is reduced by the damage taken until it finishes a long rest.</div>
+      <hr class="div">
+      <h3 class="section-head">Legendary Actions</h3>
+      <p class="legendary-note">The Daemon Prince can take 3 legendary actions, choosing from the options below. Only one legendary action option can be used at a time and only at the end of another creature's turn. Spent actions are regained at the start of its turn.</p>
+      <div class="entry"><span class="entry-name">Strike (1 Action).</span> One Daemon Blade attack.</div>
+      <div class="entry"><span class="entry-name">Teleport (2 Actions).</span> The Daemon Prince teleports up to 60 feet to an unoccupied space it can see.</div>
+      <div class="entry"><span class="entry-name">Warp Scream (3 Actions).</span> Each creature within 60 feet that can hear or see the Daemon Prince makes a DC 18 Wisdom save. Failure: frightened for 1 minute and 22 (4d10) psychic damage. Success: half damage, not frightened. A frightened creature can repeat the save at the end of each of its turns.</div>
+    </div>
+  </div>
+</div>
+
+<div style="max-width:860px; margin: 40px auto 20px; background: var(--dark-red); color: var(--parchment); text-align:center; padding: 16px 20px; border: 2px solid var(--gold); border-radius: 4px; font-size:.9em;">
+  <em>To Chaos Undivided. Not to the Blood God, not to the Plague Father, not to the Changer of Ways, not to the Dark Prince — but to Chaos itself, in its vast, indifferent totality.</em><br>
+  <span style="color:var(--gold); font-size:.85em; display:block; margin-top:8px;">31 Entries &nbsp;&bull;&nbsp; CR 1/8 to CR 14 &nbsp;&bull;&nbsp; Fan-made homebrew for personal use only</span>
+</div>
+
+</body>
+</html>
