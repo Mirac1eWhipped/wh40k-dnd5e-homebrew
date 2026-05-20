@@ -1354,8 +1354,8 @@ function syncQuickActionsFromWargear() {
       var _ref = REQ_ITEMS.find(function(x){ return x.id === meta.id; });
       if (_ref) {
         if (!Array.isArray(meta.mods))  meta.mods = _ref.mods || [];
-        if (!meta.shots_max)            { meta.shots_max = _ref.shots || 0; }
-        if (meta.shots_cur === undefined) meta.shots_cur = meta.shots_max;
+        meta.shots_max = _ref.shots || 0;                          // always sync from catalog
+        if (meta.shots_cur === undefined || meta.shots_cur > meta.shots_max) meta.shots_cur = meta.shots_max;
         meta.dmg   = _ref.dmg   || meta.dmg   || '';
         meta.wtype = _ref.wtype  || meta.wtype  || '';
         meta.range = _ref.range  || meta.range  || '—';
@@ -2243,9 +2243,11 @@ function _sreqAdd(id) {
       const ins = row.querySelectorAll('input');
       if (ins.length && !ins[0].value.trim()) {
         ins[0].value = it.ammo;
-        const s = String(it.shots);
-        if (ins[1]) ins[1].value = s;
-        if (ins[2]) ins[2].value = s;
+        const _armorType = (document.getElementById('armor-type')||{}).value || 'tacticus';
+        const _ammoItem  = (typeof REQ_ITEMS !== 'undefined' ? REQ_ITEMS : []).find(x => x.cat === 'Ammo' && x.name === it.ammo);
+        const _cap = (_ammoItem && _ammoItem.caps && _ammoItem.caps[_armorType] !== undefined) ? String(_ammoItem.caps[_armorType]) : '';
+        if (ins[1]) ins[1].value = _cap;
+        if (ins[2]) ins[2].value = _cap;
         [ins[0], ins[1], ins[2]].filter(Boolean).forEach(el => { el.dispatchEvent(new Event('input')); el.dispatchEvent(new Event('change')); });
         break;
       }
