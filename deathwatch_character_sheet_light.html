@@ -1068,6 +1068,16 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
               <span style="font-family:var(--font-label);font-size:10pt;color:var(--text-dim);">/ <span id="spells-power-max">0</span></span>
               <button onclick="_powerAdj(1)" style="width:24px;height:24px;font-size:14pt;line-height:1;background:none;border:1px solid var(--gold-dim);color:var(--gold);cursor:pointer;border-radius:2px;padding:0;">+</button>
               <button onclick="_powerReset()" style="font-family:var(--font-label);font-size:8pt;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--gold-dim);background:transparent;color:var(--gold-dim);cursor:pointer;border-radius:2px;" title="Reset to max">↺ Resupply</button>
+              <div style="margin-left:auto;display:flex;gap:12px;align-items:center;">
+                <div style="text-align:center;">
+                  <div style="font-family:var(--font-label);font-size:7pt;letter-spacing:.13em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:1px;">To Hit</div>
+                  <div style="font-family:var(--font-label);font-size:11pt;color:var(--gold-light);" id="spells-spell-hit">—</div>
+                </div>
+                <div style="text-align:center;">
+                  <div style="font-family:var(--font-label);font-size:7pt;letter-spacing:.13em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:1px;">Save DC</div>
+                  <div style="font-family:var(--font-label);font-size:11pt;color:var(--gold-light);" id="spells-save-dc">—</div>
+                </div>
+              </div>
             </div>
             <!-- Prepared Spells Counter (Spells tab) -->
             <div style="display:flex;align-items:center;gap:8px;padding:6px 0 2px;border-top:1px solid var(--border);margin-top:4px;">
@@ -2604,6 +2614,14 @@ function _syncPreparedDisplay() {
   if (spcEl) { spcEl.textContent = curP; spcEl.style.color = overColor; }
   if (spmEl) spmEl.textContent = maxP;
   if (spfEl) spfEl.textContent = formula;
+  // Spell To Hit & Save DC
+  var hitMod = mod + pb;
+  var hitStr = hitMod >= 0 ? '+' + hitMod : String(hitMod);
+  var saveDC = 8 + mod + pb;
+  var shEl = document.getElementById('spells-spell-hit');
+  var sdEl = document.getElementById('spells-save-dc');
+  if (shEl) shEl.textContent = hitStr;
+  if (sdEl) sdEl.textContent = String(saveDC);
 }
 function _sreqSetCat(btn, cat) {
   _sreqCat = cat;
