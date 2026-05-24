@@ -899,8 +899,15 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
             </div>
             <button onclick="_powerReset()" style="font-family:var(--font-label);font-size:8pt;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--gold-dim);background:transparent;color:var(--gold-dim);cursor:pointer;border-radius:2px;" title="Reset to max">↺ Resupply</button>
           </div>
+          <!-- Prepared Spells Counter -->
+          <div style="display:flex;align-items:center;gap:8px;padding:4px 0 2px;border-top:1px solid var(--border);margin-top:2px;">
+            <span style="font-family:var(--font-label);font-size:7.5pt;letter-spacing:.16em;text-transform:uppercase;color:var(--silver-dim);">Prepared</span>
+            <span style="font-family:var(--font-label);font-size:11pt;color:var(--gold);" id="prepared-cur">0</span>
+            <span style="font-family:var(--font-label);font-size:9pt;color:var(--text-dim);">/ <span id="prepared-max">0</span></span>
+            <span style="font-family:var(--font-label);font-size:7pt;color:var(--text-dim);opacity:.7;" id="prepared-formula"></span>
+          </div>
           <!-- Active Powers Quick List -->
-          <div id="active-powers-list" style="margin-top:2px;"></div>
+          <div id="active-powers-list" style="margin-top:4px;"></div>
         </div>
         <!-- Actions Reference — THIRD (reference material, less frequently needed) -->
         <div class="section" style="margin-bottom:8px;">
@@ -1061,6 +1068,13 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
               <span style="font-family:var(--font-label);font-size:10pt;color:var(--text-dim);">/ <span id="spells-power-max">0</span></span>
               <button onclick="_powerAdj(1)" style="width:24px;height:24px;font-size:14pt;line-height:1;background:none;border:1px solid var(--gold-dim);color:var(--gold);cursor:pointer;border-radius:2px;padding:0;">+</button>
               <button onclick="_powerReset()" style="font-family:var(--font-label);font-size:8pt;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--gold-dim);background:transparent;color:var(--gold-dim);cursor:pointer;border-radius:2px;" title="Reset to max">↺ Resupply</button>
+            </div>
+            <!-- Prepared Spells Counter (Spells tab) -->
+            <div style="display:flex;align-items:center;gap:8px;padding:6px 0 2px;border-top:1px solid var(--border);margin-top:4px;">
+              <span style="font-family:var(--font-label);font-size:7.5pt;letter-spacing:.16em;text-transform:uppercase;color:var(--silver-dim);">Prepared</span>
+              <span style="font-family:var(--font-label);font-size:11pt;color:var(--gold);" id="spells-prepared-cur">0</span>
+              <span style="font-family:var(--font-label);font-size:9pt;color:var(--text-dim);">/ <span id="spells-prepared-max">0</span></span>
+              <span style="font-family:var(--font-label);font-size:7pt;color:var(--text-dim);opacity:.7;" id="spells-prepared-formula"></span>
             </div>
           </div>
           <button class="sreq-open-btn" onclick="_spellOpen()" style="font-size:10pt;padding:6px 16px;display:block;margin-bottom:12px;">Open Spell Browser</button>
@@ -1397,6 +1411,7 @@ function calcMod(s) {
   const mod = Math.floor((score - 10) / 2);
   el.value = mod >= 0 ? '+' + mod : String(mod);
   _recalcDerived();
+  if ((s === 'int' || s === 'cha') && typeof _syncPreparedDisplay === 'function') _syncPreparedDisplay();
 }
 
 /* ── Level → Prof bonus ── */
@@ -1407,6 +1422,7 @@ function onLevelChange() {
   _recalcDerived();
   updateSubclassOpts();
   if (typeof _updatePowerTracker === 'function') _updatePowerTracker();
+  if (typeof _syncPreparedDisplay === 'function') _syncPreparedDisplay();
 }
 
 /* ── Wargear equip / Quick Actions system ── */
@@ -2262,6 +2278,7 @@ async function _loadSheet(adminOverrideId) {
     renderActivePowers();
     _updatePowerTracker();
     _syncPowerDisplay();
+    _syncPreparedDisplay();
     STATS.forEach(s => calcMod(s));
     syncQuickActionsFromWargear();
     renderAmmoTracker();
@@ -2434,6 +2451,7 @@ function _spellAdd(id) {
   _spellbook.push(id);
   renderActivePowers();
   _spellFilter();
+  _syncPreparedDisplay();
   _schedSave();
 }
 function _spellRemove(id) {
@@ -2444,6 +2462,7 @@ function _spellRemove(id) {
   if (pidx !== -1) _pinnedSpells.splice(pidx, 1);
   renderActivePowers();
   _spellFilter();
+  _syncPreparedDisplay();
   syncQuickActionsFromWargear();
   _schedSave();
 }
@@ -2515,6 +2534,7 @@ function _updatePowerTracker() {
     lvl = Math.max(1, Math.min(20, lvl));
     _powerMax = Math.round(20 + (lvl - 1) / 19 * 60);
     _syncPowerDisplay();
+    _syncPreparedDisplay();
   }
   if (stb) {
     stb.style.display = show ? '' : 'none';
@@ -2551,6 +2571,39 @@ function _syncPowerDisplay() {
   if (spCur)  spCur.textContent  = _powerCur;
   if (spMax)  spMax.textContent  = _powerMax;
   if (maxInp && parseInt(maxInp.value) !== _powerMax) maxInp.value = _powerMax;
+}
+function _syncPreparedDisplay() {
+  var clsEl = document.getElementById('cls-select');
+  var cls   = clsEl ? clsEl.value : '';
+  var isLib = cls === 'Librarian';
+  var isChap = cls === 'Chaplain';
+  if (!isLib && !isChap) return;
+  var lvlEl = document.getElementById('char-level');
+  var lvl   = lvlEl ? (parseInt(lvlEl.value) || 1) : 1;
+  var pb    = Math.ceil(lvl / 4) + 1;
+  // Librarian uses INT, Chaplain uses CHA
+  var stat  = isLib ? 'int' : 'cha';
+  var sc    = parseInt((document.getElementById(stat + '-score') || {}).value);
+  var mod   = isNaN(sc) ? 0 : Math.floor((sc - 10) / 2);
+  var maxP  = Math.max(1, lvl + mod + pb);
+  var curP  = (typeof _spellbook !== 'undefined') ? _spellbook.length : 0;
+  var statLabel = isLib ? 'INT' : 'CHA';
+  var formula   = '(Lv' + lvl + ' + ' + statLabel + ' + PB)';
+  var overColor = curP > maxP ? '#c04040' : 'var(--gold)';
+  // Actions tab
+  var pcEl = document.getElementById('prepared-cur');
+  var pmEl = document.getElementById('prepared-max');
+  var pfEl = document.getElementById('prepared-formula');
+  if (pcEl) { pcEl.textContent = curP; pcEl.style.color = overColor; }
+  if (pmEl) pmEl.textContent = maxP;
+  if (pfEl) pfEl.textContent = formula;
+  // Spells tab
+  var spcEl = document.getElementById('spells-prepared-cur');
+  var spmEl = document.getElementById('spells-prepared-max');
+  var spfEl = document.getElementById('spells-prepared-formula');
+  if (spcEl) { spcEl.textContent = curP; spcEl.style.color = overColor; }
+  if (spmEl) spmEl.textContent = maxP;
+  if (spfEl) spfEl.textContent = formula;
 }
 function _sreqSetCat(btn, cat) {
   _sreqCat = cat;
@@ -2765,6 +2818,7 @@ async function _loadSheetForUser(uid) {
     renderActivePowers();
     _updatePowerTracker();
     _syncPowerDisplay();
+    _syncPreparedDisplay();
     STATS.forEach(function(s){ calcMod(s); });
     _status('loaded', 'Viewing ' + (rows[0].name || 'player') + '\'s sheet');
   } catch(e) { _status('error','Could not load player sheet'); }
