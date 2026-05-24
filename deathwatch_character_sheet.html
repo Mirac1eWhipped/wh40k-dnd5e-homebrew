@@ -1552,7 +1552,7 @@ function syncQuickActionsFromWargear() {
       var spDmgColor = spDmg === '—' ? 'var(--text-dim)' : 'var(--text)';
       spellRows += '<tr>' +
         '<td style="text-align:center;font-size:11pt;padding:3px 2px;color:'+spColor+';">'+spIcon+'</td>' +
-        '<td><div class="qa-name-cell"><span class="dp-clickable" style="font-family:var(--font-label);font-size:10pt;color:var(--gold-light);" onclick="_spellPopup(event,\''+sp.id+'\')">'+sp.name+'</span><div class="qa-meta-row"><span style="font-family:var(--font-label);font-size:6.5pt;letter-spacing:.07em;text-transform:uppercase;color:var(--text-dim);opacity:.8;border-radius:3px;padding:1px 4px;background:rgba(100,100,120,.15);">'+sp.action+'</span></div></div></td>' +
+        '<td><div class="qa-name-cell"><span class="dp-clickable" style="font-family:var(--font-label);font-size:10pt;color:var(--gold-light);" onclick="_spellPopup(event,\''+sp.id+'\')">'+sp.name+'</span><div class="qa-meta-row"><span style="font-family:var(--font-label);font-size:6.5pt;letter-spacing:.07em;text-transform:uppercase;color:var(--text-dim);opacity:.8;border-radius:3px;padding:1px 4px;background:rgba(100,100,120,.15);">'+sp.action+'</span><span style="font-family:var(--font-label);font-size:6.5pt;letter-spacing:.07em;text-transform:uppercase;color:var(--text-dim);opacity:.8;border-radius:3px;padding:1px 4px;background:rgba(100,100,120,.15);">'+sp.duration+'</span></div></div></td>' +
         '<td style="text-align:center;color:var(--gold-light);font-size:10pt;font-weight:600;">'+spHit+'</td>' +
         '<td style="text-align:center;color:'+spDmgColor+';font-size:10pt;">'+spDmg+'</td>' +
         '<td style="text-align:center;font-size:10pt;">'+sp.range+'</td>' +
