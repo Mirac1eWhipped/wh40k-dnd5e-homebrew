@@ -260,7 +260,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .cls-selector select,.cls-selector input{background:var(--panel);border:1px solid var(--border2);color:var(--text);font-family:var(--font-body);font-size:13pt;padding:6px 8px;outline:none;width:100%;}
 .cls-selector select:focus,.cls-selector input:focus{border-color:var(--gold);}
 .cls-selector select option{background:var(--panel);}
-#sub-wrap{display:none;}
+/* #sub-wrap default-hidden handled inline — shown by updateSubclassOpts() */
 .feat-list{display:flex;flex-direction:column;gap:8px;}
 .feat-card{background:var(--panel);border:1px solid var(--border2);border-left:3px solid var(--gold-dim);padding:10px 14px;}
 .feat-card-hdr{display:flex;align-items:baseline;gap:10px;margin-bottom:6px;}
@@ -592,7 +592,28 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
     <div class="sh-identity">
       <input class="sh-name-inp" type="text" id="char-name" placeholder="Operative Name…">
       <div class="sh-details">
-        <div class="sh-detail-field" style="min-width:160px;"><label>Class / Specialty</label><input type="text" id="char-class" placeholder="e.g. Tactical Operative"></div>
+        <input type="hidden" id="char-class">
+        <div class="sh-detail-field" style="min-width:160px;">
+          <label>Specialty / Class</label>
+          <select id="cls-select" onchange="updateSubclassOpts();_schedSave();">
+            <option value="">— Select Class —</option>
+            <option value="Tactical Operative">Tactical Operative</option>
+            <option value="Close Combat Operative">Close Combat Operative</option>
+            <option value="Gravis Operative">Gravis Operative</option>
+            <option value="Terminator">Terminator</option>
+            <option value="Vanguard Operative">Vanguard Operative</option>
+            <option value="Apothecary">Apothecary</option>
+            <option value="Chaplain">Chaplain</option>
+            <option value="Librarian">Librarian</option>
+            <option value="Techmarine">Techmarine</option>
+          </select>
+        </div>
+        <div class="sh-detail-field" id="sub-wrap" style="display:none;min-width:140px;">
+          <label>Subclass</label>
+          <select id="sub-select" onchange="renderFeatures();_schedSave();">
+            <option value="">— Select Subclass —</option>
+          </select>
+        </div>
         <div class="sh-detail-field"><label>Chapter</label>
           <select id="char-chapter" onchange="renderLineageTraits()">
             <option value="">— Chapter —</option>
@@ -1069,33 +1090,8 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 
       <!-- ABILITIES tab -->
       <div class="rc-tab-panel" id="rc-abilities">
-        <div class="cls-selector">
-          <div>
-            <label>Specialty / Class</label>
-            <select id="cls-select" onchange="updateSubclassOpts()">
-              <option value="">— Select Class —</option>
-              <option value="Tactical Operative">Tactical Operative</option>
-              <option value="Close Combat Operative">Close Combat Operative</option>
-              <option value="Gravis Operative">Gravis Operative</option>
-              <option value="Terminator">Terminator</option>
-              <option value="Vanguard Operative">Vanguard Operative</option>
-              <option value="Apothecary">Apothecary</option>
-              <option value="Chaplain">Chaplain</option>
-              <option value="Librarian">Librarian</option>
-              <option value="Techmarine">Techmarine</option>
-            </select>
-          </div>
-          <div>
-            <label>Level</label>
-            <input type="number" id="feat-level" min="1" max="20" value="1" oninput="updateSubclassOpts()">
-          </div>
-          <div id="sub-wrap">
-            <label>Subclass</label>
-            <select id="sub-select" onchange="renderFeatures()">
-              <option value="">— Select Subclass —</option>
-            </select>
-          </div>
-        </div>
+        <!-- feat-level kept in DOM for save-field position compatibility — controlled by char-level in header -->
+        <input type="number" id="feat-level" min="1" max="20" value="1" style="display:none;pointer-events:none;">
         <div id="cls-profs-block" style="display:none;"></div>
         <div id="lineage-section" style="display:none;margin-bottom:16px;">
           <div class="sec-title" style="margin-bottom:8px;">Lineage — Adeptus Astartes</div>
@@ -1415,6 +1411,9 @@ function calcMod(s) {
 
 /* ── Level → Prof bonus ── */
 function onLevelChange() {
+  var _fl = document.getElementById('feat-level');
+  var _cl = document.getElementById('char-level');
+  if (_fl && _cl) _fl.value = _cl.value;
   _recalcDerived();
   updateSubclassOpts();
 }
@@ -1966,7 +1965,6 @@ async function _doSave() {
   const subSel = document.getElementById('sub-select');
   const featLvl = document.getElementById('feat-level');
   const _chEl = document.getElementById('char-chapter');
-  const _clEl = document.getElementById('char-class');
   const _plEl = document.getElementById('char-player');
   const _cpEl = document.getElementById('char-campaign');
   const extra = {
@@ -1974,7 +1972,6 @@ async function _doSave() {
     sub: subSel ? subSel.value : '',
     feat_lvl: featLvl ? featLvl.value : '',
     chapter: _chEl ? _chEl.value : '',
-    op_class: _clEl ? _clEl.value : '',
     player_name: _plEl ? _plEl.value : '',
     campaign: _cpEl ? _cpEl.value : '',
     hp_cur: (document.getElementById('hp-cur') || {value:''}).value,
@@ -2199,6 +2196,9 @@ async function _loadSheet(adminOverrideId) {
     const featLvl = document.getElementById('feat-level');
     if (clsSel && ext.cls) clsSel.value = ext.cls;
     if (featLvl && ext.feat_lvl) featLvl.value = ext.feat_lvl;
+    // Sync char-level header from feat-level (canonical source for features)
+    const _charLvEl = document.getElementById('char-level');
+    if (featLvl && _charLvEl && featLvl.value) _charLvEl.value = featLvl.value;
     updateSubclassOpts();
     if (subSel && ext.sub) { subSel.value = ext.sub; renderFeatures(); }
     renderLineageTraits();
@@ -2728,6 +2728,9 @@ async function _loadSheetForUser(uid) {
     var featLvl = document.getElementById('feat-level');
     if (clsSel && ext.cls) clsSel.value = ext.cls;
     if (featLvl && ext.feat_lvl) featLvl.value = ext.feat_lvl;
+    // Sync char-level header from feat-level
+    var _charLvEl2 = document.getElementById('char-level');
+    if (featLvl && _charLvEl2 && featLvl.value) _charLvEl2.value = featLvl.value;
     updateSubclassOpts();
     if (subSel && ext.sub) { subSel.value = ext.sub; renderFeatures(); }
     renderLineageTraits();
