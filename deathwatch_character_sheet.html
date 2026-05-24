@@ -1545,8 +1545,8 @@ function syncQuickActionsFromWargear() {
       var costColor  = (typeof _SPELL_COST_COLOR !== 'undefined' && _SPELL_COST_COLOR[sp.costType]) || 'var(--gold)';
       var spIcon     = sp.class === 'librarian' ? '✦' : '✝';
       var spColor    = sp.class === 'librarian' ? '#a090e0' : '#d4a040';
-      // Spell attack roll: Librarian = INT+PB, Chaplain = WIS+PB
-      var spStat     = sp.class === 'librarian' ? 'int' : 'wis';
+      // Spell attack roll: Librarian = INT+PB, Chaplain = CHA+PB
+      var spStat     = sp.class === 'librarian' ? 'int' : 'cha';
       var spHit      = fmt(_mod(spStat) + pb);
       var spDmg = sp.damage || '—';
       var spDmgColor = spDmg === '—' ? 'var(--text-dim)' : 'var(--text)';
