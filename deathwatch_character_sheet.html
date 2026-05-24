@@ -402,6 +402,10 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .dos-atk-table tbody tr{border-bottom:1px solid var(--border);}
 .dos-atk-table tbody tr:last-child{border-bottom:none;}
 .qa-mod-pill{display:inline-block;font-family:var(--font-label);font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-light);background:rgba(212,160,48,.12);border:1px solid rgba(212,160,48,.3);border-radius:3px;padding:1px 5px;margin:1px 2px 1px 0;white-space:nowrap;cursor:pointer;transition:background .15s;}.qa-mod-pill:hover{background:rgba(212,160,48,.28);}
+/* ── Quick Actions filter buttons ── */
+.qa-filter-btn{font-family:var(--font-label);font-size:7pt;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--silver-dim);padding:2px 8px;cursor:pointer;border-radius:2px;transition:all .15s;white-space:nowrap;}
+.qa-filter-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(200,164,74,.08);}
+.qa-filter-btn:hover:not(.active){border-color:var(--silver-dim);color:var(--text);}
 /* ── Action reference cards ── */
 .act-ref-row{display:flex;align-items:center;gap:4px;padding:2px 2px;border-bottom:1px solid var(--border);cursor:pointer;border-radius:2px;}
 .act-ref-row:last-child{border-bottom:none;}
@@ -849,7 +853,16 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
       <div class="rc-tab-panel active" id="rc-actions">
         <!-- Quick Actions — FIRST (attack table, matches D&D Beyond layout) -->
         <div class="section" style="margin-bottom:8px;">
-          <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Quick Actions — Equipped Weapons</span></div>
+          <div class="dos-col-hdr">
+            <span class="dos-col-hdr-lbl">Quick Actions</span>
+            <span style="margin-left:auto;display:flex;gap:4px;align-items:center;">
+              <button class="qa-filter-btn active" onclick="_qaSetFilter(this,'all')">All</button>
+              <button class="qa-filter-btn" onclick="_qaSetFilter(this,'Action')">Action</button>
+              <button class="qa-filter-btn" onclick="_qaSetFilter(this,'Bonus Action')">Bonus</button>
+              <button class="qa-filter-btn" onclick="_qaSetFilter(this,'Reaction')">Reaction</button>
+              <button class="qa-filter-btn" onclick="_qaSetFilter(this,'Free')">Free</button>
+            </span>
+          </div>
           <table class="dos-atk-table">
             <thead><tr><th style="width:22px;padding:4px 2px;"></th><th>Armament</th><th style="text-align:center;">To Hit</th><th style="text-align:center;">Damage</th><th style="text-align:center;">Range</th><th style="text-align:center;">Mag</th></tr></thead>
             <tbody id="quick-actions-tbody"><tr><td colspan="6" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">++ No weapons equipped — mark armaments as active in the Wargear panel ++</td></tr></tbody>
@@ -1427,6 +1440,14 @@ function _toggleEquip(idx) {
   _schedSave();
 }
 
+var _qaFilter = 'all';
+function _qaSetFilter(btn, f) {
+  _qaFilter = f;
+  document.querySelectorAll('.qa-filter-btn').forEach(function(b){ b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  syncQuickActionsFromWargear();
+}
+
 function syncQuickActionsFromWargear() {
   var tbody = document.getElementById('quick-actions-tbody');
   if (!tbody) return;
@@ -1446,6 +1467,7 @@ function syncQuickActionsFromWargear() {
     var name = ins[0] ? ins[0].value.trim() : '';
     if (!name) continue;
     // Back-fill fields from REQ_ITEMS for weapons saved before shots/mods tracking
+    var itemAction = 'Action';
     if (meta.id && typeof REQ_ITEMS !== 'undefined') {
       var _ref = REQ_ITEMS.find(function(x){ return x.id === meta.id; });
       if (_ref) {
@@ -1455,8 +1477,11 @@ function syncQuickActionsFromWargear() {
         meta.dmg   = _ref.dmg   || meta.dmg   || '';
         meta.wtype = _ref.wtype  || meta.wtype  || '';
         meta.range = _ref.range  || meta.range  || '—';
+        if (_ref.action) itemAction = _ref.action;
       }
     }
+    // Apply action-type filter
+    if (_qaFilter !== 'all' && itemAction !== _qaFilter) continue;
     var stat  = meta.stat || 'str';
     // Finesse: automatically use whichever of STR or DEX is higher
     if (Array.isArray(meta.mods) && meta.mods.indexOf('Finesse') !== -1) {
@@ -1514,6 +1539,8 @@ function syncQuickActionsFromWargear() {
     _pinnedSpells.forEach(function(sid) {
       var sp = SPELLS.find(function(s){ return s.id === sid; });
       if (!sp) return;
+      // Apply action-type filter to spells
+      if (_qaFilter !== 'all' && sp.action !== _qaFilter) return;
       var costLabel  = sp.costType === 'free' ? 'FREE' : (sp.cost + ' ' + sp.costType);
       var costColor  = (typeof _SPELL_COST_COLOR !== 'undefined' && _SPELL_COST_COLOR[sp.costType]) || 'var(--gold)';
       var spIcon     = sp.class === 'librarian' ? '✦' : '✝';
@@ -1534,7 +1561,10 @@ function syncQuickActionsFromWargear() {
     }
     rows += spellRows;
   }
-  if (!rows) rows = '<tr><td colspan="6" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">++ No weapons equipped — mark armaments as active in the Wargear panel ++</td></tr>';
+  var emptyMsg = _qaFilter === 'all'
+    ? '++ No weapons equipped — mark armaments as active in the Wargear panel ++'
+    : '++ No ' + _qaFilter + ' items found ++';
+  if (!rows) rows = '<tr><td colspan="6" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">'+emptyMsg+'</td></tr>';
   tbody.innerHTML = rows;
   renderAmmoTracker();
 }
