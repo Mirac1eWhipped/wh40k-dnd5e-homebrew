@@ -874,7 +874,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
             </span>
           </div>
           <table class="dos-atk-table">
-            <thead><tr><th style="width:22px;padding:4px 2px;"></th><th>Armament</th><th style="text-align:center;">To Hit</th><th style="text-align:center;">Damage</th><th style="text-align:center;">Range</th><th style="text-align:center;">Mag</th></tr></thead>
+            <thead><tr><th style="width:22px;padding:4px 2px;"></th><th>Armament / Power</th><th style="text-align:center;">To Hit</th><th style="text-align:center;">Damage</th><th style="text-align:center;">Range</th><th style="text-align:center;">Mag / Points</th></tr></thead>
             <tbody id="quick-actions-tbody"><tr><td colspan="6" style="text-align:center;opacity:.45;font-size:9pt;padding:6px;">++ No weapons equipped — mark armaments as active in the Wargear panel ++</td></tr></tbody>
           </table>
         </div>
@@ -894,7 +894,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
               <button onclick="_powerAdj(-1)" style="width:22px;height:22px;font-size:14pt;line-height:1;background:none;border:1px solid var(--gold-dim);color:var(--gold);cursor:pointer;border-radius:2px;padding:0;">−</button>
               <span id="power-cur" style="font-family:var(--font-label);font-size:14pt;color:var(--gold);min-width:28px;text-align:center;">0</span>
               <span style="font-family:var(--font-label);font-size:10pt;color:var(--text-dim);">/</span>
-              <input id="power-max" type="number" min="0" max="200" value="0" oninput="_powerMaxChange()" style="width:44px;font-family:var(--font-label);font-size:10pt;text-align:center;background:var(--input-bg,#1a1a1a);border:1px solid var(--gold-dim);color:var(--text-main,#ccc);padding:2px 4px;">
+              <input id="power-max" type="number" min="0" max="200" value="0" readonly style="width:44px;font-family:var(--font-label);font-size:10pt;text-align:center;background:transparent;border:1px solid var(--gold-dim);color:var(--text-main,#ccc);padding:2px 4px;cursor:default;">
               <button onclick="_powerAdj(1)" style="width:22px;height:22px;font-size:14pt;line-height:1;background:none;border:1px solid var(--gold-dim);color:var(--gold);cursor:pointer;border-radius:2px;padding:0;">+</button>
             </div>
             <button onclick="_powerReset()" style="font-family:var(--font-label);font-size:8pt;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--gold-dim);background:transparent;color:var(--gold-dim);cursor:pointer;border-radius:2px;" title="Reset to max">↺ Resupply</button>
@@ -1406,6 +1406,7 @@ function onLevelChange() {
   if (_fl && _cl) _fl.value = _cl.value;
   _recalcDerived();
   updateSubclassOpts();
+  if (typeof _updatePowerTracker === 'function') _updatePowerTracker();
 }
 
 /* ── Wargear equip / Quick Actions system ── */
@@ -1537,14 +1538,13 @@ function syncQuickActionsFromWargear() {
       // Spell attack roll: Librarian = INT+PB, Chaplain = WIS+PB
       var spStat     = sp.class === 'librarian' ? 'int' : 'wis';
       var spHit      = fmt(_mod(spStat) + pb);
-      var costBadge  = '<span style="font-family:var(--font-label);font-size:7pt;letter-spacing:.06em;color:'+costColor+';margin-left:5px;opacity:.85;">'+costLabel+'</span>';
       spellRows += '<tr>' +
         '<td style="text-align:center;font-size:12pt;padding:3px 2px;color:'+spColor+';">'+spIcon+'</td>' +
-        '<td><div class="qa-name-cell"><span class="dp-clickable" style="font-family:var(--font-label);font-size:10pt;color:var(--gold-light);" onclick="_spellPopup(event,\''+sp.id+'\')">'+sp.name+'</span>'+costBadge+'</div></td>' +
+        '<td><div class="qa-name-cell"><span class="dp-clickable" style="font-family:var(--font-label);font-size:10pt;color:var(--gold-light);" onclick="_spellPopup(event,\''+sp.id+'\')">'+sp.name+'</span></div></td>' +
         '<td style="text-align:center;color:var(--gold-light);font-weight:600;">'+spHit+'</td>' +
-        '<td style="text-align:center;color:var(--text-dim);font-size:9pt;">'+sp.action+'</td>' +
+        '<td style="text-align:center;color:var(--text-dim);font-size:9pt;line-height:1.3;">'+sp.action+'<br><span style="font-size:7.5pt;opacity:.65;">'+sp.duration+'</span></td>' +
         '<td style="text-align:center;font-size:9pt;">'+sp.range+'</td>' +
-        '<td style="text-align:center;color:var(--text-dim);font-size:8.5pt;">'+sp.duration+'</td>' +
+        '<td style="text-align:center;color:'+costColor+';font-size:9pt;font-weight:600;">'+costLabel+'</td>' +
       '</tr>';
     });
   }
@@ -2506,6 +2506,14 @@ function _updatePowerTracker() {
   if (st) st.style.display = show ? '' : 'none';
   if (tl) tl.textContent = label;
   if (sl) sl.textContent = label;
+  if (show) {
+    // Auto-calculate power max from level: L1=20, L20=80
+    var lvlEl = document.getElementById('char-level');
+    var lvl = lvlEl ? (parseInt(lvlEl.value) || 1) : 1;
+    lvl = Math.max(1, Math.min(20, lvl));
+    _powerMax = Math.round(20 + (lvl - 1) / 19 * 60);
+    _syncPowerDisplay();
+  }
   if (stb) {
     stb.style.display = show ? '' : 'none';
     // If Spells tab is active and we're hiding it, switch to Actions
