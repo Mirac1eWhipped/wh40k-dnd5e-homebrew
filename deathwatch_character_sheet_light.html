@@ -412,6 +412,24 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .act-popup-badge{font-family:var(--font-label);font-size:7pt;letter-spacing:.08em;text-transform:uppercase;border-radius:3px;padding:2px 5px;}
 .act-popup-name{font-family:var(--font-label);font-size:10pt;color:var(--gold-light);display:block;margin:5px 0 5px;}
 .act-popup-desc{font-size:8.5pt;color:var(--text);line-height:1.5;}
+/* ── Detail popup (weapons & spells) ── */
+#detail-popup{display:none;position:fixed;background:var(--panel);border:1px solid var(--gold-dim);border-radius:4px;padding:13px 15px;width:320px;max-height:460px;overflow-y:auto;z-index:700;box-shadow:0 10px 40px rgba(0,0,0,.9);}
+#detail-popup.open{display:block;}
+.dp-badges{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:4px;}
+.dp-badge{font-family:var(--font-label);font-size:7pt;letter-spacing:.1em;text-transform:uppercase;border-radius:3px;padding:2px 6px;}
+.dp-name{font-family:var(--font-label);font-size:11pt;color:var(--gold-light);display:block;margin:4px 0 8px;line-height:1.3;}
+.dp-stats{display:grid;grid-template-columns:1fr 1fr;gap:5px 12px;margin-bottom:8px;}
+.dp-stat{font-size:8.5pt;color:var(--text-dim);line-height:1.35;}
+.dp-stat strong{display:block;font-family:var(--font-label);font-size:7.5pt;letter-spacing:.1em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:1px;}
+.dp-mods{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;}
+.dp-mod-pill{font-family:var(--font-label);font-size:7pt;letter-spacing:.08em;text-transform:uppercase;padding:1px 6px;border:1px solid var(--gold-dim);color:var(--gold-dim);border-radius:2px;cursor:pointer;}
+.dp-mod-pill:hover{background:var(--gold-dim);color:#000;}
+.dp-divider{border:none;border-top:1px solid var(--border);margin:8px 0;}
+.dp-desc{font-size:9pt;color:var(--text);line-height:1.6;font-style:italic;}
+.dp-notes{font-size:8pt;color:var(--gold-dim);margin-top:6px;font-style:normal;}
+.dp-peril{font-family:var(--font-label);font-size:7.5pt;letter-spacing:.08em;color:#c04040;margin-bottom:6px;}
+.dp-clickable{cursor:pointer;text-decoration:underline;text-decoration-color:var(--gold-dim);text-underline-offset:2px;}
+.dp-clickable:hover{color:var(--gold-light)!important;}
 /* ── Shot tracker ── */
 .shot-tracker{display:flex;align-items:center;gap:2px;}
 .shot-btn{background:transparent;border:1px solid var(--gold-dim);color:var(--gold);font-size:9pt;width:16px;height:16px;cursor:pointer;border-radius:2px;padding:0;line-height:1;font-family:monospace;}
@@ -1468,9 +1486,12 @@ function syncQuickActionsFromWargear() {
     }
     var wtypeBadge = wtype ? '<span class="qa-wtype-badge '+wBadgeCls+'">'+wtype+'</span>' : '';
     var metaRow = (wtypeBadge || mods) ? '<div class="qa-meta-row">'+wtypeBadge+mods+'</div>' : '';
+    var nameSpan = meta.id
+      ? '<span class="dp-clickable" style="font-family:var(--font-label);font-size:10pt;color:var(--gold-light);" onclick="_weaponPopup(event,\''+meta.id+'\')">'+name+'</span>'
+      : '<span style="font-family:var(--font-label);font-size:10pt;color:var(--text);">'+name+'</span>';
     rows += '<tr>'
       + '<td style="text-align:center;color:var(--silver-dim);font-size:11pt;padding:3px 2px;">'+wIcon+'</td>'
-      + '<td><div class="qa-name-cell"><span style="font-family:var(--font-label);font-size:10pt;color:var(--text);">'+name+'</span>'+metaRow+'</div></td>'
+      + '<td><div class="qa-name-cell">'+nameSpan+metaRow+'</div></td>'
       + '<td style="text-align:center;color:var(--gold-light);">'+hit+'</td>'
       + '<td style="text-align:center;">'+dmg+'</td>'
       + '<td style="text-align:center;">'+range+'</td>'
@@ -2332,12 +2353,12 @@ function _spellFilter() {
       var costLabel = sp.costType === 'free' ? 'FREE' : (sp.cost + ' ' + sp.costType);
       var costColor = _SPELL_COST_COLOR[sp.costType] || 'var(--gold)';
       var borderColor = sp.class === 'librarian' ? '#7060c8' : '#c8a44a';
-      html += '<div class="sreq-card" style="border-left:3px solid '+borderColor+';">' +
+      html += '<div class="sreq-card" style="border-left:3px solid '+borderColor+';cursor:pointer;" onclick="_spellPopup(event,\''+sp.id+'\')">' +
         '<div class="sreq-card-name">'+sp.name+'</div>' +
         '<div class="sreq-card-stat" style="color:'+costColor+';font-weight:600;">'+costLabel+'</div>' +
         '<div class="sreq-card-stat">'+sp.action+' · '+sp.range+' · '+sp.duration+'</div>' +
         (sp.hasPerils ? '<div class="sreq-card-stat" style="color:#c04040;font-size:8pt;">⚠ Perils risk</div>' : '') +
-        '<button class="sreq-add" onclick="_spellAdd(\''+sp.id+'\')" '+(isAdded?'disabled style="opacity:.4;cursor:default;"':'')+'>'+(isAdded?'✓ Added':'+ Add Power')+'</button>' +
+        '<button class="sreq-add" onclick="event.stopPropagation();_spellAdd(\''+sp.id+'\')" '+(isAdded?'disabled style="opacity:.4;cursor:default;"':'')+'>'+(isAdded?'✓ Added':'+ Add Power')+'</button>' +
         '</div>';
     });
   });
@@ -2378,7 +2399,7 @@ function renderActivePowers() {
     var borderColor = sp.class === 'librarian' ? '#7060c8' : '#c8a44a';
     html += '<div style="display:flex;align-items:center;gap:6px;padding:3px 0;border-bottom:1px solid var(--border);">' +
       '<div style="flex:1;min-width:0;">' +
-        '<span style="font-family:var(--font-label);font-size:9pt;color:var(--gold-light);margin-right:6px;border-left:2px solid '+borderColor+';padding-left:5px;">'+sp.name+'</span>' +
+        '<span class="dp-clickable" onclick="_spellPopup(event,\''+sp.id+'\')" style="font-family:var(--font-label);font-size:9pt;color:var(--gold-light);margin-right:6px;border-left:2px solid '+borderColor+';padding-left:5px;">'+sp.name+'</span>' +
         '<span style="font-size:8pt;color:'+costColor+';font-weight:600;">'+costLabel+'</span>' +
         '<span style="font-size:8pt;color:var(--text-dim);margin-left:6px;">'+sp.action+' · '+sp.range+'</span>' +
         (sp.hasPerils ? '<span style="font-size:7pt;color:#c04040;margin-left:4px;">⚠</span>' : '') +
@@ -2786,7 +2807,78 @@ function _modPopup(e, modName) {
 document.addEventListener('click', function() {
   var box = document.getElementById('act-popup-box');
   if (box) box.classList.remove('open');
+  var dp = document.getElementById('detail-popup');
+  if (dp) dp.classList.remove('open');
 });
+
+/* ══ DETAIL POPUP — weapons & spells ══ */
+function _detailPopup(e, html) {
+  var box = document.getElementById('detail-popup');
+  if (!box) return;
+  box.innerHTML = html;
+  // Position near click, flip if too close to edges
+  var vpW = window.innerWidth, vpH = window.innerHeight;
+  var pw = 332, ph = 460;
+  var x = e.clientX + 14;
+  var y = e.clientY + 14;
+  if (x + pw > vpW - 8) x = Math.max(8, e.clientX - pw - 8);
+  if (y + ph > vpH - 8) y = Math.max(8, e.clientY - ph - 8);
+  box.style.left = x + 'px';
+  box.style.top  = y + 'px';
+  box.classList.add('open');
+  e.stopPropagation();
+}
+function _weaponPopup(e, itemId) {
+  if (typeof REQ_ITEMS === 'undefined') return;
+  var item = REQ_ITEMS.find(function(x){ return x.id === itemId; });
+  if (!item) return;
+  var modsHtml = (item.mods && item.mods.length)
+    ? '<div class="dp-mods">' + item.mods.map(function(m){
+        return '<span class="dp-mod-pill" onclick="_modPopup(event,\''+m.replace(/'/g,"\\'")+'\')" title="Click for details">'+m+'</span>';
+      }).join('') + '</div>'
+    : '';
+  var notesHtml = item.notes ? '<div class="dp-notes">'+item.notes+'</div>' : '';
+  var html =
+    '<div class="dp-badges">' +
+      '<span class="dp-badge" style="background:rgba(200,164,74,.18);color:var(--gold);">'+item.cat+'</span>' +
+      (item.wtype ? '<span class="dp-badge" style="background:rgba(100,100,100,.25);color:var(--silver-dim);">'+item.wtype+'</span>' : '') +
+    '</div>' +
+    '<span class="dp-name">'+item.name+'</span>' +
+    '<div class="dp-stats">' +
+      '<div class="dp-stat"><strong>Damage</strong>'+item.dmg+'</div>' +
+      '<div class="dp-stat"><strong>Range</strong>'+item.range+'</div>' +
+      '<div class="dp-stat"><strong>Ammo</strong>'+(item.ammo||'—')+'</div>' +
+      '<div class="dp-stat"><strong>Shots / Mag</strong>'+(item.shots||'—')+'</div>' +
+      '<div class="dp-stat"><strong>Cost</strong>'+(item.cost||'—')+'</div>' +
+    '</div>' +
+    modsHtml +
+    (item.lore ? '<hr class="dp-divider"><div class="dp-desc">'+item.lore+'</div>' : '') +
+    notesHtml;
+  _detailPopup(e, html);
+}
+function _spellPopup(e, spellId) {
+  if (typeof SPELLS === 'undefined') return;
+  var sp = SPELLS.find(function(s){ return s.id === spellId; });
+  if (!sp) return;
+  var costLabel = sp.costType === 'free' ? 'FREE' : (sp.cost + ' ' + sp.costType);
+  var classColor = sp.class === 'librarian' ? '#7060c8' : '#c8a44a';
+  var classTxt   = sp.class === 'librarian' ? 'Librarian' : 'Chaplain';
+  var html =
+    '<div class="dp-badges">' +
+      '<span class="dp-badge" style="background:'+classColor+';color:#fff;">'+classTxt+'</span>' +
+      '<span class="dp-badge" style="background:rgba(100,100,100,.25);color:var(--silver-dim);">'+sp.tierLabel+'</span>' +
+    '</div>' +
+    '<span class="dp-name">'+sp.name+'</span>' +
+    '<div class="dp-stats">' +
+      '<div class="dp-stat"><strong>Cost</strong>'+costLabel+'</div>' +
+      '<div class="dp-stat"><strong>Action</strong>'+sp.action+'</div>' +
+      '<div class="dp-stat"><strong>Range</strong>'+sp.range+'</div>' +
+      '<div class="dp-stat"><strong>Duration</strong>'+sp.duration+'</div>' +
+    '</div>' +
+    (sp.hasPerils ? '<div class="dp-peril">⚠ Spending 16+ WRP triggers a Perils of the Warp check</div>' : '') +
+    '<hr class="dp-divider"><div class="dp-desc">'+sp.desc+'</div>';
+  _detailPopup(e, html);
+}
 </script>
 
 <!-- Action detail popup -->
@@ -2795,6 +2887,9 @@ document.addEventListener('click', function() {
   <span class="act-popup-name"></span>
   <span class="act-popup-desc"></span>
 </div>
+
+<!-- Weapon / Spell detail popup -->
+<div id="detail-popup"></div>
 
 </body>
 </html>
