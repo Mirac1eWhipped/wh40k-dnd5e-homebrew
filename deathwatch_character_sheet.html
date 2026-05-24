@@ -821,6 +821,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
       <div class="rc-tabs">
         <button class="rc-tab-btn active" onclick="rcTab(this,'rc-actions')">Actions</button>
         <button class="rc-tab-btn" onclick="rcTab(this,'rc-wargear')">Wargear</button>
+        <button class="rc-tab-btn" onclick="rcTab(this,'rc-spells')">Spells</button>
         <button class="rc-tab-btn" onclick="rcTab(this,'rc-requisitorium')">Requisitorium</button>
         <button class="rc-tab-btn" onclick="rcTab(this,'rc-abilities')">Abilities</button>
         <button class="rc-tab-btn" onclick="rcTab(this,'rc-notes')">Notes</button>
@@ -840,6 +841,25 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
         <div class="section" style="margin-bottom:8px;">
           <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Ammunition</span></div>
           <div id="ammo-tracker-container"><div style="opacity:.4;font-size:9pt;padding:8px 4px;">No ammo tracked — add weapons from the Requisitorium or fill in the Wargear tab.</div></div>
+        </div>
+        <!-- Warp/Holy Power Tracker — shown for Librarian/Chaplain -->
+        <div class="section" id="power-tracker-section" style="margin-bottom:8px;display:none;">
+          <div class="dos-col-hdr">
+            <span class="dos-col-hdr-lbl" id="power-tracker-label">Power Points</span>
+            <button class="sreq-open-btn" onclick="_spellOpen()" style="font-size:9pt;padding:1px 7px;">+ Spell Browser</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;padding:4px 0 6px;">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <button onclick="_powerAdj(-1)" style="width:22px;height:22px;font-size:14pt;line-height:1;background:none;border:1px solid var(--gold-dim);color:var(--gold);cursor:pointer;border-radius:2px;padding:0;">−</button>
+              <span id="power-cur" style="font-family:var(--font-label);font-size:14pt;color:var(--gold);min-width:28px;text-align:center;">0</span>
+              <span style="font-family:var(--font-label);font-size:10pt;color:var(--text-dim);">/</span>
+              <input id="power-max" type="number" min="0" max="200" value="0" oninput="_powerMaxChange()" style="width:44px;font-family:var(--font-label);font-size:10pt;text-align:center;background:var(--input-bg,#1a1a1a);border:1px solid var(--gold-dim);color:var(--text-main,#ccc);padding:2px 4px;">
+              <button onclick="_powerAdj(1)" style="width:22px;height:22px;font-size:14pt;line-height:1;background:none;border:1px solid var(--gold-dim);color:var(--gold);cursor:pointer;border-radius:2px;padding:0;">+</button>
+            </div>
+            <button onclick="_powerReset()" style="font-family:var(--font-label);font-size:8pt;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--gold-dim);background:transparent;color:var(--gold-dim);cursor:pointer;border-radius:2px;" title="Reset to max">↺ Resupply</button>
+          </div>
+          <!-- Active Powers Quick List -->
+          <div id="active-powers-list" style="margin-top:2px;"></div>
         </div>
         <!-- Actions Reference — THIRD (reference material, less frequently needed) -->
         <div class="section" style="margin-bottom:8px;">
@@ -983,6 +1003,27 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- SPELLS tab -->
+      <div class="rc-tab-panel" id="rc-spells">
+        <div class="section">
+          <div class="sec-title" id="spells-tab-title">Spells &amp; Powers</div>
+          <p style="font-family:var(--font-label);font-size:9pt;color:var(--silver-dim);letter-spacing:.1em;margin-bottom:10px;" id="spells-tab-hint">Browse and manage your class powers. Only available for Librarian and Chaplain classes.</p>
+          <!-- Power Point Tracker (mirrored from Actions tab) -->
+          <div id="spells-tab-tracker" style="display:none;margin-bottom:12px;">
+            <div style="font-family:var(--font-label);font-size:8pt;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;" id="spells-tracker-label">Power Points</div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+              <button onclick="_powerAdj(-1)" style="width:24px;height:24px;font-size:14pt;line-height:1;background:none;border:1px solid var(--gold-dim);color:var(--gold);cursor:pointer;border-radius:2px;padding:0;">−</button>
+              <span id="spells-power-cur" style="font-family:var(--font-label);font-size:14pt;color:var(--gold);min-width:30px;text-align:center;">0</span>
+              <span style="font-family:var(--font-label);font-size:10pt;color:var(--text-dim);">/ <span id="spells-power-max">0</span></span>
+              <button onclick="_powerAdj(1)" style="width:24px;height:24px;font-size:14pt;line-height:1;background:none;border:1px solid var(--gold-dim);color:var(--gold);cursor:pointer;border-radius:2px;padding:0;">+</button>
+              <button onclick="_powerReset()" style="font-family:var(--font-label);font-size:8pt;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--gold-dim);background:transparent;color:var(--gold-dim);cursor:pointer;border-radius:2px;" title="Reset to max">↺ Resupply</button>
+            </div>
+          </div>
+          <button class="sreq-open-btn" onclick="_spellOpen()" style="font-size:10pt;padding:6px 16px;display:block;margin-bottom:12px;">Open Spell Browser</button>
+          <div id="spells-tab-list"><div style="opacity:.4;font-size:9pt;padding:4px 0;">No powers added yet — open the Spell Browser to add powers to your active list.</div></div>
         </div>
       </div>
 
@@ -1153,6 +1194,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
     </div>
   </div>
 </div>
+<script src="spells.js"></script>
 <script src="req_items.js"></script>
 <style>
 #sreq-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:1000;align-items:center;justify-content:center;}
@@ -1200,6 +1242,36 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
       </div>
     </div>
     <div class="sreq-grid" id="sreq-grid"></div>
+  </div>
+</div>
+<!-- Spell Browser Overlay -->
+<style>
+#spell-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:1000;align-items:center;justify-content:center;}
+#spell-overlay.open{display:flex;}
+#spell-modal{background:var(--panel-bg,var(--panel));border:1px solid var(--gold);border-radius:4px;width:min(680px,95vw);max-height:80vh;display:flex;flex-direction:column;overflow:hidden;}
+</style>
+<div id="spell-overlay" onclick="if(event.target===this)_spellClose()">
+  <div id="spell-modal">
+    <div class="sreq-hdr">
+      <span class="sreq-ttl" id="spell-modal-title">Sanctioned Powers Browser</span>
+      <button class="sreq-x" onclick="_spellClose()">&#10005;</button>
+    </div>
+    <div class="sreq-controls">
+      <input class="sreq-search" id="spell-search" type="text" placeholder="Search powers…" oninput="_spellFilter()">
+      <div class="sreq-filters" id="spell-cat-filters">
+        <button class="sreq-fbtn active" onclick="_spellSetCat(this,'all')">All Powers</button>
+        <button class="sreq-fbtn" onclick="_spellSetCat(this,'librarian')">Librarian (WRP)</button>
+        <button class="sreq-fbtn" onclick="_spellSetCat(this,'chaplain')">Chaplain (EBP)</button>
+      </div>
+      <div class="sreq-filters" id="spell-tier-filters">
+        <button class="sreq-fbtn active" onclick="_spellSetTier(this,'all')">All Tiers</button>
+        <button class="sreq-fbtn" onclick="_spellSetTier(this,'base')">Base (Free)</button>
+        <button class="sreq-fbtn" onclick="_spellSetTier(this,'rank1')">Rank I / Dev I</button>
+        <button class="sreq-fbtn" onclick="_spellSetTier(this,'rank2')">Rank II / Dev II</button>
+        <button class="sreq-fbtn" onclick="_spellSetTier(this,'rank3')">Rank III / Dev III</button>
+      </div>
+    </div>
+    <div class="sreq-grid" id="spell-grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr));"></div>
   </div>
 </div>
 <script>
@@ -1599,6 +1671,7 @@ function renderFeatures() {
     const subBadge = f._sub ? '<span class="sub-badge">' + f._sub + '</span>' : '';
     return '<div class="feat-card"><div class="feat-card-hdr"><span class="feat-card-lvl">' + f.level_str + '</span><span class="feat-card-name">' + f.name + subBadge + '</span></div><div class="feat-card-body">' + formatBody(f.body) + '</div></div>';
   }).join('');
+  if (typeof _updatePowerTracker === 'function') _updatePowerTracker();
 }
 
 /* ── Class Proficiency Data ── */
@@ -1840,6 +1913,9 @@ async function _doSave() {
     inspiration: _inspiration,
     conditions: Array.from(document.querySelectorAll('.dos-cond-chip.active')).map(function(c){ return c.textContent; }),
     conditions_notes: (document.getElementById('conditions-notes') || {value:''}).value
+    ,spellbook: _spellbook
+    ,power_cur: _powerCur
+    ,power_max: _powerMax
     ,defenses: {
       resist: Array.from(document.querySelectorAll('#def-resist-chips .dos-def-chip.resist')).map(function(c){ return c.textContent; }),
       immune: Array.from(document.querySelectorAll('#def-immune-chips .dos-def-chip.immune')).map(function(c){ return c.textContent; }),
@@ -2105,6 +2181,12 @@ async function _loadSheet(adminOverrideId) {
       if (dnEl && def.notes) dnEl.value = def.notes;
       _updateDefEmpty();
     }
+    if (ext.spellbook && Array.isArray(ext.spellbook)) _spellbook = ext.spellbook;
+    _powerCur = (typeof ext.power_cur === 'number') ? ext.power_cur : 0;
+    _powerMax = (typeof ext.power_max === 'number') ? ext.power_max : 0;
+    renderActivePowers();
+    _updatePowerTracker();
+    _syncPowerDisplay();
     STATS.forEach(s => calcMod(s));
     syncQuickActionsFromWargear();
     renderAmmoTracker();
@@ -2182,6 +2264,184 @@ function _sreqOpen() {
   _sreqFilter();
 }
 function _sreqClose() { document.getElementById('sreq-overlay').classList.remove('open'); }
+
+/* ══ SPELL / POWER BROWSER SYSTEM ══ */
+var _spellbook      = [];
+var _powerCur       = 0;
+var _powerMax       = 0;
+var _spellCatFilter = 'all';
+var _spellTierFilter= 'all';
+
+const _SPELL_TIER_ALIAS = {
+  base:  ['base'],
+  rank1: ['rank1','dev1'],
+  rank2: ['rank2','dev2'],
+  rank3: ['rank3','dev3'],
+};
+const _SPELL_TIER_LABEL = {
+  base:'Base (Free)', rank1:'Rank I — Neophyte Disciplines', rank2:'Rank II — Librarian Disciplines',
+  rank3:'Rank III — Chief Librarian Disciplines', dev1:'Devotion I — Righteous Invocations',
+  dev2:'Devotion II — Sacred Rites', dev3:'Devotion III — The Emperor\'s Absolute Will',
+};
+const _SPELL_COST_COLOR = { free:'var(--gold)', WRP:'#a090e0', EBP:'#d4a040' };
+
+function _spellOpen() {
+  var ov = document.getElementById('spell-overlay');
+  if (ov) { ov.classList.add('open'); _spellFilter(); }
+  document.addEventListener('keydown', _spellEsc);
+}
+function _spellClose() {
+  var ov = document.getElementById('spell-overlay');
+  if (ov) ov.classList.remove('open');
+  document.removeEventListener('keydown', _spellEsc);
+}
+function _spellEsc(e) { if (e.key === 'Escape') _spellClose(); }
+
+function _spellSetCat(btn, cat) {
+  _spellCatFilter = cat;
+  document.querySelectorAll('#spell-cat-filters .sreq-fbtn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  _spellFilter();
+}
+function _spellSetTier(btn, tier) {
+  _spellTierFilter = tier;
+  document.querySelectorAll('#spell-tier-filters .sreq-fbtn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  _spellFilter();
+}
+function _spellFilter() {
+  if (typeof SPELLS === 'undefined') return;
+  var grid = document.getElementById('spell-grid');
+  if (!grid) return;
+  var q = ((document.getElementById('spell-search') || {}).value || '').toLowerCase();
+  var tierAliases = _spellTierFilter === 'all' ? null : (_SPELL_TIER_ALIAS[_spellTierFilter] || [_spellTierFilter]);
+
+  var filtered = SPELLS.filter(function(sp) {
+    if (_spellCatFilter !== 'all' && sp.class !== _spellCatFilter) return false;
+    if (tierAliases && tierAliases.indexOf(sp.tier) === -1) return false;
+    if (q && sp.name.toLowerCase().indexOf(q) === -1 && sp.desc.toLowerCase().indexOf(q) === -1) return false;
+    return true;
+  });
+
+  if (!filtered.length) {
+    grid.innerHTML = '<div class="sreq-empty">No powers match your filters.</div>';
+    return;
+  }
+  var groups = {};
+  var tierOrder = ['base','rank1','dev1','rank2','dev2','rank3','dev3'];
+  filtered.forEach(function(sp) {
+    if (!groups[sp.tier]) groups[sp.tier] = [];
+    groups[sp.tier].push(sp);
+  });
+  var html = '';
+  tierOrder.forEach(function(t) {
+    if (!groups[t]) return;
+    html += '<div style="grid-column:1/-1;font-family:var(--font-label);font-size:8pt;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-dim);border-bottom:1px solid var(--border);padding-bottom:3px;margin:6px 0 3px;">' + (_SPELL_TIER_LABEL[t]||t) + '</div>';
+    groups[t].forEach(function(sp) {
+      var isAdded = _spellbook.indexOf(sp.id) !== -1;
+      var costLabel = sp.costType === 'free' ? 'FREE' : (sp.cost + ' ' + sp.costType);
+      var costColor = _SPELL_COST_COLOR[sp.costType] || 'var(--gold)';
+      var borderColor = sp.class === 'librarian' ? '#7060c8' : '#c8a44a';
+      html += '<div class="sreq-card" style="border-left:3px solid '+borderColor+';">' +
+        '<div class="sreq-card-name">'+sp.name+'</div>' +
+        '<div class="sreq-card-stat" style="color:'+costColor+';font-weight:600;">'+costLabel+'</div>' +
+        '<div class="sreq-card-stat">'+sp.action+' · '+sp.range+' · '+sp.duration+'</div>' +
+        (sp.hasPerils ? '<div class="sreq-card-stat" style="color:#c04040;font-size:8pt;">⚠ Perils risk</div>' : '') +
+        '<button class="sreq-add" onclick="_spellAdd(\''+sp.id+'\')" '+(isAdded?'disabled style="opacity:.4;cursor:default;"':'')+'>'+(isAdded?'✓ Added':'+ Add Power')+'</button>' +
+        '</div>';
+    });
+  });
+  grid.innerHTML = html;
+}
+function _spellAdd(id) {
+  if (_spellbook.indexOf(id) !== -1) return;
+  _spellbook.push(id);
+  renderActivePowers();
+  _spellFilter();
+  _schedSave();
+}
+function _spellRemove(id) {
+  var idx = _spellbook.indexOf(id);
+  if (idx === -1) return;
+  _spellbook.splice(idx, 1);
+  renderActivePowers();
+  _spellFilter();
+  _schedSave();
+}
+function renderActivePowers() {
+  var sp1 = document.getElementById('active-powers-list');
+  var sp2 = document.getElementById('spells-tab-list');
+  if (typeof SPELLS === 'undefined') return;
+  if (!_spellbook.length) {
+    var empty1 = '<div style="opacity:.4;font-size:9pt;padding:4px 0;">No powers added yet.</div>';
+    var empty2 = '<div style="opacity:.4;font-size:9pt;padding:4px 0;">No powers added yet — open the Spell Browser to add powers to your active list.</div>';
+    if (sp1) sp1.innerHTML = empty1;
+    if (sp2) sp2.innerHTML = empty2;
+    return;
+  }
+  var html = '';
+  _spellbook.forEach(function(id) {
+    var sp = SPELLS.find(function(s){ return s.id === id; });
+    if (!sp) return;
+    var costLabel = sp.costType === 'free' ? 'FREE' : (sp.cost + ' ' + sp.costType);
+    var costColor = _SPELL_COST_COLOR[sp.costType] || 'var(--gold)';
+    var borderColor = sp.class === 'librarian' ? '#7060c8' : '#c8a44a';
+    html += '<div style="display:flex;align-items:center;gap:6px;padding:3px 0;border-bottom:1px solid var(--border);">' +
+      '<div style="flex:1;min-width:0;">' +
+        '<span style="font-family:var(--font-label);font-size:9pt;color:var(--gold-light);margin-right:6px;border-left:2px solid '+borderColor+';padding-left:5px;">'+sp.name+'</span>' +
+        '<span style="font-size:8pt;color:'+costColor+';font-weight:600;">'+costLabel+'</span>' +
+        '<span style="font-size:8pt;color:var(--text-dim);margin-left:6px;">'+sp.action+' · '+sp.range+'</span>' +
+        (sp.hasPerils ? '<span style="font-size:7pt;color:#c04040;margin-left:4px;">⚠</span>' : '') +
+      '</div>' +
+      '<button onclick="_spellRemove(\''+sp.id+'\')" title="Remove" style="background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:11pt;line-height:1;padding:0 2px;flex-shrink:0;" onmouseover="this.style.color=\'#c04040\'" onmouseout="this.style.color=\'var(--text-dim)\'">✕</button>' +
+    '</div>';
+  });
+  if (sp1) sp1.innerHTML = html;
+  if (sp2) sp2.innerHTML = html;
+}
+function _updatePowerTracker() {
+  var clsEl = document.getElementById('cls-select');
+  var cls = clsEl ? clsEl.value : '';
+  var isLib  = cls === 'Librarian';
+  var isChap = cls === 'Chaplain';
+  var show   = isLib || isChap;
+  var label  = isLib ? 'Warp Resilience Points (WRP)' : isChap ? "Emperor's Blessing Points (EBP)" : 'Power Points';
+  var ts = document.getElementById('power-tracker-section');
+  var st = document.getElementById('spells-tab-tracker');
+  var tl = document.getElementById('power-tracker-label');
+  var sl = document.getElementById('spells-tracker-label');
+  if (ts) ts.style.display = show ? '' : 'none';
+  if (st) st.style.display = show ? '' : 'none';
+  if (tl) tl.textContent = label;
+  if (sl) sl.textContent = label;
+}
+function _powerAdj(delta) {
+  _powerCur = Math.max(0, Math.min(_powerMax, _powerCur + delta));
+  _syncPowerDisplay();
+  _schedSave();
+}
+function _powerMaxChange() {
+  var inp = document.getElementById('power-max');
+  _powerMax = inp ? (parseInt(inp.value)||0) : 0;
+  if (_powerCur > _powerMax) _powerCur = _powerMax;
+  _syncPowerDisplay();
+  _schedSave();
+}
+function _powerReset() {
+  _powerCur = _powerMax;
+  _syncPowerDisplay();
+  _schedSave();
+}
+function _syncPowerDisplay() {
+  var curEl  = document.getElementById('power-cur');
+  var spCur  = document.getElementById('spells-power-cur');
+  var spMax  = document.getElementById('spells-power-max');
+  var maxInp = document.getElementById('power-max');
+  if (curEl)  curEl.textContent  = _powerCur;
+  if (spCur)  spCur.textContent  = _powerCur;
+  if (spMax)  spMax.textContent  = _powerMax;
+  if (maxInp && parseInt(maxInp.value) !== _powerMax) maxInp.value = _powerMax;
+}
 function _sreqSetCat(btn, cat) {
   _sreqCat = cat;
   document.querySelectorAll('.sreq-fbtn').forEach(b => b.classList.remove('active'));
@@ -2385,6 +2645,12 @@ async function _loadSheetForUser(uid) {
         if (exp) exp.checked = true;
       });
     }
+    if (ext.spellbook && Array.isArray(ext.spellbook)) _spellbook = ext.spellbook;
+    _powerCur = (typeof ext.power_cur === 'number') ? ext.power_cur : 0;
+    _powerMax = (typeof ext.power_max === 'number') ? ext.power_max : 0;
+    renderActivePowers();
+    _updatePowerTracker();
+    _syncPowerDisplay();
     STATS.forEach(function(s){ calcMod(s); });
     _status('loaded', 'Viewing ' + (rows[0].name || 'player') + '\'s sheet');
   } catch(e) { _status('error','Could not load player sheet'); }
