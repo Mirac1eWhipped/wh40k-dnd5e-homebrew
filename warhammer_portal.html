@@ -762,6 +762,8 @@
     .op-view-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
     .op-del-btn { background: transparent; border: 1px solid var(--border); color: var(--text-dim); font-size: 13px; width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
     .op-del-btn:hover { border-color: var(--red-bright); color: var(--red-bright); }
+    .op-edit-btn { background: transparent; border: 1px solid var(--gold-dim); color: var(--gold-dim); font-size: 12px; width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+    .op-edit-btn:hover { border-color: var(--gold); color: var(--gold); background: rgba(200,164,74,.1); }
     .op-empty-state { grid-column: 1 / -1; text-align: center; padding: 48px 20px; color: var(--text-dim); font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 3px; border: 1px dashed var(--border); }
     /* ─── Add Operative Modal ─── */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 900; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s; overflow-y: auto; padding: 20px; }
@@ -1967,6 +1969,7 @@
       var hpMax = parseInt(op.hpMax) || 1;
       var hpPct = Math.max(0, Math.min(100, Math.round((hp / hpMax) * 100)));
       var sheetLabel = SHEET_LABELS[op.sheetFile] || op.sheetFile || 'Deathwatch — Dark';
+      var isAdmin = _portalLoggedIn() && _portalUid() === ADMIN_UID;
       var card = document.createElement('div');
       card.className = 'op-card';
       card.innerHTML =
@@ -1991,6 +1994,7 @@
         (op.playerName ? '<div class="op-card-player">&#9651; ' + op.playerName + '</div>' : '') +
         '<div class="op-card-actions">' +
           '<button class="op-view-btn" onclick="openSheet(\'' + op.id + '\')">&#9654; View Sheet</button>' +
+          (isAdmin && op.cloudId && op.sheetFile ? '<button class="op-edit-btn" onclick="event.stopPropagation();_adminEditSheet(\'' + op.cloudId + '\',\'' + op.sheetFile + '\')" title="GM: Edit this operative\'s sheet">&#9998;</button>' : '') +
           '<button class="op-del-btn" onclick="deleteOperative(\'' + op.id + '\')" title="Remove Operative">&times;</button>' +
         '</div>';
       grid.appendChild(card);
@@ -2095,6 +2099,11 @@
     _openSheetWindow = window.open(url, '_blank');
   }
   function closeSheet() { /* sheets now open in their own tab */ }
+
+  function _adminEditSheet(cloudId, sheetFile) {
+    if (!cloudId || !sheetFile) { alert('No cloud save found for this operative — they may not have logged in yet.'); return; }
+    window.location.href = sheetFile + '?cloudId=' + encodeURIComponent(cloudId);
+  }
 
   // ── Sync roster from Supabase cloud ──────────────────────────
   var SHEET_TYPE_MAP = {
@@ -2450,6 +2459,7 @@
   });
 
   /* ══ PORTAL SUPABASE AUTH ══ */
+  const ADMIN_UID  = 'e183a5aa-421d-4df7-8d32-39046de091f4';
   const _PAB_URL = 'https://uggazjqvwyndpcxrkazx.supabase.co';
   const _PAB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnZ2F6anF2d3luZHBjeHJrYXp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4MTcxOTAsImV4cCI6MjA5NDM5MzE5MH0.6dcsbi-lzQJUQS5UZTVg-tI_mFuy8yfAlfWsf0ennpU';
   function _portalToken()  { return localStorage.getItem('supa_tok')   || ''; }
