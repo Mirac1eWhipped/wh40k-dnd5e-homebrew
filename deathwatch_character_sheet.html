@@ -864,7 +864,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
       <div class="rc-tabs">
         <button class="rc-tab-btn active" onclick="rcTab(this,'rc-actions')">Actions</button>
         <button class="rc-tab-btn" onclick="rcTab(this,'rc-wargear')">Wargear</button>
-        <button class="rc-tab-btn" onclick="rcTab(this,'rc-spells')">Spells</button>
+        <button class="rc-tab-btn" id="rc-spells-btn" onclick="rcTab(this,'rc-spells')" style="display:none;">Spells</button>
         <button class="rc-tab-btn" onclick="rcTab(this,'rc-requisitorium')">Requisitorium</button>
         <button class="rc-tab-btn" onclick="rcTab(this,'rc-abilities')">Abilities</button>
         <button class="rc-tab-btn" onclick="rcTab(this,'rc-notes')">Notes</button>
@@ -2503,14 +2503,23 @@ function _updatePowerTracker() {
   var isChap = cls === 'Chaplain';
   var show   = isLib || isChap;
   var label  = isLib ? 'Warp Resilience Points (WRP)' : isChap ? "Emperor's Blessing Points (EBP)" : 'Power Points';
-  var ts = document.getElementById('power-tracker-section');
-  var st = document.getElementById('spells-tab-tracker');
-  var tl = document.getElementById('power-tracker-label');
-  var sl = document.getElementById('spells-tracker-label');
+  var ts  = document.getElementById('power-tracker-section');
+  var st  = document.getElementById('spells-tab-tracker');
+  var tl  = document.getElementById('power-tracker-label');
+  var sl  = document.getElementById('spells-tracker-label');
+  var stb = document.getElementById('rc-spells-btn');
   if (ts) ts.style.display = show ? '' : 'none';
   if (st) st.style.display = show ? '' : 'none';
   if (tl) tl.textContent = label;
   if (sl) sl.textContent = label;
+  if (stb) {
+    stb.style.display = show ? '' : 'none';
+    // If Spells tab is active and we're hiding it, switch to Actions
+    if (!show && stb.classList.contains('active')) {
+      var actBtn = document.querySelector('.rc-tab-btn[onclick*="rc-actions"]');
+      if (actBtn) rcTab(actBtn, 'rc-actions');
+    }
+  }
 }
 function _powerAdj(delta) {
   _powerCur = Math.max(0, Math.min(_powerMax, _powerCur + delta));
