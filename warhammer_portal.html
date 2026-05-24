@@ -2609,6 +2609,10 @@
     }
     if (changed) {
       saveRoster(data);
+      // Now that playerUid is assigned, run the dedup pass immediately.
+      // This collapses any pre-existing duplicate that shares playerUid+sheetFile
+      // (e.g. one entry added manually before login, plus one added by the sync).
+      _cleanupRosterDupes();
       renderRoster();
     }
   });
