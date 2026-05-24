@@ -1544,10 +1544,14 @@ function syncQuickActionsFromWargear() {
       var costColor  = (typeof _SPELL_COST_COLOR !== 'undefined' && _SPELL_COST_COLOR[sp.costType]) || 'var(--gold)';
       var spIcon     = sp.class === 'librarian' ? '✦' : '✝';
       var spColor    = sp.class === 'librarian' ? '#a090e0' : '#d4a040';
+      // Spell attack roll: Librarian = INT+PB, Chaplain = WIS+PB
+      var spStat     = sp.class === 'librarian' ? 'int' : 'wis';
+      var spHit      = fmt(_mod(spStat) + pb);
+      var costBadge  = '<span style="font-family:var(--font-label);font-size:7pt;letter-spacing:.06em;color:'+costColor+';margin-left:5px;opacity:.85;">'+costLabel+'</span>';
       spellRows += '<tr>' +
         '<td style="text-align:center;font-size:12pt;padding:3px 2px;color:'+spColor+';">'+spIcon+'</td>' +
-        '<td><div class="qa-name-cell"><span class="dp-clickable" style="font-family:var(--font-label);font-size:10pt;color:var(--gold-light);" onclick="_spellPopup(event,\''+sp.id+'\')">'+sp.name+'</span></div></td>' +
-        '<td style="text-align:center;color:'+costColor+';font-size:9pt;font-weight:600;">'+costLabel+'</td>' +
+        '<td><div class="qa-name-cell"><span class="dp-clickable" style="font-family:var(--font-label);font-size:10pt;color:var(--gold-light);" onclick="_spellPopup(event,\''+sp.id+'\')">'+sp.name+'</span>'+costBadge+'</div></td>' +
+        '<td style="text-align:center;color:var(--gold-light);font-weight:600;">'+spHit+'</td>' +
         '<td style="text-align:center;color:var(--text-dim);font-size:9pt;">'+sp.action+'</td>' +
         '<td style="text-align:center;font-size:9pt;">'+sp.range+'</td>' +
         '<td style="text-align:center;color:var(--text-dim);font-size:8.5pt;">'+sp.duration+'</td>' +
