@@ -50,6 +50,39 @@ table.lvl tbody td:last-child{text-align:left;color:var(--text);font-size:9.5pt;
 .resource-title{font-family:var(--font-head);font-size:13pt;color:var(--gold-light);margin-bottom:6px;}
 .resource-note{font-size:9.5pt;color:var(--text-dim);font-style:italic;margin-bottom:.1in;line-height:1.5;}
 .page-footer{margin-top:.2in;border-top:1px solid var(--gold-dim);padding-top:.09in;font-family:var(--font-label);font-size:6pt;color:var(--text-dim);letter-spacing:.16em;text-align:center;text-transform:uppercase;}
+.discipline-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.14in;margin-bottom:.18in;}
+.discipline-card{background:var(--panel);border:1px solid var(--border);border-top:3px solid var(--gold-dim);padding:.14in .16in;}
+.discipline-card.biomancy{border-top-color:#60b86c;}
+.discipline-card.telepathy{border-top-color:#a060d0;}
+.discipline-card.telekinesis{border-top-color:#4090d8;}
+.discipline-card.pyromancy{border-top-color:#d06030;}
+.discipline-card.divination{border-top-color:#c8a44a;}
+.discipline-card.temporal{border-top-color:#60c8c0;}
+.disc-name{font-family:var(--font-head);font-size:12pt;margin-bottom:3px;}
+.biomancy .disc-name{color:#60b86c;}
+.telepathy .disc-name{color:#c080f8;}
+.telekinesis .disc-name{color:#60b0f8;}
+.pyromancy .disc-name{color:#f07848;}
+.divination .disc-name{color:var(--gold-light);}
+.temporal .disc-name{color:#60e0d8;}
+.disc-subtitle{font-family:var(--font-label);font-size:6pt;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;}
+.disc-lore{font-size:9pt;color:var(--text-dim);font-style:italic;line-height:1.5;margin-bottom:10px;border-bottom:1px solid var(--border);padding-bottom:8px;}
+.disc-autoprep{background:var(--panel2);border:1px solid var(--border);padding:6px 10px;margin-bottom:10px;}
+.disc-autoprep-label{font-family:var(--font-label);font-size:6pt;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;}
+.disc-autoprep-list{font-size:8.5pt;color:var(--text);line-height:1.55;}
+.disc-feature{margin-bottom:10px;}
+.disc-feature-header{display:flex;align-items:baseline;gap:6px;margin-bottom:4px;}
+.disc-feature-level{font-family:var(--font-label);font-size:6pt;color:var(--silver-dim);letter-spacing:.18em;text-transform:uppercase;background:var(--panel2);border:1px solid var(--border);padding:1px 5px;white-space:nowrap;}
+.disc-feature-name{font-family:var(--font-label);font-size:10pt;font-weight:600;letter-spacing:.01em;}
+.biomancy .disc-feature-name{color:#60b86c;}
+.telepathy .disc-feature-name{color:#c080f8;}
+.telekinesis .disc-feature-name{color:#60b0f8;}
+.pyromancy .disc-feature-name{color:#f07848;}
+.divination .disc-feature-name{color:var(--gold-light);}
+.temporal .disc-feature-name{color:#60e0d8;}
+.disc-feature p{font-size:9pt;color:var(--text);line-height:1.55;text-align:justify;}
+.disc-feature p strong{color:var(--gold-light);font-family:var(--font-label);font-size:8.5pt;}
+.peril-inline{color:#e07070;font-family:var(--font-label);font-size:7.5pt;letter-spacing:.08em;}
 </style>
 </head>
 <body>
@@ -72,9 +105,9 @@ table.lvl tbody td:last-child{text-align:left;color:var(--text);font-size:9.5pt;
 <div class="info-grid">
   <div class="info-panel">
     <div class="sec-head">Hit Points</div>
-    <div class="hp-box"><div class="hp-label">Hit Dice</div><div class="hp-value">d8</div></div>
-    <div class="info-row"><div class="info-label">1st Level</div><div class="info-value">8 + CON modifier</div></div>
-    <div class="info-row"><div class="info-label">Higher Levels</div><div class="info-value">1d8 + CON modifier per level</div></div>
+    <div class="hp-box"><div class="hp-label">Hit Dice</div><div class="hp-value">d6</div></div>
+    <div class="info-row"><div class="info-label">1st Level</div><div class="info-value">6 + CON modifier</div></div>
+    <div class="info-row"><div class="info-label">Higher Levels</div><div class="info-value">1d6 + CON modifier per level</div></div>
   </div>
   <div class="info-panel">
     <div class="sec-head">Proficiencies</div>
@@ -97,8 +130,10 @@ table.lvl tbody td:last-child{text-align:left;color:var(--text);font-size:9.5pt;
 
 <div class="resource-box">
   <div class="resource-title">Warp Resilience Points</div>
-  <div class="resource-note">Spent to manifest Advanced Warp Powers. Base Warp Spells are free and usable at will. Warp Resilience Points reset on resupply. Save DC for all Warp Powers = 8 + Proficiency Bonus + INT modifier.</div>
+  <div class="resource-note">Spent to manifest Advanced Warp Powers. Base Warp Spells are free and usable at will. Warp Resilience Points reset on resupply. Save DC for all Warp Powers = 8 + Proficiency Bonus + INT modifier. <strong style="color:var(--gold)">Short Rest Recovery:</strong> Once per resupply, during a short rest you may center your mind and recover WRP equal to your <strong>INT modifier × Proficiency Bonus</strong>. This represents pulling back from the Warp rather than drawing deeper — it does not trigger a Perils check and does not interact with Warp Tempering.</div>
   <div class="resource-note"><strong style="color:var(--gold)">Perils of the Warp:</strong> Whenever you manifest an Advanced Warp Power costing 6 or more Warp Resilience Points, make a WIS save (DC = 10 + points spent above 5). On a failure, gain Corruption equal to 1d4 and the GM may trigger a Warp Influence Effect.</div>
+  <div class="resource-note"><strong style="color:var(--gold)">The Push:</strong> Before manifesting any Advanced Warp Power, you may declare a Push. The power automatically triggers a Perils of the Warp check regardless of cost (WIS DC = 10 + points spent above 5, minimum DC 12). If you <em>succeed</em>: the power achieves maximum effect — choose one: damage dice are maximized, area of effect is doubled, or number of targets is doubled. If you <em>fail</em>: standard Perils consequences apply, but the power still fires at normal effect. A Push is declared before dice are rolled and cannot be cancelled. Courage rewarded. Hubris punished. <strong>Only one Perils check is ever made per power manifested</strong>, regardless of how many triggers apply (cost threshold, Push, and Warp Tempering never stack into multiple rolls). When multiple triggers apply simultaneously, use the highest applicable DC. If you declared a Push, its enhanced effect on success applies regardless of what else triggered the check.</div>
+  <div class="resource-note"><strong style="color:var(--gold)">Empower:</strong> When manifesting any Advanced Warp Power, you may spend <strong>3 additional WRP</strong> to Empower it, adding <strong>+2d6 bonus damage</strong> of the power's primary damage type. You may Empower up to twice per manifestation (+4d6 total for 6 extra WRP). For non-damage powers, each Empower instead extends duration by 50% or adds one extra target (your choice at declaration). Extra WRP spent from Empower counts toward Perils of the Warp calculations.</div>
 </div>
 
 <div class="section-title">Level Progression</div>
@@ -108,21 +143,21 @@ table.lvl tbody td:last-child{text-align:left;color:var(--text);font-size:9.5pt;
   <tbody>
     <tr class="milestone"><td>1</td><td class="prof">+2</td><td class="warp">20</td><td>Psyker Awakening (Rank 1), Class Proficiencies</td></tr>
     <tr><td>2</td><td class="prof">+2</td><td class="warp">24</td><td>Force Weapon Mastery</td></tr>
-    <tr><td>3</td><td class="prof">+2</td><td class="warp">28</td><td>Warp Sense</td></tr>
+    <tr><td>3</td><td class="prof">+2</td><td class="warp">28</td><td>Warp Sense, Psychic Discipline (Specialty)</td></tr>
     <tr><td>4</td><td class="prof">+2</td><td class="warp">32</td><td>Ability Score Improvement or Feat</td></tr>
     <tr class="milestone"><td>5</td><td class="prof">+3</td><td class="warp">36</td><td>Warp Conduit</td></tr>
-    <tr><td>6</td><td class="prof">+3</td><td class="warp">40</td><td>Psychic Cleansing</td></tr>
+    <tr><td>6</td><td class="prof">+3</td><td class="warp">40</td><td>Warp Tempering</td></tr>
     <tr class="milestone"><td>7</td><td class="prof">+3</td><td class="warp">44</td><td>Psyker Ranking 2, Psychic Strike 3d6</td></tr>
     <tr><td>8</td><td class="prof">+3</td><td class="warp">48</td><td>Ability Score Improvement or Feat</td></tr>
-    <tr><td>9</td><td class="prof">+4</td><td class="warp">52</td><td>Deny the Witch</td></tr>
+    <tr><td>9</td><td class="prof">+4</td><td class="warp">52</td><td>Deny the Witch, Discipline Mastery</td></tr>
     <tr><td>10</td><td class="prof">+4</td><td class="warp">56</td><td>—</td></tr>
     <tr><td>11</td><td class="prof">+4</td><td class="warp">60</td><td>Psychic Hood</td></tr>
     <tr><td>12</td><td class="prof">+4</td><td class="warp">64</td><td>Ability Score Improvement or Feat</td></tr>
     <tr><td>13</td><td class="prof">+5</td><td class="warp">68</td><td>Warp Shield</td></tr>
     <tr class="milestone"><td>14</td><td class="prof">+5</td><td class="warp">72</td><td>Psyker Ranking 3, Psychic Strike 4d6</td></tr>
-    <tr><td>15</td><td class="prof">+5</td><td class="warp">76</td><td>—</td></tr>
+    <tr><td>15</td><td class="prof">+5</td><td class="warp">76</td><td>Discipline Paragon</td></tr>
     <tr><td>16</td><td class="prof">+5</td><td class="warp">80</td><td>Ability Score Improvement or Feat</td></tr>
-    <tr><td>17</td><td class="prof">+6</td><td class="warp">84</td><td>Warp Mastery</td></tr>
+    <tr><td>17</td><td class="prof">+6</td><td class="warp">84</td><td>Warp Mastery, Immateria Unlocked (Rank IV)</td></tr>
     <tr><td>18</td><td class="prof">+6</td><td class="warp">88</td><td>Mind Fortress</td></tr>
     <tr><td>19</td><td class="prof">+6</td><td class="warp">92</td><td>Ability Score Improvement or Feat</td></tr>
     <tr class="milestone"><td>20</td><td class="prof">+6</td><td class="warp">100</td><td>Herald of the Warp</td></tr>
@@ -136,8 +171,9 @@ table.lvl tbody td:last-child{text-align:left;color:var(--text);font-size:9.5pt;
 
 <div class="feature">
   <div class="feature-header"><span class="feature-level">Level 1</span><span class="feature-name">Psyker Awakening</span></div>
-  <p>Your mind has been opened to the Warp under the careful tutelage of your Chapter's Librarius. You gain proficiency with the Force Sword and Force Staff and their Warp Conduit modifier. You may spend Warp Resilience Points to manifest Warp Powers from The Librarian &amp; Psychic Powers sheet. Base Warp Spells are free and usable at will.</p>
+  <p>Your mind has been opened to the Warp under the careful tutelage of your Chapter's Librarius. You gain proficiency with the Force Sword and Force Staff — both weapons use your <strong>INT modifier</strong> for attack rolls and damage rolls in place of STR or DEX. You may spend Warp Resilience Points to manifest Warp Powers from The Librarian &amp; Psychic Powers sheet. Base Warp Spells are free and usable at will.</p>
   <p>Your Psyker Ranking begins at 1, giving access to all Rank 1 Advanced Warp Powers. You unlock Rank 2 at level 7 and Rank 3 at level 14. The save DC for all Warp Powers is 8 + Proficiency Bonus + INT modifier. Warp Resilience Points reset on resupply.</p>
+  <p><strong style="color:var(--gold-light)">Warp Draw.</strong> As a bonus action, you may bleed your own vitality into psychic fuel. Spend up to 10 HP — gain 1 WRP per 2 HP spent (round down, minimum 1 HP spent). This HP loss cannot be prevented by any means and cannot be restored until after your next resupply. You may use Warp Draw once per turn. Every use beyond the first per resupply requires a DC 12 WIS save; on a failure, gain 1 Corruption as the Warp takes notice of your desperation.</p>
 </div>
 
 <div class="feature">
@@ -157,8 +193,9 @@ table.lvl tbody td:last-child{text-align:left;color:var(--text);font-size:9.5pt;
 </div>
 
 <div class="feature">
-  <div class="feature-header"><span class="feature-level">Level 6</span><span class="feature-name">Psychic Cleansing</span></div>
-  <p>During a short rest you may enter a deep meditative trance and spend Warp Resilience Points to purge Corruption from your mind and soul. For every 5 Warp Resilience Points spent, reduce your Corruption score by 1. You may not reduce your Corruption below the threshold of your current Corruption tier — Corruption can be managed but not fully erased without narrative intervention from a Chaplain or Inquisitor.</p>
+  <div class="feature-header"><span class="feature-level">Level 6</span><span class="feature-name">Warp Tempering</span></div>
+  <p>Your scars from the Warp have become conduits. The darkness inside you is no longer merely a liability — it is fuel. While your Corruption score is <strong>3 or higher</strong>, you add your Proficiency Bonus to all Warp Power damage rolls and your Warp Power save DC increases by 1. At <strong>Corruption 7 or higher</strong>, these bonuses increase further — add double your Proficiency Bonus to damage rolls and save DC increases by 2 — but every Advanced Warp Power you manifest automatically triggers a Perils of the Warp check regardless of cost or The Push.</p>
+  <p>During a short rest, you may still purge Corruption by spending 5 WRP per point reduced. You cannot reduce Corruption below your current Corruption tier's floor through this method alone. Reducing below 3 Corruption suspends the Warp Tempering bonus until Corruption climbs back.</p>
 </div>
 
 <div class="feature">
@@ -168,12 +205,13 @@ table.lvl tbody td:last-child{text-align:left;color:var(--text);font-size:9.5pt;
 
 <div class="feature">
   <div class="feature-header"><span class="feature-level">Level 9</span><span class="feature-name">Deny the Witch</span></div>
-  <p>When a creature within 60ft of you casts a spell or manifests a psychic power, you may use your reaction and spend Warp Resilience Points equal to the power's cost (minimum 4) to attempt to nullify it. The caster must make an INT saving throw (DC = 8 + Proficiency Bonus + INT modifier). On a failure the power is completely negated. On a success your Warp Resilience Points are still spent but the power proceeds. You may use this feature a number of times equal to your Proficiency Bonus per resupply.</p>
+  <p>When a creature within 60ft of you casts a spell or manifests a psychic power, you may use your reaction to attempt to nullify it. As part of the reaction, you instinctively identify the power's Rank — spend WRP based on its Rank: <strong>4 WRP</strong> for Rank I (or unknown/non-psychic spells), <strong>8 WRP</strong> for Rank II, <strong>12 WRP</strong> for Rank III. The caster must make an INT saving throw (DC = 8 + Proficiency Bonus + INT modifier). On a failure the power is completely negated. On a success your WRP are still spent but the power proceeds. You may use this feature a number of times equal to your Proficiency Bonus per resupply.</p>
 </div>
 
 <div class="feature">
   <div class="feature-header"><span class="feature-level">Level 11</span><span class="feature-name">Psychic Hood</span></div>
   <p>Your psychic hood filters the most dangerous warp energies before they can overwhelm your mind. The Perils of the Warp WIS save DC is reduced by 2 — now 8 + the number of points spent above 5 (down from 10). You gain resistance to psychic damage.</p>
+  <p><strong style="color:var(--gold-light)">Warp Empowerment.</strong> Whenever you succeed on a Perils of the Warp check — whether triggered by cost, The Push, or Warp Tempering — the Warp briefly rewards your mastery. Until the end of your next turn, your next Warp Power deals an additional 2d6 psychic damage and ignores resistance to psychic damage. The Warp did not break you. It bent.</p>
 </div>
 
 <div class="feature">
@@ -188,18 +226,173 @@ table.lvl tbody td:last-child{text-align:left;color:var(--text);font-size:9.5pt;
 
 <div class="feature">
   <div class="feature-header"><span class="feature-level">Level 17</span><span class="feature-name">Warp Mastery</span></div>
-  <p>Your control over the Warp and your own psychic resilience reaches its apex. Your Psychic Cleansing cost reduces from 5 Warp Resilience Points per Corruption to 3 Warp Resilience Points per Corruption. Your Deny the Witch feature no longer costs Warp Resilience Points to activate — it is free to use, limited only by your reaction and your Proficiency Bonus uses per resupply.</p>
+  <p>Your control over the Warp and your own psychic resilience reaches its apex. Your Warp Tempering Corruption purge cost reduces from 5 WRP per Corruption to 3 WRP per Corruption. Your Deny the Witch feature no longer costs Warp Resilience Points to activate — it is free to use, limited only by your reaction and your Proficiency Bonus uses per resupply.</p>
+  <p><strong style="color:var(--gold-light)">Immateria Unlocked.</strong> You gain access to all Rank IV Immateria powers from The Librarian &amp; Psychic Powers sheet. These represent the raw stuff of the Immaterium itself — they are not taught by the Librarius and carry no Discipline Resonance advantage. All Immateria powers trigger mandatory Perils checks regardless of cost or other mechanics. Corruption is the price of this knowledge.</p>
+  <p><strong style="color:var(--gold-light)">Accept the Surge.</strong> Once per resupply, when you fail a Perils of the Warp check, you may declare "Accept the Surge" instead of rolling on the Warp Influence table. You immediately manifest one Advanced Warp Power of your choice as a free action at no WRP cost, at maximum effect — all damage dice are maximized, all saves are made at disadvantage. You gain 1d6+2 Corruption. The Warp offered you power. You took it. Now carry the price.</p>
 </div>
 
 <div class="feature">
   <div class="feature-header"><span class="feature-level">Level 18</span><span class="feature-name">Mind Fortress</span></div>
-  <p>Your psychic defenses become virtually impenetrable. You are immune to psychic damage and the Charmed condition. Your INT score increases by 2 and its maximum increases to 22. The Perils of the Warp save DC is reduced by a further 2 — now 6 + the number of points spent above 5.</p>
+  <p>Your psychic defenses become virtually impenetrable. You are immune to psychic damage and the Charmed condition. Your INT score increases by 2 and its maximum increases to 22.</p>
+  <p><strong style="color:var(--gold-light)">Perfected Push.</strong> The Push mechanic evolves in your hands. When you Push and <em>succeed</em> the Perils check, you may choose two enhanced effects instead of one — maximized damage AND doubled area, for example, or doubled targets AND maximized damage. When you Push and <em>fail</em>, you gain 1 fewer point of Corruption from the failure (minimum 1). The Warp knows you now. And you know exactly where its edges are.</p>
 </div>
 
 <div class="feature">
   <div class="feature-header"><span class="feature-level">Level 20</span><span class="feature-name">Herald of the Warp — Class Paragon</span></div>
   <p>Once per resupply as an action, for 1 minute you become a conduit of pure psychic power. All Warp Powers cost half their normal Warp Resilience Points for the duration (rounded up). Perils of the Warp checks are not required for the duration — your mastery is absolute. Your Psychic Strike deals maximum damage automatically — no roll required.</p>
   <p>Enemies within 15ft of you must make a WIS saving throw (DC = 8 + Proficiency Bonus + INT modifier) at the start of each of their turns or be Stunned until the end of their next turn as your psychic presence overwhelms their minds.</p>
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+
+<div class="section-title">Psychic Disciplines</div>
+<p style="font-size:10pt;color:var(--text);line-height:1.62;margin-bottom:.1in;">At <strong style="color:var(--gold-light)">Level 3</strong>, you choose one of the six Psychic Disciplines below — the school in which your Chapter's Librarius trained you. Your discipline grants two Advanced Warp Powers that are <strong style="color:var(--gold-light)">always prepared and never count against your preparation limit</strong>. You gain your discipline's Specialty feature at Level 3, its Mastery feature at Level 9, and its Paragon feature at Level 15. Discipline powers interact fully with The Push, Warp Tempering, and Warp Draw mechanics.</p>
+<div style="background:var(--panel2);border:1px solid var(--gold-dim);border-left:3px solid var(--gold);padding:.1in .14in;margin-bottom:.16in;">
+  <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold-light);font-weight:600;">Discipline Resonance.</span>
+  <span style="font-size:9.5pt;color:var(--text);line-height:1.6;"> When you Push one of your always-prepared discipline powers, you have <strong style="color:var(--gold-light)">advantage on the Perils of the Warp check</strong>. Your mastery of your chosen school makes the risk calculable — and the reward more attainable. This advantage applies regardless of what else triggers the Perils check (Warp Tempering, power cost, etc.), and stacks with any other features that modify Perils checks.</span>
+</div>
+
+<div class="discipline-grid">
+
+  <!-- BIOMANCY -->
+  <div class="discipline-card biomancy">
+    <div class="disc-name">Biomancy</div>
+    <div class="disc-subtitle">The Art of Life &amp; Flesh</div>
+    <div class="disc-lore">Biomancers shape living tissue with the same ease others lift stones. They knit wounds, flood allies with impossible strength, and reach into enemy bodies to wreak ruin at the cellular level. They are healers who understand that life is just another weapon.</div>
+    <div class="disc-autoprep">
+      <div class="disc-autoprep-label">Always Prepared (Free Slots)</div>
+      <div class="disc-autoprep-list"><strong>Rank I:</strong> Psychic Scour, Mental Bastion<br><strong>Rank II:</strong> Might of Heroes, Biomantic Surge</div>
+    </div>
+    <div class="disc-feature">
+      <div class="disc-feature-header"><span class="disc-feature-level">Level 3</span><span class="disc-feature-name">Vitae Conduit</span></div>
+      <p>Psychic power flows through living tissue as naturally as blood through veins. <strong>Psychic Scour costs 0 WRP</strong> for you — it is always free, like a Base Warp Power. When you use Warp Draw, you may redirect the effect: instead of gaining WRP yourself, an ally within 30ft regains HP <strong>equal to the HP you spent</strong> (1:1 ratio, rather than the normal 2:1 WRP conversion). You gain proficiency in Medicine and may substitute INT for WIS on Medicine checks.</p>
+    </div>
+    <div class="disc-feature">
+      <div class="disc-feature-header"><span class="disc-feature-level">Level 9</span><span class="disc-feature-name">Fleshcrafter</span></div>
+      <p>Your biological reach extends to those who cannot give consent. You may apply your Biomancy buff powers — Mental Bastion, Might of Heroes, and Biomantic Surge — to <strong>unconscious, dying, or otherwise incapacitated allies</strong> without requiring their conscious agreement. A fallen brother can still be made into a weapon.</p>
+      <p>Additionally, you may invert Biomantic Surge into <strong>Biomantic Wither</strong> — targeting an enemy rather than enhancing an ally. The target makes a <strong>CON save</strong>. On a failure: their STR and CON are reduced by 4, their movement speed is halved, and they may make only one attack per turn for up to 1 minute. They repeat the CON save at the end of each of their turns; success ends the effect. Costs the same WRP as Biomantic Surge and triggers Perils normally.</p>
+    </div>
+    <div class="disc-feature">
+      <div class="disc-feature-header"><span class="disc-feature-level">Level 15</span><span class="disc-feature-name">Living Conduit</span></div>
+      <p>Your biology has been so thoroughly reshaped by warp energy that it rebounds from damage at impossible speed. At the start of each of your turns in combat, if you are below half your maximum HP, you regain HP equal to your INT modifier (minimum 1). This cannot bring you above half HP. Additionally, <strong>Biomantic Surge no longer imposes Exhaustion</strong> on the target when it ends.</p>
+    </div>
+  </div>
+
+  <!-- TELEPATHY -->
+  <div class="discipline-card telepathy">
+    <div class="disc-name">Telepathy</div>
+    <div class="disc-subtitle">The Battlefield of Mind</div>
+    <div class="disc-lore">Mind is the ultimate battlefield. Telepaths reach into enemy skulls and rearrange the furniture — they are interrogators, infiltrators, and the ones who walk out of a room knowing everything the enemy thought was secret. They win before the fighting starts.</div>
+    <div class="disc-autoprep">
+      <div class="disc-autoprep-label">Always Prepared (Free Slots)</div>
+      <div class="disc-autoprep-list"><strong>Rank I:</strong> Telepathic Assault, Memory Wipe<br><strong>Rank II:</strong> Hallucination, Dominate Mind</div>
+    </div>
+    <div class="disc-feature">
+      <div class="disc-feature-header"><span class="disc-feature-level">Level 3</span><span class="disc-feature-name">Mindspear</span></div>
+      <p>Your mental attacks exploit cracks opened by previous strikes. When you manifest a power targeting INT, WIS, or CHA saves, <strong>creatures that already failed a saving throw against any of your powers this combat have disadvantage</strong> on the new save. Additionally, Mind Scan is upgraded — on a failed save you may ask the GM <strong>three yes/no questions</strong> instead of one, and you may now target unwilling creatures you cannot see (range still 30ft) as long as you know they are within range.</p>
+    </div>
+    <div class="disc-feature">
+      <div class="disc-feature-header"><span class="disc-feature-level">Level 9</span><span class="disc-feature-name">Cascade</span></div>
+      <p>A thought becomes two arrows. When you <strong>Push a Telepathy power and succeed</strong>, you may immediately redirect the power's full effect (at normal, not maximized, values) to a <strong>second target within 30ft</strong> — free, no additional WRP, no additional Perils check. The second target makes their saving throw normally. Additionally, once per round as a reaction, you may grant one ally <strong>advantage on a single attack roll, saving throw, or ability check</strong> — you saw the better outcome a heartbeat before it happened.</p>
+    </div>
+    <div class="disc-feature">
+      <div class="disc-feature-header"><span class="disc-feature-level">Level 15</span><span class="disc-feature-name">Veil of the Perfect Mind</span></div>
+      <p>Your mind is a fortress within a fortress. You are <strong>immune to all mind-reading</strong>, magical or psychic. When a creature attempts to charm, frighten, or read your mind, you become aware of them and their exact location instantly. When you use Cognitive Override or Memory Wipe and the target fails the save, you may craft a <strong>false memory of your design</strong> to replace what was erased — the target believes it absolutely and will defend it as genuine. GM adjudicates plausibility.</p>
+    </div>
+  </div>
+
+  <!-- TELEKINESIS -->
+  <div class="discipline-card telekinesis">
+    <div class="disc-name">Telekinesis</div>
+    <div class="disc-subtitle">Force Made Manifest</div>
+    <div class="disc-lore">Telekinetics turn the battlefield itself into a weapon. Every wall, vehicle, and enemy body is ammunition. They are blunt, overwhelming, and deeply satisfying to watch work. They do not ask whether something can be thrown. They ask how far.</div>
+    <div class="disc-autoprep">
+      <div class="disc-autoprep-label">Always Prepared (Free Slots)</div>
+      <div class="disc-autoprep-list"><strong>Rank I:</strong> Force Wave, Mind Grasp<br><strong>Rank II:</strong> Force Cage, Vortex of Doom</div>
+    </div>
+    <div class="disc-feature">
+      <div class="disc-feature-header"><span class="disc-feature-level">Level 3</span><span class="disc-feature-name">Kinetic Supremacy</span></div>
+      <p>Your telekinetic force substantially exceeds standard output. All powers that push or pull creatures (Force Wave, Crushing Grasp, etc.) <strong>increase push/pull distance by 10ft</strong>. Kinetic Lift's weight limit doubles to 1,000 lbs. When you <strong>Push a telekinetic power and succeed</strong>, all creatures in the area of effect are shoved an <strong>additional 15ft</strong> as part of the enhanced effect — no save required for this bonus movement.</p>
+    </div>
+    <div class="disc-feature">
+      <div class="disc-feature-header"><span class="disc-feature-level">Level 9</span><span class="disc-feature-name">Kinetic Momentum</span></div>
+      <p>You chain telekinetic force through the battlefield. When you push a creature into another creature or solid object with a telekinetic power, the struck object or creature takes <strong>force damage equal to your INT modifier + Proficiency Bonus</strong> and must make a STR save or be knocked Prone (Large or larger have advantage). Additionally, once per turn as a bonus action, you may hurl a loose object up to 500 lbs within 60ft — ranged spell attack, <strong>2d10 force damage</strong> on a hit.</p>
+    </div>
+    <div class="disc-feature">
+      <div class="disc-feature-header"><span class="disc-feature-level">Level 15</span><span class="disc-feature-name">Living Storm</span></div>
+      <p>A permanent telekinetic field radiates from your body. You emanate a <strong>15ft aura</strong>: creatures entering or starting their turn in the aura make STR saves (DC = your Warp Power save DC) or are pushed 10ft away from you. You choose whether to activate this each round — no action required. <strong>Opportunity attacks against you are made with disadvantage</strong> as projectiles and melee strikes deflect off your kinetic field.</p>
+    </div>
+  </div>
+
+  <!-- PYROMANCY -->
+  <div class="discipline-card pyromancy">
+    <div class="disc-name">Pyromancy</div>
+    <div class="disc-subtitle">Warp-Fire &amp; Soul-Burn</div>
+    <div class="disc-lore">Warp-fire doesn't just burn matter — it burns souls. Pyromancers are the Librarians enemies fear most, and the ones their own side watches nervously. Pure destructive output with consequences for everyone in range. They are an argument that ends conversations.</div>
+    <div class="disc-autoprep">
+      <div class="disc-autoprep-label">Always Prepared (Free Slots)</div>
+      <div class="disc-autoprep-list"><strong>Rank I:</strong> Pyrokinesis, Soul Sear<br><strong>Rank II:</strong> Soul Blaze, Storm of the Emperor's Wrath</div>
+    </div>
+    <div class="disc-feature">
+      <div class="disc-feature-header"><span class="disc-feature-level">Level 3</span><span class="disc-feature-name">Warpfire Affinity</span></div>
+      <p>Your Warp Tempering Corruption bonus applies at <strong>double value to fire and psychic fire damage</strong> — and activates at Corruption 1+ for fire damage specifically, rather than waiting for 3. You are <strong>immune to fire damage</strong> and cannot be harmed by warp-fire. When you <strong>Push a fire-based power and succeed</strong>, warp-fire spreads to every creature within 10ft of the original target — 1d6 fire damage per turn, same DEX check DC to extinguish.</p>
+    </div>
+    <div class="disc-feature">
+      <div class="disc-feature-header"><span class="disc-feature-level">Level 9</span><span class="disc-feature-name">Unstable Combustion</span></div>
+      <p>Your fire attacks feed on catastrophic failure. When a creature fails a saving throw against one of your fire-based powers by <strong>5 or more</strong>, they detonate in secondary warp-fire — all creatures within 10ft make DEX saves (DC = your power save DC) or take <strong>2d8 fire damage</strong> and catch warp-fire themselves (same ongoing effect). Your warp-fire <strong>cannot be extinguished by water, smothering, or magic</strong> — only the specified DEX check against your save DC ends it.</p>
+    </div>
+    <div class="disc-feature">
+      <div class="disc-feature-header"><span class="disc-feature-level">Level 15</span><span class="disc-feature-name">Living Pyre</span></div>
+      <p>Once per resupply as an action, you ignite yourself with concentrated warp-fire without taking damage. For 1 minute: you shed warp-fire in a <strong>10ft radius</strong> (2d6 fire per turn, DEX save for half), all your warp powers deal <strong>+2d8 fire damage</strong>, and you are immune to all fire damage. When the duration ends: <span class="peril-inline">⚠ automatic Perils check DC 15.</span> The Warp does not give you this much power without wanting something back.</p>
+    </div>
+  </div>
+
+  <!-- DIVINATION -->
+  <div class="discipline-card divination">
+    <div class="disc-name">Divination</div>
+    <div class="disc-subtitle">The Currents of the Possible</div>
+    <div class="disc-lore">The Warp touches all of time simultaneously. Diviners read currents others cannot perceive — they rarely seem surprised because they aren't. They win battles that haven't started yet. To fight alongside a Diviner is to feel the uncanny certainty that everything is going exactly as planned.</div>
+    <div class="disc-autoprep">
+      <div class="disc-autoprep-label">Always Prepared (Free Slots)</div>
+      <div class="disc-autoprep-list"><strong>Rank I:</strong> Far Sight, Veil of Time<br><strong>Rank II:</strong> Prescience, Hallucination</div>
+    </div>
+    <div class="disc-feature">
+      <div class="disc-feature-header"><span class="disc-feature-level">Level 3</span><span class="disc-feature-name">Eyes of the Warp</span></div>
+      <p>Before each combat begins — or at the start of the first round if ambushed — you may ask the GM one of the following and receive an honest answer: <em>"What is the biggest threat in this encounter?"</em> / <em>"Is any psyker or warp entity present?"</em> / <em>"What is the enemy's primary objective this combat?"</em> You and all allies within 30ft <strong>cannot be Surprised</strong> while you are conscious. Warp Sight is free for you and its duration extends to <strong>1 hour</strong>.</p>
+    </div>
+    <div class="disc-feature">
+      <div class="disc-feature-header"><span class="disc-feature-level">Level 9</span><span class="disc-feature-name">Temporal Read</span></div>
+      <p>Your foresight extends to mechanical precision. When you declare a Push, you may <strong>pre-see the Perils check result</strong> before committing — the GM tells you secretly whether you would succeed or fail. You may then cancel the Push, manifesting the power normally with no bonus and no Perils trigger. You used the future to sidestep it. Additionally, once per round as a reaction, you may grant one ally <strong>advantage on a single roll</strong> — you saw the better outcome a second before it arrived.</p>
+    </div>
+    <div class="disc-feature">
+      <div class="disc-feature-header"><span class="disc-feature-level">Level 15</span><span class="disc-feature-name">Unwritten Moment</span></div>
+      <p>Once per resupply as a reaction, when you or an ally within 60ft would be reduced to 0 HP, you may rewind that single moment — the triggering attack or effect simply does not occur. The attacker loses their action (or the effect is negated), and the creature that would have fallen is instead at 1 HP. Time does not appreciate the edit. <strong>You automatically gain 1 Corruption</strong> and must make a <span class="peril-inline">⚠ Perils check DC 14</span> immediately after.</p>
+    </div>
+  </div>
+
+  <!-- TEMPORAL -->
+  <div class="discipline-card temporal">
+    <div class="disc-name">Temporal</div>
+    <div class="disc-subtitle">The Weapon That Is Time</div>
+    <div class="disc-lore">Time is not a river. It is a weapon. Temporal Librarians are unnerving even to their allies — they act on information no one else has, counter things that haven't happened yet, and occasionally apologize for events they caused several seconds ago. Even the Warp finds them interesting.</div>
+    <div class="disc-autoprep">
+      <div class="disc-autoprep-label">Always Prepared (Free Slots)</div>
+      <div class="disc-autoprep-list"><strong>Rank I:</strong> Temporal Echo, Gate of Infinity I<br><strong>Rank II:</strong> Dimensional Step, Vortex of Doom</div>
+    </div>
+    <div class="disc-feature">
+      <div class="disc-feature-header"><span class="disc-feature-level">Level 3</span><span class="disc-feature-name">Chronosense</span></div>
+      <p>Your awareness bleeds slightly into both directions of time. You have <strong>advantage on all Initiative rolls</strong>. When you fail a saving throw, you may use your reaction to reroll it once — you briefly borrow the outcome from a parallel timeline. You may use this a number of times equal to your Proficiency Bonus per resupply. Additionally, <strong>Temporal Echo may now be used during active combat</strong> (no longer restricted to outside combat) — costs 3 WRP and a bonus action.</p>
+    </div>
+    <div class="disc-feature">
+      <div class="disc-feature-header"><span class="disc-feature-level">Level 9</span><span class="disc-feature-name">Causality Breach</span></div>
+      <p>When you <strong>Push a Temporal power and succeed</strong>, you may choose an alternative enhanced effect: instead of a standard boost, the power <strong>loops</strong> — at the start of your next turn it fires again automatically at the same targets for free, no WRP cost, no additional Perils check. It cannot loop a third time. Additionally, <strong>Gate of Infinity I and II no longer require line of sight</strong> — only knowledge that the destination exists and is within range.</p>
+    </div>
+    <div class="disc-feature">
+      <div class="disc-feature-header"><span class="disc-feature-level">Level 15</span><span class="disc-feature-name">Temporal Sovereign</span></div>
+      <p>You no longer age and cannot be aged by any means. Once per resupply, when you or any ally within 60ft is killed (reduced to 0 HP and failed all death saves, or instantly killed), you may tear a hole in the last 12 seconds and pull them back. They return at 1 HP with full memory of what killed them. You gain <strong>1d8+4 Corruption</strong> immediately and must make a <span class="peril-inline">⚠ Perils check DC 16</span> or roll on the Warp Influence table. The cost of cheating death is the Warp's to name.</p>
+    </div>
+  </div>
+
 </div>
 
 <div class="page-footer">Librarian &nbsp;·&nbsp; Deathwatch Kill Team &nbsp;·&nbsp; WH40K D&amp;D 5E Homebrew &nbsp;·&nbsp; Jericho Reach Campaign</div>
