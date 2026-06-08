@@ -1320,6 +1320,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
         <button class="sreq-fbtn" onclick="_spellSetTier(this,'rank1')">Rank I / Dev I</button>
         <button class="sreq-fbtn" onclick="_spellSetTier(this,'rank2')">Rank II / Dev II</button>
         <button class="sreq-fbtn" onclick="_spellSetTier(this,'rank3')">Rank III / Dev III</button>
+        <button class="sreq-fbtn" onclick="_spellSetTier(this,'rank4')">Rank IV (Immateria)</button>
       </div>
     </div>
     <div class="sreq-grid" id="spell-grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr));"></div>
@@ -2390,10 +2391,12 @@ const _SPELL_TIER_ALIAS = {
   rank1: ['rank1','dev1'],
   rank2: ['rank2','dev2'],
   rank3: ['rank3','dev3'],
+  rank4: ['rank4'],
 };
 const _SPELL_TIER_LABEL = {
   base:'Base (Free)', rank1:'Rank I — Neophyte Disciplines', rank2:'Rank II — Librarian Disciplines',
-  rank3:'Rank III — Chief Librarian Disciplines', dev1:'Devotion I — Righteous Invocations',
+  rank3:'Rank III — Chief Librarian Disciplines', rank4:'Rank IV — Immateria (Forbidden Disciplines)',
+  dev1:'Devotion I — Righteous Invocations',
   dev2:'Devotion II — Sacred Rites', dev3:'Devotion III — The Emperor\'s Absolute Will',
 };
 const _SPELL_COST_COLOR = { free:'var(--gold)', WRP:'#a090e0', EBP:'#d4a040' };
@@ -2441,7 +2444,7 @@ function _spellFilter() {
     return;
   }
   var groups = {};
-  var tierOrder = ['base','rank1','dev1','rank2','dev2','rank3','dev3'];
+  var tierOrder = ['base','rank1','dev1','rank2','dev2','rank3','dev3','rank4'];
   filtered.forEach(function(sp) {
     if (!groups[sp.tier]) groups[sp.tier] = [];
     groups[sp.tier].push(sp);
