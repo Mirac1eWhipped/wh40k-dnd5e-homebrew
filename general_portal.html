@@ -1456,6 +1456,7 @@
           <button class="req-filter" data-st="rank1" onclick="spellSetTier(this,'rank1')">Rank I / Dev I</button>
           <button class="req-filter" data-st="rank2" onclick="spellSetTier(this,'rank2')">Rank II / Dev II</button>
           <button class="req-filter" data-st="rank3" onclick="spellSetTier(this,'rank3')">Rank III / Dev III</button>
+          <button class="req-filter" data-st="rank4" onclick="spellSetTier(this,'rank4')" style="border-color:#7a3030;color:#e08080;">Rank IV — Immateria</button>
         </div>
       </div>
       <!-- Card Grid -->
@@ -1913,12 +1914,13 @@
   let _spellTier  = 'all';
 
   // Tier ordering for display
-  const SPELL_TIER_ORDER = ['base','rank1','rank2','rank3','dev1','dev2','dev3'];
+  const SPELL_TIER_ORDER = ['base','rank1','rank2','rank3','rank4','dev1','dev2','dev3'];
   const SPELL_TIER_LABELS = {
     base:'Base Powers (Free)',
     rank1:'Rank I — Neophyte Disciplines',
     rank2:'Rank II — Librarian Disciplines',
     rank3:'Rank III — Chief Librarian Disciplines',
+    rank4:'Rank IV — Immateria (Forbidden Disciplines)',
     dev1:'Devotion I — Righteous Invocations',
     dev2:'Devotion II — Sacred Rites',
     dev3:'Devotion III — The Emperor\'s Absolute Will',
