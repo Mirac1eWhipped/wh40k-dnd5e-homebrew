@@ -32,6 +32,7 @@
   --font-body:  'Crimson Text',Georgia,serif;}
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+input,textarea,select{color:var(--text);}
 
 body{background:var(--bg-page);font-family:var(--font-body);color:var(--text);font-size:14pt;line-height:1.5;}
 
@@ -166,7 +167,7 @@ body{background:var(--bg-page);font-family:var(--font-body);color:var(--text);fo
 .field-group input,.field-group textarea,.field-group select{background:transparent;border:none;border-bottom:1px solid var(--line);color:var(--text);font-family:var(--font-body);font-size:13pt;padding:2px 3px;outline:none;width:100%;}
 .field-group input:focus,.field-group textarea:focus,.field-group select:focus{border-bottom-color:var(--gold);}
 .field-group select{cursor:pointer;}
-.field-group select option{background:var(--panel);}
+.field-group select option{background:var(--panel);color:var(--text);}
 textarea.lined{border:1px solid var(--border2);background:var(--panel2);padding:6px 8px;resize:none;line-height:1.7;width:100%;}
 textarea.lined:focus{border-color:var(--gold);outline:none;}
 
