@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wargear Upgrades — Sanctified, Artificer &amp; Master-Crafted Patterns</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080a0c;--panel:#0d1018;--panel2:#101420;--gold:#c8a44a;--gold-light:#e8c96a;--gold-dim:#7a6128;--silver:#9aaabb;--silver-dim:#4a5a6a;--text:#ccd4e0;--text-dim:#6a7a8a;--border:#2a3a52;--tech:#d8842a;--tech-light:#f8a850;--tech-dim:#6a3f14;--font-head:'Cinzel Decorative','Cinzel',serif;--font-label:'Cinzel',serif;--font-body:'Crimson Text',Georgia,serif;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size:10.5pt;}
+.page{width:9in;margin:.4in auto .6in;padding:.45in .52in;background:var(--bg);border:1px solid var(--border);position:relative;overflow:hidden;}
+.page::before,.page::after{content:'';position:absolute;width:48px;height:48px;border-color:var(--gold-dim);border-style:solid;opacity:.5;pointer-events:none;}
+.page::before{top:8px;left:8px;border-width:2px 0 0 2px;}.page::after{bottom:8px;right:8px;border-width:0 2px 2px 0;}
+@media screen{.print-bar{text-align:center;padding:.15in 0 .08in;}.print-btn{display:inline-block;padding:7px 28px;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);font-family:var(--font-label);font-size:10pt;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;transition:all .2s;}.print-btn:hover{background:var(--gold-dim);color:#000;}.portal-link{display:inline-block;padding:7px 28px;margin-right:10px;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);font-family:var(--font-label);font-size:10pt;text-decoration:none;letter-spacing:.25em;text-transform:uppercase;transition:all .2s;}.portal-link:hover{background:var(--gold-dim);color:#000;}}
+@media print{@page{size:letter landscape;margin:0;}body{background:white;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.page{width:11in;margin:0;border:none;}.print-bar,.filter-bar{display:none!important;}}
+.class-header{text-align:center;border-bottom:2px solid var(--gold-dim);padding-bottom:.15in;margin-bottom:.18in;}
+.class-header .aquila{font-size:13pt;color:var(--gold);letter-spacing:.5em;margin-bottom:6px;}
+.class-header h1{font-family:var(--font-head);font-size:24pt;color:var(--gold-light);letter-spacing:.04em;text-shadow:0 0 32px rgba(200,164,74,.3);line-height:1.1;margin-bottom:4px;}
+.class-header .subtitle{font-family:var(--font-label);font-size:10pt;color:var(--silver-dim);letter-spacing:.35em;text-transform:uppercase;}
+.section-title{font-family:var(--font-head);font-size:15pt;color:var(--gold-light);letter-spacing:.04em;border-bottom:1px solid var(--gold-dim);padding-bottom:5px;margin-bottom:.12in;text-shadow:0 0 14px rgba(200,164,74,.2);margin-top:.22in;}
+.rank-note{font-size:10pt;color:var(--text-dim);font-style:italic;margin-bottom:.12in;line-height:1.5;}
+.rules-box{background:var(--panel);border:1px solid var(--border);border-top:3px solid var(--gold-dim);padding:.16in .2in;margin-bottom:.18in;}
+.rules-box-title{font-family:var(--font-head);font-size:12pt;color:var(--gold-light);margin-bottom:.12in;letter-spacing:.03em;}
+.rule-tag{display:inline-block;font-family:var(--font-label);font-size:10pt;letter-spacing:.12em;text-transform:uppercase;padding:1px 5px;border:1px solid;margin-right:3px;vertical-align:middle;}
+.rt-t1{color:var(--silver);border-color:var(--silver-dim);background:rgba(154,170,187,.1);}
+.rt-t2{color:var(--tech-light);border-color:var(--tech-dim);background:rgba(216,132,42,.12);}
+.rt-t3{color:var(--gold-light);border-color:var(--gold-dim);background:rgba(200,164,74,.14);}
+.rule-body{font-size:10pt;color:var(--text);line-height:1.7;}
+.rule-body p{margin-bottom:.1in;}
+.rule-body p:last-child{margin-bottom:0;}
+.rule-body strong{color:var(--gold-light);}
+.cost-table{width:100%;border-collapse:collapse;margin:.1in 0 .05in;}
+.cost-table th{font-family:var(--font-label);font-size:9.5pt;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);text-align:left;border-bottom:1px solid var(--gold-dim);padding:4px 8px;}
+.cost-table td{font-size:10pt;padding:5px 8px;border-bottom:1px solid var(--border);}
+.cost-table tr:last-child td{border-bottom:none;}
+.filter-bar{background:var(--panel);border:1px solid var(--border);border-top:3px solid var(--gold-dim);padding:.1in .14in;margin-bottom:.18in;}
+.filter-row{display:flex;align-items:center;gap:10px;margin-bottom:7px;}
+.filter-row:last-child{margin-bottom:0;}
+.filter-label{font-family:var(--font-label);font-size:10pt;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);min-width:76px;flex-shrink:0;}
+.filter-btns{display:flex;flex-wrap:wrap;gap:5px;}
+.fbtn{font-family:var(--font-label);font-size:10pt;letter-spacing:.14em;text-transform:uppercase;padding:3px 10px;background:var(--panel2);border:1px solid var(--border);color:var(--text-dim);cursor:pointer;transition:all .15s;user-select:none;}
+.fbtn:hover{border-color:var(--gold-dim);color:var(--gold);}
+.fbtn.active{background:var(--gold-dim);border-color:var(--gold);color:#000;font-weight:700;}
+.fbtn[data-tier="t2"].active{background:var(--tech-dim);border-color:var(--tech-light);color:var(--tech-light);}
+.fbtn[data-tier="t3"].active{background:var(--gold-dim);border-color:var(--gold);color:#000;}
+.power-grid{display:grid;grid-template-columns:1fr 1fr;gap:.1in;margin-bottom:.14in;}
+.power-card{background:var(--panel2);border:1px solid var(--border);padding:10px 12px;transition:border-color .2s,background .2s;}
+.power-card.t1{border-color:var(--silver-dim);}
+.power-card.t2{border-color:var(--tech-dim);}
+.power-card.t3{border-color:var(--gold-dim);background:rgba(200,164,74,.05);}
+.power-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;margin-bottom:6px;}
+.power-name{font-family:var(--font-label);font-size:10.5pt;color:var(--gold-light);font-weight:600;line-height:1.2;flex:1;}
+.power-cost-badge{font-family:var(--font-label);font-size:9.5pt;font-weight:700;color:#000;padding:2px 8px;white-space:nowrap;flex-shrink:0;}
+.cost-t1{background:var(--silver);}
+.cost-t2{background:var(--tech-light);}
+.cost-t3{background:var(--gold);}
+.power-desc{font-size:10pt;color:var(--text);line-height:1.52;}
+.power-desc strong{color:var(--gold-light);font-family:var(--font-label);font-size:inherit;}
+.page-footer{margin-top:.2in;border-top:1px solid var(--gold-dim);padding-top:.09in;font-family:var(--font-label);font-size:10pt;color:var(--text-dim);letter-spacing:.16em;text-align:center;text-transform:uppercase;}
+</style>
+</head>
+<body>
+<div class="print-bar"><a href="general_portal.html" class="portal-link">&#8592; Back to Portal</a></div>
+
+<div class="page">
+
+<div class="class-header">
+  <div class="aquila">&#10022;</div>
+  <h1>Wargear Upgrades</h1>
+  <div class="subtitle">Sanctified &middot; Artificer &middot; Master-Crafted Patterns</div>
+</div>
+
+<div class="rules-box">
+  <div class="rules-box-title">&#9671; How Wargear Upgrades Work</div>
+  <div class="rule-body">
+    <p>Beyond the standard Requisitorium catalogue sit the <strong>Sanctioned Upgrade Patterns</strong> — permanent enhancements bonded to a single weapon or piece of armour through ritual maintenance, artificer's work, and consecrated components. Any character can requisition an upgrade for a weapon or armour piece they already own, applied during a <strong>resupply</strong> at an Armoury, Forge, or equivalent facility. This is a permanent choice: the upgrade is bonded to that specific physical item. If the item is lost or destroyed, the Requisition Points invested in it are lost with it.</p>
+    <p>There are <strong>three tiers</strong>, purchased in sequence — you cannot skip a tier. Each tier grants a flat numeric bonus (<strong>+1 / +2 / +3</strong> to attack and damage rolls for weapons, or <strong>+1 / +2 / +3 AC</strong> for armour) exactly like upgrading a magic item's plus in 5e. Each tier <em>also</em> unlocks one <strong>Augmetic Trait slot</strong> — a named special property chosen from that tier's list (or any lower tier's list). Traits are cumulative: a Master-Crafted (Tier 3) item retains every trait chosen at Tier 1 and Tier 2, plus its own Tier 3 pick, for three traits total.</p>
+    <table class="cost-table">
+      <tr><th>Tier</th><th>Bonus</th><th>Cost to Install</th><th>Total Invested</th></tr>
+      <tr><td><span class="rule-tag rt-t1">Tier I</span> Sanctified Pattern</td><td>+1 / +1 AC</td><td>300 RP</td><td>300 RP</td></tr>
+      <tr><td><span class="rule-tag rt-t2">Tier II</span> Artificer Pattern</td><td>+2 / +2 AC</td><td>+450 RP</td><td>750 RP</td></tr>
+      <tr><td><span class="rule-tag rt-t3">Tier III</span> Master-Crafted Pattern</td><td>+3 / +3 AC</td><td>+750 RP</td><td>1,500 RP</td></tr>
+    </table>
+    <p><strong>Swapping traits:</strong> Augmetic Traits can only be swapped between missions, during the downtime that follows a completed mission. Swapping out one previously chosen trait for a different one your item qualifies for costs <strong>50 RP &times; the tier of the trait being installed</strong> — 50 RP for a Tier I trait, 100 RP for Tier II, 150 RP for Tier III. The old trait's blessing is stripped and the new one consecrated in its place. Outside of a Techmarine or Tech-Priest's field work (see below), mid-mission swaps are not possible, even at a resupply.</p>
+    <p><strong>Restrictions:</strong> upgrades cannot be applied to <strong>Relic</strong>-category items — those are already singular artefacts with their own fixed properties (a GM may allow narrative exceptions for a major storyline). An item can only carry one tier track; you don't stack Tier I and Tier II as separate purchases; buying Tier II simply raises the same item to +2 and grants its second trait slot.</p>
+    <p><strong>Techmarines and Tech-Priests</strong> apply a <strong>25% discount</strong> (round down to the nearest 5 RP) to every upgrade cost above, including trait swap costs, reflecting their own tools and standing with the Mechanicus priesthood. They are also the <em>only</em> characters who may install a Tier I upgrade or perform a trait swap in the field during a <strong>short rest</strong>, rather than waiting for downtime between missions, provided they have Artificer's Tools on hand. Tier II and Tier III installations still require proper Armoury/Forge access regardless of class. Any character proficient with Artificer's Tools or equivalent smith's tools receives a smaller <strong>10% discount</strong> on installation and swap costs.</p>
+    <p>This system runs alongside, not in place of, the Techmarine's <strong>Mechanicus Enhancement</strong> class feature — that remains a temporary per-resupply buff layered on top of whatever permanent upgrade tier the item already carries. None of the traits below duplicate or outclass an existing class's signature feature — where an idea overlapped (Terminator's Ceramite Wall, Close Combat Operative's Ceramite Bulwark, Gravis Operative's Iron Halo/Unyielding Platform, or the Hexagrammic Ward relic), it was reworked into a distinct niche instead.</p>
+    <p><strong>Weapon-Family Traits:</strong> a number of Augmetic Traits are restricted to specific weapon patterns — they graft an existing named weapon property (drawn straight from the Requisitorium's own modifier list) onto a compatible weapon that doesn't already have it. A Las Fusil can requisition an <strong>Overcharge Coil</strong> because Las weapons already run this exact risk in their lore; a Bolt weapon cannot, because there's no in-fiction mechanism for a solid mass-reactive round to "overcharge." These traits still occupy a normal trait slot at the tier listed and cost nothing beyond reaching that tier — they're restricted by <em>eligibility</em>, not by extra price. A weapon can never take a Family Trait for a property it already has baked into its base <code>mods</code> list. GM has final say on borderline cases (a homebrew Las-pattern rifle added later, for instance, should qualify for the same Las-family traits).</p>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <div class="filter-row">
+    <span class="filter-label">Slot</span>
+    <div class="filter-btns">
+      <button class="fbtn active" data-slot="all">All</button>
+      <button class="fbtn" data-slot="weapon">Weapon Traits</button>
+      <button class="fbtn" data-slot="armor">Armour Traits</button>
+    </div>
+  </div>
+  <div class="filter-row">
+    <span class="filter-label">Tier</span>
+    <div class="filter-btns">
+      <button class="fbtn active" data-tier="all">All Tiers</button>
+      <button class="fbtn" data-tier="t1">Tier I</button>
+      <button class="fbtn" data-tier="t2">Tier II</button>
+      <button class="fbtn" data-tier="t3">Tier III</button>
+    </div>
+  </div>
+  <div class="filter-row">
+    <span class="filter-label">Family</span>
+    <div class="filter-btns">
+      <button class="fbtn active" data-family="all">All</button>
+      <button class="fbtn" data-family="bolt">Bolt</button>
+      <button class="fbtn" data-family="plasma">Plasma</button>
+      <button class="fbtn" data-family="melta">Melta</button>
+      <button class="fbtn" data-family="volkite">Volkite</button>
+      <button class="fbtn" data-family="grav">Grav</button>
+      <button class="fbtn" data-family="needle">Needle</button>
+      <button class="fbtn" data-family="las">Las / Beam</button>
+      <button class="fbtn" data-family="power">Power Weapons</button>
+      <button class="fbtn" data-family="physical">Chain Weapons</button>
+    </div>
+  </div>
+</div>
+
+<div class="section-title">Weapon Augmetic Traits</div>
+<div class="rank-note">Chosen when a weapon is upgraded to the matching tier. A weapon's total trait count equals its tier (Tier III weapons carry three).</div>
+<div class="power-grid">
+
+  <div class="power-card t1" data-slot="weapon" data-tier="t1" data-family="any">
+    <div class="power-card-top"><div class="power-name">Balanced Grip</div><div class="power-cost-badge cost-t1">TIER I</div></div>
+    <div class="power-desc">You have <strong>advantage</strong> on the first attack roll made with this weapon in each combat encounter.</div>
+  </div>
+
+  <div class="power-card t1" data-slot="weapon" data-tier="t1" data-family="any">
+    <div class="power-card-top"><div class="power-name">Extended Magazine</div><div class="power-cost-badge cost-t1">TIER I</div></div>
+    <div class="power-desc">This weapon's ammo capacity (shots per clip) increases by <strong>50%</strong>, rounded up.</div>
+  </div>
+
+  <div class="power-card t1" data-slot="weapon" data-tier="t1" data-family="any">
+    <div class="power-card-top"><div class="power-name">Marked for the Kill</div><div class="power-cost-badge cost-t1">TIER I</div></div>
+    <div class="power-desc">You gain <strong>+2 to attack rolls</strong> with this weapon against any creature at or below half its maximum HP.</div>
+  </div>
+
+  <div class="power-card t1" data-slot="weapon" data-tier="t1" data-family="any">
+    <div class="power-card-top"><div class="power-name">Steady Recoil Compensation</div><div class="power-cost-badge cost-t1">TIER I</div></div>
+    <div class="power-desc">You ignore disadvantage on attack rolls made with this weapon at long range.</div>
+  </div>
+
+  <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="any">
+    <div class="power-card-top"><div class="power-name">Cogitator-Guided Targeting</div><div class="power-cost-badge cost-t2">TIER II</div></div>
+    <div class="power-desc">Once per turn, you may <strong>reroll a missed attack roll</strong> made with this weapon. You must use the new result.</div>
+  </div>
+
+  <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="any">
+    <div class="power-card-top"><div class="power-name">Searing Rounds</div><div class="power-cost-badge cost-t2">TIER II</div></div>
+    <div class="power-desc">On a hit, this weapon deals an additional <strong>1d4 Fire damage</strong>.</div>
+  </div>
+
+  <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="any">
+    <div class="power-card-top"><div class="power-name">Overcharged Cell</div><div class="power-cost-badge cost-t2">TIER II</div></div>
+    <div class="power-desc">On a critical hit with this weapon, deal <strong>maximum damage</strong> on all dice, plus one additional damage die of the weapon's primary type.</div>
+  </div>
+
+  <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="any">
+    <div class="power-card-top"><div class="power-name">Honed Edge</div><div class="power-cost-badge cost-t2">TIER II</div></div>
+    <div class="power-desc">This weapon scores a critical hit on a roll of <strong>19 or 20</strong>.</div>
+  </div>
+
+  <div class="power-card t3" data-slot="weapon" data-tier="t3" data-family="any">
+    <div class="power-card-top"><div class="power-name">Zealot's Bane</div><div class="power-cost-badge cost-t3">TIER III</div></div>
+    <div class="power-desc">At the start of each day, designate one creature type (Xenos, Heretic, Daemon, or Ork). This weapon deals an additional <strong>1d6 damage</strong> of its primary type against that type until the next dawn.</div>
+  </div>
+
+  <div class="power-card t3" data-slot="weapon" data-tier="t3" data-family="any">
+    <div class="power-card-top"><div class="power-name">Disintegration Coil</div><div class="power-cost-badge cost-t3">TIER III</div></div>
+    <div class="power-desc">On a critical hit against a creature already at or below 25% of its maximum HP, that creature must succeed on a <strong>CON save</strong> (DC 8 + your Proficiency Bonus + relevant modifier) or be instantly slain, leaving no recoverable remains.</div>
+  </div>
+
+  <div class="power-card t3" data-slot="weapon" data-tier="t3" data-family="any">
+    <div class="power-card-top"><div class="power-name">Perfect Balance</div><div class="power-cost-badge cost-t3">TIER III</div></div>
+    <div class="power-desc">Attack rolls with this weapon are never affected by disadvantage from situational penalties (cover, range, awkward positioning — natural disadvantage from conditions like Blinded still applies). Once per turn, add your Proficiency Bonus to one damage roll with this weapon.</div>
+  </div>
+
+  <div class="power-card t3" data-slot="weapon" data-tier="t3" data-family="any">
+    <div class="power-card-top"><div class="power-name">Sanctified Core</div><div class="power-cost-badge cost-t3">TIER III</div></div>
+    <div class="power-desc">This weapon counts as magical for the purpose of overcoming resistance and immunity. It deals an additional <strong>1d8 Radiant damage</strong> against Daemons and Chaos-aligned creatures.</div>
+  </div>
+
+</div>
+
+<div class="section-title">Weapon-Family Traits <span style="font-size:10pt;color:var(--text-dim);font-family:var(--font-body);font-weight:400;letter-spacing:0">(Pattern-Restricted)</span></div>
+<div class="rank-note">Only available to the listed weapon pattern(s), and only if the weapon doesn't already carry that property natively. These occupy a normal trait slot at the tier shown — no extra RP cost beyond reaching that tier.</div>
+<div class="power-grid">
+
+  <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="las">
+    <div class="power-card-top"><div class="power-name">Overcharge Coil</div><div class="power-cost-badge cost-t2">TIER II</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> Las-pattern energy weapons (e.g. Las Fusil) that lack Overcharge. Grants <strong>Overcharge</strong>: before rolling to hit, declare Overcharge. Roll 1d6 — on a 1 or 2 the weapon misfires (take 1d8 Radiant, lose the attack). On a 3+ deal an additional 1d8 damage.</div>
+  </div>
+
+  <div class="power-card t3" data-slot="weapon" data-tier="t3" data-family="plasma">
+    <div class="power-card-top"><div class="power-name">Stabilised Overcharge Matrix</div><div class="power-cost-badge cost-t3">TIER III</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> any Plasma-pattern weapon. Refines its existing Overcharge mod: it now only misfires on a natural <strong>1</strong> instead of a 1 or 2.</div>
+  </div>
+
+  <div class="power-card t1" data-slot="weapon" data-tier="t1" data-family="melta">
+    <div class="power-card-top"><div class="power-name">Focusing Coil</div><div class="power-cost-badge cost-t1">TIER I</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> any Melta-pattern weapon. Increases the weapon's range by <strong>50%</strong>, rounded up.</div>
+  </div>
+
+  <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="melta">
+    <div class="power-card-top"><div class="power-name">Armour Pierce Lens</div><div class="power-cost-badge cost-t2">TIER II</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> Melta-pattern weapons lacking Armour Pierce. Grants <strong>Armour Pierce</strong>: ignores AC bonuses from non-magical armour — use the target's unarmoured AC (10 + DEX modifier) when attacking.</div>
+  </div>
+
+  <div class="power-card t3" data-slot="weapon" data-tier="t3" data-family="volkite">
+    <div class="power-card-top"><div class="power-name">Cascading Deflagration</div><div class="power-cost-badge cost-t3">TIER III</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> any Volkite-pattern weapon. Expands its Deflagrate chain-reaction radius from 5 ft to <strong>10 ft</strong> — matching the Volkite Culverin's heavier pattern.</div>
+  </div>
+
+  <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="grav">
+    <div class="power-card-top"><div class="power-name">Crush Emitter</div><div class="power-cost-badge cost-t2">TIER II</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> Grav-pattern weapons lacking Crush. Grants <strong>Crush</strong>: deals an additional 1d6 Force damage for each AC point above 15 the target has (maximum +3d6).</div>
+  </div>
+
+  <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="needle">
+    <div class="power-card-top"><div class="power-name">Neurotoxin Reservoir</div><div class="power-cost-badge cost-t2">TIER II</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> any Needle-pattern weapon. On a hit, the target must succeed on a DC 13 CON save or be <strong>Poisoned</strong> until the end of its next turn, in addition to normal damage.</div>
+  </div>
+
+  <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="bolt">
+    <div class="power-card-top"><div class="power-name">Adamantium Penetrator Rounds</div><div class="power-cost-badge cost-t2">TIER II</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> Bolt-pattern weapons lacking Armour Pierce. Grants <strong>Armour Pierce</strong> (as above) — the same principle behind Sternguard Kraken Penetrator rounds, scaled down to a field-installable coating.</div>
+  </div>
+
+  <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="bolt">
+    <div class="power-card-top"><div class="power-name">Rapid Cycling Mechanism</div><div class="power-cost-badge cost-t2">TIER II</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> Bolt-pattern weapons lacking Rapid Fire (e.g. Bolt Sniper Rifle, Stalker Bolt Rifle). Grants <strong>Rapid Fire</strong>: gain an additional attack if you have not moved this turn.</div>
+  </div>
+
+  <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="physical">
+    <div class="power-card-top"><div class="power-name">Reinforced Tooth Assembly</div><div class="power-cost-badge cost-t2">TIER II</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> Chain-pattern weapons lacking Shatter (e.g. Chainsword, Chainaxe). Grants <strong>Shatter</strong>: deals double damage against structures and vehicles. You also have <strong>advantage</strong> on Strength checks made to break, sunder, or force open objects and doors using this weapon.</div>
+  </div>
+
+  <div class="power-card t3" data-slot="weapon" data-tier="t3" data-family="power">
+    <div class="power-card-top"><div class="power-name">Kinetic Shock Coil</div><div class="power-cost-badge cost-t3">TIER III</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> Power-pattern weapons lacking Stunning (e.g. Power Sword, Power Fist). Grants <strong>Stunning</strong>: on a successful hit, target makes a DC 13 CON save or is stunned until the end of its next turn (once per creature per combat).</div>
+  </div>
+
+</div>
+
+<div class="section-title">Armour Augmetic Traits</div>
+<div class="rank-note">Chosen when a piece of armour is upgraded to the matching tier. An armour piece's total trait count equals its tier (Tier III armour carries three).</div>
+<div class="power-grid">
+
+  <div class="power-card t1" data-slot="armor" data-tier="t1">
+    <div class="power-card-top"><div class="power-name">Reinforced Joints</div><div class="power-cost-badge cost-t1">TIER I</div></div>
+    <div class="power-desc">Your movement speed while wearing this armour increases by <strong>5 ft</strong>.</div>
+  </div>
+
+  <div class="power-card t1" data-slot="armor" data-tier="t1">
+    <div class="power-card-top"><div class="power-name">Auto-Sealing Plates</div><div class="power-cost-badge cost-t1">TIER I</div></div>
+    <div class="power-desc">You have <strong>advantage</strong> on saving throws against poison, disease, and inhaled or gas-based effects while wearing this armour.</div>
+  </div>
+
+  <div class="power-card t1" data-slot="armor" data-tier="t1">
+    <div class="power-card-top"><div class="power-name">Dampening Lining</div><div class="power-cost-badge cost-t1">TIER I</div></div>
+    <div class="power-desc">When you take falling damage, treat the fall as <strong>10 ft shorter</strong> than it actually was for the purpose of calculating damage.</div>
+  </div>
+
+  <div class="power-card t1" data-slot="armor" data-tier="t1">
+    <div class="power-card-top"><div class="power-name">Signal Ward</div><div class="power-cost-badge cost-t1">TIER I</div></div>
+    <div class="power-desc">You have <strong>advantage</strong> on checks and saves to avoid being detected by auspex scanners, vox-tracking, or other technological detection while wearing this armour.</div>
+  </div>
+
+  <div class="power-card t2" data-slot="armor" data-tier="t2">
+    <div class="power-card-top"><div class="power-name">Kinetic Diffusion Plating</div><div class="power-cost-badge cost-t2">TIER II</div></div>
+    <div class="power-desc">Choose Bludgeoning, Piercing, or Slashing at installation. You have <strong>resistance</strong> to that damage type from non-magical sources while wearing this armour.</div>
+  </div>
+
+  <div class="power-card t2" data-slot="armor" data-tier="t2">
+    <div class="power-card-top"><div class="power-name">Thermal Regulation Core</div><div class="power-cost-badge cost-t2">TIER II</div></div>
+    <div class="power-desc">Choose Fire or Cold at installation. You have <strong>resistance</strong> to that damage type while wearing this armour.</div>
+  </div>
+
+  <div class="power-card t2" data-slot="armor" data-tier="t2">
+    <div class="power-card-top"><div class="power-name">Reactive Counter-Plating</div><div class="power-cost-badge cost-t2">TIER II</div></div>
+    <div class="power-desc">Once per turn when a creature hits you with a melee attack while you wear this armour, that creature takes <strong>1d6 damage</strong> of the same type they dealt.</div>
+  </div>
+
+  <div class="power-card t2" data-slot="armor" data-tier="t2">
+    <div class="power-card-top"><div class="power-name">Stabilised Void Plating</div><div class="power-cost-badge cost-t2">TIER II</div></div>
+    <div class="power-desc">You have <strong>advantage</strong> on saving throws and ability checks to avoid being knocked prone, restrained, or forcibly moved (including effects like Grav-Lock) while wearing this armour.</div>
+  </div>
+
+  <div class="power-card t3" data-slot="armor" data-tier="t3">
+    <div class="power-card-top"><div class="power-name">Voidhardened Plating</div><div class="power-cost-badge cost-t3">TIER III</div></div>
+    <div class="power-desc">You are immune to the effects of vacuum exposure and extreme heat or cold while wearing this armour, and you have <strong>advantage</strong> on saving throws against airborne toxins and radiation.</div>
+  </div>
+
+  <div class="power-card t3" data-slot="armor" data-tier="t3">
+    <div class="power-card-top"><div class="power-name">Multi-Spectrum Sensorium</div><div class="power-cost-badge cost-t3">TIER III</div></div>
+    <div class="power-desc">You have <strong>advantage</strong> on Wisdom (Perception) and Intelligence (Investigation) checks while wearing this armour, and can see clearly through non-magical smoke, fog, and heavy foliage as if they weren't there.</div>
+  </div>
+
+  <div class="power-card t3" data-slot="armor" data-tier="t3">
+    <div class="power-card-top"><div class="power-name">Overwatch Protocol</div><div class="power-cost-badge cost-t3">TIER III</div></div>
+    <div class="power-desc">Once per short rest, when a creature you can see moves more than 5 ft while within 30 ft of you, you may use your reaction to make one attack against it with a ranged weapon you are holding.</div>
+  </div>
+
+  <div class="power-card t3" data-slot="armor" data-tier="t3">
+    <div class="power-card-top"><div class="power-name">Adaptive Camouflage Weave</div><div class="power-cost-badge cost-t3">TIER III</div></div>
+    <div class="power-desc">If you have not moved since the start of your last turn, you have <strong>advantage</strong> on Stealth checks and attacks against you are made with <strong>disadvantage</strong> until you move or take an action other than Ready.</div>
+  </div>
+
+</div>
+
+<div class="page-footer">Adeptus Inquisitorium &middot; Wargear Upgrades Reference &middot; Jericho Reach Campaign</div>
+
+</div>
+
+<script>
+(function(){
+  const slotBtns = document.querySelectorAll('.fbtn[data-slot]');
+  const tierBtns = document.querySelectorAll('.fbtn[data-tier]');
+  const famBtns = document.querySelectorAll('.fbtn[data-family]');
+  let curSlot = 'all', curTier = 'all', curFam = 'all';
+  function apply(){
+    document.querySelectorAll('.power-card').forEach(function(card){
+      const s = card.getAttribute('data-slot');
+      const t = card.getAttribute('data-tier');
+      const f = card.getAttribute('data-family');
+      const slotOk = (curSlot==='all'||curSlot===s);
+      const tierOk = (curTier==='all'||curTier===t);
+      const famOk = (curFam==='all') || (f===null) || (f==='any') || (f===curFam);
+      card.style.display = (slotOk && tierOk && famOk) ? '' : 'none';
+    });
+  }
+  slotBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      slotBtns.forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active');
+      curSlot = b.getAttribute('data-slot');
+      apply();
+    });
+  });
+  tierBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      tierBtns.forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active');
+      curTier = b.getAttribute('data-tier');
+      apply();
+    });
+  });
+  famBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      famBtns.forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active');
+      curFam = b.getAttribute('data-family');
+      apply();
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
