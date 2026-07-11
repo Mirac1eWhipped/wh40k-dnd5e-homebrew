@@ -88,6 +88,7 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <p><strong>Techmarines and Tech-Priests</strong> apply a <strong>25% discount</strong> (round down to the nearest 5 RP) to every upgrade cost above, including trait swap costs, reflecting their own tools and standing with the Mechanicus priesthood. They are also the <em>only</em> characters who may install a Tier I upgrade or perform a trait swap in the field during a <strong>short rest</strong>, rather than waiting for downtime between missions, provided they have Artificer's Tools on hand. Tier II and Tier III installations still require proper Armoury/Forge access regardless of class. Any character proficient with Artificer's Tools or equivalent smith's tools receives a smaller <strong>10% discount</strong> on installation and swap costs.</p>
     <p>This system runs alongside, not in place of, the Techmarine's <strong>Mechanicus Enhancement</strong> class feature — that remains a temporary per-resupply buff layered on top of whatever permanent upgrade tier the item already carries. None of the traits below duplicate or outclass an existing class's signature feature — where an idea overlapped (Terminator's Ceramite Wall, Close Combat Operative's Ceramite Bulwark, Gravis Operative's Iron Halo/Unyielding Platform, or the Hexagrammic Ward relic), it was reworked into a distinct niche instead.</p>
     <p><strong>Weapon-Family Traits:</strong> a number of Augmetic Traits are restricted to specific weapon patterns — they graft an existing named weapon property (drawn straight from the Requisitorium's own modifier list) onto a compatible weapon that doesn't already have it. A Las Fusil can requisition an <strong>Overcharge Coil</strong> because Las weapons already run this exact risk in their lore; a Bolt weapon cannot, because there's no in-fiction mechanism for a solid mass-reactive round to "overcharge." These traits still occupy a normal trait slot at the tier listed and cost nothing beyond reaching that tier — they're restricted by <em>eligibility</em>, not by extra price. A weapon can never take a Family Trait for a property it already has baked into its base <code>mods</code> list. GM has final say on borderline cases (a homebrew Las-pattern rifle added later, for instance, should qualify for the same Las-family traits).</p>
+    <p><strong>Armor Pattern Traits:</strong> likewise, each of the four Armor Patterns (Phobos, Tacticus, Gravis, and Terminator) has two Augmetic Traits available only to that pattern, reflecting its distinct construction and role on the battlefield. Like Weapon-Family Traits, these occupy a normal trait slot at the tier listed with no extra RP cost, and require both the matching armor pattern and proficiency to wear it.</p>
   </div>
 </div>
 
@@ -124,6 +125,16 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
       <button class="fbtn" data-family="physical">Chain Weapons</button>
     </div>
   </div>
+  <div class="filter-row">
+    <span class="filter-label">Pattern</span>
+    <div class="filter-btns">
+      <button class="fbtn active" data-pattern="all">All</button>
+      <button class="fbtn" data-pattern="phobos">Phobos</button>
+      <button class="fbtn" data-pattern="tacticus">Tacticus</button>
+      <button class="fbtn" data-pattern="gravis">Gravis</button>
+      <button class="fbtn" data-pattern="terminator">Terminator</button>
+    </div>
+  </div>
 </div>
 
 <div class="section-title">Weapon Augmetic Traits</div>
@@ -152,7 +163,7 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
 
   <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="any">
     <div class="power-card-top"><div class="power-name">Cogitator-Guided Targeting</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc">Once per turn, you may <strong>reroll a missed attack roll</strong> made with this weapon. You must use the new result.</div>
+    <div class="power-desc">This weapon's fire-control cogitator tracks every foe you engage. You have <strong>advantage</strong> on attack rolls made with this weapon against a creature you have already hit with it since the start of the current combat.</div>
   </div>
 
   <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="any">
@@ -167,7 +178,7 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
 
   <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="any">
     <div class="power-card-top"><div class="power-name">Honed Edge</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc">This weapon scores a critical hit on a roll of <strong>19 or 20</strong>.</div>
+    <div class="power-desc">This weapon's critical hit range increases by <strong>1</strong> (stacks with other sources — e.g. 20 becomes 19–20, or 19–20 becomes 18–20).</div>
   </div>
 
   <div class="power-card t3" data-slot="weapon" data-tier="t3" data-family="any">
@@ -264,7 +275,7 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
 
   <div class="power-card t1" data-slot="armor" data-tier="t1">
     <div class="power-card-top"><div class="power-name">Auto-Sealing Plates</div><div class="power-cost-badge cost-t1">TIER I</div></div>
-    <div class="power-desc">You have <strong>advantage</strong> on saving throws against poison, disease, and inhaled or gas-based effects while wearing this armour.</div>
+    <div class="power-desc">You have <strong>advantage</strong> on saving throws to avoid being Blinded or Deafened by explosions, flares, or other sudden environmental shocks while wearing this armour.</div>
   </div>
 
   <div class="power-card t1" data-slot="armor" data-tier="t1">
@@ -284,7 +295,7 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
 
   <div class="power-card t2" data-slot="armor" data-tier="t2">
     <div class="power-card-top"><div class="power-name">Thermal Regulation Core</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc">Choose Fire or Cold at installation. You have <strong>resistance</strong> to that damage type while wearing this armour.</div>
+    <div class="power-desc">Choose a damage type at installation — Fire, Cold, Lightning, or Acid — that you do not already have resistance to from another source. You have <strong>resistance</strong> to that damage type while wearing this armour.</div>
   </div>
 
   <div class="power-card t2" data-slot="armor" data-tier="t2">
@@ -294,17 +305,17 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
 
   <div class="power-card t2" data-slot="armor" data-tier="t2">
     <div class="power-card-top"><div class="power-name">Stabilised Void Plating</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc">You have <strong>advantage</strong> on saving throws and ability checks to avoid being knocked prone, restrained, or forcibly moved (including effects like Grav-Lock) while wearing this armour.</div>
+    <div class="power-desc">You have <strong>advantage</strong> on saving throws and ability checks to avoid being knocked prone or restrained while wearing this armour.</div>
   </div>
 
   <div class="power-card t3" data-slot="armor" data-tier="t3">
     <div class="power-card-top"><div class="power-name">Voidhardened Plating</div><div class="power-cost-badge cost-t3">TIER III</div></div>
-    <div class="power-desc">You are immune to the effects of vacuum exposure and extreme heat or cold while wearing this armour, and you have <strong>advantage</strong> on saving throws against airborne toxins and radiation.</div>
+    <div class="power-desc">You are <strong>immune</strong> to the effects of vacuum exposure, extreme heat, extreme cold, and radiation while wearing this armour.</div>
   </div>
 
   <div class="power-card t3" data-slot="armor" data-tier="t3">
     <div class="power-card-top"><div class="power-name">Multi-Spectrum Sensorium</div><div class="power-cost-badge cost-t3">TIER III</div></div>
-    <div class="power-desc">You have <strong>advantage</strong> on Wisdom (Perception) and Intelligence (Investigation) checks while wearing this armour, and can see clearly through non-magical smoke, fog, and heavy foliage as if they weren't there.</div>
+    <div class="power-desc">You can see clearly through non-magical smoke, fog, and heavy foliage as if they weren't there, and you automatically sense the presence (though not the exact location) of invisible creatures within <strong>30 feet</strong> of you.</div>
   </div>
 
   <div class="power-card t3" data-slot="armor" data-tier="t3">
@@ -314,7 +325,83 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
 
   <div class="power-card t3" data-slot="armor" data-tier="t3">
     <div class="power-card-top"><div class="power-name">Adaptive Camouflage Weave</div><div class="power-cost-badge cost-t3">TIER III</div></div>
-    <div class="power-desc">If you have not moved since the start of your last turn, you have <strong>advantage</strong> on Stealth checks and attacks against you are made with <strong>disadvantage</strong> until you move or take an action other than Ready.</div>
+    <div class="power-desc">If you have not moved since the start of your last turn, attacks against you are made with <strong>disadvantage</strong> until you move or take an action other than Ready.</div>
+  </div>
+
+</div>
+
+<div class="section-title">Armor Pattern Traits <span style="font-size:10pt;color:var(--text-dim);font-family:var(--font-body);font-weight:400;letter-spacing:0">(Pattern-Restricted)</span></div>
+<div class="rank-note">Only available to the listed armor pattern, and only to a character with proficiency to wear it. These occupy a normal trait slot at the tier shown — no extra RP cost beyond reaching that tier.</div>
+<div class="power-grid">
+
+  <div class="power-card t1" data-slot="armor" data-tier="t1" data-pattern="phobos">
+    <div class="power-card-top"><div class="power-name">Umbral Weave</div><div class="power-cost-badge cost-t1">TIER I</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> Phobos-pattern armour only. You leave no tracks, scent trail, or other physical evidence of your passage, and creatures relying on non-visual senses (scent, vibration, tremorsense) cannot pinpoint your location.</div>
+  </div>
+
+  <div class="power-card t1" data-slot="armor" data-tier="t1" data-pattern="phobos">
+    <div class="power-card-top"><div class="power-name">Marksman's Discipline</div><div class="power-cost-badge cost-t1">TIER I</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> Phobos-pattern armour only. While benefiting from the Silence of Thunder rule, you may fire one additional time (<strong>three shots total</strong>) from the same location before your stealth breaks.</div>
+  </div>
+
+  <div class="power-card t2" data-slot="armor" data-tier="t2" data-pattern="phobos">
+    <div class="power-card-top"><div class="power-name">Evasive Instincts</div><div class="power-cost-badge cost-t2">TIER II</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> Phobos-pattern armour only. The first time each combat that an attack misses you, you may immediately move up to <strong>10 feet</strong> without provoking opportunity attacks.</div>
+  </div>
+
+  <div class="power-card t3" data-slot="armor" data-tier="t3" data-pattern="phobos">
+    <div class="power-card-top"><div class="power-name">Grapnel Line</div><div class="power-cost-badge cost-t3">TIER III</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> Phobos-pattern armour only. Once per short rest, as a bonus action, you may fire an integrated grapnel line to pull yourself up to <strong>30 feet</strong> toward a fixed point you can see, ignoring difficult terrain along the way. This movement does not provoke opportunity attacks.</div>
+  </div>
+
+  <div class="power-card t1" data-slot="armor" data-tier="t1" data-pattern="tacticus">
+    <div class="power-card-top"><div class="power-name">Efficient Loadout</div><div class="power-cost-badge cost-t1">TIER I</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> Tacticus-pattern armour only. Once per combat, when a weapon you are holding would run dry, you may ignore this — a reserve magazine you didn't know you were carrying covers the gap.</div>
+  </div>
+
+  <div class="power-card t2" data-slot="armor" data-tier="t2" data-pattern="tacticus">
+    <div class="power-card-top"><div class="power-name">Requisition Efficiency</div><div class="power-cost-badge cost-t2">TIER II</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> Tacticus-pattern armour only. Whenever you requisition standard-issue equipment (not relics) during a resupply, its RP cost is reduced by <strong>15%</strong>.</div>
+  </div>
+
+  <div class="power-card t2" data-slot="armor" data-tier="t2" data-pattern="tacticus">
+    <div class="power-card-top"><div class="power-name">Adaptive Combat Doctrine</div><div class="power-cost-badge cost-t2">TIER II</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> Tacticus-pattern armour only. When this trait is installed, choose two weapon categories from <strong>Primary Ranged, Secondary Ranged, or Melee</strong>. You gain a <strong>+1 bonus</strong> to attack rolls with weapons from your chosen categories.</div>
+  </div>
+
+  <div class="power-card t3" data-slot="armor" data-tier="t3" data-pattern="tacticus">
+    <div class="power-card-top"><div class="power-name">Modular Hardpoints</div><div class="power-cost-badge cost-t3">TIER III</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> Tacticus-pattern armour only. This armour gains one additional Augmetic Trait slot, filled with a Tier I trait of your choice, beyond what its tier would normally allow.</div>
+  </div>
+
+  <div class="power-card t1" data-slot="armor" data-tier="t1" data-pattern="gravis">
+    <div class="power-card-top"><div class="power-name">Blast-Dampening Plating</div><div class="power-cost-badge cost-t1">TIER I</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> Gravis-pattern armour only. You and any creature within 5 ft of you take half damage from the blast radius of your own Heavy Ordinance weapons.</div>
+  </div>
+
+  <div class="power-card t2" data-slot="armor" data-tier="t2" data-pattern="gravis">
+    <div class="power-card-top"><div class="power-name">Ammunition Sled Integration</div><div class="power-cost-badge cost-t2">TIER II</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> Gravis-pattern armour only. Weapons with the Stationary or Heavy Ordinance tag no longer count against your carrying capacity, and you may carry one additional Heavy weapon without penalty.</div>
+  </div>
+
+  <div class="power-card t3" data-slot="armor" data-tier="t3" data-pattern="gravis">
+    <div class="power-card-top"><div class="power-name">Servo-Harness Mounting</div><div class="power-cost-badge cost-t3">TIER III</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> Gravis-pattern armour only. You can draw or stow a Heavy weapon as part of your movement, without spending your object interaction for the turn. If you draw a Stationary-tagged weapon this way, your first attack with it this turn still gains that weapon's bonus for not having moved, even though you did.</div>
+  </div>
+
+  <div class="power-card t1" data-slot="armor" data-tier="t1" data-pattern="terminator">
+    <div class="power-card-top"><div class="power-name">Voidshield Reactor</div><div class="power-cost-badge cost-t1">TIER I</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> Terminator-pattern armour only. As a bonus action, you may vent your armour's void-shield reactor to gain <strong>10 temporary hit points</strong>. These follow standard temporary HP rules. You may use this a number of times equal to <strong>3 per resupply</strong>.</div>
+  </div>
+
+  <div class="power-card t2" data-slot="armor" data-tier="t2" data-pattern="terminator">
+    <div class="power-card-top"><div class="power-name">Graze-Ward Plating</div><div class="power-cost-badge cost-t2">TIER II</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> Terminator-pattern armour only. Since this armour cannot Dodge, its plating compensates: any attack that hits you with a total exactly equal to your AC deals no damage.</div>
+  </div>
+
+  <div class="power-card t3" data-slot="armor" data-tier="t3" data-pattern="terminator">
+    <div class="power-card-top"><div class="power-name">Teleportarium Lock</div><div class="power-cost-badge cost-t3">TIER III</div></div>
+    <div class="power-desc"><strong>Eligible:</strong> Terminator-pattern armour only. Once per resupply as an action, you may teleport up to <strong>60 feet</strong> to an unoccupied space you can see, ignoring cover and obstacles. This movement does not provoke opportunity attacks.</div>
   </div>
 
 </div>
@@ -328,16 +415,19 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
   const slotBtns = document.querySelectorAll('.fbtn[data-slot]');
   const tierBtns = document.querySelectorAll('.fbtn[data-tier]');
   const famBtns = document.querySelectorAll('.fbtn[data-family]');
-  let curSlot = 'all', curTier = 'all', curFam = 'all';
+  const patternBtns = document.querySelectorAll('.fbtn[data-pattern]');
+  let curSlot = 'all', curTier = 'all', curFam = 'all', curPattern = 'all';
   function apply(){
     document.querySelectorAll('.power-card').forEach(function(card){
       const s = card.getAttribute('data-slot');
       const t = card.getAttribute('data-tier');
       const f = card.getAttribute('data-family');
+      const p = card.getAttribute('data-pattern');
       const slotOk = (curSlot==='all'||curSlot===s);
       const tierOk = (curTier==='all'||curTier===t);
       const famOk = (curFam==='all') || (f===null) || (f==='any') || (f===curFam);
-      card.style.display = (slotOk && tierOk && famOk) ? '' : 'none';
+      const patternOk = (curPattern==='all') || (p===null) || (p===curPattern);
+      card.style.display = (slotOk && tierOk && famOk && patternOk) ? '' : 'none';
     });
   }
   slotBtns.forEach(function(b){
@@ -361,6 +451,14 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
       famBtns.forEach(function(x){x.classList.remove('active');});
       b.classList.add('active');
       curFam = b.getAttribute('data-family');
+      apply();
+    });
+  });
+  patternBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      patternBtns.forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active');
+      curPattern = b.getAttribute('data-pattern');
       apply();
     });
   });
