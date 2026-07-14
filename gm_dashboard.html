@@ -280,13 +280,25 @@ const TYPE_LABELS = {
   dw_dark:'Dark Theme', dw_light:'Light Theme'
 };
 
-// Key field indices to preview (class/level=0, background=1, player=2, char name=3)
-const PREVIEW_FIELDS = [
-  { label:'Name',       idx:3 },
-  { label:'Class/Lvl', idx:0 },
-  { label:'Chapter',   idx:4 },
-  { label:'Player',    idx:2 },
-];
+function _esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Preview values come from the sheet's structured `extra` payload — the
+// positional `fields` array varies by sheet layout and cannot be trusted
+function _previewFields(row) {
+  const ex = row.extra || {};
+  const cls = ex.cls
+    ? ex.cls + (ex.level ? ' · Lvl ' + ex.level : '')
+    : (ex.level ? 'Lvl ' + ex.level : '—');
+  const hp = (ex.hp_cur || ex.hp_max) ? (ex.hp_cur || '?') + ' / ' + (ex.hp_max || '?') : '—';
+  return [
+    { label:'Class / Level', value: cls },
+    { label:'Chapter',       value: ex.chapter || '—' },
+    { label:'Player',        value: ex.player_name || '—' },
+    { label:'HP · AC',       value: hp + (ex.ac ? ' · AC ' + ex.ac : '') },
+  ];
+}
 
 function _renderCards(rows) {
   const grid = document.getElementById('cards-grid');
@@ -296,19 +308,17 @@ function _renderCards(rows) {
     return;
   }
   grid.innerHTML = filtered.map(row => {
-    const fields = row.fields || [];
     const updated = new Date(row.updated_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'});
     const sheetUrl = SHEET_URLS[row.sheet_type] || '#';
     const typeLabel = TYPE_LABELS[row.sheet_type] || row.sheet_type;
-    const previewHtml = PREVIEW_FIELDS.map(p => {
-      const val = fields[p.idx] || '—';
-      return `<div class="card-field"><div class="cf-lbl">${p.label}</div><div class="cf-val">${val}</div></div>`;
-    }).join('');
+    const previewHtml = _previewFields(row).map(p =>
+      `<div class="card-field"><div class="cf-lbl">${p.label}</div><div class="cf-val">${_esc(p.value)}</div></div>`
+    ).join('');
     return `
       <div class="char-card">
         <div class="card-header">
           <div>
-            <div class="card-name">${row.name || 'Unnamed Operative'}</div>
+            <div class="card-name">${_esc(row.name || 'Unnamed Operative')}</div>
             <div class="card-email">${row.user_id.slice(0,8)}…</div>
           </div>
           <span class="card-type-pill">${typeLabel}</span>
