@@ -1736,14 +1736,6 @@
             <div class="sheet-pick-name">Deathwatch — Light</div>
             <div class="sheet-pick-desc">White + silver. High contrast for printing. Deathwatch-specific fields.</div>
           </div>
-          <div class="sheet-pick-card" data-file="dnd5e_character_sheet.html" onclick="pickSheet(this)">
-            <div class="sheet-pick-name">D&amp;D 5E — Dark</div>
-            <div class="sheet-pick-desc">Standard D&amp;D 5E layout. Dark theme. Full spell slot and feature tracking.</div>
-          </div>
-          <div class="sheet-pick-card" data-file="dnd5e_character_sheet_light.html" onclick="pickSheet(this)">
-            <div class="sheet-pick-name">D&amp;D 5E — Light</div>
-            <div class="sheet-pick-desc">Standard D&amp;D 5E layout. Light theme. Printer-friendly.</div>
-          </div>
         </div>
       </div>
       <div class="add-field" style="margin-top:8px;">
@@ -1904,9 +1896,7 @@
   // Sheet file display names
   var SHEET_LABELS = {
     "deathwatch_character_sheet.html":       "Deathwatch — Dark",
-    "deathwatch_character_sheet_light.html": "Deathwatch — Light",
-    "dnd5e_character_sheet.html":            "D&D 5E — Dark",
-    "dnd5e_character_sheet_light.html":      "D&D 5E — Light"
+    "deathwatch_character_sheet_light.html": "Deathwatch — Light"
   };
 
   var STORAGE_KEY    = 'dw_kill_team_roster_v2';
@@ -2108,9 +2098,7 @@
   // ── Sync roster from Supabase cloud ──────────────────────────
   var SHEET_TYPE_MAP = {
     'dw_dark':    'deathwatch_character_sheet.html',
-    'dw_light':   'deathwatch_character_sheet_light.html',
-    'dnd5e_dark': 'dnd5e_character_sheet.html',
-    'dnd5e_light':'dnd5e_character_sheet_light.html'
+    'dw_light':   'deathwatch_character_sheet_light.html'
   };
   var _syncPollInterval = null;
   var _syncInProgress   = false;

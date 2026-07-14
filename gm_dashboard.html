@@ -162,17 +162,15 @@
 
   <div class="stats-row" id="stats-row">
     <div class="stat-chip"><div class="stat-val" id="stat-total">—</div><div class="stat-lbl">Total Operatives</div></div>
-    <div class="stat-chip"><div class="stat-val" id="stat-dw">—</div><div class="stat-lbl">Deathwatch Sheets</div></div>
-    <div class="stat-chip"><div class="stat-val" id="stat-dnd">—</div><div class="stat-lbl">D&D 5E Sheets</div></div>
+    <div class="stat-chip"><div class="stat-val" id="stat-dark">—</div><div class="stat-lbl">Dark Theme</div></div>
+    <div class="stat-chip"><div class="stat-val" id="stat-light">—</div><div class="stat-lbl">Light Theme</div></div>
     <div class="stat-chip"><div class="stat-val" id="stat-updated">—</div><div class="stat-lbl">Last Updated</div></div>
   </div>
 
   <div class="filter-bar">
     <button class="filter-btn active" onclick="setFilter('all',this)">All Sheets</button>
-    <button class="filter-btn" onclick="setFilter('dw_dark',this)">DW Dark</button>
-    <button class="filter-btn" onclick="setFilter('dw_light',this)">DW Light</button>
-    <button class="filter-btn" onclick="setFilter('dnd5e_dark',this)">D&D Dark</button>
-    <button class="filter-btn" onclick="setFilter('dnd5e_light',this)">D&D Light</button>
+    <button class="filter-btn" onclick="setFilter('dw_dark',this)">Dark Theme</button>
+    <button class="filter-btn" onclick="setFilter('dw_light',this)">Light Theme</button>
   </div>
 
   <div class="cards-grid" id="cards-grid">
@@ -242,11 +240,13 @@ async function loadAllChars() {
   grid.innerHTML = '<div class="loading">++ Retrieving Operative Records ++</div>';
   try {
     // Use the service role endpoint to get all characters (GM sees everything via RLS policy)
-    const rows = await _sfetch('/rest/v1/characters?select=*&order=updated_at.desc', { method:'GET' });
+    let rows = await _sfetch('/rest/v1/characters?select=*&order=updated_at.desc', { method:'GET' });
     if (!Array.isArray(rows)) {
       grid.innerHTML = '<div class="loading">++ No records found or insufficient clearance ++</div>';
       return;
     }
+    // Deathwatch sheets only — legacy D&D 5E sheet records are retired
+    rows = rows.filter(r => (r.sheet_type || '').startsWith('dw'));
     _allChars = rows;
     _renderStats(rows);
     _renderCards(rows);
@@ -257,8 +257,8 @@ async function loadAllChars() {
 
 function _renderStats(rows) {
   document.getElementById('stat-total').textContent = rows.length;
-  document.getElementById('stat-dw').textContent    = rows.filter(r => r.sheet_type.startsWith('dw')).length;
-  document.getElementById('stat-dnd').textContent   = rows.filter(r => r.sheet_type.startsWith('dnd')).length;
+  document.getElementById('stat-dark').textContent  = rows.filter(r => r.sheet_type === 'dw_dark').length;
+  document.getElementById('stat-light').textContent = rows.filter(r => r.sheet_type === 'dw_light').length;
   if (rows.length) {
     const latest = new Date(rows[0].updated_at);
     document.getElementById('stat-updated').textContent = latest.toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
@@ -273,13 +273,11 @@ function setFilter(f, btn) {
 }
 
 const SHEET_URLS = {
-  dw_dark:    'deathwatch_character_sheet.html',
-  dw_light:   'deathwatch_character_sheet_light.html',
-  dnd5e_dark: 'dnd5e_character_sheet.html',
-  dnd5e_light:'dnd5e_character_sheet_light.html',
+  dw_dark:  'deathwatch_character_sheet.html',
+  dw_light: 'deathwatch_character_sheet_light.html',
 };
 const TYPE_LABELS = {
-  dw_dark:'DW Dark', dw_light:'DW Light', dnd5e_dark:'D&D Dark', dnd5e_light:'D&D Light'
+  dw_dark:'Dark Theme', dw_light:'Light Theme'
 };
 
 // Key field indices to preview (class/level=0, background=1, player=2, char name=3)
