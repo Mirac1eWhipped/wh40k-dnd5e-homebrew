@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Librarian — Warp Powers &amp; Disciplines</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080a0c;--panel:#0d1018;--panel2:#101420;--gold:#c8a44a;--gold-light:#e8c96a;--gold-dim:#7a6128;--silver:#9aaabb;--silver-dim:#4a5a6a;--text:#ccd4e0;--text-dim:#6a7a8a;--border:#2a3a52;--warp:#7060c8;--warp-light:#a090f8;--warp-dim:#3a3068;--font-head:'Cinzel Decorative','Cinzel',serif;--font-label:'Cinzel',serif;--font-body:'Crimson Text',Georgia,serif;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size:10.5pt;}
+.page{width:9in;margin:.4in auto .6in;padding:.45in .52in;background:var(--bg);border:1px solid var(--border);position:relative;overflow:hidden;}
+.page::before,.page::after{content:'';position:absolute;width:48px;height:48px;border-color:var(--gold-dim);border-style:solid;opacity:.5;pointer-events:none;}
+.page::before{top:8px;left:8px;border-width:2px 0 0 2px;}.page::after{bottom:8px;right:8px;border-width:0 2px 2px 0;}
+@media screen{.print-bar{text-align:center;padding:.15in 0 .08in;}.print-btn{display:inline-block;padding:7px 28px;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);font-family:var(--font-label);font-size:10pt;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;transition:all .2s;}.print-btn:hover{background:var(--gold-dim);color:#000;}.portal-link{display:inline-block;padding:7px 28px;margin-right:10px;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);font-family:var(--font-label);font-size:10pt;text-decoration:none;letter-spacing:.25em;text-transform:uppercase;transition:all .2s;}.portal-link:hover{background:var(--gold-dim);color:#000;}}
+@media print{@page{size:letter landscape;margin:0;}body{background:white;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.page{width:11in;margin:0;border:none;}.print-bar,.filter-bar{display:none!important;}}
+.class-header{text-align:center;border-bottom:2px solid var(--gold-dim);padding-bottom:.15in;margin-bottom:.18in;}
+.class-header .aquila{font-size:13pt;color:var(--gold);letter-spacing:.5em;margin-bottom:6px;}
+.class-header h1{font-family:var(--font-head);font-size:24pt;color:var(--gold-light);letter-spacing:.04em;text-shadow:0 0 32px rgba(200,164,74,.3);line-height:1.1;margin-bottom:4px;}
+.class-header .subtitle{font-family:var(--font-label);font-size:10pt;color:var(--silver-dim);letter-spacing:.35em;text-transform:uppercase;}
+.divider{display:flex;align-items:center;gap:10px;margin:.14in 0;}.divider-line{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);}.divider-gem{width:8px;height:8px;background:var(--gold);transform:rotate(45deg);flex-shrink:0;opacity:.85;}
+.section-title{font-family:var(--font-head);font-size:15pt;color:var(--gold-light);letter-spacing:.04em;border-bottom:1px solid var(--gold-dim);padding-bottom:5px;margin-bottom:.12in;text-shadow:0 0 14px rgba(200,164,74,.2);}
+.rank-title{font-family:var(--font-head);font-size:13pt;color:var(--warp-light);letter-spacing:.04em;border-bottom:1px solid var(--warp-dim);padding-bottom:4px;margin-bottom:.1in;margin-top:.18in;text-shadow:0 0 14px rgba(112,96,200,.3);}
+.rank-note{font-size:10pt;color:var(--text-dim);font-style:italic;margin-bottom:.12in;line-height:1.5;}
+.prep-tracker{background:var(--panel);border:1px solid var(--warp-dim);border-top:3px solid var(--warp);padding:.12in .16in;margin-bottom:.18in;}
+.prep-tracker-title{font-family:var(--font-head);font-size:12pt;color:var(--warp-light);margin-bottom:8px;}
+.prep-controls{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end;margin-bottom:10px;}
+.prep-input-group{display:flex;flex-direction:column;gap:3px;}
+.prep-label{font-family:var(--font-label);font-size:10pt;color:var(--gold);letter-spacing:.2em;text-transform:uppercase;}
+.prep-input{background:var(--panel2);border:1px solid var(--border);color:var(--text);font-family:var(--font-label);font-size:12pt;text-align:center;padding:4px 8px;width:100%;-moz-appearance:textfield;}
+.prep-input::-webkit-outer-spin-button,.prep-input::-webkit-inner-spin-button{-webkit-appearance:none;}
+.prep-bar{background:var(--panel2);border:1px solid var(--border);padding:8px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.prep-count{font-family:var(--font-head);font-size:16pt;color:var(--warp-light);}
+.prep-count span{font-size:10pt;color:var(--text-dim);}
+.prep-rule{font-size:10pt;color:var(--text-dim);line-height:1.5;flex:1;}
+.prep-rule strong{color:var(--gold);}
+.prep-warn{color:#e06060;font-size:10pt;font-family:var(--font-label);display:none;}
+.prep-warn.visible{display:block;}
+.power-grid{display:grid;grid-template-columns:1fr 1fr;gap:.1in;margin-bottom:.14in;}
+.power-grid.triple{grid-template-columns:1fr 1fr 1fr;}
+.power-card{background:var(--panel2);border:1px solid var(--border);padding:10px 12px;transition:border-color .2s,background .2s;}
+.power-card.prepared{border-color:var(--warp);background:rgba(112,96,200,.06);}
+.power-card.base-card{border-color:var(--gold-dim);}
+.power-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;margin-bottom:6px;}
+.power-name{font-family:var(--font-label);font-size:10.5pt;color:var(--gold-light);font-weight:600;line-height:1.2;flex:1;}
+.power-cost-badge{font-family:var(--font-label);font-size:10pt;font-weight:700;color:#000;padding:2px 8px;white-space:nowrap;flex-shrink:0;}
+.cost-free{background:var(--gold);}
+.cost-r1{background:var(--warp-light);color:#000;}
+.cost-r2{background:#8060d8;color:#fff;}
+.cost-r3{background:#5040a8;color:#fff;}
+.power-meta{display:flex;flex-wrap:wrap;gap:5px 12px;margin-bottom:6px;}
+.meta-item{font-family:var(--font-label);font-size:10pt;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);}
+.meta-item span{color:var(--silver);}
+.power-desc{font-size:10pt;color:var(--text);line-height:1.52;}
+.power-desc strong{color:var(--gold-light);font-family:var(--font-label);font-size:inherit;}
+.power-desc em{color:var(--text-dim);}
+.peril-tag{display:inline-block;background:rgba(200,60,60,.15);border:1px solid rgba(200,60,60,.4);color:#e07070;font-family:var(--font-label);font-size:10pt;letter-spacing:.15em;text-transform:uppercase;padding:1px 6px;margin-top:4px;}
+.prep-check-wrap{display:flex;align-items:center;gap:6px;margin-top:6px;cursor:pointer;}
+.prep-checkbox{width:14px;height:14px;border:1px solid var(--warp-dim);background:var(--panel);appearance:none;-webkit-appearance:none;cursor:pointer;flex-shrink:0;position:relative;}
+.prep-checkbox:checked{background:var(--warp);border-color:var(--warp-light);}
+.prep-checkbox:checked::after{content:'✓';position:absolute;top:-2px;left:1px;font-size:10px;color:#fff;font-weight:bold;}
+.prep-check-label{font-family:var(--font-label);font-size:10pt;letter-spacing:.15em;text-transform:uppercase;color:var(--text-dim);cursor:pointer;user-select:none;}
+.prepared .prep-check-label{color:var(--warp-light);}
+.page-footer{margin-top:.2in;border-top:1px solid var(--gold-dim);padding-top:.09in;font-family:var(--font-label);font-size:10pt;color:var(--text-dim);letter-spacing:.16em;text-align:center;text-transform:uppercase;}
+.disc-tags{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:5px;}.disc-tag{font-family:var(--font-label);font-size:10pt;letter-spacing:.12em;text-transform:uppercase;padding:1px 6px;border:1px solid;}.disc-tag.biomancy{color:#60b86c;border-color:rgba(96,184,108,.5);background:rgba(96,184,108,.1);}.disc-tag.telepathy{color:#c080f8;border-color:rgba(192,128,248,.5);background:rgba(192,128,248,.1);}.disc-tag.telekinesis{color:#60b0f8;border-color:rgba(96,176,248,.5);background:rgba(96,176,248,.1);}.disc-tag.pyromancy{color:#f07848;border-color:rgba(240,120,72,.5);background:rgba(240,120,72,.1);}.disc-tag.divination{color:#c8a44a;border-color:rgba(200,164,74,.5);background:rgba(200,164,74,.1);}.disc-tag.temporal{color:#60e0d8;border-color:rgba(96,224,216,.5);background:rgba(96,224,216,.1);}.disc-tag.immateria{color:#d060e8;border-color:rgba(200,60,220,.55);background:rgba(200,60,220,.1);}
+.cost-r4{background:#2a0550;color:#d060e8;border:1px solid rgba(200,60,220,.6);}.rank-title.r4{color:#d060e8 !important;border-bottom-color:rgba(200,60,220,.5) !important;text-shadow:0 0 14px rgba(200,60,220,.35) !important;}
+.filter-bar{background:var(--panel);border:1px solid var(--border);border-top:3px solid var(--gold-dim);padding:.1in .14in;margin-bottom:.18in;}.filter-row{display:flex;align-items:center;gap:10px;margin-bottom:7px;}.filter-row:last-child{margin-bottom:0;}.filter-label{font-family:var(--font-label);font-size:10pt;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);min-width:76px;flex-shrink:0;}.filter-btns{display:flex;flex-wrap:wrap;gap:5px;}.fbtn{font-family:var(--font-label);font-size:10pt;letter-spacing:.14em;text-transform:uppercase;padding:3px 10px;background:var(--panel2);border:1px solid var(--border);color:var(--text-dim);cursor:pointer;transition:all .15s;user-select:none;}.fbtn:hover{border-color:var(--gold-dim);color:var(--gold);}.fbtn.active{background:var(--gold-dim);border-color:var(--gold);color:#000;font-weight:700;}.fbtn[data-disc="biomancy"].active{background:rgba(96,184,108,.18);border-color:#60b86c;color:#60b86c;}.fbtn[data-disc="telepathy"].active{background:rgba(192,128,248,.15);border-color:#c080f8;color:#c080f8;}.fbtn[data-disc="telekinesis"].active{background:rgba(96,176,248,.15);border-color:#60b0f8;color:#60b0f8;}.fbtn[data-disc="pyromancy"].active{background:rgba(240,120,72,.18);border-color:#f07848;color:#f07848;}.fbtn[data-disc="divination"].active{background:rgba(200,164,74,.18);border-color:var(--gold);color:var(--gold-light);}.fbtn[data-disc="temporal"].active{background:rgba(96,224,216,.15);border-color:#60e0d8;color:#60e0d8;}.fbtn[data-disc="immateria"].active{background:rgba(200,60,220,.15);border-color:#d060e8;color:#d060e8;}.fbtn[data-rank="r4"].active{background:rgba(200,60,220,.15);border-color:#d060e8;color:#d060e8;}
+.rules-box{background:var(--panel);border:1px solid var(--border);border-top:3px solid var(--gold-dim);padding:.16in .2in;margin-bottom:.18in;}.rules-box-title{font-family:var(--font-head);font-size:12pt;color:var(--gold-light);margin-bottom:.12in;letter-spacing:.03em;}.rule-tag{display:inline-block;font-family:var(--font-label);font-size:10pt;letter-spacing:.12em;text-transform:uppercase;padding:1px 5px;border:1px solid;margin-right:3px;vertical-align:middle;}.rt-base{color:var(--gold);border-color:var(--gold-dim);background:rgba(200,164,74,.1);}.rt-r1{color:var(--warp-light);border-color:var(--warp-dim);background:rgba(112,96,200,.1);}.rt-r2{color:#8060d8;border-color:#5040a0;background:rgba(112,96,200,.08);}.rt-r3{color:#5040a8;border-color:#3a2878;background:rgba(80,64,168,.1);}.rt-r4{color:#d060e8;border-color:rgba(200,60,220,.5);background:rgba(200,60,220,.1);}.rule-body{font-size:10pt;color:var(--text);line-height:1.7;}.rule-body p{margin-bottom:.1in;}.rule-body p:last-child{margin-bottom:0;}
+</style>
+</head>
+<body>
+<div class="print-bar"><a href="general_portal.html" class="portal-link">&#8592; Back to Portal</a></div>
+<div class="rules-box">
+  <div class="rules-box-title">&#9671; How Warp Powers Work — Librarian Reference</div>
+  <div class="rule-body" style="font-size:10pt;line-height:1.7;color:var(--text);">
+
+    <p>All Librarian powers draw on <strong>Warp Resilience Points (WRP)</strong> — the measure of how hard you are pushing into the Immaterium. Your WRP pool resets fully on <strong>resupply</strong>, and you may recover <strong>INT mod &times; Prof Bonus</strong> WRP once per resupply on a short rest by pulling back from the Warp (no risk, no roll). Your <strong>Save DC</strong> for all powers is <strong>8 + Proficiency Bonus + INT modifier</strong>.</p>
+
+    <p>Powers come in two categories. <strong>Base Powers</strong> are always available, always free, and never carry any risk — use them freely and without limit. <strong>Advanced Powers</strong> cost WRP and come in four ranks: <span class="rule-tag rt-r1">Rank I</span> costs 4–6 WRP, <span class="rule-tag rt-r2">Rank II</span> costs 8–12 WRP, <span class="rule-tag rt-r3">Rank III</span> costs 12–18 WRP, and <span class="rule-tag rt-r4">Rank IV</span> costs 18–24 WRP. Higher ranks unlock at higher Librarian levels. Before each mission, you prepare a number of Advanced Powers equal to your <strong>Librarian Level + INT modifier</strong> — this can only change on resupply. Base Powers and your discipline's 4 auto-prepared powers never count against this limit.</p>
+
+    <p>Whenever you spend <strong>6 or more WRP on a single power</strong>, you risk tearing open a hole in your psyche — this is the <strong>Perils of the Warp</strong>. Make a <strong>WIS save</strong> with DC equal to 10 + the number of WRP spent above 5. Only one check is made per power regardless of how many triggers apply; use the highest applicable DC. On a failure, you gain <strong>1d4 Corruption</strong> and the GM may invoke a Warp Influence Effect. On a success, the power fires normally with no consequence.</p>
+
+    <p><strong>The Push</strong> is a deliberate gamble — declare it before you roll, and it cannot be taken back. It automatically triggers a Perils check at minimum DC 12 regardless of the power's WRP cost. On a success the power achieves maximum effect: choose one of damage dice maximized, area of effect doubled, or number of targets doubled. On a failure, the power fires at normal effect and you still suffer the Perils consequences. Pushing one of your discipline's own auto-prepared powers grants you <strong>advantage</strong> on the Perils check.</p>
+
+    <p>Any Advanced Power can be <strong>Empowered</strong> by spending <strong>3 additional WRP</strong> at the time of manifestation, up to twice per cast. Each Empower adds <strong>+2d6 damage</strong> of the power's primary type to damage-dealing powers, or either extends duration by 50% or adds one extra target for non-damage powers — choose at declaration. The extra WRP spent on Empower counts toward Perils calculations.</p>
+
+    <p>Finally, if you are ever short on WRP, you may use <strong>Warp Draw</strong> as a bonus action — spending up to <strong>10 HP</strong> to gain <strong>1 WRP per 2 HP</strong> spent. That HP cannot be restored until resupply. The first use per resupply costs only the HP itself; each use after that requires a <strong>WIS save DC 12</strong> or you gain <strong>1 Corruption</strong> as the Warp begins feeding back.</p>
+
+  </div>
+</div>
+
+<div class="filter-bar">
+  <div class="filter-row">
+    <span class="filter-label">Discipline</span>
+    <div class="filter-btns">
+      <button class="fbtn active" data-disc="all">All</button>
+      <button class="fbtn" data-disc="biomancy">Biomancy</button>
+      <button class="fbtn" data-disc="telepathy">Telepathy</button>
+      <button class="fbtn" data-disc="telekinesis">Telekinesis</button>
+      <button class="fbtn" data-disc="pyromancy">Pyromancy</button>
+      <button class="fbtn" data-disc="divination">Divination</button>
+      <button class="fbtn" data-disc="temporal">Temporal</button>
+      <button class="fbtn" data-disc="immateria">Immateria (Rank IV)</button>
+    </div>
+  </div>
+  <div class="filter-row">
+    <span class="filter-label">Rank</span>
+    <div class="filter-btns">
+      <button class="fbtn active" data-rank="all">All Ranks</button>
+      <button class="fbtn" data-rank="base">Base</button>
+      <button class="fbtn" data-rank="r1">Rank I</button>
+      <button class="fbtn" data-rank="r2">Rank II</button>
+      <button class="fbtn" data-rank="r3">Rank III</button>
+      <button class="fbtn" data-rank="r4">Rank IV</button>
+    </div>
+  </div>
+</div>
+
+<div class="section-title">Base Warp Powers &nbsp;<span style="font-size:10pt;color:var(--text-dim);font-family:var(--font-body);font-weight:400;letter-spacing:0">(At-Will · Always Available · No WRP Cost)</span></div>
+<div class="rank-note">Extensions of your psychic presence. No Warp Resilience Points, no Perils of the Warp risk. These scale with your level and never count against your preparation limit.</div>
+<div class="power-grid triple">
+
+
+  <div class="power-card base-card" data-rank="base" data-discs="biomancy">
+    <div class="power-card-top"><div class="power-name">Psychic Mending</div><div class="power-cost-badge cost-free">FREE</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag biomancy">Biomancy</span></div>
+    <div class="power-desc">Stabilize a dying creature within range (no check required), or restore <strong>1d6 HP</strong> to a willing creature you can see. Cannot be used on yourself. Scales: 2d6 at Lv7, 3d6 at Lv14.</div>
+  </div>
+
+  <div class="power-card base-card" data-rank="base" data-discs="divination">
+    <div class="power-card-top"><div class="power-name">Warp Trace</div><div class="power-cost-badge cost-free">FREE</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Touch / 30ft</span></div><div class="meta-item">Duration: <span>1 hour</span></div></div>
+    <div class="disc-tags"><span class="disc-tag divination">Divination</span></div>
+    <div class="power-desc">Attune to a creature's psychic signature — must touch them or an object they have carried. For 1 hour, you know their <strong>general direction</strong> (not distance or precise location). Blocked by 2ft of stone, 2in of metal, or a thin sheet of lead. Usable outside combat only.</div>
+  </div>
+
+
+  <div class="power-card" data-rank="base" data-discs="pyromancy">
+    <div class="power-card-top"><div class="power-name">Warp Flame</div><div class="power-cost-badge cost-free">FREE</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Touch</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag pyromancy">Pyromancy</span></div>
+    <div class="power-desc">Make a melee spell attack. Hit: <strong>1d8 fire damage</strong> and target catches warp-fire — <strong>1d4 fire/turn</strong>. DEX check (DC = Save DC) as action to extinguish. Cannot be smothered or doused normally. Also ignites flammable objects. Scales: 2d8 at Lv7, 3d8 at Lv14.</div>
+  </div>
+
+
+  <div class="power-card base-card" data-rank="base" data-discs="immateria">
+    <div class="power-card-top"><div class="power-name">Psychic Bolt</div><div class="power-cost-badge cost-free">FREE</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag immateria">Immateria</span></div>
+    <div class="power-desc">Make a ranged spell attack (INT + Prof). On hit: <strong>1d10 psychic damage</strong> (2d10 at Lv7, 3d10 at Lv14). No saving throw — a direct psychic strike.</div>
+  </div>
+
+  <div class="power-card base-card" data-rank="base" data-discs="telepathy">
+    <div class="power-card-top"><div class="power-name">Mind Scan</div><div class="power-cost-badge cost-free">FREE</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telepathy">Telepathy</span></div>
+    <div class="power-desc">Target makes an <strong>INT save</strong>. Failure: read surface thoughts — emotional state, immediate intent, ask GM one yes/no question about their knowledge. Success: they know you attempted the probe. Daemons have disadvantage.</div>
+  </div>
+
+  <div class="power-card base-card" data-rank="base" data-discs="divination">
+    <div class="power-card-top"><div class="power-name">Warp Sight</div><div class="power-cost-badge cost-free">FREE</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>Self</span></div><div class="meta-item">Duration: <span>10 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag divination">Divination</span></div>
+    <div class="power-desc">Gain <strong>darkvision 60ft</strong> (or extend existing by 60ft), see invisible/warp entities, automatically detect any psyker or daemon within 60ft with relative direction.</div>
+  </div>
+
+  <div class="power-card base-card" data-rank="base" data-discs="telepathy">
+    <div class="power-card-top"><div class="power-name">Telepathic Link</div><div class="power-cost-badge cost-free">FREE</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>120ft</span></div><div class="meta-item">Duration: <span>1 hour</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telepathy">Telepathy</span></div>
+    <div class="power-desc">Establish silent two-way telepathic communication with up to <strong>3 willing allies</strong>. Instantaneous, uninterceptable. All linked allies hear everything you transmit. Ends if knocked unconscious or on resupply.</div>
+  </div>
+
+  <div class="power-card base-card" data-rank="base" data-discs="telekinesis">
+    <div class="power-card-top"><div class="power-name">Kinetic Ward</div><div class="power-cost-badge cost-free">FREE</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Reaction</span></div><div class="meta-item">Range: <span>Self</span></div><div class="meta-item">Duration: <span>Until next turn</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telekinesis">Telekinesis</span></div>
+    <div class="power-desc">Manifest a telekinetic barrier as a reaction to being targeted. Gain <strong>+2 AC</strong> against the triggering attack and until your next turn. At Lv11, increases to +3 AC and reduces damage by 1d6 if the attack hits.</div>
+  </div>
+
+  <div class="power-card base-card" data-rank="base" data-discs="telepathy">
+    <div class="power-card-top"><div class="power-name">Neural Disruption</div><div class="power-cost-badge cost-free">FREE</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telepathy">Telepathy</span></div>
+    <div class="power-desc">Fire a precise psychic spike at a target's neural pathways. Target makes a <strong>CON save</strong>. Failure: disadvantage on their next attack roll, saving throw, or ability check (you declare which). Subtle — the target may not know you caused it.</div>
+  </div>
+
+  <div class="power-card base-card" data-rank="base" data-discs="temporal">
+    <div class="power-card-top"><div class="power-name">Phase Shift</div><div class="power-cost-badge cost-free">FREE</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Reaction (on attack)</span></div><div class="meta-item">Range: <span>Self</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag temporal">Temporal</span></div>
+    <div class="power-desc">Briefly phase into the Warp. The triggering attack <strong>misses automatically</strong>. After phasing, you have disadvantage on all attack rolls until the start of your next turn as you reorient. Usable once per round.</div>
+  </div>
+
+  <div class="power-card base-card" data-rank="base" data-discs="telepathy">
+    <div class="power-card-top"><div class="power-name">Psychic Communion</div><div class="power-cost-badge cost-free">FREE</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Conc. 10 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telepathy">Telepathy</span></div>
+    <div class="power-desc">Share full senses with a willing ally — see, hear, and perceive everything they experience. Communicate complex tactical information instantly (no word limit). You are not surprised while communing, regardless of your physical position.</div>
+  </div>
+
+  <div class="power-card base-card" data-rank="base" data-discs="telekinesis">
+    <div class="power-card-top"><div class="power-name">Kinetic Lift</div><div class="power-cost-badge cost-free">FREE</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telekinesis">Telekinesis</span></div>
+    <div class="power-desc">Telekinetically levitate an object (up to 500 lbs) or creature (Large or smaller). Object: move 20ft per turn free action. Creature: <strong>STR save</strong> or lifted 10ft and suspended. Levitated creatures can still act. Falling deals normal damage.</div>
+  </div>
+
+  <div class="power-card base-card" data-rank="base" data-discs="divination">
+    <div class="power-card-top"><div class="power-name">Warp Echo</div><div class="power-cost-badge cost-free">FREE</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft radius</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag divination">Divination</span></div>
+    <div class="power-desc">Open your mind to psychic residue of recent events. Receive visions of significant events within 60ft of your position in the last <strong>24 hours</strong>. Violence, deaths, and powerful emotions leave the strongest impressions. GM determines what is visible. Cannot be used during active combat.</div>
+  </div>
+
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+<div class="section-title">Advanced Warp Powers</div>
+
+<!-- RANK I -->
+<div class="rank-title">⬡ Rank I — Neophyte Disciplines &nbsp;<span style="font-family:var(--font-body);font-size:10pt;color:var(--text-dim);font-style:italic;letter-spacing:0">(Level 1+ · 4–6 WRP)</span></div>
+<div class="rank-note">Available from Level 1. Psyker Ranking 1 required. These are the foundations of psychic warfare — mind attacks, telekinesis, limited warp travel, and psychic camouflage.</div>
+<div class="power-grid">
+
+  <div class="power-card" id="pc_smite" data-rank="r1" data-discs="telekinesis">
+    <div class="power-card-top"><div class="power-name">Smite the Unclean</div><div class="power-cost-badge cost-r1">4 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>Self</span></div><div class="meta-item">Duration: <span>Instant (next hit)</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telekinesis">Telekinesis</span></div>
+    <div class="power-desc">Channel psychic energy through your Force weapon. The next hit this turn deals an additional <strong>2d8 psychic damage</strong>. Against Chaos-aligned creatures and daemons: <strong>3d8</strong>. Declare after seeing the attack roll. Does not trigger Perils of the Warp.</div>
+  </div>
+
+  <div class="power-card" id="pc_forcewave" data-rank="r1" data-discs="telekinesis">
+    <div class="power-card-top"><div class="power-name">Force Wave</div><div class="power-cost-badge cost-r1">4 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft cone</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telekinesis">Telekinesis</span></div>
+    <div class="power-desc">Project a telekinetic burst in a 30ft cone. Each creature makes a <strong>STR save</strong>. Failure: <strong>4d8 force damage</strong> and pushed 20ft. Success: half, no push. Objects up to 500 lbs are also pushed. Light cover is knocked aside.</div>
+  </div>
+
+  <div class="power-card" id="pc_mindgrasp" data-rank="r1" data-discs="telekinesis">
+    <div class="power-card-top"><div class="power-name">Mind Grasp</div><div class="power-cost-badge cost-r1">4 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telekinesis">Telekinesis</span></div>
+    <div class="power-desc">Seize a creature of Large size or smaller with telekinetic force. Target makes a <strong>STR save</strong>. Failure: <strong>Grappled</strong> (no physical contact). Move the target 15ft/turn as a free action. They reattempt the save at the end of each of their turns.</div>
+  </div>
+
+  <div class="power-card" id="pc_soulsear" data-rank="r1" data-discs="pyromancy">
+    <div class="power-card-top"><div class="power-name">Soul Sear</div><div class="power-cost-badge cost-r1">4 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag pyromancy">Pyromancy</span></div>
+    <div class="power-desc">Lash out with a bolt of psychic fire. Target makes an <strong>INT save</strong>. Failure: <strong>4d8 psychic damage</strong> and Frightened until end of their next turn. Success: half, not Frightened. Mindless creatures are immune to Frightened but take full damage.</div>
+  </div>
+
+  <div class="power-card" id="pc_warpspeed" data-rank="r1" data-discs="temporal">
+    <div class="power-card-top"><div class="power-name">Warp Speed</div><div class="power-cost-badge cost-r1">4 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>Self</span></div><div class="meta-item">Duration: <span>Until end of turn</span></div></div>
+    <div class="disc-tags"><span class="disc-tag temporal">Temporal</span></div>
+    <div class="power-desc">Partially phase through the Warp. Until end of your turn: movement speed <strong>triples</strong>, no opportunity attacks provoked, pass through difficult terrain freely. You may pass through occupied spaces but cannot end your turn inside one.</div>
+  </div>
+
+  <div class="power-card" id="pc_pyrokinesis" data-rank="r1" data-discs="pyromancy">
+    <div class="power-card-top"><div class="power-name">Pyrokinesis</div><div class="power-cost-badge cost-r1">4 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Ongoing</span></div></div>
+    <div class="disc-tags"><span class="disc-tag pyromancy">Pyromancy</span></div>
+    <div class="power-desc">Ignite a target with warp-fueled psychic fire. Make a ranged spell attack. Hit: <strong>4d6 fire damage</strong> and the target catches warp-fire — <strong>1d6 fire damage</strong> at the start of each of their turns. DEX check (DC = Save DC) as an action to extinguish. Cannot be extinguished by mundane means (not water, not smothering).</div>
+  </div>
+
+  <div class="power-card" id="pc_telepassault" data-rank="r1" data-discs="telepathy">
+    <div class="power-card-top"><div class="power-name">Telepathic Assault</div><div class="power-cost-badge cost-r1">5 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telepathy">Telepathy</span></div>
+    <div class="power-desc">Hammer a target's mind. Target makes an <strong>INT save</strong>. Failure: <strong>2d10 psychic damage</strong> and <strong>Stunned</strong> until end of their next turn. Success: 1d10, not Stunned. Creatures with INT 3 or lower are immune to Stun but take double damage instead.</div>
+  </div>
+
+  <div class="power-card" id="pc_nullfield" data-rank="r1" data-discs="divination">
+    <div class="power-card-top"><div class="power-name">Null Field</div><div class="power-cost-badge cost-r1">5 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (15ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag divination">Divination</span></div>
+    <div class="power-desc">Project a psychic damping field. All psykers within 15ft must spend <strong>4 additional WRP</strong> per power and roll manifesting at <strong>disadvantage</strong>. Warp entities have disadvantage on all rolls within the area. Affects allies — use with care.</div>
+  </div>
+
+  <div class="power-card" id="pc_veiloftime" data-rank="r1" data-discs="temporal">
+    <div class="power-card-top"><div class="power-name">Veil of Time</div><div class="power-cost-badge cost-r1">5 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag temporal">Temporal</span></div>
+    <div class="power-desc">Drag a target into slow-time. Target makes a <strong>WIS save</strong>. Failure: <strong>Slowed</strong> — speed halved, -2 AC, -2 DEX saves, one action or attack per turn (not both). They repeat the save at end of each turn to escape.</div>
+  </div>
+
+  <div class="power-card" id="pc_shroud" data-rank="r1" data-discs="telepathy">
+    <div class="power-card-top"><div class="power-name">Psychic Shroud</div><div class="power-cost-badge cost-r1">5 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telepathy">Telepathy</span></div>
+    <div class="power-desc">Bend light and mental perception around yourself. You become <strong>invisible</strong>; your thoughts cannot be read. Ends immediately on any hostile action (attacking, offensive power, interacting with enemy). Other psykers within 30ft detect your presence on an INT check (DC = Save DC).</div>
+  </div>
+
+  <div class="power-card" id="pc_psychscour" data-rank="r1" data-discs="biomancy">
+    <div class="power-card-top"><div class="power-name">Psychic Scour</div><div class="power-cost-badge cost-r1">5 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag biomancy">Biomancy</span></div>
+    <div class="power-desc">Burn away a negative condition afflicting an ally with focused psychic energy. Remove one of the following from a willing ally: <strong>Blinded, Deafened, Frightened, Poisoned</strong>, or one level of Exhaustion. Alternatively, clear one non-magical disease. The target experiences a brief intense burning sensation.</div>
+  </div>
+
+  <div class="power-card" id="pc_ectoplasm" data-rank="r1" data-discs="telekinesis">
+    <div class="power-card-top"><div class="power-name">Ectoplasmic Tendrils</div><div class="power-cost-badge cost-r1">5 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telekinesis">Telekinesis</span></div>
+    <div class="power-desc">Manifest psychokinetic tendrils. Up to <strong>3 creatures</strong> within 30ft make STR saves. Failures are <strong>Restrained</strong> and take <strong>2d6 psychic damage</strong> at the start of each of their turns. STR save each turn to break free. Release any tendril as a free action.</div>
+  </div>
+
+  <div class="power-card" id="pc_mentalbast" data-rank="r1" data-discs="biomancy">
+    <div class="power-card-top"><div class="power-name">Mental Bastion</div><div class="power-cost-badge cost-r1">4 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Encounter</span></div></div>
+    <div class="disc-tags"><span class="disc-tag biomancy">Biomancy</span></div>
+    <div class="power-desc">Fortify an ally's mind against psychic intrusion. One willing ally gains <strong>resistance to psychic damage</strong> and advantage on INT saving throws for the rest of the encounter. They also cannot be Charmed or Frightened while the Bastion persists. Only one ally may be Bastioned at a time.</div>
+  </div>
+
+  <div class="power-card" id="pc_crushgrasp" data-rank="r1" data-discs="telekinesis">
+    <div class="power-card-top"><div class="power-name">Crushing Grasp</div><div class="power-cost-badge cost-r1">5 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telekinesis">Telekinesis</span></div>
+    <div class="power-desc">Compress air around a creature into a crushing telekinetic vice. Target makes a <strong>CON save</strong>. Failure: <strong>6d8 force damage</strong> and Incapacitated until start of their next turn. Success: 3d8, not Incapacitated. Creatures in power armor have disadvantage — even ceramite yields to focused telekinesis.</div>
+  </div>
+
+  <div class="power-card" id="pc_mindlink" data-rank="r1" data-discs="telepathy">
+    <div class="power-card-top"><div class="power-name">Mindlink Network</div><div class="power-cost-badge cost-r1">5 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Conc. 1 hour</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telepathy">Telepathy</span></div>
+    <div class="power-desc">Establish a full tactical psychic network with up to <strong>5 willing allies</strong>. All linked allies communicate silently within 1 mile. The network shares the <strong>highest Initiative modifier</strong> among its members, and the group cannot be Surprised while any networked ally is aware of a threat.</div>
+  </div>
+
+  <div class="power-card" id="pc_farsight" data-rank="r1" data-discs="divination">
+    <div class="power-card-top"><div class="power-name">Far Sight</div><div class="power-cost-badge cost-r1">5 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Unlimited</span></div><div class="meta-item">Duration: <span>Conc. 10 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag divination">Divination</span></div>
+    <div class="power-desc">Extend psychic senses across vast distances. Choose a location you have previously visited. For the duration, see and hear that location as if present — observation only, no interaction. You are <strong>blind and deaf</strong> to your actual surroundings while projecting. Excellent for pre-mission reconnaissance.</div>
+  </div>
+
+  <div class="power-card" id="pc_warpconstruct" data-rank="r1" data-discs="telekinesis">
+    <div class="power-card-top"><div class="power-name">Warp Construct</div><div class="power-cost-badge cost-r1">6 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>1 hour</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telekinesis">Telekinesis</span></div>
+    <div class="power-desc">Condense warp energy into a simple physical object or structure up to 10ft in any dimension. The construct has <strong>AC 13, 20 HP</strong>. Serves as cover, bridge, barrier, or any non-mechanical shape you define. Visibly unnatural — faintly luminescent. Vanishes when destroyed or when duration expires.</div>
+  </div>
+
+  <div class="power-card" id="pc_memwipe" data-rank="r1" data-discs="telepathy">
+    <div class="power-card-top"><div class="power-name">Memory Wipe</div><div class="power-cost-badge cost-r1">6 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Permanent</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telepathy">Telepathy</span></div>
+    <div class="power-desc">Selectively erase a creature's recent memories. Target makes an <strong>INT save</strong>. Failure: lose all memory of the last <strong>1 hour</strong>. They do not know they've been affected. Reserve for necessary operational security. Success: target knows something was attempted and becomes hostile.</div>
+  </div>
+
+  <div class="power-card" id="pc_gate1" data-rank="r1" data-discs="temporal">
+    <div class="power-card-top"><div class="power-name">Gate of Infinity I</div><div class="power-cost-badge cost-r1">6 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>Self (30ft)</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag temporal">Temporal</span></div>
+    <div class="power-desc">Tear a miniature hole in reality and step through, appearing within <strong>30ft</strong>. No opportunity attacks provoked. Ignores difficult terrain, obstacles, barriers under 10ft. If destination occupied, appear in nearest unoccupied space. A crack of displaced air marks both points.</div>
+  </div>
+
+  <div class="power-card" id="pc_tempecho" data-rank="r1" data-discs="temporal divination">
+    <div class="power-card-top"><div class="power-name">Temporal Echo</div><div class="power-cost-badge cost-r1">6 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft (30ft radius)</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag temporal">Temporal</span><span class="disc-tag divination">Divination</span></div>
+    <div class="power-desc">Briefly replay the last 6 seconds in a 30ft radius. All creatures in the area make <strong>WIS saves</strong>. Failure: displaced back 6 seconds — their position, HP, and conditions reset to start of last turn. They lose memory of that turn's events. Success: unaffected. <em>Closely monitored by the Librarius — use with operational justification.</em></div>
+  </div>
+
+  <div class="power-card" id="pc_compel" data-rank="r1" data-discs="telepathy">
+    <div class="power-card-top"><div class="power-name">Compel</div><div class="power-cost-badge cost-r1">4 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telepathy">Telepathy</span></div>
+    <div class="power-desc">Plant a simple psychic command (max 5 words, non-harmful) into a target's mind. Target makes a <strong>WIS save</strong>. Failure: they carry out the command for up to 1 minute, believing it was their own idea. The command must be actionable and specific. Success: the target knows psychic intrusion was attempted and may become hostile.</div>
+  </div>
+
+  <div class="power-card" id="pc_pyroclast" data-rank="r1" data-discs="pyromancy">
+    <div class="power-card-top"><div class="power-name">Pyroclast</div><div class="power-cost-badge cost-r1">5 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft (20ft radius)</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag pyromancy">Pyromancy</span></div>
+    <div class="power-desc">Detonate a burst of warp-fire at a point within 60ft. All creatures in the 20ft radius make a <strong>DEX save</strong>. Failure: <strong>8d6 fire damage</strong> and they catch warp-fire — <strong>1d8 fire damage</strong> at the start of each of their turns. DEX check (DC = Save DC) as an action to extinguish. Cannot be smothered or doused normally. Success: half, no ongoing.</div>
+  </div>
+
+  <div class="power-card" id="pc_psychometry" data-rank="r1" data-discs="divination">
+    <div class="power-card-top"><div class="power-name">Psychometry</div><div class="power-cost-badge cost-r1">4 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Touch</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag divination">Divination</span></div>
+    <div class="power-desc">Touch an object and read its psychic history. Learn up to <strong>3 significant events</strong> involving the object within the last month. Violence, death, and powerful emotion leave the strongest impressions — mundane use leaves almost none. GM determines what is visible. Cannot be used on living creatures.</div>
+  </div>
+
+  <div class="power-card" id="pc_kineticbarrier" data-rank="r1" data-discs="telekinesis">
+    <div class="power-card-top"><div class="power-name">Kinetic Barrier</div><div class="power-cost-badge cost-r1">5 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telekinesis">Telekinesis</span></div>
+    <div class="power-desc">Conjure a 10ft wide, 10ft tall wall of compressed telekinetic force at a point within 60ft. The wall has <strong>AC 15 and 30 HP</strong>. Physical projectiles (bolts, slugs, arrows) are <strong>blocked automatically</strong> — no roll required. Warp powers and spells targeting through the wall require a contested INT check against your save DC to pass. The wall is translucent and visible.</div>
+  </div>
+
+  <div class="power-card" id="pc_biosurge" data-rank="r1" data-discs="biomancy">
+    <div class="power-card-top"><div class="power-name">Bio-Surge</div><div class="power-cost-badge cost-r1">4 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Until end of their next turn</span></div></div>
+    <div class="disc-tags"><span class="disc-tag biomancy">Biomancy</span></div>
+    <div class="power-desc">Flood an ally's body with a surge of warp-fuelled biological enhancement. Target gains <strong>advantage on all STR and CON checks and saving throws</strong>, +10ft movement speed, and deals +1d4 damage on all attacks. No Exhaustion on expiry. Brief, potent, surgical — the Biomancer's answer to a moment of crisis.</div>
+  </div>
+
+  <div class="power-card" id="pc_drainlife" data-rank="r1" data-discs="biomancy">
+    <div class="power-card-top"><div class="power-name">Drain Life</div><div class="power-cost-badge cost-r1">5 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag biomancy">Biomancy</span></div>
+    <div class="power-desc">Ranged spell attack (INT+Prof). Hit: <strong>4d8 necrotic</strong>. Regain HP equal to <strong>half the damage dealt</strong>. No effect on undead or constructs. Scales: 5d8 at Lv7, 7d8 at Lv14.</div>
+  </div>
+
+  <div class="power-card" id="pc_synapticoverload" data-rank="r1" data-discs="biomancy">
+    <div class="power-card-top"><div class="power-name">Synaptic Overload</div><div class="power-cost-badge cost-r1">5 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag biomancy">Biomancy</span></div>
+    <div class="power-desc">Hijack a target's nervous system. <strong>CON save</strong>. Failure: <strong>3d6 necrotic</strong> and <strong>Stunned</strong> until end of their next turn. Success: 3d6 only. No effect on constructs or undead.</div>
+  </div>
+
+  <div class="power-card" id="pc_shockwave" data-rank="r1" data-discs="telekinesis">
+    <div class="power-card-top"><div class="power-name">Shockwave</div><div class="power-cost-badge cost-r1">5 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (15ft radius)</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telekinesis">Telekinesis</span></div>
+    <div class="power-desc">Slam telekinetic force into the ground. All creatures within 15ft make a <strong>STR save</strong>. Failure: <strong>4d6 force damage</strong> and knocked <strong>Prone</strong>. Success: half, not prone. You are unaffected.</div>
+  </div>
+
+  <div class="power-card" id="pc_combustion" data-rank="r1" data-discs="pyromancy">
+    <div class="power-card-top"><div class="power-name">Combustion</div><div class="power-cost-badge cost-r1">5 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag pyromancy">Pyromancy</span></div>
+    <div class="power-desc">Target makes a <strong>CON save</strong>. Failure: <strong>4d8 fire damage</strong> and catches warp-fire (<strong>1d8/turn</strong>). Success: 2d8, no ongoing. DEX check (DC = Save DC) as action to extinguish — cannot be doused normally.</div>
+  </div>
+
+  <div class="power-card" id="pc_firewalk" data-rank="r1" data-discs="pyromancy">
+    <div class="power-card-top"><div class="power-name">Fire Walk</div><div class="power-cost-badge cost-r1">4 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>Self</span></div><div class="meta-item">Duration: <span>Until end of turn</span></div></div>
+    <div class="disc-tags"><span class="disc-tag pyromancy">Pyromancy</span></div>
+    <div class="power-desc">Until end of your turn: <strong>immune to fire damage</strong>, move freely through flames. Your movement leaves a warp-fire trail persisting 1 minute — difficult terrain dealing <strong>1d6 fire</strong> to any creature entering it.</div>
+  </div>
+
+  <div class="power-card" id="pc_solaray" data-rank="r1" data-discs="pyromancy">
+    <div class="power-card-top"><div class="power-name">Solar Ray</div><div class="power-cost-badge cost-r1">5 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft line</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag pyromancy">Pyromancy</span></div>
+    <div class="power-desc">Searing beam in a 5ft wide, 60ft line. Each creature makes a <strong>DEX save</strong>. Failure: <strong>4d8 radiant + 2d8 fire damage</strong> and <strong>Blinded</strong> until end of their next turn. Success: half, not blinded.</div>
+  </div>
+
+  <div class="power-card" id="pc_combatprecog" data-rank="r1" data-discs="divination">
+    <div class="power-card-top"><div class="power-name">Combat Precognition</div><div class="power-cost-badge cost-r1">4 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Until start of target's next turn</span></div></div>
+    <div class="disc-tags"><span class="disc-tag divination">Divination</span></div>
+    <div class="power-desc">Read a creature's immediate psychic intent. The GM tells you <strong>exactly what action they will take on their next turn</strong>. You also have <strong>advantage on the first attack or save</strong> you make against them before their next turn.</div>
+  </div>
+
+  <div class="power-card" id="pc_aurareading" data-rank="r1" data-discs="divination">
+    <div class="power-card-top"><div class="power-name">Aura Reading</div><div class="power-cost-badge cost-r1">4 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (60ft)</span></div><div class="meta-item">Duration: <span>1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag divination">Divination</span></div>
+    <div class="power-desc">Perceive the psychic signature of all creatures and objects within 60ft: whether each creature is a psyker/spellcaster, their emotional state, whether objects are warp-touched, and the discipline of any active psychic effects. No concentration required.</div>
+  </div>
+
+  <div class="power-card" id="pc_mindmap" data-rank="r1" data-discs="divination">
+    <div class="power-card-top"><div class="power-name">Mind Map</div><div class="power-cost-badge cost-r1">5 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (100ft)</span></div><div class="meta-item">Duration: <span>10 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag divination">Divination</span></div>
+    <div class="power-desc">Project psychic awareness through walls within 100ft. Perceive the <strong>layout of all enclosed spaces</strong>, the <strong>location of every creature</strong> (not identity), and any active warp or psychic zones. Blocked by 10ft of solid rock.</div>
+  </div>
+
+  <div class="power-card" id="pc_haste" data-rank="r1" data-discs="temporal">
+    <div class="power-card-top"><div class="power-name">Haste</div><div class="power-cost-badge cost-r1">5 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Until start of your next turn</span></div></div>
+    <div class="disc-tags"><span class="disc-tag temporal">Temporal</span></div>
+    <div class="power-desc">Accelerate an ally's personal timeline. Until start of your next turn: movement speed <strong>doubles</strong>, +2 AC, advantage on DEX saves, and one <strong>additional action</strong> (Attack, Dash, or Disengage only). When it ends they are Slowed until end of their next turn.</div>
+  </div>
+
+</div>
+
+<!-- RANK II -->
+<div class="rank-title">⬡ Rank II — Librarian Disciplines &nbsp;<span style="font-family:var(--font-body);font-size:10pt;color:var(--text-dim);font-style:italic;letter-spacing:0">(Level 7+ · 8–12 WRP)</span></div>
+<div class="rank-note">Requires Psyker Ranking 2 (Level 7+). These powers carry meaningful warp energy — turns where total WRP spent exceeds 10 may prompt a Perils of the Warp check at GM discretion.</div>
+<div class="power-grid">
+
+  <div class="power-card" id="pc_might" data-rank="r2" data-discs="biomancy">
+    <div class="power-card-top"><div class="power-name">Might of Heroes</div><div class="power-cost-badge cost-r2">8 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag biomancy">Biomancy</span></div>
+    <div class="power-desc">Flood one ally's biology with psychic enhancement. Target gains <strong>+4 STR, DEX, and CON</strong>, movement +20ft, and may make <strong>one additional attack</strong> when taking the Attack action. Highly visible — target emanates a psychic aura. (Distinct from divine buffs — this is raw biological enhancement, not faith.)</div>
+  </div>
+
+  <div class="power-card" id="pc_prescience" data-rank="r2" data-discs="divination">
+    <div class="power-card-top"><div class="power-name">Prescience</div><div class="power-cost-badge cost-r2">8 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>Self</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag divination">Divination</span></div>
+    <div class="power-desc">Open your mind to the near-future. Gain <strong>advantage on all attack rolls, saving throws, and ability checks</strong>. The first attack against you each turn is made with <strong>disadvantage</strong>. Breaking concentration costs 1d6 psychic damage as the visions snap away violently.</div>
+  </div>
+
+  <div class="power-card" id="pc_psychfortress" data-rank="r2" data-discs="biomancy telekinesis">
+    <div class="power-card-top"><div class="power-name">Psychic Fortress</div><div class="power-cost-badge cost-r2">8 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft (self + allies)</span></div><div class="meta-item">Duration: <span>Until depleted</span></div></div>
+    <div class="disc-tags"><span class="disc-tag biomancy">Biomancy</span><span class="disc-tag telekinesis">Telekinesis</span></div>
+    <div class="power-desc">Project a shared psychic barrier around yourself and up to 3 allies. Each gains <strong>temporary HP equal to 2d10 + INT modifier</strong>. While any temp HP from this power remains, the target has <strong>resistance to psychic damage</strong>. Temp HP must be depleted before other HP is lost.</div>
+  </div>
+
+  <div class="power-card" id="pc_hallucination" data-rank="r2" data-discs="telepathy">
+    <div class="power-card-top"><div class="power-name">Hallucination</div><div class="power-cost-badge cost-r2">8 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telepathy">Telepathy</span></div>
+    <div class="power-desc">Implant false sensory experiences in a target's mind. Target makes an <strong>INT save</strong>. Failure: fully hallucinating — disadvantage on all attacks and saves, must use their action each turn interacting with the hallucination. Repeat save at end of each turn. You design the content of what they experience.</div>
+  </div>
+
+  <div class="power-card" id="pc_forcecage" data-rank="r2" data-discs="telekinesis">
+    <div class="power-card-top"><div class="power-name">Force Cage</div><div class="power-cost-badge cost-r2">8 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Conc. 1 hour</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telekinesis">Telekinesis</span></div>
+    <div class="power-desc">Imprison a creature in an invisible telekinetic cage. Target makes a <strong>STR save</strong>. Failure: contained in a 10ft force cube — cannot move, teleport, or be moved. Can still attack and act. The cage has <strong>no physical component</strong> — attacks pass through, only the creature is held. Success: 2d8 force damage, no cage.</div>
+  </div>
+
+  <div class="power-card" id="pc_biomantsurge" data-rank="r2" data-discs="biomancy">
+    <div class="power-card-top"><div class="power-name">Biomantic Surge</div><div class="power-cost-badge cost-r2">8 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag biomancy">Biomancy</span></div>
+    <div class="power-desc">Dramatically enhance an ally's physical biology. One ally gains: STR and CON become 20 (if not higher), movement doubles, one free attack when an enemy enters melee range, and they need not breathe. When the duration ends: target gains <strong>1 level of Exhaustion</strong>. The body cannot sustain such enhancement without cost.</div>
+  </div>
+
+  <div class="power-card" id="pc_dominate" data-rank="r2" data-discs="telepathy">
+    <div class="power-card-top"><div class="power-name">Dominate Mind</div><div class="power-cost-badge cost-r2">10 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telepathy">Telepathy</span></div>
+    <div class="power-desc">Seize control of a sentient creature's will. Target makes a <strong>WIS save</strong>. Failure: Charmed and under your mental control — follow your spoken commands (up to 3 words) issued as a bonus action each turn. Creatures with INT 3 or lower are immune. The dominated creature may repeat the save if it takes damage from your allies.</div>
+  </div>
+
+  <div class="power-card" id="pc_soulblaze" data-rank="r2" data-discs="pyromancy">
+    <div class="power-card-top"><div class="power-name">Soul Blaze</div><div class="power-cost-badge cost-r2">10 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag pyromancy">Pyromancy</span></div>
+    <div class="power-desc">Set a target's soul alight with warp-fire. Target makes a <strong>CON save</strong>. Failure: <strong>5d6 psychic damage</strong> now, plus <strong>3d6 psychic damage</strong> at start of each of their turns. Success: 3d6, no ongoing. Action to reattempt the CON save and extinguish the blaze.</div>
+  </div>
+
+  <div class="power-card" id="pc_psychtransfer" data-rank="r2" data-discs="biomancy">
+    <div class="power-card-top"><div class="power-name">Psychic Transference</div><div class="power-cost-badge cost-r2">8 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Reaction (ally takes damage)</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag biomancy">Biomancy</span></div>
+    <div class="power-desc">When an ally within 60ft takes damage, redirect it psychically. The ally takes no damage — the <strong>damage source</strong> takes <strong>half the original amount</strong> as psychic damage (no save), and your ally takes the other half as psychic damage. Net: damage is split and partially reflected back to its origin.</div>
+  </div>
+
+  <div class="power-card" id="pc_storm" data-rank="r2" data-discs="pyromancy">
+    <div class="power-card-top"><div class="power-name">Storm of the Emperor's Wrath</div><div class="power-cost-badge cost-r2">10 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (60ft cone)</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag pyromancy">Pyromancy</span></div>
+    <div class="power-desc">Call down crackling psychic lightning in a 60ft cone. Each creature makes a <strong>DEX save</strong>. Failure: <strong>5d8 lightning + 3d8 psychic damage</strong>. Success: half. Metallic armor (power armor excluded) grants no protection — armored targets have disadvantage on the save.</div>
+  </div>
+
+  <div class="power-card" id="pc_nullstorm" data-rank="r2" data-discs="divination">
+    <div class="power-card-top"><div class="power-name">Null Storm</div><div class="power-cost-badge cost-r2">10 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft (30ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 10 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag divination">Divination</span></div>
+    <div class="power-desc">Unleash a psychic dampening storm. Within the 30ft radius, all powers and spells cost <strong>double</strong> and all save DCs reduce by 3. Warp entities have disadvantage on all rolls. <em>Does not suppress your own powers while you maintain concentration.</em></div>
+  </div>
+
+  <div class="power-card" id="pc_brainburst" data-rank="r2" data-discs="telepathy">
+    <div class="power-card-top"><div class="power-name">Brain Burst</div><div class="power-cost-badge cost-r2">10 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telepathy">Telepathy</span></div>
+    <div class="power-desc">Focus psychic energy to a singular devastating point inside a target's skull. Target makes a <strong>CON save</strong>. Failure: <strong>7d10 psychic damage</strong>. If reduced to 0 HP, their head detonates — all within 10ft make CON saves or take 2d10 psychic. Success: 3d10, no secondary effect.</div>
+  </div>
+
+  <div class="power-card" id="pc_warprift" data-rank="r2" data-discs="temporal telekinesis">
+    <div class="power-card-top"><div class="power-name">Warp Rift</div><div class="power-cost-badge cost-r2">10 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft (10×30ft line)</span></div><div class="meta-item">Duration: <span>1 minute</span></div></div>
+    <div class="disc-tags"><span class="disc-tag temporal">Temporal</span><span class="disc-tag telekinesis">Telekinesis</span></div>
+    <div class="power-desc">Tear a gash in realspace. Creatures entering or starting their turn inside take <strong>3d10 force damage</strong> (DEX save for half). Creatures reduced to 0 HP inside are pulled into the Warp — recovery requires Gate of Infinity or GM narrative intervention. Escaping costs double movement.</div>
+  </div>
+
+  <div class="power-card" id="pc_warphorror" data-rank="r2" data-discs="telepathy">
+    <div class="power-card-top"><div class="power-name">Warp Horror</div><div class="power-cost-badge cost-r2">10 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft (30ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telepathy">Telepathy</span></div>
+    <div class="power-desc">Project terrifying warp imagery into enemy minds. All enemies within 30ft of a designated point make <strong>WIS saves</strong>. Failure: Frightened of that point, must move away. At start of each turn, repeat the save — on a <strong>second failure</strong>, they are also Incapacitated for that turn. Constructs and mindless creatures are immune.</div>
+  </div>
+
+  <div class="power-card" id="pc_cogoverride" data-rank="r2" data-discs="telepathy">
+    <div class="power-card-top"><div class="power-name">Cognitive Override</div><div class="power-cost-badge cost-r2">10 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Until resupply</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telepathy">Telepathy</span></div>
+    <div class="power-desc">Convince a creature's mind it never experienced this encounter. Target makes an <strong>INT save</strong>. Failure: forgets having seen you or your kill team entirely — loses all tactical knowledge of positions and capabilities gained this combat. Will not pursue, report, or remember the engagement. Success: target is aware of the attempt.</div>
+  </div>
+
+  <div class="power-card" id="pc_gestalt" data-rank="r2" data-discs="telepathy biomancy">
+    <div class="power-card-top"><div class="power-name">Gestalt Mind</div><div class="power-cost-badge cost-r2">10 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Conc. 10 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telepathy">Telepathy</span><span class="disc-tag biomancy">Biomancy</span></div>
+    <div class="power-desc">Temporarily merge the tactical consciousness of up to 4 willing allies. Linked members may share action economy (one can use another's reaction), all have advantage on attacks against any creature that attacked any member, and cannot be Surprised. When the gestalt ends, all participants take <strong>1d6 psychic damage</strong>.</div>
+  </div>
+
+  <div class="power-card" id="pc_dimstep" data-rank="r2" data-discs="temporal">
+    <div class="power-card-top"><div class="power-name">Dimensional Step</div><div class="power-cost-badge cost-r2">10 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>Self (90ft)</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag temporal">Temporal</span></div>
+    <div class="power-desc">Phase through the Warp in a streak of violet energy, crossing up to <strong>90ft</strong> — including through solid matter up to 5ft thick. Unlike Gate I, line of sight is not required, only knowledge of the destination. If you phase into solid matter, take <strong>4d10 force damage</strong> and shunt to nearest open space.</div>
+  </div>
+
+  <div class="power-card" id="pc_vortex" data-rank="r2" data-discs="telekinesis">
+    <div class="power-card-top"><div class="power-name">Vortex of Doom</div><div class="power-cost-badge cost-r2">12 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft (20ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telekinesis">Telekinesis</span></div>
+    <div class="power-desc">Tear open a miniature warp vortex. All creatures within 20ft make <strong>DEX saves</strong>. Failure: <strong>6d8 force damage</strong> + pulled 10ft toward center. Success: half, no pull. Repeat at start of each of your turns. Escaping costs double movement. Creatures reduced to 0 HP inside are lost to the Warp.</div>
+  </div>
+
+  <div class="power-card" id="pc_realityshear" data-rank="r2" data-discs="telekinesis">
+    <div class="power-card-top"><div class="power-name">Reality Shear</div><div class="power-cost-badge cost-r2">12 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telekinesis">Telekinesis</span></div>
+    <div class="power-desc">Tear apart the quantum structure of reality around a target. Target makes a <strong>CON save</strong>. Failure: <strong>8d8 force damage</strong> and one of their equipped items (weapons, armor, or key equipment — your choice) is <strong>permanently destroyed</strong> as molecular bonds are severed. Success: 4d8 damage, no item destruction. Ignores damage resistances and immunities.</div>
+  </div>
+
+  <div class="power-card" id="pc_gate2" data-rank="r2" data-discs="temporal">
+    <div class="power-card-top"><div class="power-name">Gate of Infinity II</div><div class="power-cost-badge cost-r2">12 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self + 3 allies (60ft)</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag temporal">Temporal</span></div>
+    <div class="power-desc">Step through a larger warp gate bringing allies. Up to <strong>3 willing creatures</strong> within 10ft of you teleport with you to a destination within <strong>60ft</strong>. A crackling tear in space opens at both origin and destination. All transported creatures make WIS saves (DC 10) or are Disoriented until end of their next turn.</div>
+  </div>
+
+  <div class="power-card" id="pc_regenfield" data-rank="r2" data-discs="biomancy">
+    <div class="power-card-top"><div class="power-name">Regenerative Field</div><div class="power-cost-badge cost-r2">8 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (30ft)</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag biomancy">Biomancy</span></div>
+    <div class="power-desc">Project a biological restoration aura. Up to <strong>3 allies of your choice</strong> within 30ft regain <strong>1d8 + INT modifier HP</strong> at the start of each of your turns while they remain in range. Concentration is required — breaking it immediately ends the field. You may change which allies are included as a free action on your turn.</div>
+  </div>
+
+  <div class="power-card" id="pc_masssuggestion" data-rank="r2" data-discs="telepathy">
+    <div class="power-card-top"><div class="power-name">Mass Suggestion</div><div class="power-cost-badge cost-r2">8 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>1 hour</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telepathy">Telepathy</span></div>
+    <div class="power-desc">Broadcast a psychic command to up to <strong>6 creatures</strong> of your choice within 60ft. Each makes a <strong>WIS save</strong>. Failures: the target complies with a reasonable, non-suicidal suggestion for 1 hour, believing it sounds sensible. Creatures currently hostile to you make the save with advantage. When the effect ends, targets are not automatically aware they were influenced.</div>
+  </div>
+
+  <div class="power-card" id="pc_pyroshell" data-rank="r2" data-discs="pyromancy">
+    <div class="power-card-top"><div class="power-name">Pyroclastic Shell</div><div class="power-cost-badge cost-r2">8 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag pyromancy">Pyromancy</span></div>
+    <div class="power-desc">Encase a willing ally in a shell of controlled warp-fire. While the shell persists: creatures that hit the target with melee attacks take <strong>1d8 fire damage</strong>, and the target deals <strong>+1d6 fire damage</strong> on all melee attacks. As a bonus action, the target (or you) can erupt the shell — dealing <strong>3d8 fire damage</strong> to all within 10ft (DEX save for half) and ending the effect. Warp-fire cannot be doused by mundane means.</div>
+  </div>
+
+  <div class="power-card" id="pc_fateseye" data-rank="r2" data-discs="divination">
+    <div class="power-card-top"><div class="power-name">Fate's Eye</div><div class="power-cost-badge cost-r2">10 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>Self</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag divination">Divination</span></div>
+    <div class="power-desc">Open your mind to the immediate future — a window of 3 seconds. You <strong>cannot be Surprised</strong>, have <strong>advantage on all saving throws</strong>, and enemies have <strong>disadvantage on all attacks</strong> against you. The weight of constant foresight is immense — if concentration breaks from taking damage, you take an additional <strong>1d8 psychic damage</strong> as the visions shatter. More overwhelming than Prescience, but requires no preparation.</div>
+  </div>
+
+  <div class="power-card" id="pc_cellregen" data-rank="r2" data-discs="biomancy">
+    <div class="power-card-top"><div class="power-name">Cellular Regeneration</div><div class="power-cost-badge cost-r2">8 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Touch</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag biomancy">Biomancy</span></div>
+    <div class="power-desc">Touch a creature — restore <strong>5d8 + INT modifier HP</strong> and remove one disease, poison, or non-magical condition (Blinded, Deafened, Frightened, Paralyzed, or Poisoned). Cannot target constructs or undead.</div>
+  </div>
+
+  <div class="power-card" id="pc_ironconstitution" data-rank="r2" data-discs="biomancy">
+    <div class="power-card-top"><div class="power-name">Iron Constitution</div><div class="power-cost-badge cost-r2">8 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag biomancy">Biomancy</span></div>
+    <div class="power-desc">Fortify an ally's physiology. Target gains <strong>resistance to bludgeoning, piercing, and slashing damage</strong> and their max HP increases by <strong>2x your INT modifier</strong> (they gain that HP immediately). Bonus HP is lost when the power ends.</div>
+  </div>
+
+  <div class="power-card" id="pc_bonecrush" data-rank="r2" data-discs="biomancy">
+    <div class="power-card-top"><div class="power-name">Bone Crush</div><div class="power-cost-badge cost-r2">10 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag biomancy">Biomancy</span></div>
+    <div class="power-desc"><strong>CON save</strong>. Failure: <strong>7d8 necrotic</strong>, speed reduced to 0 until end of their next turn, and disadvantage on STR checks/saves for 1 minute. Success: 4d8 only. Constructs immune to speed/STR effects but take full damage.</div>
+  </div>
+
+  <div class="power-card" id="pc_gravitywell" data-rank="r2" data-discs="telekinesis">
+    <div class="power-card-top"><div class="power-name">Gravity Well</div><div class="power-cost-badge cost-r2">10 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft (20ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telekinesis">Telekinesis</span></div>
+    <div class="power-desc">Create a point of intense telekinetic gravity. Each creature within 20ft makes a <strong>STR save</strong> at start of its turn. Failure: pulled <strong>10ft toward the center</strong> and takes <strong>3d8 force damage</strong>. Success: half, no pull. Escaping costs double movement.</div>
+  </div>
+
+  <div class="power-card" id="pc_tkslam" data-rank="r2" data-discs="telekinesis">
+    <div class="power-card-top"><div class="power-name">Telekinetic Slam</div><div class="power-cost-badge cost-r2">8 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telekinesis">Telekinesis</span></div>
+    <div class="power-desc">Seize two targets within 60ft and hurl them into each other. Each makes a <strong>STR save</strong>. Failure: <strong>6d10 force damage</strong> and Stunned until start of their next turn. Success: 3d10, not Stunned. Huge+ creatures have advantage.</div>
+  </div>
+
+  <div class="power-card" id="pc_phoenixfury" data-rank="r2" data-discs="pyromancy">
+    <div class="power-card-top"><div class="power-name">Phoenix Fury</div><div class="power-cost-badge cost-r2">8 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (20ft radius)</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag pyromancy">Pyromancy</span></div>
+    <div class="power-desc">Detonate warp-fire centred on yourself. All other creatures within 20ft make a <strong>DEX save</strong>. Failure: <strong>8d8 fire damage</strong>. Success: half. You take no damage. Every flammable object in the radius ignites.</div>
+  </div>
+
+  <div class="power-card" id="pc_conflagration" data-rank="r2" data-discs="pyromancy">
+    <div class="power-card-top"><div class="power-name">Conflagration</div><div class="power-cost-badge cost-r2">10 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft (20ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag pyromancy">Pyromancy</span></div>
+    <div class="power-desc">Seed an area with spreading warp-fire. Creatures entering or starting a turn inside take <strong>5d6 fire damage</strong> (DEX save half). Failed save: also catch warp-fire (<strong>2d6/turn</strong>). Each round the fire expands 5ft in a random direction unless blocked by stone. Cannot be doused.</div>
+  </div>
+
+  <div class="power-card" id="pc_smelt" data-rank="r2" data-discs="pyromancy">
+    <div class="power-card-top"><div class="power-name">Smelt</div><div class="power-cost-badge cost-r2">8 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag pyromancy">Pyromancy</span></div>
+    <div class="power-desc">Focus warp-heat on a metal object being worn or carried. Target makes a <strong>CON save</strong>. Failure: <strong>5d8 fire damage</strong> and the object is partially melted — weapons deal -2 damage, armour loses 3 AC (permanent until repaired). Success: 2d8, no item damage.</div>
+  </div>
+
+  <div class="power-card" id="pc_flamewall" data-rank="r2" data-discs="pyromancy">
+    <div class="power-card-top"><div class="power-name">Flame Wall</div><div class="power-cost-badge cost-r2">10 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag pyromancy">Pyromancy</span></div>
+    <div class="power-desc">Conjure a 40ft long, 10ft tall wall of warp-fire. Creatures passing through take <strong>4d8 fire damage</strong> (DEX save half) and catch warp-fire. The wall provides total concealment from mundane vision and blocks non-warp projectiles. Cannot be doused.</div>
+  </div>
+
+  <div class="power-card" id="pc_truesight" data-rank="r2" data-discs="divination">
+    <div class="power-card-top"><div class="power-name">True Sight</div><div class="power-cost-badge cost-r2">8 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>Self</span></div><div class="meta-item">Duration: <span>10 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag divination">Divination</span></div>
+    <div class="power-desc">Open your mind's eye to unfiltered reality. For 10 minutes: see through <strong>illusions</strong>, perceive the <strong>true form of shapeshifters and warp entities</strong>, see <strong>invisible creatures</strong>, and detect dimensional pockets within 30ft.</div>
+  </div>
+
+  <div class="power-card" id="pc_oraclevision" data-rank="r2" data-discs="divination">
+    <div class="power-card-top"><div class="power-name">Oracle's Vision</div><div class="power-cost-badge cost-r2">8 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag divination">Divination</span></div>
+    <div class="power-desc">Project your psychic senses up to <strong>1 hour into the future</strong>. Describe a specific concern — the GM provides a vision of the most probable outcome, possibly symbolic. Visions can be changed by subsequent choices. <em>Cannot be used during active combat.</em></div>
+  </div>
+
+  <div class="power-card" id="pc_doomsight" data-rank="r2" data-discs="divination">
+    <div class="power-card-top"><div class="power-name">Doom Sight</div><div class="power-cost-badge cost-r2">10 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag divination">Divination</span></div>
+    <div class="power-desc">Read the thread of fate around a target and perceive their most likely death. <strong>WIS save</strong>. Failure: <strong>Frightened</strong> 1 minute and -2 to all rolls (knowing their end is near). Success: you still see their fate, they feel nothing. You always learn their death method regardless.</div>
+  </div>
+
+  <div class="power-card" id="pc_retrocognition" data-rank="r2" data-discs="divination">
+    <div class="power-card-top"><div class="power-name">Retrocognition</div><div class="power-cost-badge cost-r2">10 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Touch (location)</span></div><div class="meta-item">Duration: <span>Conc. 10 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag divination">Divination</span></div>
+    <div class="power-desc">Fully experience any moment in a location's history up to <strong>1 year ago</strong> — all senses, up to 10 minutes of vision-time. Observation only. Traumatic events (battles, daemonic incursions) require a <strong>WIS save DC 12</strong> or take 1d4 psychic.</div>
+  </div>
+
+  <div class="power-card" id="pc_slow" data-rank="r2" data-discs="temporal">
+    <div class="power-card-top"><div class="power-name">Slow</div><div class="power-cost-badge cost-r2">8 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag temporal">Temporal</span></div>
+    <div class="power-desc">Drag up to <strong>3 creatures</strong> into temporal treacle. <strong>WIS save</strong>. Failure: Slowed — speed halved, -2 AC, -2 DEX saves, either action OR movement per turn (not both). Repeat save at end of each turn.</div>
+  </div>
+
+  <div class="power-card" id="pc_rewind" data-rank="r2" data-discs="temporal">
+    <div class="power-card-top"><div class="power-name">Rewind</div><div class="power-cost-badge cost-r2">10 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Reaction (on taking damage)</span></div><div class="meta-item">Range: <span>Self</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag temporal">Temporal</span></div>
+    <div class="power-desc">Undo the last 6 seconds. The triggering damage does not occur — you revert to HP, conditions, and position from the start of your last turn. You retain full memory. Allies and enemies are unaffected. <strong>Once per resupply.</strong></div>
+  </div>
+
+  <div class="power-card" id="pc_tempdisplace" data-rank="r2" data-discs="temporal">
+    <div class="power-card-top"><div class="power-name">Temporal Displacement</div><div class="power-cost-badge cost-r2">10 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Reaction (on being targeted)</span></div><div class="meta-item">Range: <span>Self</span></div><div class="meta-item">Duration: <span>Until start of your next turn</span></div></div>
+    <div class="disc-tags"><span class="disc-tag temporal">Temporal</span></div>
+    <div class="power-desc">Step out of phase with time. Until your next turn you <strong>cannot be targeted</strong> — present but untouchable. You can observe but cannot act or interact. At the start of your next turn, reappear anywhere within <strong>30ft</strong> of your displaced position. <strong>Once per resupply.</strong></div>
+  </div>
+
+</div>
+
+<!-- RANK III -->
+<div class="rank-title">⬡ Rank III — Chief Librarian Disciplines &nbsp;<span style="font-family:var(--font-body);font-size:10pt;color:#e07070;font-style:italic;letter-spacing:0">(Level 14+ · 12–18 WRP · High Peril Risk)</span></div>
+<div class="rank-note">Requires Psyker Ranking 3 (Level 14+). Powers costing 16+ WRP automatically trigger a Perils of the Warp check (WIS DC 14). These represent the absolute limit of sanctioned psychic capability. Anything beyond this is heresy — or legend.</div>
+<div class="power-grid">
+
+  <div class="power-card" id="pc_realityanchor" data-rank="r3" data-discs="temporal">
+    <div class="power-card-top"><div class="power-name">Reality Anchor</div><div class="power-cost-badge cost-r3">14 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft (30ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 10 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag temporal">Temporal</span></div>
+    <div class="power-desc">Lock down the laws of physics in a 30ft radius. Within the area: <strong>no teleportation</strong> of any kind (including Gate of Infinity, daemonic stepping), no summoning or banishment, no extradimensional spaces can be accessed. Affects everyone equally — including you. Plan accordingly.</div>
+  </div>
+
+  <div class="power-card" id="pc_mindshatter" data-rank="r3" data-discs="telepathy">
+    <div class="power-card-top"><div class="power-name">Mind Shatter</div><div class="power-cost-badge cost-r3">14 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Permanent</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telepathy">Telepathy</span></div>
+    <div class="power-desc">Launch a devastating attack designed to permanently damage the target's mind. Target makes an <strong>INT save</strong>. Failure: <strong>6d12 psychic damage</strong> and INT permanently reduced by <strong>1d6</strong>. If INT reaches 0, vegetative state. Success: 6d12, no reduction. Cannot target constructs. <em>Repeated use attracts Inquisitorial attention.</em></div>
+  </div>
+
+  <div class="power-card" id="pc_purgesoul" data-rank="r3" data-discs="biomancy">
+    <div class="power-card-top"><div class="power-name">Purge Soul</div><div class="power-cost-badge cost-r3">14 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag biomancy">Biomancy</span></div>
+    <div class="power-desc">Reach into a target's soul and attempt to rip it out. Target makes a <strong>CON save</strong>. Failure: <strong>10d10 psychic damage</strong>. Success: 5d10. If reduced to 0 HP, the target <strong>cannot be stabilized</strong> — their soul scatters to the Warp. Recovery requires extraordinary GM-narrative intervention.</div>
+  </div>
+
+  <div class="power-card" id="pc_astralproject" data-rank="r3" data-discs="divination">
+    <div class="power-card-top"><div class="power-name">Astral Projection</div><div class="power-cost-badge cost-r3">14 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self</span></div><div class="meta-item">Duration: <span>Conc. 10 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag divination">Divination</span></div>
+    <div class="power-desc">Leave your physical body behind and project your psychic consciousness across the battlefield. Your astral form is <strong>invisible, flies 60ft</strong>, and can observe everything within 300ft of your body. You can communicate mentally with anyone you can see. Your body is helpless (AC 10, cannot act). If your body drops to 0 HP, the projection is destroyed immediately.</div>
+  </div>
+
+  <div class="power-card" id="pc_gate3" data-rank="r3" data-discs="temporal">
+    <div class="power-card-top"><div class="power-name">Gate of Infinity III</div><div class="power-cost-badge cost-r3">14 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft (dest. 300ft)</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag temporal">Temporal</span></div>
+    <div class="power-desc">Open a massive warp gate transporting your entire kill team. All <strong>willing creatures within 30ft</strong> teleport to a destination within <strong>300ft</strong> you can see or have previously visited. Unwilling creatures within the radius must make a <strong>WIS save</strong> or be transported as well.</div>
+  </div>
+
+  <div class="power-card" id="pc_temporalstasis" data-rank="r3" data-discs="temporal">
+    <div class="power-card-top"><div class="power-name">Temporal Stasis</div><div class="power-cost-badge cost-r3">14 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Up to 1 hour</span></div></div>
+    <div class="disc-tags"><span class="disc-tag temporal">Temporal</span></div>
+    <div class="power-desc">Freeze one creature outside the flow of time. Target makes a <strong>WIS save</strong>. Failure: perfectly preserved in a frozen moment — cannot act, be damaged, moved, or affected. Simply paused. Lasts until you end it, it is dispelled, or 1 hour passes. Success: <strong>Slowed</strong> for 1 minute instead.</div>
+  </div>
+
+  <div class="power-card" id="pc_massdominion" data-rank="r3" data-discs="telepathy">
+    <div class="power-card-top"><div class="power-name">Mass Dominion</div><div class="power-cost-badge cost-r3">14 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft (30ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telepathy">Telepathy</span></div>
+    <div class="power-desc">Extend your psychic will to dominate multiple minds. Up to <strong>3 creatures of your choice</strong> within 30ft make WIS saves. Failures are Charmed and under your mental control. A single bonus action command applies to all dominated creatures simultaneously. If one breaks free, all repeat their saves.</div>
+  </div>
+
+  <div class="power-card" id="pc_veilworlds" data-rank="r3" data-discs="temporal">
+    <div class="power-card-top"><div class="power-name">Veil Between Worlds</div><div class="power-cost-badge cost-r3">16 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>1 minute</span></div></div>
+    <div class="disc-tags"><span class="disc-tag temporal">Temporal</span></div>
+    <div class="power-desc">Banish one creature to a Warp pocket. Target makes a <strong>CHA save</strong>. Failure: vanishes for 1 minute in a hellish pocket dimension, returning to an unoccupied space within 10ft with <strong>2 levels of Exhaustion</strong>. Success: unaffected. <span class="peril-tag">⚠ Triggers Perils Check</span></div>
+  </div>
+
+  <div class="power-card" id="pc_psychscream" data-rank="r3" data-discs="telepathy">
+    <div class="power-card-top"><div class="power-name">Psychic Scream</div><div class="power-cost-badge cost-r3">16 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (90ft radius)</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telepathy">Telepathy</span></div>
+    <div class="power-desc">Unleash a psychic shriek shredding minds across a massive area. All enemies within 90ft make <strong>INT saves</strong>. Failure: <strong>8d8 psychic damage</strong> and Stunned until end of their next turn. Success: 4d8. Constructs and mindless creatures are immune. Allies within 30ft make WIS saves (DC 12) or are Deafened 1 minute. <span class="peril-tag">⚠ Triggers Perils Check</span></div>
+  </div>
+
+  <div class="power-card" id="pc_psychsunder" data-rank="r3" data-discs="telepathy">
+    <div class="power-card-top"><div class="power-name">Psychic Sundering</div><div class="power-cost-badge cost-r3">16 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Permanent</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telepathy">Telepathy</span></div>
+    <div class="power-desc">Strike at the very core of a psyker's being. Target must be a psyker or spellcaster — makes an <strong>INT save at disadvantage</strong>. Failure: psychic/magical abilities permanently suppressed — cannot cast spells or manifest powers until Greater Restoration or equivalent. Success: <strong>8d12 psychic damage</strong>. <span class="peril-tag">⚠ Triggers Perils Check</span></div>
+  </div>
+
+  <div class="power-card" id="pc_warpmaw" data-rank="r3" data-discs="telekinesis temporal">
+    <div class="power-card-top"><div class="power-name">Warp Maw</div><div class="power-cost-badge cost-r3">16 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Until escaped</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telekinesis">Telekinesis</span><span class="disc-tag temporal">Temporal</span></div>
+    <div class="power-desc">Open a mouth of pure void beneath a target. <strong>DEX save</strong>. Failure: <strong>8d12 force damage</strong> and Swallowed into the Warp — incapacitated, 4d6 force/turn. WIS save each turn to claw back, reappearing within 10ft of you. Success: 4d12 only. <span class="peril-tag">⚠ Triggers Perils Check</span></div>
+  </div>
+
+  <div class="power-card" id="pc_livingvortex" data-rank="r3" data-discs="telekinesis pyromancy">
+    <div class="power-card-top"><div class="power-name">Living Vortex</div><div class="power-cost-badge cost-r3">16 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (20ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telekinesis">Telekinesis</span><span class="disc-tag pyromancy">Pyromancy</span></div>
+    <div class="power-desc">Become one with a Warp Vortex. Your form dissolves into a 20ft storm of psychic energy. Immune to physical damage. Any creature starting its turn within 20ft takes <strong>5d8 force + 5d8 psychic</strong> (DEX save for half). You cannot be targeted by abilities requiring a specific creature. Perils check each turn (WIS DC 15). If concentration breaks: reappear at 1 HP. <span class="peril-tag">⚠ Ongoing Perils DC 15</span></div>
+  </div>
+
+  <div class="power-card" id="pc_catapyro" data-rank="r3" data-discs="pyromancy">
+    <div class="power-card-top"><div class="power-name">Cataclysmic Pyrokinesis</div><div class="power-cost-badge cost-r3">16 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>120ft (40ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag pyromancy">Pyromancy</span></div>
+    <div class="power-desc">Unleash a catastrophic psychic inferno. All creatures in 40ft radius make <strong>DEX saves</strong>. Failure: <strong>6d8 fire + 6d8 psychic</strong> and caught in warp-fire (2d8/turn). Success: half, no ongoing. Within the area: visibility 10ft, movement costs double, non-airtight armor users make CON saves each turn or gain 1 Exhaustion. <span class="peril-tag">⚠ Mandatory Perils Check</span></div>
+  </div>
+
+  <div class="power-card" id="pc_emperorwrath" data-rank="r3" data-discs="pyromancy">
+    <div class="power-card-top"><div class="power-name">The Emperor's Wrath</div><div class="power-cost-badge cost-r3">18 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>120ft (20ft radius)</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag pyromancy">Pyromancy</span></div>
+    <div class="power-desc">Channel the raw psychic might of the Emperor's will. All creatures in a 20ft radius sphere make <strong>DEX saves</strong>. Failure: <strong>8d8 lightning + 8d8 psychic damage</strong>. Success: half. The ground becomes difficult terrain; all warp effects active within are immediately dispelled. <span class="peril-tag">⚠ Mandatory Perils Check</span></div>
+  </div>
+
+  <div class="power-card" id="pc_biosingularity" data-rank="r3" data-discs="biomancy">
+    <div class="power-card-top"><div class="power-name">Biological Singularity</div><div class="power-cost-badge cost-r3">14 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Instant / 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag biomancy">Biomancy</span></div>
+    <div class="power-desc">Accelerate a target's cellular processes to catastrophic speeds. Target makes a <strong>CON save</strong>. Failure: <strong>8d10 necrotic damage</strong>. If they survive the failure, their body overcorrects — they regain <strong>2d10 HP at the start of each of their turns</strong> for 1 minute as cells go into frenzied regeneration. This regeneration cannot be suppressed. Success: 4d10 only, no regeneration. Cannot target constructs or undead. <span class="peril-tag">⚠ Triggers Perils Check</span></div>
+  </div>
+
+  <div class="power-card" id="pc_collectiveconsciousness" data-rank="r3" data-discs="telepathy">
+    <div class="power-card-top"><div class="power-name">Collective Consciousness</div><div class="power-cost-badge cost-r3">14 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>10 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telepathy">Telepathy</span></div>
+    <div class="power-desc">Merge your kill team's minds into a single tactical consciousness. Up to <strong>5 willing allies</strong> within 60ft share all senses completely — see through any member's eyes, hear through any member's ears. The group acts on the <strong>same initiative count</strong> (highest among members). Any member's awareness prevents Surprise for all. <em>When the duration ends:</em> each member takes <strong>2d6 psychic damage</strong> and is Stunned until the end of their next turn. <span class="peril-tag">⚠ Triggers Perils Check</span></div>
+  </div>
+
+  <div class="power-card" id="pc_chronorewrite" data-rank="r3" data-discs="temporal">
+    <div class="power-card-top"><div class="power-name">Chronological Rewrite</div><div class="power-cost-badge cost-r3">18 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (60ft radius)</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag temporal">Temporal</span></div>
+    <div class="power-desc">Rewrite the last 1 minute of events within 60ft of your position. All creatures and objects within range revert — positions, HP, conditions, and expended resources reset to their state 1 minute ago. <strong>You retain memory of both timelines.</strong> Unwilling creatures within range make a <strong>WIS save</strong>; those who succeed also retain memory of the erased timeline. The Librarius considers this power heresy-adjacent. <strong>Automatic Perils check DC 18.</strong> You gain <strong>1d8 Corruption</strong> regardless of the check's result. <span class="peril-tag">⚠ Mandatory Perils DC 18</span></div>
+  </div>
+
+  <div class="power-card" id="pc_warplague" data-rank="r3" data-discs="biomancy">
+    <div class="power-card-top"><div class="power-name">Warp Plague</div><div class="power-cost-badge cost-r3">14 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag biomancy">Biomancy</span></div>
+    <div class="power-desc"><strong>CON save</strong>. Failure: Poisoned, and takes <strong>4d6 necrotic/turn</strong>. At the start of each turn a Poisoned target must pass a CON save (same DC) or transmit the plague to one adjacent creature. Success: Poisoned 1 round, no spread. Curable by Psychic Scour at double WRP cost.
+    <span class="peril-tag">&#9888; Mandatory Perils</span></div>
+  </div>
+
+  <div class="power-card" id="pc_massvitality" data-rank="r3" data-discs="biomancy">
+    <div class="power-card-top"><div class="power-name">Mass Vitality</div><div class="power-cost-badge cost-r3">14 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag biomancy">Biomancy</span></div>
+    <div class="power-desc">Restore biological vigour to the entire kill team. Up to <strong>5 allies</strong> within 60ft each regain <strong>6d8 + INT modifier HP</strong>. Additionally, each target is cleansed of one condition of your choice: Blinded, Deafened, Frightened, Paralyzed, or Poisoned.</div>
+  </div>
+
+  <div class="power-card" id="pc_necroticaura" data-rank="r3" data-discs="biomancy">
+    <div class="power-card-top"><div class="power-name">Necrotic Aura</div><div class="power-cost-badge cost-r3">14 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (15ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag biomancy">Biomancy</span></div>
+    <div class="power-desc">Emanate a field of accelerated cellular death. Enemies within 15ft make a <strong>CON save</strong> at the start of their turn. Failure: <strong>4d6 necrotic damage</strong> and -2 to all attack rolls until end of their next turn. Success: half, no debuff. You are unaffected.</div>
+  </div>
+
+  <div class="power-card" id="pc_kineticsingularity" data-rank="r3" data-discs="telekinesis">
+    <div class="power-card-top"><div class="power-name">Kinetic Singularity</div><div class="power-cost-badge cost-r3">14 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft (30ft radius)</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag telekinesis">Telekinesis</span></div>
+    <div class="power-desc">Collapse a 30ft radius sphere toward its centre. All creatures in the area make a <strong>STR save</strong>. Failure: pulled <strong>20ft toward the centre</strong> and take <strong>8d10 force damage</strong>. Success: 4d10, pulled 10ft. Creatures colliding at the centre take an additional <strong>3d10 force damage</strong>. Area becomes difficult terrain.
+    <span class="peril-tag">&#9888; Mandatory Perils</span></div>
+  </div>
+
+  <div class="power-card" id="pc_immolation" data-rank="r3" data-discs="pyromancy">
+    <div class="power-card-top"><div class="power-name">Immolation</div><div class="power-cost-badge cost-r3">16 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Until extinguished</span></div></div>
+    <div class="disc-tags"><span class="disc-tag pyromancy">Pyromancy</span></div>
+    <div class="power-desc">Ignite a target from the inside. <strong>CON save</strong>. Failure: <strong>8d8 fire damage</strong> and the target burns internally — takes <strong>4d6 fire/turn</strong>, cannot be extinguished by external means. Only a CON save (same DC) at end of their turn ends it. Success: 4d8, no ongoing.
+    <span class="peril-tag">&#9888; Mandatory Perils</span></div>
+  </div>
+
+  <div class="power-card" id="pc_novaburst" data-rank="r3" data-discs="pyromancy">
+    <div class="power-card-top"><div class="power-name">Nova Burst</div><div class="power-cost-badge cost-r3">16 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (60ft radius)</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag pyromancy">Pyromancy</span></div>
+    <div class="power-desc">Release all contained warp-fire in a catastrophic detonation. All creatures in 60ft radius make a <strong>DEX save</strong>. Failure: <strong>10d8 fire + 5d8 psychic damage</strong>. Success: half. All ongoing warp-fire effects in the area are consumed — you regain <strong>1d10 WRP</strong> as the energy feeds back.
+    <span class="peril-tag">&#9888; Mandatory Perils</span></div>
+  </div>
+
+  <div class="power-card" id="pc_stellarcore" data-rank="r3" data-discs="pyromancy">
+    <div class="power-card-top"><div class="power-name">Stellar Core</div><div class="power-cost-badge cost-r3">16 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>120ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag pyromancy">Pyromancy</span></div>
+    <div class="power-desc">Compress warp-fire into a star-point and release it. <strong>Ranged spell attack</strong>. Hit: <strong>12d6 fire damage</strong>. If this reduces the target to 0 HP, they are vaporised — no body remains. All creatures within 10ft of the target make a DEX save or take <strong>4d10 fire damage</strong> (success: half).
+    <span class="peril-tag">&#9888; Mandatory Perils</span></div>
+  </div>
+
+  <div class="power-card" id="pc_probshift" data-rank="r3" data-discs="divination">
+    <div class="power-card-top"><div class="power-name">Probability Shift</div><div class="power-cost-badge cost-r3">14 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Reaction (after any roll)</span></div><div class="meta-item">Range: <span>120ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag divination">Divination</span></div>
+    <div class="power-desc">Once per resupply, reach into the web of probability and alter one dice result after it is revealed. Replace the result with <strong>any number on that die</strong> — no reroll, your choice. Works on attack rolls, saves, checks, or damage. The Warp notices the impossibility.
+    <span class="peril-tag">&#9888; Mandatory Perils DC 12</span></div>
+  </div>
+
+  <div class="power-card" id="pc_deathsclock" data-rank="r3" data-discs="divination">
+    <div class="power-card-top"><div class="power-name">Death's Clock</div><div class="power-cost-badge cost-r3">14 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (60ft radius)</span></div><div class="meta-item">Duration: <span>1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag divination">Divination</span></div>
+    <div class="power-desc">Read the lifespan remaining in every living creature within 60ft. You know each creature's <strong>exact current HP</strong> and conditions. You also know which target is closest to death — attacks against that creature deal <strong>maximum damage</strong> for the rest of your turn. The weight of so much impending death requires a <strong>WIS save DC 13</strong> or gain 1 Corruption.</div>
+  </div>
+
+  <div class="power-card" id="pc_temporaldupe" data-rank="r3" data-discs="temporal">
+    <div class="power-card-top"><div class="power-name">Temporal Duplicate</div><div class="power-cost-badge cost-r3">14 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self</span></div><div class="meta-item">Duration: <span>Until start of your next turn</span></div></div>
+    <div class="disc-tags"><span class="disc-tag temporal">Temporal</span></div>
+    <div class="power-desc">Pull a version of yourself from 6 seconds in the past. Your Duplicate shares your current stats, acts immediately after you on initiative, and has your current HP. It cannot use Rank III+ powers. When it disappears: you take <strong>2d6 psychic damage</strong> as the timelines collapse.
+    <span class="peril-tag">&#9888; Mandatory Perils</span></div>
+  </div>
+
+  <div class="power-card" id="pc_timestop" data-rank="r3" data-discs="temporal">
+    <div class="power-card-top"><div class="power-name">Time Stop</div><div class="power-cost-badge cost-r3">16 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self</span></div><div class="meta-item">Duration: <span>3 additional turns</span></div></div>
+    <div class="disc-tags"><span class="disc-tag temporal">Temporal</span></div>
+    <div class="power-desc">Stop time for one round. All other creatures are frozen — cannot act, move, or react. You take <strong>3 additional turns</strong> in sequence. You cannot directly harm frozen creatures (reality prevents paradox) but may reposition, buff allies, and set environmental hazards that trigger when time resumes.
+    <span class="peril-tag">&#9888; Mandatory Perils DC 14</span></div>
+  </div>
+
+</div>
+
+<div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
+<!-- RANK IV -->
+<div class="rank-title r4">&#9671; Rank IV &#8212; Immateria &nbsp;<span style="font-family:var(--font-body);font-size:10pt;color:#d060e8;font-style:italic;letter-spacing:0">(Level 17+ &middot; 18&#8211;22 WRP &middot; Mandatory Perils)</span></div>
+<div class="rank-note" style="color:#9060a0;">These are not sanctioned psychic disciplines. They are the raw stuff of the Immaterium given form &#8212; powers the Librarius does not teach because it cannot fully control what happens when they are used. A Librarian who reaches into the Immateria does so as an individual, not a member of a school. Requires <strong style="color:#d060e8;">Warp Mastery (Level 17+)</strong>. <strong>All Immateria powers trigger mandatory Perils checks</strong> regardless of cost, The Push, or Warp Tempering. Discipline Resonance does not apply &#8212; no one truly masters the Immaterium.</div>
+<div class="power-grid">
+  <div class="power-card" id="pc_nexus" data-rank="r4" data-discs="immateria">
+    <div class="power-card-top"><div class="power-name">Nexus of Power</div><div class="power-cost-badge cost-r4">20 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>Self</span></div><div class="meta-item">Duration: <span>Instant (next power)</span></div></div>
+    <div class="disc-tags"><span class="disc-tag immateria">Immateria</span></div>
+    <div class="power-desc">Concentrate psychic power into a moment of absolute clarity. The <strong>next Advanced Warp Power</strong> you manifest before end of turn costs <strong>20 WRP</strong>, skips Perils checks, and deals <strong>maximum damage / achieves maximum effect</strong>. That power's save DCs increase by 2.</div>
+  </div>
+
+  <div class="power-card" id="pc_entropyfield" data-rank="r4" data-discs="immateria">
+    <div class="power-card-top"><div class="power-name">Entropy Field</div><div class="power-cost-badge cost-r4">18 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft (20ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag immateria">Immateria</span></div>
+    <div class="power-desc">Project a field of accelerated entropy. All enemies in the radius make <strong>CON saves</strong> at start of each turn. Failure: equipment deteriorates — weapons deal <strong>-1d6 damage</strong> (cumulative), armor loses <strong>1 AC</strong> (cumulative), and they take 3d8 necrotic. Success: 2d8 necrotic. After 3 failures, equipment is destroyed. Deterioration is permanent unless repaired.</div>
+  </div>
+
+  <div class="power-card" id="pc_warpsiphon" data-rank="r4" data-discs="immateria">
+    <div class="power-card-top"><div class="power-name">Warp Siphon</div><div class="power-cost-badge cost-r4">18 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag immateria">Immateria</span></div>
+    <div class="power-desc">Reach into an enemy psyker and rip their power out. Target makes an <strong>INT save</strong>. Failure: their power pool is reduced by 25% for this encounter; you regain <strong>WRP equal to what they lost</strong> (max 15 WRP). Success: 5d10 psychic damage only. Cannot target non-psychic targets — useless against constructs.</div>
+  </div>
+
+  <div class="power-card" id="pc_apotheosis" data-rank="r4" data-discs="immateria">
+    <div class="power-card-top"><div class="power-name">Apotheosis</div><div class="power-cost-badge cost-r4">20 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag immateria">Immateria</span></div>
+    <div class="power-desc">Shed your physical form and become a being of pure psychic energy. Immune to physical damage, fly 60ft (hover), each Warp Power deals <strong>+4d6 bonus psychic damage</strong>, emanate a 30ft aura — enemies make WIS saves or Frightened. When duration ends: <strong>automatic Perils check DC 18</strong>. <span class="peril-tag">⚠ Mandatory Perils DC 18</span></div>
+  </div>
+
+  <div class="power-card" id="pc_psychannihilation" data-rank="r4" data-discs="immateria">
+    <div class="power-card-top"><div class="power-name">Psychic Annihilation</div><div class="power-cost-badge cost-r4">22 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
+    <div class="disc-tags"><span class="disc-tag immateria">Immateria</span></div>
+    <div class="power-desc">Pure psychic energy that disassembles matter at the molecular level. Target makes a <strong>CON save</strong>. Failure: <strong>12d12 psychic damage</strong>. If reduced to 0 HP, the target is <strong>completely disintegrated</strong> — every molecule dispersed. Nothing remains. Success: 6d12. <strong>Automatically triggers a Perils check at DC 16</strong> in addition to any other checks this turn. <span class="peril-tag">⚠ Mandatory Perils DC 16</span></div>
+  </div>
+
+
+  <div class="power-card" id="pc_warpmanifest" data-rank="r4" data-discs="immateria">
+    <div class="power-card-top"><div class="power-name">Warp Manifestation</div><div class="power-cost-badge cost-r4">22 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>1 hour</span></div></div>
+    <div class="disc-tags"><span class="disc-tag immateria">Immateria</span></div>
+    <div class="power-desc">Tear the veil and bind a warp entity to your will. A Lesser Daemon (GM-stat, CR 8&#8211;10 equivalent) is summoned in an unoccupied space within 30ft. It serves you for 1 hour but cannot leave without permission. When dismissed or duration ends: <strong>gain 1d6 Corruption</strong>. If destroyed in battle: gain <strong>1d8 Corruption</strong>. The Inquisition is interested in Librarians who can do this.
+    <span class="peril-tag">&#9888; Mandatory Perils DC 16</span></div>
+  </div>
+
+  <div class="power-card" id="pc_realityfracture" data-rank="r4" data-discs="immateria">
+    <div class="power-card-top"><div class="power-name">Reality Fracture</div><div class="power-cost-badge cost-r4">22 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft (40ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
+    <div class="disc-tags"><span class="disc-tag immateria">Immateria</span></div>
+    <div class="power-desc">Shatter the laws of physics in a 40ft radius. Within the area: all damage rolls are made twice and the lower result used (reality resists violence), all movement costs triple, and all saving throws are at disadvantage. You may exempt yourself from <strong>one law of physics</strong> (gravity, inertia, or solidity) while inside the area.
+    <span class="peril-tag">&#9888; Mandatory Perils DC 16</span></div>
+  </div>
+
+  <div class="power-card" id="pc_warpspeaks" data-rank="r4" data-discs="immateria">
+    <div class="power-card-top"><div class="power-name">The Warp Speaks</div><div class="power-cost-badge cost-r4">24 WRP</div></div>
+    <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self</span></div><div class="meta-item">Duration: <span>1 hour</span></div></div>
+    <div class="disc-tags"><span class="disc-tag immateria">Immateria</span></div>
+    <div class="power-desc">Open your mind completely to the Immaterium and receive its answer. Ask one question &#8212; any question. The GM answers truthfully from the Warp's perspective: accurate but possibly symbolic or incomplete. For 1 hour the Warp continues to whisper: ask the GM <strong>one yes/no question per combat round</strong> as a free action. Automatic Perils DC 18. <strong>Gain 1d4+2 Corruption regardless of the Perils result.</strong>
+    <span class="peril-tag">&#9888; Mandatory Perils DC 18</span></div>
+  </div>
+
+</div>
+
+<div class="page-footer">Librarian — Warp Powers &amp; Disciplines &nbsp;·&nbsp; 125 Powers Total &nbsp;·&nbsp; WH40K D&amp;D 5E Homebrew &nbsp;·&nbsp; Jericho Reach Campaign</div>
+</div>
+
+
+<script>
+(function(){
+  var activeDisc = 'all';
+  var activeRank = 'all';
+
+  function applyFilters() {
+    var cards = document.querySelectorAll('.power-card');
+    cards.forEach(function(card) {
+      var discs = (card.dataset.discs || '').split(' ');
+      var rank  = card.dataset.rank || 'base';
+      var discOk = activeDisc === 'all' || discs.indexOf(activeDisc) !== -1;
+      var rankOk = activeRank === 'all' || rank === activeRank;
+      card.style.display = (discOk && rankOk) ? '' : 'none';
+    });
+    updateHeaders();
+  }
+
+  function updateHeaders() {
+    // Handle rank-title headers (Rank I–IV)
+    document.querySelectorAll('.rank-title').forEach(function(title) {
+      var el = title.nextElementSibling;
+      var grid = null;
+      // Skip rank-note to find the power-grid
+      while (el) {
+        if (el.classList.contains('power-grid')) { grid = el; break; }
+        el = el.nextElementSibling;
+      }
+      var visible = grid
+        ? grid.querySelectorAll('.power-card:not([style*="display: none"])').length
+        : 0;
+      var show = visible > 0;
+      title.style.display = show ? '' : 'none';
+      // Also hide/show rank-note immediately after title
+      var note = title.nextElementSibling;
+      if (note && note.classList.contains('rank-note')) {
+        note.style.display = show ? '' : 'none';
+      }
+    });
+
+    // Handle base section header (section-title + rank-note before triple grid)
+    var baseGrid = document.querySelector('.power-grid.triple') ||
+                   document.querySelector('.power-grid[class*="triple"]');
+    if (baseGrid) {
+      var baseVisible = baseGrid.querySelectorAll('.power-card:not([style*="display: none"])').length > 0;
+      var el2 = baseGrid.previousElementSibling;
+      while (el2) {
+        if (el2.classList.contains('section-title') || el2.classList.contains('rank-note')) {
+          el2.style.display = baseVisible ? '' : 'none';
+        } else if (el2.classList.contains('divider') || el2.classList.contains('filter-bar')) {
+          break;
+        }
+        el2 = el2.previousElementSibling;
+      }
+    }
+
+    // "Advanced Warp Powers" section title — keep visible when any advanced card shows
+    var advTitle = document.querySelector('.section-title + .power-grid, .section-title ~ .rank-title');
+    var advSection = null;
+    document.querySelectorAll('.section-title').forEach(function(st) {
+      if (st.textContent.trim().indexOf('Advanced') !== -1) advSection = st;
+    });
+    if (advSection) {
+      var anyAdv = document.querySelectorAll(
+        '.power-card[data-rank="r1"]:not([style*="display: none"]),' +
+        '.power-card[data-rank="r2"]:not([style*="display: none"]),' +
+        '.power-card[data-rank="r3"]:not([style*="display: none"]),' +
+        '.power-card[data-rank="r4"]:not([style*="display: none"])'
+      ).length;
+      advSection.style.display = anyAdv > 0 ? '' : 'none';
+    }
+  }
+
+  document.querySelectorAll('.fbtn[data-disc]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.fbtn[data-disc]').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      activeDisc = btn.dataset.disc;
+      applyFilters();
+    });
+  });
+
+  document.querySelectorAll('.fbtn[data-rank]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.fbtn[data-rank]').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      activeRank = btn.dataset.rank;
+      applyFilters();
+    });
+  });
+})();
+</script>
+</body>
+</html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          

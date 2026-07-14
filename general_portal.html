@@ -743,6 +743,16 @@
       .lore-entry { grid-template-columns: 60px 1fr; }
       .mission-grid { grid-template-columns: 1fr; }
       .nav-btn { padding: 14px 14px 11px; font-size: 12px; letter-spacing: 2px; }
+      /* single-row swipeable nav instead of stacking 3-4 rows */
+      .nav-inner {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .nav-inner::-webkit-scrollbar { display: none; }
+      .nav-btn { flex: 0 0 auto; white-space: nowrap; }
     }
 
     /* ─── KILL TEAM ROSTER v2 ──────────────────────────────────── */
@@ -1113,6 +1123,169 @@
       line-height: 1.65;
       white-space: pre-line;
     }
+
+    /* ─── HOME: CHARACTER CREATION PATH ────────────────────────────────── */
+    .path-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 14px;
+      margin-bottom: 36px;
+      counter-reset: step;
+    }
+    .path-step {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold-dim);
+      padding: 16px 18px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .path-step:hover {
+      border-color: var(--border2);
+      border-left-color: var(--gold);
+      background: var(--bg2);
+    }
+    .path-step-num {
+      flex: 0 0 auto;
+      width: 38px; height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gold);
+      border: 1px solid var(--gold-dim);
+      border-radius: 50%;
+      background: var(--bg);
+    }
+    .path-step-title {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--silver);
+      margin-bottom: 4px;
+      transition: color 0.2s;
+    }
+    .path-step:hover .path-step-title { color: var(--gold-light); }
+    .path-step-desc {
+      font-size: 13.5px;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    /* ─── SEARCH BAR HINT ──────────────────────────────────────────────── */
+    .search-key-hint {
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      color: var(--text-dim);
+      border: 1px solid var(--border2);
+      padding: 3px 9px;
+      background: var(--bg2);
+      user-select: none;
+    }
+    @media (max-width: 700px) { .search-key-hint { display: none; } }
+
+    /* ─── GLOBAL SEARCH RESULTS ────────────────────────────────────────── */
+    .sr-group-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 26px 0 14px;
+    }
+    .sr-group-header:first-child { margin-top: 0; }
+    .sr-group-label {
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      white-space: nowrap;
+    }
+    .sr-group-count {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+    .sr-group-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--border2), transparent); }
+    .sr-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 12px;
+    }
+    .sr-item {
+      display: block;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--border2);
+      padding: 13px 16px;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .sr-item:hover { border-color: var(--border2); border-left-color: var(--gold); background: var(--bg2); }
+    .sr-item-title {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: #dde8f8;
+      letter-spacing: 0.5px;
+      margin-bottom: 3px;
+    }
+    .sr-item:hover .sr-item-title { color: var(--gold-light); }
+    .sr-item-sub {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .sr-item-snippet {
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.45;
+      margin-top: 6px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* ─── BACK TO TOP ──────────────────────────────────────────────────── */
+    #backtop {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 90;
+      width: 44px; height: 44px;
+      background: var(--bg2);
+      border: 1px solid var(--gold-dim);
+      color: var(--gold);
+      font-size: 16px;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity 0.25s, transform 0.25s, border-color 0.2s;
+    }
+    #backtop.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    #backtop:hover { border-color: var(--gold); color: var(--gold-light); }
+
+    /* ─── WARGEAR SEARCH-JUMP FLASH ────────────────────────────────────── */
+    @keyframes wgflash {
+      0%   { box-shadow: 0 0 0 2px var(--gold); background: var(--bg3); }
+      100% { box-shadow: 0 0 0 2px transparent; }
+    }
+    .wg-flash { animation: wgflash 1.8s ease-out; }
   </style>
 </head>
 <body>
@@ -1134,27 +1307,175 @@
 <!-- ════════════════════ NAVIGATION ════════════════════ -->
 <nav>
   <div class="nav-inner">
-    <button class="nav-btn" onclick="showSection('lineage', this)">Lineage</button>
-    <button class="nav-btn active" onclick="showSection('operatives', this)">Operatives</button>
-    <button class="nav-btn" onclick="showSection('bestiary', this)">Bestiary</button>
-    <button class="nav-btn" onclick="showSection('requisitorium', this)">Requisitorium</button>
-    <button class="nav-btn" onclick="showSection('wargear', this)">Wargear Crafting</button>
-    <button class="nav-btn" onclick="showSection('spells', this)">Spells</button>
-    <button class="nav-btn" onclick="showSection('rules', this)">Rules</button>
-    <button class="nav-btn" onclick="showSection('campaigns', this)">Campaigns</button>
-    <button class="nav-btn" onclick="showSection('about', this)">About</button>
+    <button class="nav-btn active" data-section="home" onclick="showSection('home')">Home</button>
+    <button class="nav-btn" data-section="lineage" onclick="showSection('lineage')">Lineage</button>
+    <button class="nav-btn" data-section="operatives" onclick="showSection('operatives')">Operatives</button>
+    <button class="nav-btn" data-section="bestiary" onclick="showSection('bestiary')">Bestiary</button>
+    <button class="nav-btn" data-section="requisitorium" onclick="showSection('requisitorium')">Requisitorium</button>
+    <button class="nav-btn" data-section="wargear" onclick="showSection('wargear')">Wargear</button>
+    <button class="nav-btn" data-section="spells" onclick="showSection('spells')">Powers</button>
+    <button class="nav-btn" data-section="rules" onclick="showSection('rules')">Rules</button>
+    <button class="nav-btn" data-section="campaigns" onclick="showSection('campaigns')">Campaigns</button>
+    <button class="nav-btn" data-section="about" onclick="showSection('about')">About</button>
   </div>
 </nav>
 
 <!-- ════════════════════ SEARCH BAR ════════════════════ -->
 <div class="search-wrap">
   <input class="search-input-el" id="search-input" type="text"
-    placeholder="++ Search Operatives · Bestiary · Campaigns ++"
+    placeholder="++ Search All Records — Classes · Items · Powers · Rules · Chapters ++"
     oninput="handleSearch(this.value)" />
+  <span class="search-key-hint" title="Press / to focus search">/</span>
 </div>
 
 <!-- ════════════════════ MAIN CONTENT ════════════════════ -->
 <main>
+
+  <!-- ════════════════════ HOME ════════════════════ -->
+  <section id="home" class="section active">
+    <div class="section-heading">
+      <h2>Command Overview</h2>
+      <div class="section-heading-line"></div>
+    </div>
+
+    <div class="card" style="margin-bottom:28px;">
+      <div class="card-title">Welcome, Battle-Brother</div>
+      <div class="card-meta">Central Repository &nbsp;·&nbsp; All Rules · Classes · Items · Powers</div>
+      <p>This portal is the central archive for the Warhammer 40,000 &times; D&amp;D 5E homebrew campaign. Every rule, operative class, chapter, weapon, power, and enemy dossier lives here. New to the Kill Team? Follow the induction protocol below. Returning veteran? Jump straight to any archive — or use the search bar above to find anything, anywhere in the repository.</p>
+    </div>
+
+    <!-- Character creation path -->
+    <div class="section-heading" style="margin-top:36px;">
+      <h2>New Recruit Protocol — Build Your Battle-Brother</h2>
+      <div class="section-heading-line"></div>
+    </div>
+    <div class="path-steps">
+      <a class="path-step" href="#lineage">
+        <div class="path-step-num">I</div>
+        <div class="path-step-body">
+          <div class="path-step-title">Choose Your Chapter</div>
+          <div class="path-step-desc">Review your Astartes lineage traits, then select a Chapter — each grants unique heritage abilities.</div>
+        </div>
+      </a>
+      <a class="path-step" href="#operatives">
+        <div class="path-step-num">II</div>
+        <div class="path-step-body">
+          <div class="path-step-title">Choose Your Class</div>
+          <div class="path-step-desc">Pick an Operative Specialisation — your role in the Kill Team, from Tactical to Techmarine.</div>
+        </div>
+      </a>
+      <a class="path-step" href="Feats.html">
+        <div class="path-step-num">III</div>
+        <div class="path-step-body">
+          <div class="path-step-title">Plan Your Feats</div>
+          <div class="path-step-desc">At levels 4, 8, 12, 16 and 19, trade an Ability Score Improvement for a Feat. Browse the full list.</div>
+        </div>
+      </a>
+      <a class="path-step" href="#requisitorium">
+        <div class="path-step-num">IV</div>
+        <div class="path-step-body">
+          <div class="path-step-title">Requisition Wargear</div>
+          <div class="path-step-desc">Spend Requisition Points on weapons, armor patterns, ammo, and equipment — then upgrade them.</div>
+        </div>
+      </a>
+      <a class="path-step" href="#spells">
+        <div class="path-step-num">V</div>
+        <div class="path-step-body">
+          <div class="path-step-title">Learn Your Powers</div>
+          <div class="path-step-desc">Librarians take Warp powers, Chaplains take Holy invocations. Other classes may skip this step.</div>
+        </div>
+      </a>
+      <a class="path-step" href="#rules">
+        <div class="path-step-num">VI</div>
+        <div class="path-step-body">
+          <div class="path-step-title">Master the Rules</div>
+          <div class="path-step-desc">Combat actions, conditions, cover — plus the homebrew rules that make the 41st Millennium deadly.</div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Quick access archives -->
+    <div class="section-heading" style="margin-top:40px;">
+      <h2>Archives — Quick Access</h2>
+      <div class="section-heading-line"></div>
+    </div>
+    <div class="link-grid">
+      <a class="link-card ac-gold" href="#lineage">
+        <div class="lc-title">Lineage &amp; Chapters</div>
+        <div class="lc-meta"><span id="home-count-chapters">9</span> Chapters</div>
+        <p class="lc-desc">Astartes traits shared by every Battle-Brother, plus the heritage abilities of each Space Marine Chapter.</p>
+        <div class="lc-cta">▶ Open Archive</div>
+      </a>
+      <a class="link-card ac-blue" href="#operatives">
+        <div class="lc-title">Operatives</div>
+        <div class="lc-meta"><span id="home-count-classes">9</span> Classes</div>
+        <p class="lc-desc">Full class rules for every Kill Team specialisation — subclasses, abilities, and equipment loadouts.</p>
+        <div class="lc-cta">▶ Open Archive</div>
+      </a>
+      <a class="link-card ac-green" href="#bestiary">
+        <div class="lc-title">Bestiary</div>
+        <div class="lc-meta"><span id="home-count-bestiary">4</span> Master Bestiaries</div>
+        <p class="lc-desc">Stat blocks, tactics, and lore for every Tyranid, Necron, Genestealer, and Chaos threat in the Reach.</p>
+        <div class="lc-cta">▶ Open Archive</div>
+      </a>
+      <a class="link-card ac-silver" href="#requisitorium">
+        <div class="lc-title">Requisitorium</div>
+        <div class="lc-meta"><span id="home-count-req">—</span> Items</div>
+        <p class="lc-desc">The complete Deathwatch arsenal — weapons, armor patterns, ammunition, equipment, and relics.</p>
+        <div class="lc-cta">▶ Open Archive</div>
+      </a>
+      <a class="link-card ac-orange" href="#wargear">
+        <div class="lc-title">Wargear Upgrades</div>
+        <div class="lc-meta"><span id="home-count-wg">—</span> Augmetic Traits</div>
+        <p class="lc-desc">Sanctified, Artificer, and Master-Crafted upgrade patterns to permanently enhance your weapons and armor.</p>
+        <div class="lc-cta">▶ Open Archive</div>
+      </a>
+      <a class="link-card ac-purple" href="#spells">
+        <div class="lc-title">Powers</div>
+        <div class="lc-meta"><span id="home-count-spells">—</span> Warp &amp; Holy Powers</div>
+        <p class="lc-desc">The Inquisitorium Arcanum — every Librarian Warp discipline and Chaplain Holy invocation, searchable.</p>
+        <div class="lc-cta">▶ Open Archive</div>
+      </a>
+      <a class="link-card ac-red" href="#rules">
+        <div class="lc-title">Rules Reference</div>
+        <div class="lc-meta"><span id="home-count-rules">—</span> Entries</div>
+        <p class="lc-desc">Core 5E combat actions, conditions, and cover — plus the homebrew rules unique to this campaign.</p>
+        <div class="lc-cta">▶ Open Archive</div>
+      </a>
+      <a class="link-card ac-teal" href="#campaigns">
+        <div class="lc-title">Campaigns</div>
+        <div class="lc-meta">1 Active Theatre</div>
+        <p class="lc-desc">Campaign records and dedicated portals — mission logs, operative rosters, and tactical maps.</p>
+        <div class="lc-cta">▶ Open Archive</div>
+      </a>
+    </div>
+
+    <!-- Tools & sheets -->
+    <div class="section-heading" style="margin-top:24px;">
+      <h2>Field Tools &amp; Documents</h2>
+      <div class="section-heading-line"></div>
+    </div>
+    <div class="link-grid">
+      <a class="link-card ac-silver" href="deathwatch_character_sheet.html">
+        <div class="lc-title">Character Sheet</div>
+        <div class="lc-meta">Deathwatch &nbsp;·&nbsp; Interactive</div>
+        <p class="lc-desc">The full interactive Deathwatch character sheet — track stats, wargear, ammo, and Mortal Wounds.</p>
+        <div class="lc-cta">▶ Open Sheet</div>
+      </a>
+      <a class="link-card ac-gold" href="deathwatch_reference_key.html">
+        <div class="lc-title">Sheet Reference Key</div>
+        <div class="lc-meta">How-To &nbsp;·&nbsp; Field Guide</div>
+        <p class="lc-desc">A guide to every field on the character sheet — what it tracks and how it maps to the homebrew rules.</p>
+        <div class="lc-cta">▶ Open Guide</div>
+      </a>
+      <a class="link-card ac-red" href="gm_dashboard.html">
+        <div class="lc-title">GM Dashboard</div>
+        <div class="lc-meta">Watch Commander &nbsp;·&nbsp; Eyes Only</div>
+        <p class="lc-desc">Game Master tools for running the session — encounter tracking and campaign management.</p>
+        <div class="lc-cta">▶ Open Dashboard</div>
+      </a>
+    </div>
+  </section>
 
   <!-- ════════════════════ LINEAGE ════════════════════ -->
   <section id="lineage" class="section">
@@ -1234,7 +1555,7 @@
 
   </section>
 
-  <section id="operatives" class="section active">
+  <section id="operatives" class="section">
     <div class="section-heading">
       <h2>Operative Specialisations</h2>
       <div class="section-heading-line"></div>
@@ -1243,6 +1564,11 @@
       <div class="card-title">Kill Team — Battle-Brother Roles</div>
       <div class="card-meta">Deathwatch Codex &nbsp;·&nbsp; Specialisation Dossiers</div>
       <p>Each Battle-Brother brings a distinct fighting discipline to the Kill Team. Select a specialisation to view the full class rules, subclass options, abilities, and equipment loadouts — all adapted to the Warhammer 40,000 D&amp;D 5E ruleset.</p>
+    </div>
+    <div class="card" style="margin-bottom:28px;">
+      <div class="card-title">Feats — Ability Score Improvement Alternatives</div>
+      <div class="card-meta">Character Advancement &nbsp;·&nbsp; All Classes</div>
+      <p>At 4th, 8th, 12th, 16th, and 19th level, trade your Ability Score Improvement for a Feat instead — general combat techniques plus niche picks for Marksmen, Brawlers, the devout, Psykers, Tech-Adepts, Apothecaries, and infiltrators. <a href="Feats.html" style="color:var(--gold-dim);">View the full Feats reference &#8599;</a></p>
     </div>
     <div class="link-grid">
       <a class="link-card ac-blue" href="Tactical_Operative.html">
@@ -1974,13 +2300,16 @@
       <h2>Search Results</h2>
       <div class="section-heading-line"></div>
     </div>
-    <div id="search-results-grid" class="link-grid"></div>
+    <div id="search-results-grid"></div>
     <div id="no-results-msg" class="no-results-msg" style="display:none;">++ No Records Found — Refine Search Query ++</div>
   </section>
 
 
 
 </main>
+
+<!-- ════════════════════ BACK TO TOP ════════════════════ -->
+<button id="backtop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top" title="Back to top">▲</button>
 
 <!-- ════════════════════ FOOTER ════════════════════ -->
 <footer>
@@ -2237,6 +2566,7 @@
     }
     document.getElementById('req-modal-body').innerHTML = body;
     document.getElementById('req-modal-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
     document.addEventListener('keydown', _reqEsc);
   }
 
@@ -2244,11 +2574,28 @@
 
   function reqCloseModal() {
     document.getElementById('req-modal-overlay').classList.remove('open');
+    document.body.style.overflow = '';
     document.removeEventListener('keydown', _reqEsc);
   }
 
   // Init on tab open
-  document.addEventListener('DOMContentLoaded', () => { reqFilter(); rulesInit(); spellFilter(); });
+  document.addEventListener('DOMContentLoaded', () => {
+    reqFilter(); rulesInit(); spellFilter();
+    routeFromHash();
+    homeFillCounts();
+  });
+
+  // Live record counts on the Home tiles
+  function homeFillCounts() {
+    const set = (id, n) => { const el = document.getElementById(id); if (el && n) el.textContent = n; };
+    set('home-count-req',      (typeof REQ_ITEMS !== 'undefined') ? REQ_ITEMS.length : 0);
+    set('home-count-spells',   (typeof SPELLS !== 'undefined') ? SPELLS.length : 0);
+    set('home-count-rules',    RULES_DATA.length);
+    set('home-count-wg',       document.querySelectorAll('#wargear .wg-card').length);
+    set('home-count-chapters', CHAPTERS.length);
+    set('home-count-classes',  document.querySelectorAll('#operatives .link-card[href]').length);
+    set('home-count-bestiary', document.querySelectorAll('#bestiary .link-card[href]').length);
+  }
 
 
   /* ════════════════════════════════════════════
@@ -2387,12 +2734,14 @@
       <div class="rmd-notes" style="line-height:1.7;font-size:14px;">${sp.desc}</div>`;
     document.getElementById('spell-modal-body').innerHTML = body;
     document.getElementById('spell-modal-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
     document.addEventListener('keydown', _spellEsc);
   }
 
   function _spellEsc(e) { if (e.key === 'Escape') spellCloseModal(); }
   function spellCloseModal() {
     document.getElementById('spell-modal-overlay').classList.remove('open');
+    document.body.style.overflow = '';
     document.removeEventListener('keydown', _spellEsc);
   }
 
@@ -2544,22 +2893,40 @@
 
 
 
-    let _lastSectionId = 'operatives';
-  let _lastBtn = null;
+  /* ════════════════════════════════════════════
+     SECTION ROUTING — hash-based deep links
+     (#requisitorium etc. survive refresh, back/forward works)
+  ════════════════════════════════════════════ */
+  let _lastSectionId = 'home';
 
-  function showSection(id, btn) {
+  function showSection(id, push) {
+    if (push === undefined) push = true;
+    const section = document.getElementById(id);
+    if (!section || !section.classList.contains('section') || id === 'search-results') return;
+
     const si = document.getElementById('search-input');
     if (si) si.value = '';
     document.getElementById('search-results').classList.remove('active');
 
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    btn.classList.add('active');
+    section.classList.add('active');
+    const btn = document.querySelector('.nav-btn[data-section="' + id + '"]');
+    if (btn) btn.classList.add('active');
     _lastSectionId = id;
-    _lastBtn = btn;
-    window.scrollTo(0, 0);
+    if (push && location.hash !== '#' + id) history.pushState(null, '', '#' + id);
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }
+
+  function routeFromHash() {
+    const id = location.hash.slice(1);
+    if (id && document.getElementById(id) && id !== 'search-results') {
+      showSection(id, false);
+    } else if (!id) {
+      showSection('home', false);
+    }
+  }
+  window.addEventListener('hashchange', routeFromHash);
 
   const wgFilters = { slot: 'all', tier: 'all', family: 'all', pattern: 'all' };
   function wgSetFilter(kind, val, btn) {
@@ -2585,37 +2952,225 @@
     });
   }
 
+  /* ════════════════════════════════════════════
+     GLOBAL SEARCH — every record in the repository
+     (classes, bestiaries, chapters, items, powers,
+      rules, wargear traits, campaigns, sections)
+  ════════════════════════════════════════════ */
+  let _searchIndex = null;
+  let _searchDebounce = null;
+
+  function _stripHtml(html) {
+    const tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return tmp.textContent || '';
+  }
+
+  function _esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function buildSearchIndex() {
+    const idx = [];
+
+    // Portal sections
+    [
+      ['lineage',       'Lineage & Chapters',  'Astartes traits · chapter heritage'],
+      ['operatives',    'Operatives',          'Kill Team class rules'],
+      ['bestiary',      'Bestiary',            'Xenos & Chaos threat compendium'],
+      ['requisitorium', 'Requisitorium',       'Weapons · armor · equipment'],
+      ['wargear',       'Wargear Upgrades',    'Sanctified & master-crafted patterns'],
+      ['spells',        'Powers',              'Warp powers · holy invocations'],
+      ['rules',         'Rules Reference',     'Combat doctrine & homebrew rules'],
+      ['campaigns',     'Campaigns',           'Campaign records & portals'],
+    ].forEach(([id, title, sub]) => {
+      idx.push({ group: 'Portal Sections', title, sub, text: (title + ' ' + sub).toLowerCase(),
+                 go: () => showSection(id) });
+    });
+
+    // Class / bestiary / campaign link cards (from DOM)
+    const groupOf = { operatives: 'Operative Classes', bestiary: 'Bestiaries', campaigns: 'Campaigns' };
+    Object.keys(groupOf).forEach(secId => {
+      document.querySelectorAll('#' + secId + ' .link-card[href]').forEach(card => {
+        const title = (card.querySelector('.lc-title') || {}).textContent || '';
+        const sub   = (card.querySelector('.lc-meta')  || {}).textContent || '';
+        const desc  = (card.querySelector('.lc-desc')  || {}).textContent || '';
+        idx.push({ group: groupOf[secId], title: title.trim(), sub: sub.trim(), snippet: desc.trim(),
+                   text: card.textContent.toLowerCase(), href: card.getAttribute('href') });
+      });
+    });
+
+    // Chapters → open dossier modal
+    CHAPTERS.forEach(ch => {
+      const abilityText = ch.abilities.map(a => a.name + ' ' + a.text).join(' ');
+      idx.push({ group: 'Chapter Heritage', title: ch.name, sub: ch.subtitle,
+                 snippet: ch.description,
+                 text: (ch.name + ' ' + ch.subtitle + ' ' + ch.description + ' ' + abilityText).toLowerCase(),
+                 go: () => { showSection('lineage'); chapterOpenModal(ch.id); } });
+    });
+
+    // Requisitorium items → open item dossier
+    (typeof REQ_ITEMS !== 'undefined' ? REQ_ITEMS : []).forEach(item => {
+      const bits = [item.name, item.cat, item.wtype, item.dmg, item.effects, item.notes, item.lore, (item.mods || []).join(' ')];
+      idx.push({ group: 'Requisitorium — Items', title: item.name,
+                 sub: item.cat + (item.dmg ? ' · ' + item.dmg : '') + (item.cost ? ' · ' + item.cost : ''),
+                 text: bits.filter(Boolean).join(' ').toLowerCase(),
+                 go: () => { showSection('requisitorium'); reqOpenModal(item.id); } });
+    });
+
+    // Powers → open power dossier
+    (typeof SPELLS !== 'undefined' ? SPELLS : []).forEach(sp => {
+      const cls = sp.class === 'librarian' ? 'Librarian' : 'Chaplain';
+      idx.push({ group: 'Powers — Inquisitorium Arcanum', title: sp.name,
+                 sub: cls + ' · ' + (sp.tierLabel || '') + ' · ' + _spellCostLabel(sp),
+                 snippet: _stripHtml(sp.desc || ''),
+                 text: [sp.name, cls, sp.tierLabel, sp.action, sp.range, sp.duration, sp.desc].filter(Boolean).join(' ').toLowerCase(),
+                 go: () => { showSection('spells'); spellOpenModal(sp.id); } });
+    });
+
+    // Rules → open rules section filtered to that rule
+    RULES_DATA.forEach(r => {
+      idx.push({ group: 'Rules Reference', title: r.name,
+                 sub: r.cat + (r.homebrew ? ' · Homebrew' : ''),
+                 snippet: _stripHtml(r.body),
+                 text: (r.name + ' ' + r.cat + ' ' + _stripHtml(r.body)).toLowerCase(),
+                 go: () => {
+                   showSection('rules');
+                   const rs = document.getElementById('rules-search');
+                   rs.value = r.name;
+                   const allBtn = document.querySelector('#rules-cats .rules-cat-btn');
+                   if (allBtn) rulesSetCat('all', allBtn); else rulesFilter();
+                 } });
+    });
+
+    // Wargear augmetic traits → jump to card and flash it
+    document.querySelectorAll('#wargear .wg-card').forEach((card, i) => {
+      const name = (card.querySelector('.wg-card-name') || {}).textContent || '';
+      const tier = (card.querySelector('.wg-tier-badge') || {}).textContent || '';
+      const desc = (card.querySelector('.wg-card-desc') || {}).textContent || '';
+      if (!card.id) card.id = 'wg-card-' + i;
+      const cardId = card.id;
+      idx.push({ group: 'Wargear — Augmetic Traits', title: name.trim(), sub: tier.trim(),
+                 snippet: desc.trim(),
+                 text: (name + ' ' + tier + ' ' + desc).toLowerCase(),
+                 go: () => {
+                   showSection('wargear');
+                   wgResetFilters();
+                   const el = document.getElementById(cardId);
+                   if (el) {
+                     el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                     el.classList.remove('wg-flash');
+                     void el.offsetWidth;
+                     el.classList.add('wg-flash');
+                   }
+                 } });
+    });
+
+    return idx;
+  }
+
+  function wgResetFilters() {
+    ['slot', 'tier', 'family', 'pattern'].forEach(kind => {
+      wgFilters[kind] = 'all';
+      document.querySelectorAll('#wg-' + kind + '-btns .req-filter').forEach((b, i) => {
+        b.classList.toggle('active', i === 0);
+      });
+    });
+    wgApply();
+  }
+
+  const SEARCH_GROUP_ORDER = [
+    'Operative Classes', 'Chapter Heritage', 'Requisitorium — Items',
+    'Powers — Inquisitorium Arcanum', 'Wargear — Augmetic Traits',
+    'Rules Reference', 'Bestiaries', 'Campaigns', 'Portal Sections',
+  ];
+  const SEARCH_GROUP_CAP = 12; // max results shown per group
+
+  window._searchGo = [];
   function handleSearch(val) {
+    clearTimeout(_searchDebounce);
+    _searchDebounce = setTimeout(() => runSearch(val), 120);
+  }
+
+  function runSearch(val) {
     const q = val.trim().toLowerCase();
     const resultsSection = document.getElementById('search-results');
+    const container = document.getElementById('search-results-grid');
+    const noMsg = document.getElementById('no-results-msg');
 
     if (!q) {
       resultsSection.classList.remove('active');
-      document.getElementById(_lastSectionId).classList.add('active');
-      if (_lastBtn) _lastBtn.classList.add('active');
+      showSection(_lastSectionId, false);
       return;
     }
 
-    const cards = document.querySelectorAll('#operatives .link-card, #bestiary .link-card, #campaigns .link-card');
-    const container = resultsSection.querySelector('.link-grid');
-    if (container) {
-      container.innerHTML = '';
-      let found = 0;
-      cards.forEach(card => {
-        if (card.textContent.toLowerCase().includes(q)) {
-          container.appendChild(card.cloneNode(true));
-          found++;
+    if (!_searchIndex) _searchIndex = buildSearchIndex();
+
+    // Title matches rank above body matches
+    const matches = _searchIndex
+      .map(e => {
+        const inTitle = e.title.toLowerCase().includes(q);
+        const inText = e.text.includes(q);
+        return (inTitle || inText) ? { e, rank: inTitle ? 0 : 1 } : null;
+      })
+      .filter(Boolean)
+      .sort((a, b) => a.rank - b.rank);
+
+    const groups = {};
+    matches.forEach(m => { (groups[m.e.group] = groups[m.e.group] || []).push(m.e); });
+
+    window._searchGo = [];
+    let html = '';
+    SEARCH_GROUP_ORDER.forEach(g => {
+      const items = groups[g];
+      if (!items || !items.length) return;
+      const shown = items.slice(0, SEARCH_GROUP_CAP);
+      html += '<div class="sr-group-header"><span class="sr-group-label">' + g + '</span>' +
+              '<span class="sr-group-count">' + items.length + ' record' + (items.length !== 1 ? 's' : '') +
+              (items.length > shown.length ? ' · showing ' + shown.length : '') + '</span>' +
+              '<div class="sr-group-line"></div></div><div class="sr-grid">';
+      shown.forEach(e => {
+        const inner = '<div class="sr-item-title">' + _esc(e.title) + '</div>' +
+                      '<div class="sr-item-sub">' + _esc(e.sub) + '</div>' +
+                      (e.snippet ? '<div class="sr-item-snippet">' + _esc(e.snippet) + '</div>' : '');
+        if (e.href) {
+          html += '<a class="sr-item" href="' + e.href + '">' + inner + '</a>';
+        } else {
+          const gi = window._searchGo.push(e.go) - 1;
+          html += '<div class="sr-item" onclick="_searchGo[' + gi + ']()">' + inner + '</div>';
         }
       });
-      if (found === 0) {
-        container.innerHTML = '<p style="color:var(--text-dim);padding:20px 0;">No results found.</p>';
-      }
-    }
+      html += '</div>';
+    });
+
+    container.innerHTML = html;
+    noMsg.style.display = matches.length ? 'none' : '';
 
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     resultsSection.classList.add('active');
   }
+
+  // Press "/" anywhere to focus search
+  document.addEventListener('keydown', e => {
+    if (e.key === '/' && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) {
+      e.preventDefault();
+      const si = document.getElementById('search-input');
+      si.focus();
+      si.select();
+    }
+  });
+
+  // Back-to-top visibility — show once the page header has scrolled out of view
+  (function () {
+    const toggle = show => document.getElementById('backtop').classList.toggle('show', show);
+    const header = document.querySelector('header');
+    if ('IntersectionObserver' in window && header) {
+      new IntersectionObserver(entries => toggle(!entries[0].isIntersecting), { threshold: 0 }).observe(header);
+    } else {
+      window.addEventListener('scroll', () => toggle(window.scrollY > 600), { passive: true });
+    }
+  })();
 
   /* ══════════════════════════════════════════════════════
      CHAPTER HERITAGE
