@@ -1832,7 +1832,7 @@ const DW_CLASS_PROFS = {
   },
   'Apothecary': {
     saves:   ['Wisdom', 'Constitution'],
-    skills:  { count:3, list:['History','Insight','Medicine','Perception','Religion','Survival'] },
+    skills:  { count:2, fixed:['Medicine'], list:['History','Insight','Perception','Religion','Survival'] },
     armor:   'Tacticus Armor, Gravis Armor',
     weapons: 'Ranged Secondary, Physical Melee, Narthecium',
     tools:   'Medicae Kit, Auspex',
@@ -1840,7 +1840,7 @@ const DW_CLASS_PROFS = {
   },
   'Chaplain': {
     saves:   ['Wisdom', 'Charisma'],
-    skills:  { count:3, list:['History','Insight','Intimidation','Perception','Persuasion','Religion'] },
+    skills:  { count:2, fixed:['Religion'], list:['History','Insight','Intimidation','Perception','Persuasion'] },
     armor:   'Phobos Armor, Tacticus Armor',
     weapons: 'Ranged Secondary, Physical Melee, Power Melee, Crozius Arcanum',
     tools:   'Auspex',
@@ -1848,7 +1848,7 @@ const DW_CLASS_PROFS = {
   },
   'Librarian': {
     saves:   ['Intelligence', 'Wisdom'],
-    skills:  { count:3, list:['Arcana','History','Insight','Investigation','Perception','Religion'] },
+    skills:  { count:2, fixed:['Arcana'], list:['History','Insight','Investigation','Perception','Religion'] },
     armor:   'Phobos Armor, Tacticus Armor, Gravis Armor',
     weapons: 'Ranged Secondary, Physical Melee, Force Sword, Force Staff',
     tools:   'Auspex',
@@ -1856,7 +1856,7 @@ const DW_CLASS_PROFS = {
   },
   'Techmarine': {
     saves:   ['Intelligence', 'Constitution'],
-    skills:  { count:3, list:['Athletics','History','Investigation','Medicine','Perception','Technology'] },
+    skills:  { count:2, fixed:['Technology'], list:['Athletics','History','Investigation','Medicine','Perception'] },
     armor:   'Tacticus Armor, Gravis Armor',
     weapons: "Ranged Primary & Secondary, Physical & Power Melee, Omnissian Power Axe, Servo-Arm, Mechadendrites",
     tools:   "Artificer's Tools, Auspex",
@@ -1871,7 +1871,7 @@ function _renderClassProfs(cls) {
   if (!p) { block.style.display = 'none'; return; }
   var rows = [
     ['Saving Throws', p.saves.join(', ')],
-    ['Skills',        'Choose ' + p.skills.count + ' from: ' + p.skills.list.join(', ')],
+    ['Skills',        (p.skills.fixed ? p.skills.fixed.join(', ') + ', plus choose ' : 'Choose ') + p.skills.count + ' from: ' + p.skills.list.join(', ')],
     ['Armor',         p.armor],
     ['Weapons',       p.weapons],
     ['Tools',         p.tools]
