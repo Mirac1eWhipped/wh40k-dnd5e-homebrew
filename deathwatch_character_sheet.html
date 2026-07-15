@@ -1290,6 +1290,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
         <button class="sreq-fbtn" onclick="_sreqSetCat(this,'Terminator')">Terminator</button>
         <button class="sreq-fbtn" onclick="_sreqSetCat(this,'Relic')">Relic</button>
         <button class="sreq-fbtn" onclick="_sreqSetCat(this,'Equipment')">Equipment</button>
+        <button class="sreq-fbtn" onclick="_sreqSetCat(this,'Tools')">Tools</button>
         <button class="sreq-fbtn" onclick="_sreqSetCat(this,'Armor')">Armor</button>
         <button class="sreq-fbtn" onclick="_sreqSetCat(this,'Ammo')">Ammo</button>
       </div>
@@ -2667,6 +2668,9 @@ function _sreqRender(items) {
       const c = it.caps;
       return `<div class="sreq-card"><div class="sreq-card-name">${it.name}</div><div class="sreq-card-stat">Cost: ${it.cost}</div><div class="sreq-card-stat" style="font-size:8.5pt;">Phobos ${c.phobos} &bull; Tacticus ${c.tacticus} &bull; Gravis ${c.gravis} &bull; Terminator ${c.terminator}</div>${it.notes ? `<div class="sreq-card-stat" style="font-size:8pt;font-style:italic;">${it.notes}</div>` : ''}<button class="sreq-add" onclick="_sreqAdd('${it.id}')">+ Add to Ammo</button></div>`;
     }
+    if (it.cat === 'Tools') {
+      return `<div class="sreq-card"><div class="sreq-card-name">${it.name}</div><div class="sreq-card-stat">Tools &bull; ${it.wtype}</div><div class="sreq-card-stat">${it.use}</div><div class="sreq-card-stat">Cost: ${it.cost}</div><button class="sreq-add" onclick="_sreqAdd('${it.id}')">+ Add to Wargear</button></div>`;
+    }
     return `<div class="sreq-card"><div class="sreq-card-name">${it.name}</div><div class="sreq-card-stat">${it.cat} &bull; ${it.wtype}</div><div class="sreq-card-stat">${it.dmg}</div><div class="sreq-card-stat">Range: ${it.range}</div><div class="sreq-card-stat">Cost: ${it.cost}</div><button class="sreq-add" onclick="_sreqAdd('${it.id}')">+ Add to Wargear</button></div>`;
   }).join('');
 }
@@ -2705,11 +2709,13 @@ function _sreqAdd(id) {
       ins[0].value = it.name;
       if (ins[1]) ins[1].value = '1';
       if (ins[2]) {
-        const parts = [it.dmg, it.range !== 'N/A' && it.range !== '5 ft Melee' ? 'Range: ' + it.range : '', it.shots && it.shots !== 'N/A' ? 'Shots: ' + it.shots : '', it.notes].filter(Boolean);
+        const parts = it.cat === 'Tools'
+          ? ['Tool Proficiency Kit', it.use]
+          : [it.dmg, it.range !== 'N/A' && it.range !== '5 ft Melee' ? 'Range: ' + it.range : '', it.shots && it.shots !== 'N/A' ? 'Shots: ' + it.shots : '', it.notes].filter(Boolean);
         ins[2].value = parts.join(' · ');
       }
       [ins[0], ins[1], ins[2]].filter(Boolean).forEach(el => { el.dispatchEvent(new Event('input')); el.dispatchEvent(new Event('change')); });
-      const isWeapon = it.cat !== 'Equipment';
+      const isWeapon = it.cat !== 'Equipment' && it.cat !== 'Tools';
       _wargearMeta[ri] = {
         id: it.id, is_weapon: isWeapon,
         stat: _wpnStatFromCat(it.cat),
