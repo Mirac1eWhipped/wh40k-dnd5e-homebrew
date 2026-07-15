@@ -842,6 +842,8 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
           <span class="dos-col-hdr-lbl" style="width:48px;text-align:right;flex-shrink:0;">Bonus</span>
         </div>
 <div class="dos-skill-row"><input type="checkbox" class="dos-prof-circle" id="skill-acrobatics-prof" onchange="onProfChange('acrobatics')"><input type="checkbox" class="exp-chk" id="skill-acrobatics-exp" title="Expertise" disabled onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="skill-acrobatics" placeholder="+0"></div><span class="dos-sv-name">Acrobatics<span class="dos-attr-abbr">DEX</span></span></div>
+<!-- Arcana was added after live saves existed; its inputs are excluded from the positional save arrays (see _fields/_checkboxes) and its prof state persists via extra.arcana_prof -->
+<div class="dos-skill-row"><input type="checkbox" class="dos-prof-circle" id="skill-arcana-prof" onchange="onProfChange('arcana')"><input type="checkbox" class="exp-chk" id="skill-arcana-exp" title="Expertise" disabled onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="skill-arcana" placeholder="+0"></div><span class="dos-sv-name">Arcana<span class="dos-attr-abbr">INT</span></span></div>
 <div class="dos-skill-row"><input type="checkbox" class="dos-prof-circle" id="skill-athletics-prof" onchange="onProfChange('athletics')"><input type="checkbox" class="exp-chk" id="skill-athletics-exp" title="Expertise" disabled onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="skill-athletics" placeholder="+0"></div><span class="dos-sv-name">Athletics<span class="dos-attr-abbr">STR</span></span></div>
 <div class="dos-skill-row"><input type="checkbox" class="dos-prof-circle" id="skill-deception-prof" onchange="onProfChange('deception')"><input type="checkbox" class="exp-chk" id="skill-deception-exp" title="Expertise" disabled onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="skill-deception" placeholder="+0"></div><span class="dos-sv-name">Deception<span class="dos-attr-abbr">CHA</span></span></div>
 <div class="dos-skill-row"><input type="checkbox" class="dos-prof-circle" id="skill-history-prof" onchange="onProfChange('history')"><input type="checkbox" class="exp-chk" id="skill-history-exp" title="Expertise" disabled onchange="_recalcDerived()"><div class="dos-sv-val"><input type="text" id="skill-history" placeholder="+0"></div><span class="dos-sv-name">History<span class="dos-attr-abbr">INT</span></span></div>
@@ -1359,6 +1361,7 @@ function rcTab(btn, panelId) {
 const STATS = ['str','dex','con','int','wis','cha'];
 const _SKILLS = [
   {id:'acrobatics',      stat:'dex'},
+  {id:'arcana',          stat:'int'},
   {id:'athletics',       stat:'str'},
   {id:'deception',       stat:'cha'},
   {id:'history',         stat:'int'},
@@ -1813,7 +1816,7 @@ const DW_CLASS_PROFS = {
   },
   'Terminator': {
     saves:   ['Strength', 'Constitution'],
-    skills:  { count:3, list:['Athletics','History','Intimidation','Perception','Religion','Survival'] },
+    skills:  { count:3, list:['Athletics','History','Insight','Intimidation','Perception','Religion','Survival'] },
     armor:   'Terminator Armor',
     weapons: 'All Terminator Weapons, Ranged Primary & Secondary, Physical & Power Melee',
     tools:   'Auspex',
@@ -1821,7 +1824,7 @@ const DW_CLASS_PROFS = {
   },
   'Vanguard Operative': {
     saves:   ['Dexterity', 'Wisdom'],
-    skills:  { count:4, list:['Acrobatics','Deception','History','Perception','Religion','Sleight of Hand','Stealth','Survival'] },
+    skills:  { count:4, list:['Acrobatics','Athletics','Deception','Investigation','Perception','Sleight of Hand','Stealth','Survival'] },
     armor:   'Phobos Armor',
     weapons: 'Ranged Primary, Ranged Secondary, Physical Melee',
     tools:   'Auspex',
@@ -1967,13 +1970,16 @@ async function _refreshToken() {
 }
 
 function _fields() {
+  // #skill-arcana excluded — added after live saves existed; fields restore by DOM
+  // position, and its value is derived on recalc anyway (prof saves via extra.arcana_prof)
   return Array.from(document.querySelectorAll(
-    'input:not([readonly]):not([type=button]):not([type=submit]):not([type=file]):not([type=checkbox]):not(.auth-inp),' +
+    'input:not([readonly]):not([type=button]):not([type=submit]):not([type=file]):not([type=checkbox]):not(.auth-inp):not(#skill-arcana),' +
     'textarea:not(.auth-inp),select:not(#cls-select):not(#sub-select)'
   ));
 }
 function _checkboxes() {
-  return Array.from(document.querySelectorAll('input[type=checkbox]:not(.exp-chk)'));
+  // #skill-arcana-prof excluded for the same positional-save reason as #skill-arcana
+  return Array.from(document.querySelectorAll('input[type=checkbox]:not(.exp-chk):not(#skill-arcana-prof)'));
 }
 function _charName() {
   const el = document.getElementById('char-name');
@@ -2017,6 +2023,7 @@ async function _doSave() {
       var e = document.getElementById('skill-'+sk.id+'-exp');
       return e && e.checked;
     }).map(function(sk) { return sk.id; }),
+    arcana_prof: !!(document.getElementById('skill-arcana-prof') || {}).checked,
     wargear_meta: _wargearMeta,
     ammo_clips: _ammoClips,
     inspiration: _inspiration,
@@ -2226,6 +2233,8 @@ async function _loadSheet(adminOverrideId) {
     const cc = _checkboxes();
     (rows[0].checkboxes || []).forEach((v, i) => { if (cc[i]) cc[i].checked = !!v; });
     const ext = rows[0].extra || {};
+    const arcProf = document.getElementById('skill-arcana-prof');
+    if (arcProf) arcProf.checked = !!ext.arcana_prof;
     const clsSel = document.getElementById('cls-select');
     const subSel = document.getElementById('sub-select');
     const featLvl = document.getElementById('feat-level');
