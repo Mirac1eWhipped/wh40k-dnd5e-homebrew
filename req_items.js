@@ -108,7 +108,7 @@ const REQ_ITEMS = [
   {id:'tool_demolitions', cat:'Tools', name:'Demolitions Kit', wtype:'Proficiency Kit', cost:'125 RP',
    use:'Rig, shape, and disarm explosive charges',
    checks:'INT checks to rig breaching charges, shape a blast, calculate safe distances, and set timed or triggered detonations; DEX checks to disarm enemy explosives and traps.',
-   notes:'Does not grant proficiency with explosive weapons — hurling grenades under fire is combat training, not engineering. Without proficiency, disarm attempts are made at disadvantage, and failing by 5 or more triggers the device.',
+   notes:'Does not grant proficiency with explosive weapons — hurling grenades under fire is combat training, not engineering. Without proficiency, disarm attempts are made at disadvantage, and failing by 5 or more triggers the device. Imperial Fists operatives receive this proficiency through their Siege Masters heritage.',
    lore:'Det-cord spools, shaped-charge frames, dead-man switches, and a well-thumbed tables-book of overpressure calculations. Any fool can make a wall explode. The demolitionist decides which way it falls.'},
   {id:'tool_vox', cat:'Tools', name:"Vox-Operator's Kit", wtype:'Proficiency Kit', cost:'100 RP',
    use:'Encrypt, intercept, jam, and boost vox traffic',
