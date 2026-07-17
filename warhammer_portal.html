@@ -596,117 +596,7 @@
       margin: 0 auto;
     }
 
-    /* ─── SEARCH BAR ───────────────────────────────────────────────────── */
-    .search-wrap {
-      background: rgba(8,10,12,0.97);
-      border-bottom: 1px solid var(--border);
-      padding: 10px 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-    }
-    .search-input-el {
-      width: 100%;
-      max-width: 560px;
-      background: var(--bg3);
-      border: 1px solid var(--border2);
-      color: var(--text);
-      font-family: 'Cinzel', serif;
-      font-size: 12px;
-      letter-spacing: 2px;
-      padding: 9px 16px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .search-input-el::placeholder { color: var(--text-dim); }
-    .search-input-el:focus { border-color: var(--silver-dim); }
 
-    /* ─── LINK CARD GRID ────────────────────────────────────────────────── */
-    .link-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-
-    .link-card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-top: 3px solid var(--border2);
-      padding: 20px 22px 18px;
-      text-decoration: none;
-      color: inherit;
-      display: flex;
-      flex-direction: column;
-      transition: border-color 0.2s, background 0.2s;
-      cursor: pointer;
-    }
-    .link-card:hover { background: #111318; }
-    .link-card:hover .lc-title { color: var(--gold-light); }
-
-    .lc-icon  { display: block; width: 38px; height: 38px; margin-bottom: 12px; }
-    .lc-icon svg { display: block; width: 100%; height: 100%; }
-
-    .lc-title {
-      font-family: 'Cinzel', serif;
-      font-size: 14px;
-      font-weight: 600;
-      color: #dde8f8;
-      letter-spacing: 1px;
-      margin-bottom: 5px;
-      transition: color 0.2s;
-    }
-    .lc-meta {
-      font-family: 'Cinzel', serif;
-      font-size: 12px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 10px;
-    }
-    .lc-desc {
-      font-size: 14px;
-      color: var(--text);
-      line-height: 1.55;
-      flex: 1;
-      margin-bottom: 14px;
-    }
-    .lc-cta {
-      font-family: 'Cinzel', serif;
-      font-size: 12px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      color: var(--silver-dim);
-      border-top: 1px solid var(--border);
-      padding-top: 10px;
-      transition: color 0.2s;
-    }
-    .link-card:hover .lc-cta { color: var(--silver); }
-
-    /* Accent top-border colours */
-    .ac-gold   { border-top-color: var(--gold); }
-    .ac-blue   { border-top-color: #4a7ec0; }
-    .ac-red    { border-top-color: var(--red-bright); }
-    .ac-green  { border-top-color: #27ae60; }
-    .ac-purple { border-top-color: #7a4ea8; }
-    .ac-teal   { border-top-color: #2a9898; }
-    .ac-silver { border-top-color: var(--silver); }
-    .ac-orange { border-top-color: #c06030; }
-    .ac-bone   { border-top-color: #c8b870; }
-
-    /* ─── SEARCH NO RESULTS ─────────────────────────────────────────────── */
-    .no-results-msg {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-dim);
-      font-family: 'Cinzel', serif;
-      font-size: 12px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      border: 1px dashed var(--border2);
-      background: var(--panel);
-    }
 
     /* ─── SCROLLBAR ────────────────────────────────────────────────────── */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -789,88 +679,6 @@
     .add-create-btn { background: linear-gradient(135deg, #1e2c44, #141720); border: 1px solid var(--gold-dim); color: var(--gold); font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 2px; padding: 8px 18px; cursor: pointer; }
     .add-create-btn:hover { border-color: var(--gold); color: var(--gold-light); }
     /* ─── Sheet iframe overlay (retired — sheets now open in new tab) ─── */
-    /* ─── COMBAT TRACKER ────────────────────────────────────────────────── */
-    .combat-toolbar { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; padding: 12px 18px; background: #060809; border: 1px solid var(--border); flex-wrap: wrap; }
-    .combat-round-wrap { display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 48px; }
-    .combat-round-label { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase; }
-    .combat-round-num { font-family: 'Cinzel', serif; font-size: 22px; font-weight: 700; color: var(--gold); line-height: 1; }
-    .combat-divider { width: 1px; height: 32px; background: var(--border); }
-    .combat-btn { background: transparent; border: 1px solid var(--border2); color: var(--silver-dim); font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 2px; padding: 7px 16px; cursor: pointer; transition: all 0.2s; text-transform: uppercase; white-space: nowrap; }
-    .combat-btn:hover { border-color: var(--gold-dim); color: var(--gold); }
-    .combat-btn.primary { border-color: var(--gold-dim); color: var(--gold); }
-    .combat-btn.primary:hover { background: rgba(212,160,48,0.07); }
-    .combat-btn.danger { border-color: rgba(239,68,68,0.35); color: #f87171; }
-    .combat-btn.danger:hover { background: rgba(239,68,68,0.07); }
-    .combat-spacer { flex: 1; }
-    .combat-turn-label { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 1px; color: var(--silver-dim); }
-    .combat-turn-name { font-family: 'Cinzel', serif; font-size: 12px; color: var(--gold); letter-spacing: 1px; }
-    .combat-list { display: flex; flex-direction: column; gap: 3px; margin-bottom: 16px; min-height: 60px; }
-    .combat-empty-msg { padding: 40px 20px; text-align: center; color: var(--text-dim); font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 3px; border: 1px dashed var(--border); }
-    .combatant-row { display: grid; grid-template-columns: 46px 1fr 140px 50px 80px; gap: 12px; align-items: center; padding: 10px 14px; border: 1px solid var(--border); background: var(--panel); transition: all 0.15s; }
-    .combatant-row.active-turn { border-color: var(--gold-dim); background: rgba(212,160,48,0.04); box-shadow: inset 3px 0 0 var(--gold-dim); }
-    .combatant-row.is-dead { opacity: 0.35; }
-    .combatant-init-box { display: flex; flex-direction: column; align-items: center; }
-    .combatant-init { font-family: 'Cinzel', serif; font-size: 20px; font-weight: 700; color: var(--gold-dim); line-height: 1; }
-    .combatant-init-lbl { font-family: 'Cinzel', serif; font-size: 7px; letter-spacing: 1px; color: var(--text-dim); text-transform: uppercase; }
-    .combatant-name-row { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
-    .combatant-name { font-family: 'Cinzel', serif; font-size: 12px; font-weight: 700; color: var(--text); letter-spacing: 0.5px; }
-    .combatant-type-badge { font-family: 'Cinzel', serif; font-size: 7px; letter-spacing: 1px; padding: 1px 6px; text-transform: uppercase; }
-    .badge-player-ct { background: rgba(59,130,246,0.12); color: #7db8f0; border: 1px solid rgba(59,130,246,0.3); }
-    .badge-enemy-ct  { background: rgba(239,68,68,0.12);  color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
-    .badge-npc-ct    { background: rgba(107,114,128,0.12);color: #9ca3af; border: 1px solid rgba(107,114,128,0.3); }
-    .combatant-conds { display: flex; flex-wrap: wrap; gap: 4px; min-height: 16px; }
-    .cond-chip { font-family: 'Cinzel', serif; font-size: 7px; letter-spacing: 1px; padding: 2px 6px; border: 1px solid rgba(239,68,68,0.4); color: #f87171; background: rgba(239,68,68,0.07); cursor: pointer; text-transform: uppercase; }
-    .cond-chip:hover { background: rgba(239,68,68,0.18); }
-    .combatant-hp-block { display: flex; flex-direction: column; gap: 4px; }
-    .hp-text { font-family: 'Cinzel', serif; font-size: 12px; color: var(--silver); letter-spacing: 1px; text-align: center; }
-    .hp-bar-track { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 2px; }
-    .hp-bar-fill { height: 100%; border-radius: 2px; transition: width 0.3s, background 0.3s; }
-    .hp-controls { display: flex; gap: 4px; justify-content: center; }
-    .hp-btn { background: transparent; border: 1px solid var(--border); color: var(--silver-dim); font-family: monospace; font-size: 12px; width: 22px; height: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
-    .hp-btn:hover { border-color: var(--border2); color: var(--silver); }
-    .combatant-ac-block { text-align: center; }
-    .combatant-ac { font-family: 'Cinzel', serif; font-size: 18px; font-weight: 700; color: var(--silver); line-height: 1; }
-    .combatant-ac-lbl { font-family: 'Cinzel', serif; font-size: 7px; letter-spacing: 1px; color: var(--text-dim); text-transform: uppercase; }
-    .combatant-btns { display: flex; gap: 5px; align-items: center; justify-content: flex-end; }
-    .c-btn { background: transparent; border: 1px solid var(--border); color: var(--text-dim); font-size: 12px; width: 26px; height: 26px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; flex-shrink: 0; }
-    .c-btn:hover { border-color: var(--border2); color: var(--silver); }
-    .c-btn.remove:hover { border-color: rgba(239,68,68,0.5); color: #f87171; }
-    /* Add form */
-    .combat-add-panel { background: #060809; border: 1px solid var(--border); padding: 18px 20px; margin-bottom: 16px; display: none; }
-    .combat-add-panel.open { display: block; }
-    .combat-add-title { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 3px; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-    .combat-form-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto; gap: 10px; align-items: end; }
-    .c-field label { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 2px; color: var(--silver-dim); text-transform: uppercase; display: block; margin-bottom: 4px; }
-    .c-field input, .c-field select { background: #0b0e14; border: 1px solid var(--border); color: var(--text); font-family: 'Cinzel', serif; font-size: 12px; padding: 7px 10px; outline: none; width: 100%; box-sizing: border-box; }
-    .c-field input:focus, .c-field select:focus { border-color: var(--gold-dim); }
-    .c-field select option { background: #0b0e14; }
-    /* Condition picker */
-    #cond-picker-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.82); z-index: 970; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.15s; }
-    #cond-picker-overlay.open { opacity: 1; pointer-events: all; }
-    .cond-picker-box { background: #0b0e14; border: 1px solid var(--border2); border-top: 2px solid var(--gold-dim); padding: 22px; width: 380px; max-width: 95vw; }
-    .cond-picker-title { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 3px; color: var(--gold-dim); text-transform: uppercase; margin-bottom: 14px; }
-    .cond-picker-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
-    .cond-pick-btn { background: transparent; border: 1px solid var(--border); color: var(--silver-dim); font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 1px; padding: 7px 6px; cursor: pointer; text-transform: uppercase; transition: all 0.15s; text-align: center; }
-    .cond-pick-btn:hover { border-color: #f87171; color: #f87171; }
-    .cond-pick-btn.on { border-color: #f87171; color: #f87171; background: rgba(239,68,68,0.1); }
-    /* Enemy info modal */
-    #enemy-info-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 960; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.2s; padding: 20px; }
-    #enemy-info-overlay.open { opacity: 1; pointer-events: all; }
-    #enemy-info-modal { background: #0b0e14; border: 1px solid var(--border2); border-top: 3px solid #f87171; width: 560px; max-width: 95vw; max-height: 88vh; overflow-y: auto; padding: 28px; animation: reqModalIn 0.2s ease; }
-    .ei-name { font-family: 'Cinzel', serif; font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-    .ei-type { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 2px; color: var(--silver-dim); text-transform: uppercase; margin-bottom: 18px; }
-    .ei-stat-row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 18px; }
-    .ei-stat { background: #0b0e14; padding: 10px 6px; text-align: center; }
-    .ei-stat-val { font-family: 'Cinzel', serif; font-size: 16px; font-weight: 700; color: var(--text); }
-    .ei-stat-mod { font-family: 'Cinzel', serif; font-size: 12px; color: var(--silver-dim); }
-    .ei-stat-lbl { font-family: 'Cinzel', serif; font-size: 7px; letter-spacing: 1px; color: var(--text-dim); text-transform: uppercase; margin-top: 2px; }
-    .ei-section { margin-bottom: 14px; }
-    .ei-section-title { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 2px; color: var(--gold-dim); text-transform: uppercase; border-bottom: 1px solid var(--border); padding-bottom: 5px; margin-bottom: 8px; }
-    .ei-trait { font-family: 'Crimson Text', serif; font-size: 14px; color: var(--text-dim); line-height: 1.65; margin-bottom: 6px; }
-    .ei-trait strong { color: var(--silver); }
-    .ei-close-btn { position: sticky; float: right; top: 0; background: transparent; border: 1px solid var(--border); color: var(--silver-dim); font-size: 14px; width: 28px; height: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; margin-left: auto; }
-    .ei-close-btn:hover { border-color: #f87171; color: #f87171; }
-  
     /* ── Portal auth bar ── */
     #portal-auth-bar{position:fixed;top:0;left:0;right:0;height:36px;background:#040609;border-bottom:1px solid #1a2535;display:flex;align-items:center;padding:0 16px;gap:10px;z-index:9999;font-family:'Cinzel',serif;}
     #portal-auth-bar .pab-label{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#8a9bb5;flex:1;}
@@ -943,18 +751,11 @@
     <button class="nav-btn" onclick="showSection('missions', this)">Mission Briefings</button>
     <button class="nav-btn" onclick="showSection('maps', this)">Sector Maps</button>
     <button class="nav-btn" onclick="showSection('killteam', this)">Kill Team</button>
-    <button class="nav-btn" onclick="showSection('combat', this)">Combat</button>
     <a class="nav-btn" href="gm_dashboard.html" style="text-decoration:none;color:var(--silver-dim);border-bottom:1px solid var(--gold-dim);" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--silver-dim)'">GM Dashboard &#8599;</a>
     <a class="nav-btn" href="general_portal.html" style="text-decoration:none;color:var(--silver-dim);border-bottom:1px solid var(--gold-dim);" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--silver-dim)'">Inquisitorium &#8599;</a>
   </div>
 </nav>
 
-<!-- ════════════════════ SEARCH BAR ════════════════════ -->
-<div class="search-wrap">
-  <input class="search-input-el" id="search-input" type="text"
-    placeholder="++ Search Campaign Records ++"
-    oninput="handleSearch(this.value)" />
-</div>
 
 <!-- ════════════════════ MAIN CONTENT ════════════════════ -->
 <main>
@@ -962,12 +763,8 @@
   <!-- ── CAMPAIGN STATS STRIP ── -->
   <div class="status-strip">
     <div class="status-stat">
-      <div class="status-stat-num" id="stat-marines">—</div>
-      <div class="status-stat-label">Kill Team Strength</div>
-    </div>
-    <div class="status-stat">
-      <div class="status-stat-num">0</div>
-      <div class="status-stat-label">Missions Deployed</div>
+      <div class="status-stat-num" style="color: var(--gold);">MATARAS II</div>
+      <div class="status-stat-label">Current Deployment</div>
     </div>
     <div class="status-stat">
       <div class="status-stat-num">1</div>
@@ -1750,73 +1547,6 @@
     </div>
   </div>
 
-  <section id="combat" class="section">
-    <div class="section-header">
-      <div class="section-eyebrow">++ Tactical Operations — Encounter Management ++</div>
-      <h2 class="section-title">Combat Tracker</h2>
-      <p class="section-sub">Track initiative order, HP, AC, and conditions for every combatant in the encounter. Click an enemy name to view their stat block.</p>
-    </div>
-    <div class="combat-toolbar">
-      <div class="combat-round-wrap">
-        <div class="combat-round-label">Round</div>
-        <div class="combat-round-num" id="combat-round-num">1</div>
-      </div>
-      <div class="combat-divider"></div>
-      <button class="combat-btn" onclick="combatPrev()">&#8592; Prev</button>
-      <button class="combat-btn primary" onclick="combatNext()">Next Turn &#8594;</button>
-      <div class="combat-divider"></div>
-      <div>
-        <div class="combat-turn-label">Active</div>
-        <div class="combat-turn-name" id="combat-active-name">—</div>
-      </div>
-      <div class="combat-spacer"></div>
-      <button class="combat-btn" onclick="combatToggleAdd()">+ Add Combatant</button>
-      <button class="combat-btn danger" onclick="combatReset()">Reset</button>
-    </div>
-
-    <div class="combat-add-panel" id="combat-add-panel">
-      <div class="combat-add-title">++ Add Combatant ++</div>
-      <div class="combat-form-row">
-        <div class="c-field"><label>Name</label><input id="ca-name" type="text" placeholder="Operative / Enemy name"></div>
-        <div class="c-field"><label>Type</label><select id="ca-type"><option value="player">Player</option><option value="enemy">Enemy</option><option value="npc">NPC</option></select></div>
-        <div class="c-field"><label>Initiative</label><input id="ca-init" type="number" placeholder="0" min="0" max="99"></div>
-        <div class="c-field"><label>Max HP</label><input id="ca-hp" type="number" placeholder="0" min="1"></div>
-        <div class="c-field"><label>AC</label><input id="ca-ac" type="number" placeholder="0" min="1"></div>
-        <div class="c-field"><label>&nbsp;</label><button class="combat-btn primary" onclick="combatAddCombatant()" style="width:100%;padding:7px 10px;">Add</button></div>
-      </div>
-    </div>
-
-    <div class="combat-list" id="combat-list">
-      <div class="combat-empty-msg">No combatants. Add operatives and enemies above to begin the encounter.</div>
-    </div>
-
-    <!-- Condition Picker -->
-    <div id="cond-picker-overlay" onclick="if(event.target===this)combatCloseCondPicker()">
-      <div class="cond-picker-box">
-        <div class="cond-picker-title">++ Toggle Conditions ++</div>
-        <div class="cond-picker-grid" id="cond-picker-grid"></div>
-        <button class="combat-btn" style="width:100%" onclick="combatCloseCondPicker()">Close</button>
-      </div>
-    </div>
-
-    <!-- Enemy Info Modal -->
-    <div id="enemy-info-overlay" onclick="if(event.target===this)combatCloseEnemyInfo()">
-      <div id="enemy-info-modal">
-        <button class="ei-close-btn" onclick="combatCloseEnemyInfo()">&#x2715;</button>
-        <div id="enemy-info-body"></div>
-      </div>
-    </div>
-
-
-  <section id="search-results" class="section">
-    <div class="section-heading">
-      <h2>Search Results</h2>
-      <div class="section-heading-line"></div>
-    </div>
-    <div id="search-results-grid" class="link-grid"></div>
-    <div id="no-results-msg" class="no-results-msg" style="display:none;">++ No Records Found — Refine Search Query ++</div>
-  </section>
-
 </main>
 
 <!-- ════════════════════ FOOTER ════════════════════ -->
@@ -1826,54 +1556,12 @@
 
 <!-- ════════════════════ JAVASCRIPT ════════════════════ -->
 <script>
-  let _lastSectionId = 'lore';
-  let _lastBtn = null;
-
   function showSection(id, btn) {
-    // Clear search when switching tabs
-    const si = document.getElementById('search-input');
-    if (si) si.value = '';
-    document.getElementById('search-results').classList.remove('active');
-
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     btn.classList.add('active');
-    _lastSectionId = id;
-    _lastBtn = btn;
     window.scrollTo(0, 0);
-  }
-
-  function handleSearch(val) {
-    const q = val.trim().toLowerCase();
-    const resultsSection = document.getElementById('search-results');
-
-    if (!q) {
-      resultsSection.classList.remove('active');
-      document.getElementById(_lastSectionId).classList.add('active');
-      if (_lastBtn) _lastBtn.classList.add('active');
-      return;
-    }
-
-    const cards = document.querySelectorAll('#killteam .link-card, #lore .link-card');
-    const container = resultsSection.querySelector('.link-grid');
-    if (container) {
-      container.innerHTML = '';
-      let found = 0;
-      cards.forEach(card => {
-        if (card.textContent.toLowerCase().includes(q)) {
-          container.appendChild(card.cloneNode(true));
-          found++;
-        }
-      });
-      if (found === 0) {
-        container.innerHTML = '<p style="color:var(--text-dim);padding:20px 0;">No results found.</p>';
-      }
-    }
-
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    resultsSection.classList.add('active');
   }
 
 
@@ -2247,204 +1935,6 @@
     renderRoster();
     _syncRosterFromCloud();
     if (_portalLoggedIn()) _startSyncPolling();
-  });
-
-  /* ════════════════════════════════════════════
-     COMBAT TRACKER
-  ════════════════════════════════════════════ */
-  let COMBATANTS = [];
-  let _combatRound = 1;
-  let _combatActiveIdx = 0;
-  let _condTargetId = null;
-
-  const ALL_CONDITIONS = ['Blinded','Charmed','Deafened','Frightened','Grappled','Incapacitated',
-    'Invisible','Paralyzed','Pinned','Poisoned','Prone','Restrained','Stunned','Unconscious'];
-
-  function combatRender() {
-    const list = document.getElementById('combat-list');
-    const sorted = [...COMBATANTS].sort((a,b) => b.initiative - a.initiative);
-    document.getElementById('combat-round-num').textContent = _combatRound;
-    if (!sorted.length) {
-      list.innerHTML = '<div class="combat-empty-msg">No combatants. Add operatives and enemies above to begin the encounter.</div>';
-      document.getElementById('combat-active-name').textContent = '—';
-      return;
-    }
-    const activeId = sorted[_combatActiveIdx % sorted.length]?.id;
-    document.getElementById('combat-active-name').textContent = sorted[_combatActiveIdx % sorted.length]?.name || '—';
-    list.innerHTML = sorted.map((c, idx) => {
-      const pct = Math.max(0, Math.min(100, (c.hp / c.maxHp) * 100));
-      const hpColor = pct > 50 ? '#3c8a4a' : pct > 25 ? '#c88018' : '#e53e3e';
-      const isActive = c.id === activeId;
-      const isDead = c.hp <= 0;
-      const badgeClass = c.type === 'player' ? 'badge-player-ct' : c.type === 'enemy' ? 'badge-enemy-ct' : 'badge-npc-ct';
-      const nameClickable = c.type === 'enemy' ? `style="cursor:pointer;text-decoration:underline;text-decoration-color:var(--border2)" onclick="combatOpenEnemyInfo('${c.id}')"` : '';
-      const condHtml = c.conditions.map(cd => `<span class="cond-chip" onclick="combatToggleCond('${c.id}','${cd}')" title="Click to remove">${cd}</span>`).join('');
-      return `<div class="combatant-row${isActive ? ' active-turn' : ''}${isDead ? ' is-dead' : ''}">
-        <div class="combatant-init-box">
-          <div class="combatant-init">${c.initiative}</div>
-          <div class="combatant-init-lbl">Init</div>
-        </div>
-        <div>
-          <div class="combatant-name-row">
-            <span class="combatant-name" ${nameClickable}>${c.name}</span>
-            <span class="combatant-type-badge ${badgeClass}">${c.type}</span>
-          </div>
-          <div class="combatant-conds">${condHtml}
-            <span class="cond-chip" style="border-color:var(--border2);color:var(--text-dim)" onclick="combatOpenCondPicker('${c.id}')">+ cond</span>
-          </div>
-        </div>
-        <div class="combatant-hp-block">
-          <div class="hp-text">${c.hp} / ${c.maxHp}</div>
-          <div class="hp-bar-track"><div class="hp-bar-fill" style="width:${pct}%;background:${hpColor}"></div></div>
-          <div class="hp-controls">
-            <button class="hp-btn" onclick="combatAdjHP('${c.id}',-5)" title="-5">-5</button>
-            <button class="hp-btn" onclick="combatAdjHP('${c.id}',-1)" title="-1">-</button>
-            <button class="hp-btn" onclick="combatAdjHP('${c.id}',1)"  title="+1">+</button>
-            <button class="hp-btn" onclick="combatAdjHP('${c.id}',5)"  title="+5">+5</button>
-          </div>
-        </div>
-        <div class="combatant-ac-block">
-          <div class="combatant-ac">${c.ac}</div>
-          <div class="combatant-ac-lbl">AC</div>
-        </div>
-        <div class="combatant-btns">
-          <button class="c-btn remove" onclick="combatRemove('${c.id}')" title="Remove">&#x2715;</button>
-        </div>
-      </div>`;
-    }).join('');
-  }
-
-  function combatAddCombatant() {
-    const name = document.getElementById('ca-name').value.trim();
-    const type = document.getElementById('ca-type').value;
-    const init = parseInt(document.getElementById('ca-init').value) || 0;
-    const hp   = parseInt(document.getElementById('ca-hp').value)   || 1;
-    const ac   = parseInt(document.getElementById('ca-ac').value)   || 10;
-    if (!name) { document.getElementById('ca-name').focus(); return; }
-    COMBATANTS.push({ id: 'c_' + Date.now(), name, type, initiative: init, hp, maxHp: hp, ac, conditions: [] });
-    document.getElementById('ca-name').value = '';
-    document.getElementById('ca-init').value = '';
-    document.getElementById('ca-hp').value   = '';
-    document.getElementById('ca-ac').value   = '';
-    combatRender();
-  }
-
-  function combatNext() {
-    const sorted = [...COMBATANTS].sort((a,b) => b.initiative - a.initiative);
-    if (!sorted.length) return;
-    _combatActiveIdx++;
-    if (_combatActiveIdx >= sorted.length) { _combatActiveIdx = 0; _combatRound++; }
-    combatRender();
-  }
-
-  function combatPrev() {
-    const sorted = [...COMBATANTS].sort((a,b) => b.initiative - a.initiative);
-    if (!sorted.length) return;
-    _combatActiveIdx--;
-    if (_combatActiveIdx < 0) { _combatActiveIdx = Math.max(0, sorted.length - 1); if (_combatRound > 1) _combatRound--; }
-    combatRender();
-  }
-
-  function combatReset() {
-    if (!confirm('Reset the encounter? This will clear all combatants and return to Round 1.')) return;
-    COMBATANTS = []; _combatRound = 1; _combatActiveIdx = 0;
-    combatRender();
-  }
-
-  function combatAdjHP(id, delta) {
-    const c = COMBATANTS.find(x => x.id === id);
-    if (!c) return;
-    c.hp = Math.min(c.maxHp, Math.max(0, c.hp + delta));
-    combatRender();
-  }
-
-  function combatRemove(id) {
-    const sorted = [...COMBATANTS].sort((a,b) => b.initiative - a.initiative);
-    const removedIdx = sorted.findIndex(c => c.id === id);
-    COMBATANTS = COMBATANTS.filter(c => c.id !== id);
-    if (_combatActiveIdx >= removedIdx && _combatActiveIdx > 0) _combatActiveIdx--;
-    combatRender();
-  }
-
-  function combatToggleCond(id, cond) {
-    const c = COMBATANTS.find(x => x.id === id);
-    if (!c) return;
-    const idx = c.conditions.indexOf(cond);
-    if (idx >= 0) c.conditions.splice(idx, 1); else c.conditions.push(cond);
-    combatRender();
-    if (_condTargetId) combatRefreshCondPicker(id);
-  }
-
-  function combatToggleAdd() {
-    const panel = document.getElementById('combat-add-panel');
-    panel.classList.toggle('open');
-    if (panel.classList.contains('open')) document.getElementById('ca-name').focus();
-  }
-
-  function combatOpenCondPicker(id) {
-    _condTargetId = id;
-    combatRefreshCondPicker(id);
-    document.getElementById('cond-picker-overlay').classList.add('open');
-  }
-
-  function combatRefreshCondPicker(id) {
-    const c = COMBATANTS.find(x => x.id === id);
-    if (!c) return;
-    const grid = document.getElementById('cond-picker-grid');
-    grid.innerHTML = ALL_CONDITIONS.map(cd => {
-      const on = c.conditions.includes(cd);
-      return `<button class="cond-pick-btn${on ? ' on' : ''}" onclick="combatToggleCond('${id}','${cd}')">${cd}</button>`;
-    }).join('');
-  }
-
-  function combatCloseCondPicker() {
-    _condTargetId = null;
-    document.getElementById('cond-picker-overlay').classList.remove('open');
-  }
-
-  function combatOpenEnemyInfo(id) {
-    const c = COMBATANTS.find(x => x.id === id);
-    if (!c) return;
-    const body = document.getElementById('enemy-info-body');
-    const stats = c.stats || {};
-    const mkStat = (lbl, val) => `<div class="ei-stat"><div class="ei-stat-val">${val || '—'}</div><div class="ei-stat-mod">${val ? '('+Math.floor((parseInt(val)-10)/2 >= 0 ? '+' : '')+Math.floor((parseInt(val)-10)/2)+')' : ''}</div><div class="ei-stat-lbl">${lbl}</div></div>`;
-    body.innerHTML = `
-      <div class="ei-name">${c.name}</div>
-      <div class="ei-type">${c.type.toUpperCase()} &nbsp;·&nbsp; AC ${c.ac} &nbsp;·&nbsp; HP ${c.hp}/${c.maxHp}</div>
-      <div class="ei-stat-row">
-        ${mkStat('STR',stats.str)}${mkStat('DEX',stats.dex)}${mkStat('CON',stats.con)}
-        ${mkStat('INT',stats.int)}${mkStat('WIS',stats.wis)}${mkStat('CHA',stats.cha)}
-      </div>
-      <div class="ei-section">
-        <div class="ei-section-title">Traits &amp; Actions</div>
-        <div class="ei-trait">${stats.traits || 'No traits recorded. Edit this enemy to add stat block details.'}</div>
-      </div>
-      <div style="margin-top:14px;">
-        <button class="combat-btn" onclick="combatEditEnemyStats('${id}')">Edit Stat Block</button>
-      </div>`;
-    document.getElementById('enemy-info-overlay').classList.add('open');
-  }
-
-  function combatEditEnemyStats(id) {
-    const c = COMBATANTS.find(x => x.id === id);
-    if (!c) return;
-    if (!c.stats) c.stats = {};
-    const s = c.stats;
-    const fields = ['str','dex','con','int','wis','cha'];
-    const vals = fields.map(f => prompt(f.toUpperCase() + ' score:', s[f] || ''));
-    if (vals.every(v => v === null)) return;
-    fields.forEach((f,i) => { if (vals[i] !== null) s[f] = vals[i]; });
-    const traits = prompt('Traits / Actions (text):', s.traits || '');
-    if (traits !== null) s.traits = traits;
-    combatOpenEnemyInfo(id);
-  }
-
-  function combatCloseEnemyInfo() {
-    document.getElementById('enemy-info-overlay').classList.remove('open');
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    combatRender();
   });
 
   /* ══ PORTAL SUPABASE AUTH ══ */

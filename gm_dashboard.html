@@ -106,10 +106,150 @@
     border:1px dashed var(--border2);background:var(--panel);
   }
 
+  /* ── View tabs ── */
+  .view-tabs { display:flex;justify-content:center;margin:0 0 34px;border-bottom:1px solid var(--border); }
+  .view-tab { background:transparent;border:none;border-bottom:2px solid transparent;color:var(--text-dim);font-family:'Cinzel',serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;padding:12px 26px;cursor:pointer;transition:all .2s;margin-bottom:-1px; }
+  .view-tab:hover { color:var(--gold); }
+  .view-tab.active { color:var(--gold);border-bottom-color:var(--gold); }
+  .view { display:none; }
+  .view.active { display:block; }
+
+  /* ── Combat tracker ── */
+  .combat-toolbar { display:flex;align-items:center;gap:14px;margin-bottom:16px;padding:12px 18px;background:var(--panel);border:1px solid var(--border);flex-wrap:wrap; }
+  .combat-round-wrap { display:flex;flex-direction:column;align-items:center;gap:1px;min-width:48px; }
+  .combat-round-label { font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase; }
+  .combat-round-num { font-family:'Cinzel',serif;font-size:22px;font-weight:700;color:var(--gold);line-height:1; }
+  .combat-divider { width:1px;height:32px;background:var(--border2); }
+  .combat-btn { background:transparent;border:1px solid var(--border2);color:var(--silver-dim);font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;padding:7px 16px;cursor:pointer;transition:all .2s;text-transform:uppercase;white-space:nowrap; }
+  .combat-btn:hover { border-color:var(--gold-dim);color:var(--gold); }
+  .combat-btn.primary { border-color:var(--gold-dim);color:var(--gold); }
+  .combat-btn.primary:hover { background:rgba(212,160,48,0.07); }
+  .combat-btn.danger { border-color:rgba(239,68,68,0.35);color:#f87171; }
+  .combat-btn.danger:hover { background:rgba(239,68,68,0.07); }
+  .combat-spacer { flex:1; }
+  .combat-turn-label { font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;color:var(--text-dim);text-transform:uppercase; }
+  .combat-turn-name { font-family:'Cinzel',serif;font-size:13px;color:var(--gold);letter-spacing:1px; }
+  .combat-list { display:flex;flex-direction:column;gap:3px;margin-bottom:16px;min-height:60px; }
+  .combat-empty-msg { padding:40px 20px;text-align:center;color:var(--text-dim);font-family:'Cinzel',serif;font-size:12px;letter-spacing:3px;border:1px dashed var(--border2);background:var(--panel); }
+  .combatant-row { display:grid;grid-template-columns:52px 1fr 150px 50px 40px;gap:12px;align-items:center;padding:10px 14px;border:1px solid var(--border);background:var(--panel);transition:all .15s; }
+  .combatant-row.active-turn { border-color:var(--gold-dim);background:rgba(212,160,48,0.05);box-shadow:inset 3px 0 0 var(--gold-dim); }
+  .combatant-row.is-dead { opacity:0.35; }
+  .combatant-init-box { display:flex;flex-direction:column;align-items:center; }
+  .combatant-init { font-family:'Cinzel',serif;font-size:20px;font-weight:700;color:var(--gold-dim);line-height:1;cursor:pointer;padding:2px 8px;border:1px solid transparent; }
+  .combatant-init:hover { border-color:var(--border2);color:var(--gold); }
+  .combatant-init-lbl { font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;color:var(--text-dim);text-transform:uppercase; }
+  .init-input { width:46px;background:var(--bg);border:1px solid var(--gold-dim);color:var(--gold);font-family:'Cinzel',serif;font-size:16px;font-weight:700;text-align:center;padding:2px;outline:none; }
+  .combatant-name-row { display:flex;align-items:center;gap:8px;margin-bottom:3px;flex-wrap:wrap; }
+  .combatant-name { font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--text);letter-spacing:0.5px; }
+  .combatant-name.has-sheet { cursor:pointer;text-decoration:underline;text-decoration-color:var(--border2);text-underline-offset:3px; }
+  .combatant-name.has-sheet:hover { color:var(--gold); }
+  .combatant-type-badge { font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;padding:1px 6px;text-transform:uppercase; }
+  .badge-player-ct { border:1px solid rgba(90,170,110,0.5);color:#7ec792;background:rgba(90,170,110,0.08); }
+  .badge-enemy-ct  { border:1px solid rgba(239,68,68,0.5);color:#f87171;background:rgba(239,68,68,0.08); }
+  .badge-npc-ct    { border:1px solid rgba(120,150,220,0.5);color:#93aef0;background:rgba(120,150,220,0.08); }
+  .combatant-conds { display:flex;flex-wrap:wrap;gap:4px;min-height:16px; }
+  .cond-chip { font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;padding:2px 6px;border:1px solid rgba(239,68,68,0.4);color:#f87171;background:rgba(239,68,68,0.07);cursor:pointer;text-transform:uppercase; }
+  .cond-chip:hover { background:rgba(239,68,68,0.18); }
+  .cond-chip.add { border-color:var(--border2);color:var(--text-dim); }
+  .combatant-hp-block { display:flex;flex-direction:column;gap:4px; }
+  .hp-text { font-family:'Cinzel',serif;font-size:13px;color:var(--silver);letter-spacing:1px;text-align:center;cursor:pointer;border:1px solid transparent; }
+  .hp-text:hover { border-color:var(--border2); }
+  .hp-input { width:56px;background:var(--bg);border:1px solid var(--gold-dim);color:var(--silver);font-family:'Cinzel',serif;font-size:13px;text-align:center;padding:1px;outline:none; }
+  .hp-bar-track { height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:2px; }
+  .hp-bar-fill { height:100%;border-radius:2px;transition:width .3s,background .3s; }
+  .hp-controls { display:flex;gap:4px;justify-content:center; }
+  .hp-btn { background:transparent;border:1px solid var(--border);color:var(--silver-dim);font-family:monospace;font-size:12px;width:24px;height:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;padding:0; }
+  .hp-btn:hover { border-color:var(--border2);color:var(--silver); }
+  .combatant-ac-block { text-align:center; }
+  .combatant-ac { font-family:'Cinzel',serif;font-size:18px;font-weight:700;color:var(--silver);line-height:1; }
+  .combatant-ac-lbl { font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;color:var(--text-dim);text-transform:uppercase; }
+  .c-remove-btn { background:transparent;border:1px solid var(--border);color:var(--text-dim);width:26px;height:26px;cursor:pointer;font-size:12px;transition:all .15s;justify-self:end; }
+  .c-remove-btn:hover { border-color:rgba(239,68,68,0.5);color:#f87171; }
+  .combat-add-panel { background:var(--panel);border:1px solid var(--border);padding:18px 20px;margin-bottom:16px;display:none; }
+  .combat-add-panel.open { display:block; }
+  .combat-add-title { font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;color:var(--gold-dim);text-transform:uppercase;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border); }
+  .combat-form-row { display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr auto;gap:10px;align-items:end; }
+  .c-field label { display:block;font-family:'Cinzel',serif;font-size:9px;letter-spacing:1.5px;color:var(--text-dim);text-transform:uppercase;margin-bottom:4px; }
+  .c-field input, .c-field select { width:100%;background:var(--bg);border:1px solid var(--border2);color:var(--text);font-family:'Crimson Text',Georgia,serif;font-size:14px;padding:7px 10px;outline:none; }
+  .c-field input:focus, .c-field select:focus { border-color:var(--gold-dim); }
+
+  /* ── Condition picker ── */
+  #cond-picker-overlay { position:fixed;inset:0;background:rgba(8,6,4,0.82);z-index:970;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .15s; }
+  #cond-picker-overlay.open { opacity:1;pointer-events:all; }
+  .cond-picker-box { background:var(--panel);border:1px solid var(--border2);border-top:2px solid var(--gold-dim);padding:22px;width:380px;max-width:95vw; }
+  .cond-picker-title { font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;color:var(--gold-dim);text-transform:uppercase;margin-bottom:14px; }
+  .cond-picker-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px; }
+  .cond-pick-btn { background:transparent;border:1px solid var(--border);color:var(--silver-dim);font-family:'Cinzel',serif;font-size:11px;letter-spacing:1px;padding:7px 6px;cursor:pointer;text-transform:uppercase;transition:all .15s;text-align:center; }
+  .cond-pick-btn:hover { border-color:#f87171;color:#f87171; }
+  .cond-pick-btn.on { border-color:#f87171;color:#f87171;background:rgba(239,68,68,0.1); }
+
+  /* ── Enemy browser ── */
+  #enemy-browser-overlay { position:fixed;inset:0;background:rgba(8,6,4,0.85);z-index:950;display:none;align-items:flex-start;justify-content:center;padding:60px 16px 30px;overflow-y:auto; }
+  #enemy-browser-overlay.open { display:flex; }
+  .eb-box { background:var(--panel);border:1px solid var(--border2);border-top:3px solid var(--gold);width:700px;max-width:100%; }
+  .eb-head { padding:16px 20px;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:center;flex-wrap:wrap; }
+  .eb-title { font-family:'Cinzel',serif;font-size:13px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;flex:1;white-space:nowrap; }
+  .eb-search { background:var(--bg);border:1px solid var(--border2);color:var(--text);font-family:'Crimson Text',Georgia,serif;font-size:14px;padding:7px 12px;outline:none;width:210px; }
+  .eb-search:focus { border-color:var(--gold-dim); }
+  .eb-close { background:none;border:1px solid var(--border2);color:var(--text-dim);width:30px;height:30px;cursor:pointer;font-size:14px;flex-shrink:0; }
+  .eb-close:hover { color:var(--gold);border-color:var(--gold-dim); }
+  .eb-tabs { display:flex;flex-wrap:wrap;gap:6px;padding:12px 20px;border-bottom:1px solid var(--border); }
+  .eb-tab { background:transparent;border:1px solid var(--border2);color:var(--text-dim);font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;padding:5px 12px;cursor:pointer;text-transform:uppercase;transition:all .15s; }
+  .eb-tab.active { border-color:var(--gold-dim);color:var(--gold);background:rgba(212,160,48,0.06); }
+  .eb-list { max-height:52vh;overflow-y:auto;padding:10px 12px; }
+  .eb-row { display:grid;grid-template-columns:1fr auto auto auto;gap:12px;align-items:center;padding:8px 10px;border:1px solid transparent; }
+  .eb-row:hover { border-color:var(--border);background:var(--bg2); }
+  .eb-name { font-family:'Cinzel',serif;font-size:13px;color:var(--silver);cursor:pointer; }
+  .eb-name:hover { color:var(--gold); }
+  .eb-faction { font-size:11px;color:var(--text-dim);letter-spacing:1px;font-family:'Cinzel',serif;text-transform:uppercase; }
+  .eb-meta { font-size:12px;color:var(--text-dim);letter-spacing:.5px;white-space:nowrap; }
+  .eb-cr { font-family:'Cinzel',serif;font-size:10px;color:var(--gold-dim);border:1px solid var(--border2);padding:2px 7px;white-space:nowrap; }
+  .eb-add { background:var(--bg3);border:1px solid var(--gold-dim);color:var(--gold);font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;padding:5px 12px;cursor:pointer;text-transform:uppercase; }
+  .eb-add:hover { border-color:var(--gold);color:var(--gold-light); }
+  .eb-loading { padding:36px 20px;text-align:center;color:var(--text-dim);font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px; }
+
+  /* ── Stat drawer (non-blocking reference panel) ── */
+  #stat-drawer { position:fixed;top:0;right:-540px;width:520px;max-width:96vw;height:100vh;background:#14100a;border-left:1px solid var(--border2);z-index:960;transition:right .25s ease;display:flex;flex-direction:column;box-shadow:-8px 0 30px rgba(0,0,0,0.55); }
+  #stat-drawer.open { right:0; }
+  .sd-head { display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--border2);background:var(--bg2); }
+  .sd-title { font-family:'Cinzel',serif;font-size:13px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;flex:1; }
+  .sd-close { background:none;border:1px solid var(--border2);color:var(--text-dim);width:28px;height:28px;cursor:pointer;font-size:13px;flex-shrink:0; }
+  .sd-close:hover { color:var(--gold);border-color:var(--gold-dim); }
+  .sd-body { overflow-y:auto;padding:18px;flex:1; }
+  .sd-notes { width:100%;min-height:140px;background:var(--bg);border:1px solid var(--border2);color:var(--text);font-family:'Crimson Text',Georgia,serif;font-size:14px;padding:10px 12px;outline:none;resize:vertical; }
+  .sd-notes:focus { border-color:var(--gold-dim); }
+  .sd-notes-lbl { font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;margin:14px 0 6px; }
+
+  /* Bestiary stat block — dark restyle, scoped to the drawer */
+  .sd-body .stat-block { background:var(--panel);border:1px solid var(--gold-dim);border-bottom:4px solid var(--red);border-radius:0 0 4px 4px; }
+  .sd-body .stat-block-header { background:var(--red);padding:10px 14px 8px;display:flex;justify-content:space-between;align-items:flex-start; }
+  .sd-body .creature-name { font-family:'Cinzel',serif;font-size:18px;font-weight:700;margin:0;color:#f0e6cc; }
+  .sd-body .creature-type { font-style:italic;font-size:12px;margin:2px 0 0;color:#d8c8a8; }
+  .sd-body .cr-badge { background:var(--gold);color:#1a0a00;border-radius:4px;padding:2px 9px;font-size:12px;font-weight:bold;white-space:nowrap;margin-top:4px; }
+  .sd-body .stat-body { padding:0 14px 12px; }
+  .sd-body hr.div { border:none;border-top:2px solid var(--gold-dim);margin:8px 0; }
+  .sd-body .top-stats p { margin:3px 0;font-size:14px; }
+  .sd-body .ability-grid { display:flex;justify-content:space-around;text-align:center;background:var(--bg2);border:1px solid var(--gold-dim);border-radius:3px;padding:6px 0;margin:7px 0; }
+  .sd-body .ability-grid .lbl { font-weight:bold;color:var(--gold);text-transform:uppercase;font-size:10px; }
+  .sd-body .ability-grid .val { font-size:15px; }
+  .sd-body .bottom-stats p { margin:2px 0;font-size:13px; }
+  .sd-body h3.section-head { color:var(--gold);font-size:13px;font-family:'Cinzel',serif;letter-spacing:1px;margin:10px 0 4px;border-bottom:1px solid var(--gold-dim);padding-bottom:2px;text-transform:uppercase; }
+  .sd-body .entry { margin:6px 0;font-size:14px;line-height:1.55; }
+  .sd-body .entry-name { font-weight:bold;font-style:italic;color:var(--gold-light); }
+  .sd-body strong { color:var(--silver); }
+
   @media (max-width: 600px) {
     .topbar { padding:10px 14px;gap:10px; }
     .topbar-sub { display:none; }
     .main { padding:28px 14px 60px; }
+    .combatant-row { grid-template-columns:44px 1fr;grid-template-areas:"init name" "hp hp" "ac remove"; }
+    .combatant-row > .combatant-init-box { grid-area:init; }
+    .combatant-row > .combatant-id-block { grid-area:name; }
+    .combatant-row > .combatant-hp-block { grid-area:hp; }
+    .combatant-row > .combatant-ac-block { grid-area:ac;text-align:left; }
+    .combatant-row > .c-remove-btn { grid-area:remove; }
+    .combat-form-row { grid-template-columns:1fr 1fr; }
+    #stat-drawer { width:100vw;max-width:100vw; }
   }
 </style>
 </head>
@@ -143,27 +283,117 @@
 
 <!-- Main -->
 <div class="main">
-  <div class="page-header">
-    <div class="page-eyebrow">++ Ordo Xenos — Deathwatch Strategium — Eyes Only ++</div>
-    <h1 class="page-title">Operative Dossiers</h1>
-    <p class="page-sub">All active operative character sheets. Updates in real time as players save their sheets.</p>
-    <div class="page-divider">
-      <div class="page-divider-line"></div>
-      <div class="page-divider-diamond"></div>
-      <div class="page-divider-line"></div>
+
+  <div class="view-tabs">
+    <button class="view-tab active" id="tab-dossiers" onclick="showView('dossiers')">Operative Dossiers</button>
+    <button class="view-tab" id="tab-combat" onclick="showView('combat')">Combat Tracker</button>
+  </div>
+
+  <!-- ══ VIEW: OPERATIVE DOSSIERS ══ -->
+  <div class="view active" id="view-dossiers">
+    <div class="page-header">
+      <div class="page-eyebrow">++ Ordo Xenos — Deathwatch Strategium — Eyes Only ++</div>
+      <h1 class="page-title">Operative Dossiers</h1>
+      <p class="page-sub">All active operative character sheets. Updates in real time as players save their sheets.</p>
+      <div class="page-divider">
+        <div class="page-divider-line"></div>
+        <div class="page-divider-diamond"></div>
+        <div class="page-divider-line"></div>
+      </div>
+    </div>
+
+    <div class="stats-row" id="stats-row">
+      <div class="stat-chip"><div class="stat-val" id="stat-total">—</div><div class="stat-lbl">Total Operatives</div></div>
+      <div class="stat-chip"><div class="stat-val" id="stat-players">—</div><div class="stat-lbl">Players</div></div>
+      <div class="stat-chip"><div class="stat-val" id="stat-avglvl">—</div><div class="stat-lbl">Average Level</div></div>
+      <div class="stat-chip"><div class="stat-val" id="stat-updated">—</div><div class="stat-lbl">Last Updated</div></div>
+    </div>
+
+    <div class="cards-grid" id="cards-grid">
+      <div class="loading">++ Awaiting Authentication — Stand By ++</div>
     </div>
   </div>
 
-  <div class="stats-row" id="stats-row">
-    <div class="stat-chip"><div class="stat-val" id="stat-total">—</div><div class="stat-lbl">Total Operatives</div></div>
-    <div class="stat-chip"><div class="stat-val" id="stat-players">—</div><div class="stat-lbl">Players</div></div>
-    <div class="stat-chip"><div class="stat-val" id="stat-avglvl">—</div><div class="stat-lbl">Average Level</div></div>
-    <div class="stat-chip"><div class="stat-val" id="stat-updated">—</div><div class="stat-lbl">Last Updated</div></div>
-  </div>
+  <!-- ══ VIEW: COMBAT TRACKER ══ -->
+  <div class="view" id="view-combat">
+    <div class="page-header">
+      <div class="page-eyebrow">++ Tactical Operations — Encounter Management ++</div>
+      <h1 class="page-title">Combat Tracker</h1>
+      <p class="page-sub">Initiative, HP, AC, and conditions. Click an enemy's name for its full stat block — click initiative or HP numbers to edit them directly.</p>
+      <div class="page-divider">
+        <div class="page-divider-line"></div>
+        <div class="page-divider-diamond"></div>
+        <div class="page-divider-line"></div>
+      </div>
+    </div>
 
-  <div class="cards-grid" id="cards-grid">
-    <div class="loading">++ Awaiting Authentication — Stand By ++</div>
+    <div class="combat-toolbar">
+      <div class="combat-round-wrap">
+        <div class="combat-round-label">Round</div>
+        <div class="combat-round-num" id="combat-round-num">1</div>
+      </div>
+      <div class="combat-divider"></div>
+      <button class="combat-btn" onclick="combatPrev()">&#8592; Prev</button>
+      <button class="combat-btn primary" onclick="combatNext()">Next Turn &#8594;</button>
+      <div class="combat-divider"></div>
+      <div>
+        <div class="combat-turn-label">Active</div>
+        <div class="combat-turn-name" id="combat-active-name">—</div>
+      </div>
+      <div class="combat-spacer"></div>
+      <button class="combat-btn primary" onclick="combatImportKillTeam(this)">&#10018; Import Kill Team</button>
+      <button class="combat-btn primary" onclick="openEnemyBrowser()">&#9760; Add Enemy</button>
+      <button class="combat-btn" onclick="combatToggleAdd()">+ Custom</button>
+      <button class="combat-btn danger" onclick="combatReset()">Reset</button>
+    </div>
+
+    <div class="combat-add-panel" id="combat-add-panel">
+      <div class="combat-add-title">++ Add Custom Combatant ++</div>
+      <div class="combat-form-row">
+        <div class="c-field"><label>Name</label><input id="ca-name" type="text" placeholder="Operative / Enemy name"></div>
+        <div class="c-field"><label>Type</label><select id="ca-type"><option value="player">Player</option><option value="enemy" selected>Enemy</option><option value="npc">NPC</option></select></div>
+        <div class="c-field"><label>Initiative</label><input id="ca-init" type="number" placeholder="0" min="0" max="99"></div>
+        <div class="c-field"><label>Max HP</label><input id="ca-hp" type="number" placeholder="0" min="1"></div>
+        <div class="c-field"><label>AC</label><input id="ca-ac" type="number" placeholder="0" min="1"></div>
+        <div class="c-field"><label>&nbsp;</label><button class="combat-btn primary" onclick="combatAddCombatant()" style="width:100%;padding:8px 10px;">Add</button></div>
+      </div>
+    </div>
+
+    <div class="combat-list" id="combat-list"></div>
   </div>
+</div>
+
+<!-- ══ ENEMY BROWSER ══ -->
+<div id="enemy-browser-overlay" onclick="if(event.target===this)closeEnemyBrowser()">
+  <div class="eb-box">
+    <div class="eb-head">
+      <div class="eb-title">&#9760; Threat Archives</div>
+      <input class="eb-search" id="eb-search" type="text" placeholder="Search designation…" oninput="renderEnemyBrowser()">
+      <button class="eb-close" onclick="closeEnemyBrowser()">&#x2715;</button>
+    </div>
+    <div class="eb-tabs" id="eb-tabs"></div>
+    <div class="eb-list" id="eb-list">
+      <div class="eb-loading">++ Accessing Bestiary Records ++</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONDITION PICKER ══ -->
+<div id="cond-picker-overlay" onclick="if(event.target===this)combatCloseCondPicker()">
+  <div class="cond-picker-box">
+    <div class="cond-picker-title">++ Toggle Conditions ++</div>
+    <div class="cond-picker-grid" id="cond-picker-grid"></div>
+    <button class="combat-btn" style="width:100%" onclick="combatCloseCondPicker()">Close</button>
+  </div>
+</div>
+
+<!-- ══ STAT REFERENCE DRAWER ══ -->
+<div id="stat-drawer">
+  <div class="sd-head">
+    <div class="sd-title" id="sd-title">Stat Block</div>
+    <button class="sd-close" onclick="closeStatDrawer()">&#x2715;</button>
+  </div>
+  <div class="sd-body" id="sd-body"></div>
 </div>
 
 <script>
@@ -312,6 +542,414 @@ function _renderCards(rows) {
   }).join('');
 }
 
+/* ════════════════════════════════════════════
+   VIEW TABS
+════════════════════════════════════════════ */
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  localStorage.setItem('gm_dash_view', name);
+}
+
+/* ════════════════════════════════════════════
+   COMBAT TRACKER — persistent encounter state
+════════════════════════════════════════════ */
+const COMBAT_KEY = 'gm_combat_v1';
+let combat = { combatants: [], round: 1, activeIdx: 0 };
+let _condTargetId = null;
+let _editingInitId = null;
+let _editingHpId = null;
+
+const ALL_CONDITIONS = ['Blinded','Charmed','Deafened','Frightened','Grappled','Incapacitated',
+  'Invisible','Paralyzed','Pinned','Poisoned','Prone','Restrained','Stunned','Unconscious'];
+
+function _cid() { return 'c_' + Date.now() + '_' + Math.random().toString(36).slice(2,7); }
+
+function combatLoad() {
+  try {
+    const d = JSON.parse(localStorage.getItem(COMBAT_KEY));
+    if (d && Array.isArray(d.combatants)) combat = d;
+  } catch(e) {}
+}
+function combatSave() { localStorage.setItem(COMBAT_KEY, JSON.stringify(combat)); }
+
+function _sortedCombatants() { return [...combat.combatants].sort((a,b) => b.initiative - a.initiative); }
+
+function combatRender() {
+  const list = document.getElementById('combat-list');
+  const sorted = _sortedCombatants();
+  document.getElementById('combat-round-num').textContent = combat.round;
+  if (!sorted.length) {
+    list.innerHTML = '<div class="combat-empty-msg">No combatants — import your Kill Team or add enemies from the Threat Archives.</div>';
+    document.getElementById('combat-active-name').textContent = '—';
+    return;
+  }
+  const active = sorted[combat.activeIdx % sorted.length];
+  document.getElementById('combat-active-name').textContent = active ? active.name : '—';
+  list.innerHTML = sorted.map(c => {
+    const pct = Math.max(0, Math.min(100, (c.hp / (c.maxHp || 1)) * 100));
+    const hpColor = pct > 50 ? '#3c8a4a' : pct > 25 ? '#c88018' : '#e53e3e';
+    const isActive = active && c.id === active.id;
+    const isDead = c.hp <= 0;
+    const badgeClass = c.type === 'player' ? 'badge-player-ct' : c.type === 'enemy' ? 'badge-enemy-ct' : 'badge-npc-ct';
+    const hasSheet = !!c.statRef || c.type !== 'player';
+    const initCell = _editingInitId === c.id
+      ? `<input class="init-input" id="init-edit-inp" type="number" value="${c.initiative}"
+           onblur="commitInit('${c.id}', this.value)"
+           onkeydown="if(event.key==='Enter')this.blur();if(event.key==='Escape'){_editingInitId=null;combatRender();}">`
+      : `<div class="combatant-init" onclick="editInit('${c.id}')" title="Click to edit initiative">${c.initiative}</div>`;
+    const hpCell = _editingHpId === c.id
+      ? `<input class="hp-input" id="hp-edit-inp" type="number" value="${c.hp}"
+           onblur="commitHp('${c.id}', this.value)"
+           onkeydown="if(event.key==='Enter')this.blur();if(event.key==='Escape'){_editingHpId=null;combatRender();}"> / ${c.maxHp}`
+      : `<div class="hp-text" onclick="editHp('${c.id}')" title="Click to set HP">${c.hp} / ${c.maxHp}</div>`;
+    const condHtml = (c.conditions || []).map(cd =>
+      `<span class="cond-chip" onclick="combatToggleCond('${c.id}','${cd}')" title="Click to remove">${cd}</span>`).join('');
+    return `<div class="combatant-row${isActive ? ' active-turn' : ''}${isDead ? ' is-dead' : ''}">
+      <div class="combatant-init-box">
+        ${initCell}
+        <div class="combatant-init-lbl">Init</div>
+      </div>
+      <div class="combatant-id-block">
+        <div class="combatant-name-row">
+          <span class="combatant-name${hasSheet ? ' has-sheet' : ''}" ${hasSheet ? `onclick="openStatDrawer('${c.id}')"` : ''}>${_esc(c.name)}</span>
+          <span class="combatant-type-badge ${badgeClass}">${c.type}</span>
+        </div>
+        <div class="combatant-conds">${condHtml}
+          <span class="cond-chip add" onclick="combatOpenCondPicker('${c.id}')">+ cond</span>
+        </div>
+      </div>
+      <div class="combatant-hp-block">
+        ${hpCell}
+        <div class="hp-bar-track"><div class="hp-bar-fill" style="width:${pct}%;background:${hpColor}"></div></div>
+        <div class="hp-controls">
+          <button class="hp-btn" onclick="combatAdjHP('${c.id}',-10)" title="-10">&#171;</button>
+          <button class="hp-btn" onclick="combatAdjHP('${c.id}',-5)" title="-5">-5</button>
+          <button class="hp-btn" onclick="combatAdjHP('${c.id}',-1)" title="-1">-</button>
+          <button class="hp-btn" onclick="combatAdjHP('${c.id}',1)"  title="+1">+</button>
+          <button class="hp-btn" onclick="combatAdjHP('${c.id}',5)"  title="+5">+5</button>
+        </div>
+      </div>
+      <div class="combatant-ac-block">
+        <div class="combatant-ac">${c.ac}</div>
+        <div class="combatant-ac-lbl">AC</div>
+      </div>
+      <button class="c-remove-btn" onclick="combatRemove('${c.id}')" title="Remove">&#x2715;</button>
+    </div>`;
+  }).join('');
+  if (_editingInitId) { const el = document.getElementById('init-edit-inp'); if (el) { el.focus(); el.select(); } }
+  if (_editingHpId)   { const el = document.getElementById('hp-edit-inp');   if (el) { el.focus(); el.select(); } }
+}
+
+function _byId(id) { return combat.combatants.find(c => c.id === id); }
+
+function editInit(id) { _editingInitId = id; combatRender(); }
+function commitInit(id, val) {
+  const c = _byId(id);
+  if (c) { const n = parseInt(val, 10); if (!isNaN(n)) c.initiative = n; }
+  _editingInitId = null;
+  combatSave(); combatRender();
+}
+function editHp(id) { _editingHpId = id; combatRender(); }
+function commitHp(id, val) {
+  const c = _byId(id);
+  if (c) { const n = parseInt(val, 10); if (!isNaN(n)) c.hp = Math.max(0, Math.min(c.maxHp, n)); }
+  _editingHpId = null;
+  combatSave(); combatRender();
+}
+
+function combatAdjHP(id, delta) {
+  const c = _byId(id);
+  if (!c) return;
+  c.hp = Math.max(0, Math.min(c.maxHp, c.hp + delta));
+  combatSave(); combatRender();
+}
+
+function combatNext() {
+  if (!combat.combatants.length) return;
+  combat.activeIdx++;
+  if (combat.activeIdx >= combat.combatants.length) { combat.activeIdx = 0; combat.round++; }
+  combatSave(); combatRender();
+}
+function combatPrev() {
+  if (!combat.combatants.length) return;
+  combat.activeIdx--;
+  if (combat.activeIdx < 0) {
+    combat.activeIdx = combat.combatants.length - 1;
+    if (combat.round > 1) combat.round--;
+  }
+  combatSave(); combatRender();
+}
+function combatReset() {
+  if (!confirm('End the encounter and clear all combatants?')) return;
+  combat = { combatants: [], round: 1, activeIdx: 0 };
+  combatSave(); combatRender();
+}
+function combatRemove(id) {
+  combat.combatants = combat.combatants.filter(c => c.id !== id);
+  if (combat.activeIdx >= combat.combatants.length) combat.activeIdx = 0;
+  combatSave(); combatRender();
+}
+
+function combatToggleAdd() {
+  document.getElementById('combat-add-panel').classList.toggle('open');
+}
+function combatAddCombatant() {
+  const name = document.getElementById('ca-name').value.trim();
+  const type = document.getElementById('ca-type').value;
+  const init = parseInt(document.getElementById('ca-init').value, 10) || 0;
+  const hp   = parseInt(document.getElementById('ca-hp').value, 10) || 10;
+  const ac   = parseInt(document.getElementById('ca-ac').value, 10) || 10;
+  if (!name) { document.getElementById('ca-name').focus(); return; }
+  combat.combatants.push({ id:_cid(), name, type, initiative:init, hp, maxHp:hp, ac, conditions:[], statRef:null, notes:'' });
+  document.getElementById('ca-name').value = '';
+  document.getElementById('ca-init').value = '';
+  document.getElementById('ca-hp').value = '';
+  document.getElementById('ca-ac').value = '';
+  combatSave(); combatRender();
+}
+
+/* ── Conditions ── */
+function combatToggleCond(id, cond) {
+  const c = _byId(id);
+  if (!c) return;
+  c.conditions = c.conditions || [];
+  const i = c.conditions.indexOf(cond);
+  if (i >= 0) c.conditions.splice(i, 1); else c.conditions.push(cond);
+  combatSave(); combatRender();
+  if (_condTargetId) combatRefreshCondPicker(_condTargetId);
+}
+function combatOpenCondPicker(id) {
+  _condTargetId = id;
+  combatRefreshCondPicker(id);
+  document.getElementById('cond-picker-overlay').classList.add('open');
+}
+function combatRefreshCondPicker(id) {
+  const c = _byId(id);
+  if (!c) return;
+  document.getElementById('cond-picker-grid').innerHTML = ALL_CONDITIONS.map(cd =>
+    `<button class="cond-pick-btn${(c.conditions||[]).includes(cd) ? ' on' : ''}" onclick="combatToggleCond('${id}','${cd}')">${cd}</button>`
+  ).join('');
+}
+function combatCloseCondPicker() {
+  _condTargetId = null;
+  document.getElementById('cond-picker-overlay').classList.remove('open');
+}
+
+/* ── Import Kill Team from the operative records ── */
+async function combatImportKillTeam(btn) {
+  const orig = btn.textContent;
+  btn.textContent = 'Importing…';
+  try {
+    if (!_allChars.length) await loadAllChars();
+    let added = 0;
+    _allChars.forEach(row => {
+      const ex = row.extra || {};
+      const name = row.name || 'Unnamed Operative';
+      if (combat.combatants.some(c => c.srcRowId === row.id)) return;
+      if (combat.combatants.some(c => c.name.toLowerCase() === name.toLowerCase())) return;
+      combat.combatants.push({
+        id: _cid(), srcRowId: row.id, name,
+        type: 'player', initiative: 0,
+        hp: parseInt(ex.hp_cur, 10) || parseInt(ex.hp_max, 10) || 10,
+        maxHp: parseInt(ex.hp_max, 10) || parseInt(ex.hp_cur, 10) || 10,
+        ac: parseInt(ex.ac, 10) || 16,
+        conditions: [], statRef: null, notes: ''
+      });
+      added++;
+    });
+    combatSave(); combatRender();
+    btn.textContent = added ? `✓ ${added} Imported` : (_allChars.length ? 'Already In' : 'No Records');
+  } catch(e) {
+    btn.textContent = 'Import Failed';
+  }
+  setTimeout(() => { btn.textContent = orig; }, 1800);
+}
+
+/* ════════════════════════════════════════════
+   ENEMY LIBRARY — parsed live from the bestiary pages
+════════════════════════════════════════════ */
+const BESTIARIES = [
+  { file: 'Genestealer_Bestiary_Master.html', label: 'Genestealer Cult' },
+  { file: 'Tyranid_Bestiary_Master.html',     label: 'Tyranids' },
+  { file: 'Necron_Bestiary_Master.html',      label: 'Necrons' },
+  { file: 'Chaos_Bestiary_Master.html',       label: 'Chaos' },
+];
+let ENEMY_LIB = null;          // [{ label, creatures: [{name,ctype,cr,ac,hp,dexMod,html}] }]
+let _enemyLibPromise = null;
+let _ebFaction = 'All';
+
+function loadEnemyLib() {
+  if (_enemyLibPromise) return _enemyLibPromise;
+  _enemyLibPromise = Promise.all(BESTIARIES.map(async b => {
+    try {
+      const r = await fetch(b.file);
+      if (!r.ok) throw new Error(r.status);
+      const doc = new DOMParser().parseFromString(await r.text(), 'text/html');
+      const creatures = [];
+      doc.querySelectorAll('.creature-entry').forEach(entry => {
+        const sb = entry.querySelector('.stat-block');
+        if (!sb) return;
+        const name  = (sb.querySelector('.creature-name') || {}).textContent?.trim();
+        if (!name) return;
+        const ctype = ((sb.querySelector('.creature-type') || {}).textContent || '').trim();
+        const cr    = ((sb.querySelector('.cr-badge') || {}).textContent || '').trim();
+        const top   = ((sb.querySelector('.top-stats') || {}).textContent || '');
+        const acM   = top.match(/Armor Class\s*(\d+)/i);
+        const hpM   = top.match(/Hit Points\s*(\d+)/i);
+        let dexMod  = 0;
+        sb.querySelectorAll('.ability-grid > div').forEach(cell => {
+          const lbl = (cell.querySelector('.lbl') || {}).textContent || '';
+          if (lbl.trim().toUpperCase() === 'DEX') {
+            const m = ((cell.querySelector('.val') || {}).textContent || '').match(/\(([+\-−]\d+)\)/);
+            if (m) dexMod = parseInt(m[1].replace('−','-'), 10) || 0;
+          }
+        });
+        creatures.push({
+          name, ctype, cr,
+          ac: acM ? parseInt(acM[1], 10) : 10,
+          hp: hpM ? parseInt(hpM[1], 10) : 10,
+          dexMod,
+          html: sb.outerHTML
+        });
+      });
+      return { label: b.label, creatures };
+    } catch(e) {
+      return { label: b.label, creatures: [], error: true };
+    }
+  })).then(groups => { ENEMY_LIB = groups; return groups; });
+  return _enemyLibPromise;
+}
+
+function _findCreature(faction, name) {
+  if (!ENEMY_LIB) return null;
+  const grp = ENEMY_LIB.find(g => g.label === faction);
+  return grp ? grp.creatures.find(c => c.name === name) : null;
+}
+
+/* ── Enemy browser ── */
+async function openEnemyBrowser() {
+  document.getElementById('enemy-browser-overlay').classList.add('open');
+  if (!ENEMY_LIB) {
+    document.getElementById('eb-list').innerHTML = '<div class="eb-loading">++ Accessing Bestiary Records ++</div>';
+    await loadEnemyLib();
+  }
+  renderEnemyTabs();
+  renderEnemyBrowser();
+}
+function closeEnemyBrowser() {
+  document.getElementById('enemy-browser-overlay').classList.remove('open');
+}
+function renderEnemyTabs() {
+  const tabs = ['All'].concat(ENEMY_LIB.map(g => g.label));
+  document.getElementById('eb-tabs').innerHTML = tabs.map(t =>
+    `<button class="eb-tab${t === _ebFaction ? ' active' : ''}" onclick="_ebFaction='${t}';renderEnemyTabs();renderEnemyBrowser();">${t}</button>`
+  ).join('');
+}
+function renderEnemyBrowser() {
+  if (!ENEMY_LIB) return;
+  const q = (document.getElementById('eb-search').value || '').trim().toLowerCase();
+  const groups = ENEMY_LIB.filter(g => _ebFaction === 'All' || g.label === _ebFaction);
+  let html = '';
+  groups.forEach(g => {
+    g.creatures.forEach(c => {
+      if (q && !c.name.toLowerCase().includes(q) && !c.ctype.toLowerCase().includes(q)) return;
+      html += `<div class="eb-row">
+        <div>
+          <div class="eb-name" onclick="previewCreature('${g.label}','${_esc(c.name).replace(/'/g,"\\'")}')" title="View stat block">${_esc(c.name)}</div>
+          ${_ebFaction === 'All' ? `<div class="eb-faction">${g.label}</div>` : ''}
+        </div>
+        <span class="eb-meta">AC ${c.ac} · HP ${c.hp}</span>
+        <span class="eb-cr">${_esc(c.cr || '—')}</span>
+        <button class="eb-add" onclick="addEnemyToCombat('${g.label}','${_esc(c.name).replace(/'/g,"\\'")}',this)">+ Add</button>
+      </div>`;
+    });
+    if (g.error) html += `<div class="eb-loading">++ ${g.label}: records unavailable ++</div>`;
+  });
+  document.getElementById('eb-list').innerHTML = html || '<div class="eb-loading">++ No matching threat records ++</div>';
+}
+
+function _nextEnemyLabel(base) {
+  const related = combat.combatants.filter(c => c.baseName === base);
+  if (!related.length) return base;
+  let max = 1;
+  related.forEach(c => {
+    const m = c.name.match(/\s(\d+)$/);
+    const n = m ? parseInt(m[1], 10) : 1;
+    if (n > max) max = n;
+  });
+  return base + ' ' + (max + 1);
+}
+
+function addEnemyToCombat(faction, name, btn) {
+  const c = _findCreature(faction, name);
+  if (!c) return;
+  const init = Math.floor(Math.random() * 20) + 1 + c.dexMod;
+  combat.combatants.push({
+    id: _cid(), name: _nextEnemyLabel(c.name), baseName: c.name,
+    type: 'enemy', initiative: Math.max(0, init),
+    hp: c.hp, maxHp: c.hp, ac: c.ac,
+    conditions: [], statRef: { faction, name: c.name }, notes: ''
+  });
+  combatSave(); combatRender();
+  if (btn) {
+    const orig = btn.textContent;
+    btn.textContent = '✓ Added';
+    setTimeout(() => { btn.textContent = orig; }, 900);
+  }
+}
+
+/* ── Stat reference drawer ── */
+async function openStatDrawer(id) {
+  const c = _byId(id);
+  if (!c) return;
+  const title = document.getElementById('sd-title');
+  const body  = document.getElementById('sd-body');
+  document.getElementById('stat-drawer').classList.add('open');
+  title.textContent = c.name;
+  if (c.statRef) {
+    if (!ENEMY_LIB) {
+      body.innerHTML = '<div class="eb-loading">++ Accessing Bestiary Records ++</div>';
+      await loadEnemyLib();
+    }
+    const cr = _findCreature(c.statRef.faction, c.statRef.name);
+    body.innerHTML = cr ? cr.html
+      : '<div class="eb-loading">++ Stat block not found in the archives ++</div>';
+  } else {
+    body.innerHTML = `
+      <p style="color:var(--text-dim);font-size:14px;">Custom combatant — no bestiary record. HP ${c.hp}/${c.maxHp} · AC ${c.ac}.</p>
+      <div class="sd-notes-lbl">GM Notes</div>
+      <textarea class="sd-notes" placeholder="Attacks, traits, reminders…"
+        oninput="_saveNotes('${c.id}', this.value)">${_esc(c.notes || '')}</textarea>`;
+  }
+}
+function _saveNotes(id, val) {
+  const c = _byId(id);
+  if (c) { c.notes = val; combatSave(); }
+}
+function closeStatDrawer() {
+  document.getElementById('stat-drawer').classList.remove('open');
+}
+
+async function previewCreature(faction, name) {
+  if (!ENEMY_LIB) await loadEnemyLib();
+  const c = _findCreature(faction, name);
+  if (!c) return;
+  document.getElementById('stat-drawer').classList.add('open');
+  document.getElementById('sd-title').textContent = c.name;
+  document.getElementById('sd-body').innerHTML = c.html;
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeStatDrawer();
+    closeEnemyBrowser();
+    combatCloseCondPicker();
+  }
+});
+
 // Init
 document.addEventListener('DOMContentLoaded', function() {
   if (_loggedIn()) {
@@ -319,6 +957,10 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('gm-email').textContent = localStorage.getItem('gm_supa_email') || '';
     loadAllChars();
   }
+  combatLoad();
+  combatRender();
+  const savedView = localStorage.getItem('gm_dash_view');
+  if (savedView === 'combat') showView('combat');
 });
 </script>
 </body>
