@@ -147,6 +147,11 @@
   .badge-player-ct { border:1px solid rgba(90,170,110,0.5);color:#7ec792;background:rgba(90,170,110,0.08); }
   .badge-enemy-ct  { border:1px solid rgba(239,68,68,0.5);color:#f87171;background:rgba(239,68,68,0.08); }
   .badge-npc-ct    { border:1px solid rgba(120,150,220,0.5);color:#93aef0;background:rgba(120,150,220,0.08); }
+  .tag-chip { font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;padding:1px 7px;text-transform:uppercase;border:1px solid var(--gold-dim);color:var(--gold);background:rgba(212,160,48,0.07);cursor:pointer; }
+  .tag-chip:hover { border-color:var(--gold);color:var(--gold-light); }
+  .tag-chip.empty { border:1px dashed var(--border2);color:var(--text-dim);background:transparent;opacity:0.55; }
+  .tag-chip.empty:hover { opacity:1;border-color:var(--gold-dim);color:var(--gold); }
+  .tag-input { width:120px;background:var(--bg);border:1px solid var(--gold-dim);color:var(--gold);font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;padding:2px 6px;outline:none;text-transform:uppercase; }
   .combatant-conds { display:flex;flex-wrap:wrap;gap:4px;min-height:16px; }
   .cond-chip { font-family:'Cinzel',serif;font-size:8px;letter-spacing:1px;padding:2px 6px;border:1px solid rgba(239,68,68,0.4);color:#f87171;background:rgba(239,68,68,0.07);cursor:pointer;text-transform:uppercase; }
   .cond-chip:hover { background:rgba(239,68,68,0.18); }
@@ -620,6 +625,7 @@ let _condTargetId = null;
 let _editingInitId = null;
 let _editingHpId = null;
 let _editingMaxHpId = null;
+let _editingTagId = null;
 
 const ALL_CONDITIONS = ['Blinded','Charmed','Deafened','Frightened','Grappled','Incapacitated',
   'Invisible','Paralyzed','Pinned','Poisoned','Prone','Restrained','Stunned','Unconscious'];
@@ -646,7 +652,8 @@ function combatRender() {
     return;
   }
   const active = sorted[combat.activeIdx % sorted.length];
-  document.getElementById('combat-active-name').textContent = active ? active.name : '—';
+  document.getElementById('combat-active-name').textContent = active
+    ? active.name + (active.tag ? ' — ' + active.tag : '') : '—';
   list.innerHTML = sorted.map(c => {
     const pct = Math.max(0, Math.min(100, (c.hp / (c.maxHp || 1)) * 100));
     const hpColor = pct > 50 ? '#3c8a4a' : pct > 25 ? '#c88018' : '#e53e3e';
@@ -682,6 +689,13 @@ function combatRender() {
         <div class="combatant-name-row">
           <span class="combatant-name${hasSheet ? ' has-sheet' : ''}" ${hasSheet ? `onclick="openStatDrawer('${c.id}')"` : ''}>${_esc(c.name)}</span>
           <span class="combatant-type-badge ${badgeClass}">${c.type}</span>
+          ${_editingTagId === c.id
+            ? `<input class="tag-input" id="tag-edit-inp" type="text" maxlength="24" value="${_esc(c.tag || '')}"
+                 onblur="commitTag('${c.id}', this.value)"
+                 onkeydown="if(event.key==='Enter')this.blur();if(event.key==='Escape'){_editingTagId=null;combatRender();}">`
+            : (c.tag
+              ? `<span class="tag-chip" onclick="editTag('${c.id}')" title="Click to edit tag">&#9098; ${_esc(c.tag)}</span>`
+              : `<span class="tag-chip empty" onclick="editTag('${c.id}')" title="Add a tag for easier tracking">+ tag</span>`)}
         </div>
         <div class="combatant-conds">${condHtml}
           <span class="cond-chip add" onclick="combatOpenCondPicker('${c.id}')">+ cond</span>
@@ -708,6 +722,7 @@ function combatRender() {
   if (_editingInitId)  { const el = document.getElementById('init-edit-inp');  if (el) { el.focus(); el.select(); } }
   if (_editingHpId)    { const el = document.getElementById('hp-edit-inp');    if (el) { el.focus(); el.select(); } }
   if (_editingMaxHpId) { const el = document.getElementById('maxhp-edit-inp'); if (el) { el.focus(); el.select(); } }
+  if (_editingTagId)   { const el = document.getElementById('tag-edit-inp');   if (el) { el.focus(); el.select(); } }
 }
 
 function _byId(id) { return combat.combatants.find(c => c.id === id); }
@@ -724,6 +739,13 @@ function commitHp(id, val) {
   const c = _byId(id);
   if (c) { const n = parseInt(val, 10); if (!isNaN(n)) c.hp = Math.max(0, Math.min(c.maxHp, n)); }
   _editingHpId = null;
+  combatSave(); combatRender();
+}
+function editTag(id) { _editingTagId = id; combatRender(); }
+function commitTag(id, val) {
+  const c = _byId(id);
+  if (c) c.tag = (val || '').trim().slice(0, 24);
+  _editingTagId = null;
   combatSave(); combatRender();
 }
 function editMaxHp(id) { _editingMaxHpId = id; combatRender(); }
@@ -783,7 +805,7 @@ function combatAddCombatant() {
   const hp   = parseInt(document.getElementById('ca-hp').value, 10) || 10;
   const ac   = parseInt(document.getElementById('ca-ac').value, 10) || 10;
   if (!name) { document.getElementById('ca-name').focus(); return; }
-  combat.combatants.push({ id:_cid(), name, type, initiative:init, hp, maxHp:hp, ac, conditions:[], statRef:null, notes:'' });
+  combat.combatants.push({ id:_cid(), name, type, initiative:init, hp, maxHp:hp, ac, conditions:[], statRef:null, notes:'', tag:'' });
   document.getElementById('ca-name').value = '';
   document.getElementById('ca-init').value = '';
   document.getElementById('ca-hp').value = '';
@@ -841,7 +863,7 @@ async function combatImportKillTeam(btn) {
         hp: parseInt(ex.hp_cur, 10) || parseInt(ex.hp_max, 10) || 10,
         maxHp: parseInt(ex.hp_max, 10) || parseInt(ex.hp_cur, 10) || 10,
         ac: parseInt(ex.ac, 10) || 16,
-        conditions: [], statRef: null, notes: ''
+        conditions: [], statRef: null, notes: '', tag: ''
       });
       added++;
     });
@@ -976,7 +998,7 @@ function addEnemyToCombat(faction, name, btn) {
     id: _cid(), name: _nextEnemyLabel(c.name), baseName: c.name,
     type: 'enemy', initiative: Math.max(0, init),
     hp: c.hp, maxHp: c.hp, ac: c.ac,
-    conditions: [], statRef: { faction, name: c.name }, notes: ''
+    conditions: [], statRef: { faction, name: c.name }, notes: '', tag: ''
   });
   combatSave(); combatRender();
   if (btn) {
