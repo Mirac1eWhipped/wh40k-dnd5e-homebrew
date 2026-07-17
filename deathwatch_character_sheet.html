@@ -294,13 +294,6 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .feat-card-body strong{color:var(--gold-light);font-family:var(--font-label);font-size:12pt;}
 .no-feats{font-family:var(--font-label);font-size:9pt;letter-spacing:.2em;color:var(--silver-dim);text-align:center;padding:30px;text-transform:uppercase;}
 /* ── Class Proficiency Block ── */
-#cls-profs-block{background:var(--panel2);border:1px solid var(--border2);padding:10px 14px;margin-bottom:12px;}
-.cls-profs-grid{display:grid;gap:0;}
-.cls-profs-row{display:grid;grid-template-columns:110px 1fr;gap:8px;align-items:baseline;padding:4px 0;border-bottom:1px solid rgba(42,58,80,.35);}
-.cls-profs-row:last-child{border-bottom:none;}
-.cls-profs-lbl{font-family:var(--font-label);font-size:7.5pt;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);white-space:nowrap;}
-.cls-profs-val{font-family:var(--font-body);font-size:10.5pt;color:var(--text);}
-.cls-profs-extra{font-family:var(--font-label);font-size:7.5pt;letter-spacing:.1em;text-transform:uppercase;color:var(--silver-dim);margin-top:6px;padding-top:5px;border-top:1px solid var(--border2);}
 .sub-badge{display:inline-block;font-family:var(--font-label);font-size:9pt;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);background:rgba(200,164,74,.1);border:1px solid var(--gold-dim);padding:1px 6px;margin-left:6px;}
 
 /* ── LORE TAB ── */
@@ -1229,7 +1222,6 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
       <div class="rc-tab-panel" id="rc-abilities">
         <!-- feat-level kept in DOM for save-field position compatibility — controlled by char-level in header -->
         <input type="number" id="feat-level" min="1" max="20" value="1" style="display:none;pointer-events:none;">
-        <div id="cls-profs-block" style="display:none;"></div>
         <div id="lineage-section" style="display:none;margin-bottom:16px;">
           <div class="sec-title" style="margin-bottom:8px;">Lineage — Adeptus Astartes</div>
           <div id="lineage-traits-list" class="feat-list"></div>
@@ -2078,103 +2070,6 @@ function renderFeatures() {
   if (typeof _updatePowerTracker === 'function') _updatePowerTracker();
 }
 
-/* ── Class Proficiency Data ── */
-const DW_CLASS_PROFS = {
-  'Tactical Operative': {
-    saves:   ['Dexterity', 'Wisdom'],
-    skills:  { count:4, list:['Acrobatics','Deception','History','Perception','Religion','Sleight of Hand','Stealth','Survival'] },
-    armor:   'Phobos Armor, Tacticus Armor',
-    weapons: 'Ranged Primary, Ranged Secondary, Physical Melee',
-    tools:   'Auspex',
-    extra:   'Default armor pattern: Tacticus or Phobos'
-  },
-  'Close Combat Operative': {
-    saves:   ['Strength', 'Constitution'],
-    skills:  { count:4, list:['Acrobatics','Athletics','History','Intimidation','Perception','Religion','Stealth'] },
-    armor:   'Phobos Armor, Tacticus Armor, Gravis Armor',
-    weapons: 'Ranged Secondary, Physical Melee, Power Melee (excl. Thunder Hammer)',
-    tools:   'Auspex',
-    extra:   'Default armor pattern: Tacticus'
-  },
-  'Gravis Operative': {
-    saves:   ['Strength', 'Constitution'],
-    skills:  { count:3, list:['Athletics','History','Intimidation','Perception','Religion','Survival'] },
-    armor:   'Gravis Armor',
-    weapons: 'Ranged Primary, Ranged Secondary, Physical Melee, Power Melee (excl. Thunder Hammer & Lightning Claws)',
-    tools:   'Auspex',
-    extra:   'Default armor pattern: Gravis'
-  },
-  'Terminator': {
-    saves:   ['Strength', 'Constitution'],
-    skills:  { count:3, list:['Athletics','History','Insight','Intimidation','Perception','Religion','Survival'] },
-    armor:   'Terminator Armor',
-    weapons: 'All Terminator Weapons, Ranged Primary & Secondary, Physical & Power Melee',
-    tools:   'Auspex',
-    extra:   'Default armor pattern: Terminator'
-  },
-  'Vanguard Operative': {
-    saves:   ['Dexterity', 'Wisdom'],
-    skills:  { count:4, list:['Acrobatics','Athletics','Deception','Investigation','Perception','Sleight of Hand','Stealth','Survival'] },
-    armor:   'Phobos Armor',
-    weapons: 'Ranged Primary, Ranged Secondary, Physical Melee',
-    tools:   'Auspex',
-    extra:   'Default armor pattern: Phobos'
-  },
-  'Apothecary': {
-    saves:   ['Wisdom', 'Constitution'],
-    skills:  { count:2, fixed:['Medicine'], list:['History','Insight','Perception','Religion','Survival'] },
-    armor:   'Tacticus Armor, Gravis Armor',
-    weapons: 'Ranged Secondary, Physical Melee, Narthecium',
-    tools:   'Medicae Kit, Auspex',
-    extra:   'Default armor pattern: Tacticus'
-  },
-  'Chaplain': {
-    saves:   ['Wisdom', 'Charisma'],
-    skills:  { count:2, fixed:['Religion'], list:['History','Insight','Intimidation','Perception','Persuasion'] },
-    armor:   'Phobos Armor, Tacticus Armor',
-    weapons: 'Ranged Secondary, Physical Melee, Power Melee, Crozius Arcanum',
-    tools:   'Auspex',
-    extra:   'Default armor pattern: Tacticus'
-  },
-  'Librarian': {
-    saves:   ['Intelligence', 'Wisdom'],
-    skills:  { count:2, fixed:['Arcana'], list:['History','Insight','Investigation','Perception','Religion'] },
-    armor:   'Phobos Armor, Tacticus Armor, Gravis Armor',
-    weapons: 'Ranged Secondary, Physical Melee, Force Sword, Force Staff',
-    tools:   'Auspex',
-    extra:   'Default armor pattern: Tacticus'
-  },
-  'Techmarine': {
-    saves:   ['Intelligence', 'Constitution'],
-    skills:  { count:2, fixed:['Technology'], list:['Athletics','History','Investigation','Medicine','Perception'] },
-    armor:   'Tacticus Armor, Gravis Armor',
-    weapons: "Ranged Primary & Secondary, Physical & Power Melee, Omnissian Power Axe, Servo-Arm, Mechadendrites",
-    tools:   "Artificer's Tools, Auspex",
-    extra:   'Default armor pattern: Tacticus'
-  }
-};
-
-function _renderClassProfs(cls) {
-  var block = document.getElementById('cls-profs-block');
-  if (!block) return;
-  var p = DW_CLASS_PROFS[cls];
-  if (!p) { block.style.display = 'none'; return; }
-  var rows = [
-    ['Saving Throws', p.saves.join(', ')],
-    ['Skills',        (p.skills.fixed ? p.skills.fixed.join(', ') + ', plus choose ' : 'Choose ') + p.skills.count + ' from: ' + p.skills.list.join(', ')],
-    ['Armor',         p.armor],
-    ['Weapons',       p.weapons],
-    ['Tools',         p.tools]
-  ];
-  var html = '<div class="sec-title" style="margin-bottom:6px;">Class Proficiencies</div>'
-    + '<div class="cls-profs-grid">'
-    + rows.map(function(r){ return '<div class="cls-profs-row"><span class="cls-profs-lbl">'+r[0]+'</span><span class="cls-profs-val">'+r[1]+'</span></div>'; }).join('')
-    + '</div>'
-    + (p.extra ? '<div class="cls-profs-extra">'+p.extra+'</div>' : '');
-  block.innerHTML = html;
-  block.style.display = '';
-}
-
 function updateSubclassOpts() {
   const clsEl  = document.getElementById('cls-select');
   const lvlEl  = document.getElementById('feat-level');
@@ -2183,7 +2078,6 @@ function updateSubclassOpts() {
   if (!clsEl || !subEl || !subWrap) return;
 
   const cls = clsEl.value;
-  _renderClassProfs(cls);
   const lvl = parseInt(lvlEl ? lvlEl.value : 1) || 1;
   const DATA = (typeof DW_CLASSES !== 'undefined') ? DW_CLASSES : DND_CLASSES;
   const data = DATA[cls];
