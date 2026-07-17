@@ -281,7 +281,39 @@
   .vox-entry.heal .de-total{color:#8fd39b;}
   .vox-entry.private{border-left-color:#8a76d8;}
   .vox-entry.private .de-label{color:#a99ae0;}
+  .vox-entry .de-flair{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;display:block;}
+  .vox-entry.crit .de-flair{color:var(--gold-light);}
+  .vox-entry.fumble .de-flair{color:var(--red-bright);}
+  .vox-entry .de-types{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--silver-dim);display:block;}
+  .vox-entry.heal .de-types{color:#8fd39b;}
+  .de-dmg-btn{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);padding:4px 12px;cursor:pointer;border-radius:2px;margin-top:4px;}
+  .de-dmg-btn:hover{border-color:var(--gold);color:var(--gold-light);}
+  .de-dmg-btn.crit{border-color:var(--gold);color:var(--gold-light);box-shadow:0 0 6px rgba(212,160,48,.4);}
   .vox-empty{font-size:13px;color:var(--text-dim);padding:2px 0;}
+  .vox-share-tgl{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:rgba(212,160,48,.12);border:1px solid var(--gold);color:var(--gold-light);padding:3px 10px;cursor:pointer;border-radius:2px;margin-right:8px;}
+  .vox-share-tgl.silent{background:rgba(130,130,130,.12);border-color:#888;color:#aaa;}
+  .vox-mode-row{display:flex;border-bottom:1px solid var(--border2);}
+  .vox-mode-btn{flex:1;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.05em;text-transform:uppercase;background:transparent;border:none;border-right:1px solid var(--border2);border-bottom:2px solid transparent;color:var(--silver-dim);padding:9px 4px;cursor:pointer;white-space:nowrap;}
+  .vox-mode-btn:last-child{border-right:none;}
+  .vox-mode-btn:hover{color:var(--text);background:rgba(255,255,255,.04);}
+  .vox-mode-btn.adv.active{color:#8fd39b;border-bottom-color:#3c8a4a;background:rgba(60,138,74,.14);}
+  .vox-mode-btn.norm.active{color:var(--gold-light);border-bottom-color:var(--gold);background:rgba(212,160,48,.12);}
+  .vox-mode-btn.dis.active{color:#e09090;border-bottom-color:#c04040;background:rgba(160,50,50,.16);}
+  .vox-tray-row{display:flex;gap:5px;padding:10px 12px 0;align-items:center;border-top:1px solid var(--border2);}
+  .vox-tray-btn{position:relative;flex:1;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.03em;background:var(--bg2);border:1px solid var(--border2);color:var(--silver);padding:7px 2px;cursor:pointer;border-radius:2px;white-space:nowrap;}
+  .vox-tray-btn:hover{border-color:var(--gold-dim);color:var(--gold-light);}
+  .vox-tray-btn .tray-count{position:absolute;top:-7px;right:-5px;min-width:16px;height:16px;line-height:15px;font-size:10px;background:var(--gold);color:#1a0a00;border-radius:8px;padding:0 3px;display:none;font-weight:bold;text-align:center;}
+  .vox-tray-btn.has{border-color:var(--gold);color:var(--gold-light);background:rgba(212,160,48,.10);}
+  .vox-tray-btn.has .tray-count{display:block;}
+  .vox-tray-clear{font-family:'Cinzel',serif;font-size:12px;background:transparent;border:1px solid var(--border2);color:var(--silver-dim);padding:7px 8px;cursor:pointer;border-radius:2px;flex:0 0 auto;}
+  .vox-tray-clear:hover{border-color:#a04040;color:var(--red-bright);}
+  #gm-cmd-row{display:flex;gap:8px;padding:10px 12px;}
+  #gm-dice-cmd{flex:1;min-width:0;background:var(--bg2);border:1px solid var(--border2);color:var(--text);font-family:'Crimson Text',Georgia,serif;font-size:15px;padding:6px 10px;outline:none;}
+  #gm-dice-cmd:focus{border-color:var(--gold-dim);}
+  #gm-cmd-go{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);padding:5px 16px;cursor:pointer;border-radius:2px;}
+  #gm-cmd-go:hover{border-color:var(--gold);color:var(--gold-light);}
+  .sd-roll{color:var(--gold-light);cursor:pointer;border-bottom:1px dotted var(--gold-dim);}
+  .sd-roll:hover{text-shadow:0 0 6px rgba(212,160,48,.55);}
   #vox-toast{position:fixed;right:92px;bottom:24px;z-index:399;background:var(--panel);border:1px solid var(--border2);border-left:3px solid var(--gold-dim);padding:9px 16px;max-width:400px;box-shadow:0 4px 18px rgba(0,0,0,.7);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;transform:translateY(6px);font-size:15px;cursor:pointer;}
   #vox-toast.show{opacity:1;transform:translateY(0);pointer-events:auto;}
   #vox-toast .de-label{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--silver-dim);display:block;}
@@ -436,9 +468,31 @@
 <div id="vox-panel">
   <div class="vox-head">
     <span class="vox-head-lbl"><span id="vox-status" title="Vox link offline"></span>✠ Vox Log</span>
-    <button class="vox-close" onclick="voxToggle()" title="Close">✕</button>
+    <span style="display:flex;align-items:center;">
+      <button class="vox-share-tgl" id="vox-share-tgl" onclick="_gmToggleShare()" title="Your rolls broadcast to player sheets — click to go silent">Team</button>
+      <button class="vox-close" onclick="voxToggle()" title="Close">✕</button>
+    </span>
+  </div>
+  <div class="vox-mode-row">
+    <button class="vox-mode-btn adv" id="gm-mode-adv" onclick="_gmSetMode('adv')" title="Roll 2d20, keep highest — applies to the next roll, then resets">Advantage</button>
+    <button class="vox-mode-btn norm active" id="gm-mode-norm" onclick="_gmSetMode('norm')" title="Single d20">Normal</button>
+    <button class="vox-mode-btn dis" id="gm-mode-dis" onclick="_gmSetMode('dis')" title="Roll 2d20, keep lowest — applies to the next roll, then resets">Disadvantage</button>
   </div>
   <div id="vox-log"><div class="vox-empty">++ Listening for kill team rolls… ++</div></div>
+  <div class="vox-tray-row">
+    <button class="vox-tray-btn" data-die="4" onclick="_trayAdd(4,event)" title="Add a d4 (Shift-click removes)">d4<span class="tray-count"></span></button>
+    <button class="vox-tray-btn" data-die="6" onclick="_trayAdd(6,event)" title="Add a d6 (Shift-click removes)">d6<span class="tray-count"></span></button>
+    <button class="vox-tray-btn" data-die="8" onclick="_trayAdd(8,event)" title="Add a d8 (Shift-click removes)">d8<span class="tray-count"></span></button>
+    <button class="vox-tray-btn" data-die="10" onclick="_trayAdd(10,event)" title="Add a d10 (Shift-click removes)">d10<span class="tray-count"></span></button>
+    <button class="vox-tray-btn" data-die="12" onclick="_trayAdd(12,event)" title="Add a d12 (Shift-click removes)">d12<span class="tray-count"></span></button>
+    <button class="vox-tray-btn" data-die="20" onclick="_trayAdd(20,event)" title="Add a d20 (Shift-click removes)">d20<span class="tray-count"></span></button>
+    <button class="vox-tray-btn" data-die="100" onclick="_trayAdd(100,event)" title="Add a d100 (Shift-click removes)">d%<span class="tray-count"></span></button>
+    <button class="vox-tray-clear" onclick="_trayClear()" title="Clear the dice pool">✕</button>
+  </div>
+  <div id="gm-cmd-row">
+    <input type="text" id="gm-dice-cmd" placeholder="Custom roll — e.g. 2d6+4" onkeydown="if(event.key==='Enter')_gmCmdRoll()">
+    <button id="gm-cmd-go" onclick="_gmCmdRoll()">Roll</button>
+  </div>
 </div>
 <div id="vox-toast" onclick="voxToggle()"></div>
 
@@ -1065,6 +1119,7 @@ async function openStatDrawer(id) {
     const cr = _findCreature(c.statRef.faction, c.statRef.name);
     body.innerHTML = cr ? cr.html
       : '<div class="eb-loading">++ Stat block not found in the archives ++</div>';
+    if (cr) _sdWireRolls(body, c.name);
   } else {
     body.innerHTML = `
       <p style="color:var(--text-dim);font-size:14px;">Custom combatant — no bestiary record. HP ${c.hp}/${c.maxHp} · AC ${c.ac}.</p>
@@ -1107,21 +1162,13 @@ function voxToggle() {
   if (t) t.classList.remove('show');
 }
 function _voxEsc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function _voxRecv(p) {
-  if (!p) return;
-  const cls = (p.cls === 'crit' || p.cls === 'fumble' || p.cls === 'heal') ? p.cls : '';
-  const isPriv = p.to === 'gm'; // whispered roll — only the GM dashboard displays these
-  const body = _voxEsc(String(p.body || '').slice(0, 600))
-    .replace(/= (-?\d+)/g, '= <span class="de-total">$1</span>')
-    .replace(/\n/g, '<br>');
-  const html = '<span class="de-label">' + (isPriv ? '⚿ ' : '') + _voxEsc(String(p.who || '?').slice(0, 60))
-    + ' · ' + _voxEsc(String(p.label || 'roll').slice(0, 120)) + (isPriv ? ' · private' : '') + '</span>' + body;
+function _voxAppend(html, cls) {
   const log = document.getElementById('vox-log');
   if (log) {
     const empty = log.querySelector('.vox-empty');
     if (empty) empty.remove();
     const e = document.createElement('div');
-    e.className = 'vox-entry' + (cls ? ' ' + cls : '') + (isPriv ? ' private' : '');
+    e.className = 'vox-entry' + (cls ? ' ' + cls : '');
     e.innerHTML = html;
     log.insertBefore(e, log.firstChild);
     while (log.children.length > 50) log.removeChild(log.lastChild);
@@ -1136,20 +1183,263 @@ function _voxRecv(p) {
     _voxToastTimer = setTimeout(() => t.classList.remove('show'), 6000);
   }
 }
+function _voxRecv(p) {
+  if (!p) return;
+  const cls = (p.cls === 'crit' || p.cls === 'fumble' || p.cls === 'heal') ? p.cls : '';
+  const isPriv = p.to === 'gm'; // whispered roll — only the GM dashboard displays these
+  const body = _voxEsc(String(p.body || '').slice(0, 600))
+    .replace(/= (-?\d+)/g, '= <span class="de-total">$1</span>')
+    .replace(/\n/g, '<br>');
+  const html = '<span class="de-label">' + (isPriv ? '⚿ ' : '') + _voxEsc(String(p.who || '?').slice(0, 60))
+    + ' · ' + _voxEsc(String(p.label || 'roll').slice(0, 120)) + (isPriv ? ' · private' : '') + '</span>' + body;
+  _voxAppend(html, (cls ? cls + ' ' : '') + (isPriv ? 'private' : ''));
+}
+let _voxChannel = null, _voxReady = false;
 function _voxInit() {
   const d = document.getElementById('vox-status');
   if (typeof supabase === 'undefined' || !supabase.createClient) return;
   try {
     const client = supabase.createClient(SUPA_URL, SUPA_KEY, {auth: {persistSession: false, autoRefreshToken: false}});
-    const ch = client.channel('vox-log-v1', {config: {broadcast: {self: false}}});
-    ch.on('broadcast', {event: 'roll'}, msg => _voxRecv(msg.payload));
-    ch.subscribe(status => {
+    _voxChannel = client.channel('vox-log-v1', {config: {broadcast: {self: false}}});
+    _voxChannel.on('broadcast', {event: 'roll'}, msg => _voxRecv(msg.payload));
+    _voxChannel.subscribe(status => {
+      _voxReady = (status === 'SUBSCRIBED');
       if (d) {
-        d.className = status === 'SUBSCRIBED' ? 'on' : ((status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') ? 'err' : '');
-        d.title = status === 'SUBSCRIBED' ? 'Vox link active — receiving kill team rolls' : 'Vox link offline';
+        d.className = _voxReady ? 'on' : ((status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') ? 'err' : '');
+        d.title = _voxReady ? 'Vox link active — sending and receiving rolls' : 'Vox link offline';
       }
     });
   } catch (e) { if (d) d.className = 'err'; }
+}
+function _voxSend(who, label, body, cls) {
+  if (!_voxChannel || !_voxReady || _gmShare === 'off') return;
+  try {
+    _voxChannel.send({type: 'broadcast', event: 'roll', payload: {
+      who: String(who).slice(0, 60), label: String(label).slice(0, 120),
+      body: String(body).slice(0, 600), cls: cls || '', to: 'all'
+    }});
+  } catch (e) {}
+}
+
+/* ── GM roll engine: same dice mechanics as the character sheets ── */
+let _gmShare = 'all';
+try { _gmShare = localStorage.getItem('gm_vox_share_v1') || 'all'; } catch (e) {}
+function _gmSetShare(m) {
+  _gmShare = m;
+  try { localStorage.setItem('gm_vox_share_v1', m); } catch (e) {}
+  const b = document.getElementById('vox-share-tgl');
+  if (b) {
+    b.textContent = m === 'all' ? 'Team' : 'Silent';
+    b.classList.toggle('silent', m !== 'all');
+    b.title = m === 'all' ? 'Your rolls broadcast to player sheets — click to go silent'
+                          : 'Your rolls stay on this dashboard — click to broadcast';
+  }
+}
+function _gmToggleShare() { _gmSetShare(_gmShare === 'all' ? 'off' : 'all'); }
+let _gmMode = 'norm';
+function _gmSetMode(m) {
+  _gmMode = m;
+  ['adv','norm','dis'].forEach(k => {
+    const b = document.getElementById('gm-mode-' + k);
+    if (b) b.classList.toggle('active', k === m);
+  });
+}
+function _d(n) { return Math.floor(Math.random() * n) + 1; }
+function _diceHasDice(s) { return /\d+\s*d\s*\d+/i.test(s || ''); }
+function _gmLog(who, label, bodyHtml, bodyPlain, cls) {
+  _voxAppend('<span class="de-label">' + _voxEsc(who) + ' · ' + _voxEsc(label) + '</span>' + bodyHtml, cls);
+  _voxSend(who, label, bodyPlain, cls);
+}
+let _gmDmgReg = [];
+function _gmRollD20(who, label, mod, ev, dmgStr) {
+  let mode = _gmMode;
+  if (ev && ev.shiftKey) mode = 'adv';
+  else if (ev && (ev.ctrlKey || ev.altKey)) mode = 'dis';
+  const d1 = _d(20), d2 = _d(20);
+  let used = d1, diceTxt;
+  if (mode === 'adv')      { used = Math.max(d1, d2); diceTxt = 'd20 [' + d1 + ', ' + d2 + '] adv → ' + used; }
+  else if (mode === 'dis') { used = Math.min(d1, d2); diceTxt = 'd20 [' + d1 + ', ' + d2 + '] dis → ' + used; }
+  else                     { diceTxt = 'd20 (' + used + ')'; }
+  const total = used + mod;
+  const cls = used === 20 ? 'crit' : (used === 1 ? 'fumble' : '');
+  const flairTxt = used === 20 ? '✠ Emperor\'s blessing — critical!' : (used === 1 ? 'The dice betray you' : '');
+  let bodyHtml = diceTxt + ' ' + (mod >= 0 ? '+' : '') + mod + ' = <span class="de-total">' + total + '</span>'
+    + (flairTxt ? '<span class="de-flair">' + flairTxt + '</span>' : '');
+  if (dmgStr && _diceHasDice(dmgStr) && used !== 1) {
+    const di = _gmDmgReg.length;
+    _gmDmgReg.push({who, label, dmg: dmgStr, crit: used === 20});
+    bodyHtml += '<br><button class="de-dmg-btn' + (used === 20 ? ' crit' : '') + '" onclick="_gmDmgFromReg(' + di + ')">'
+      + (used === 20 ? '⚔ Roll crit damage' : '⚔ Roll damage') + '</button>';
+  }
+  _gmLog(who, label, bodyHtml,
+    diceTxt + ' ' + (mod >= 0 ? '+' : '') + mod + ' = ' + total + (flairTxt ? '\n' + flairTxt : ''), cls);
+  if (_gmMode !== 'norm') _gmSetMode('norm');
+}
+function _gmDmgFromReg(i) {
+  const r = _gmDmgReg[i];
+  if (r) _gmRollDamage(r.who, r.label, r.dmg, r.crit);
+}
+function _gmRollDamage(who, label, str, crit, isCustom) {
+  const isHeal = /heal|regain|\bhp\b/i.test(String(str));
+  const profs = String(str).replace(/\([^)]*\)/g, '').split('/');
+  const lines = [], plainLines = [];
+  profs.forEach(prof => {
+    if (!_diceHasDice(prof)) return;
+    const diceRe = /(\d+)\s*d\s*(\d+)(?:\s*([A-Za-z][A-Za-z-]*))?/g;
+    const terms = [];
+    let mm;
+    while ((mm = diceRe.exec(prof)) !== null) {
+      terms.push({n: parseInt(mm[1], 10), sides: parseInt(mm[2], 10), type: (mm[3] || '').trim()});
+    }
+    const rest = prof.replace(/(\d+)\s*d\s*(\d+)(?:\s*([A-Za-z][A-Za-z-]*))?/g, ' ');
+    const flats = [];
+    let fm;
+    const flatRe = /[+-]\s*\d+/g;
+    while ((fm = flatRe.exec(rest)) !== null) flats.push(parseInt(fm[0].replace(/\s+/g, ''), 10));
+    let total = 0;
+    const parts = [], typeTotals = {}, typeOrder = [];
+    terms.forEach(t => {
+      const n = Math.min(t.n * (crit ? 2 : 1), 40);
+      const rolls = [];
+      let sum = 0;
+      for (let i = 0; i < n; i++) { const r = _d(t.sides); rolls.push(r); sum += r; }
+      total += sum;
+      parts.push(n + 'd' + t.sides + ' (' + rolls.join(', ') + ')' + (t.type ? ' ' + _voxEsc(t.type) : ''));
+      const key = t.type.toLowerCase();
+      if (!(key in typeTotals)) { typeTotals[key] = {label: t.type, sum: 0}; typeOrder.push(key); }
+      typeTotals[key].sum += sum;
+    });
+    flats.forEach(v => {
+      total += v;
+      parts.push((v >= 0 ? '+' : '') + v);
+      const key = typeOrder.length ? typeOrder[0] : '';
+      if (key in typeTotals) typeTotals[key].sum += v;
+    });
+    if (!parts.length) return;
+    let plain = parts.join(' + ').replace(/\+ \+/g, '+ ') + ' = ' + total;
+    let line = parts.join(' + ').replace(/\+ \+/g, '+ ') + ' = <span class="de-total">' + total + '</span>';
+    let typeLine = '';
+    if (isHeal) typeLine = 'Restores ' + total + ' HP';
+    else {
+      const named = typeOrder.filter(k => k && k !== 'hp');
+      if (named.length) typeLine = named.map(k => typeTotals[k].sum + ' ' + _voxEsc(typeTotals[k].label)).join(' · ') + ' damage';
+    }
+    if (typeLine) { line += '<br><span class="de-types">' + typeLine + '</span>'; plain += '\n' + typeLine; }
+    lines.push(line);
+    plainLines.push(plain);
+  });
+  if (!lines.length) return;
+  const suffix = crit ? ' — CRIT ×2 dice' : (isHeal ? ' — healing' : (isCustom ? '' : ' — damage'));
+  const cls = crit ? 'crit' : (isHeal ? 'heal' : '');
+  _gmLog(who, label + suffix, lines.join('<br>'), plainLines.join('\n'), cls);
+}
+function _gmCmdRoll() {
+  const inp = document.getElementById('gm-dice-cmd');
+  if (!inp) return;
+  let s = inp.value.trim();
+  if (!s) return;
+  if (/^d\s*\d+/i.test(s)) s = '1' + s;
+  if (!_diceHasDice(s)) {
+    inp.style.borderColor = 'var(--red-bright)';
+    setTimeout(() => { inp.style.borderColor = ''; }, 900);
+    return;
+  }
+  _gmRollDamage('GM', s, s, false, true);
+  inp.select();
+}
+
+/* ── Dice tray (same as the sheets: click d10 three times = 3d10) ── */
+const _TRAY_DICE = [4, 6, 8, 10, 12, 20, 100];
+function _trayParse() {
+  const inp = document.getElementById('gm-dice-cmd');
+  const s = inp ? inp.value : '';
+  const pool = {};
+  let mod = 0, m;
+  const re = /(\d*)\s*d\s*(\d+)/gi;
+  while ((m = re.exec(s)) !== null) {
+    const sides = parseInt(m[2], 10);
+    pool[sides] = (pool[sides] || 0) + parseInt(m[1] || '1', 10);
+  }
+  const rest = s.replace(/(\d*)\s*d\s*(\d+)/gi, ' ');
+  const fre = /[+-]\s*\d+/g;
+  let fm;
+  while ((fm = fre.exec(rest)) !== null) mod += parseInt(fm[0].replace(/\s+/g, ''), 10);
+  return {pool, mod};
+}
+function _trayBuild(p) {
+  const parts = [];
+  _TRAY_DICE.forEach(d => { if (p.pool[d]) parts.push(p.pool[d] + 'd' + d); });
+  Object.keys(p.pool).forEach(k => {
+    if (_TRAY_DICE.indexOf(parseInt(k, 10)) === -1 && p.pool[k]) parts.push(p.pool[k] + 'd' + k);
+  });
+  let s = parts.join(' + ');
+  if (p.mod) s += (s ? ' ' : '') + (p.mod > 0 ? '+' : '') + p.mod;
+  return s;
+}
+function _trayAdd(sides, ev) {
+  const p = _trayParse();
+  const delta = (ev && ev.shiftKey) ? -1 : 1;
+  p.pool[sides] = Math.max(0, Math.min(40, (p.pool[sides] || 0) + delta));
+  const inp = document.getElementById('gm-dice-cmd');
+  if (inp) inp.value = _trayBuild(p);
+  _trayRefresh();
+}
+function _trayClear() {
+  const inp = document.getElementById('gm-dice-cmd');
+  if (inp) inp.value = '';
+  _trayRefresh();
+}
+function _trayRefresh() {
+  const p = _trayParse();
+  _TRAY_DICE.forEach(d => {
+    const b = document.querySelector('.vox-tray-btn[data-die="' + d + '"]');
+    if (!b) return;
+    const c = p.pool[d] || 0;
+    b.classList.toggle('has', c > 0);
+    const badge = b.querySelector('.tray-count');
+    if (badge) badge.textContent = c;
+  });
+}
+
+/* ── Enemy stat-block rolls: wrap "+N to hit" and damage dice in the drawer ── */
+let _sdRollReg = [];
+const _SD_TYPES = 'piercing|slashing|bludgeoning|fire|lightning|necrotic|psychic|radiant|thunder|force|acid|cold|poison';
+function _sdWireRolls(body, who) {
+  _sdRollReg = [];
+  body.querySelectorAll('.entry').forEach(entry => {
+    let html = entry.innerHTML;
+    if (!/to hit|\(\s*\d+\s*d\s*\d+/i.test(html)) return;
+    const nameEl = entry.querySelector('.entry-name');
+    const wpn = nameEl ? nameEl.textContent.replace(/[.\s]+$/, '') : 'Attack';
+    let firstDmg = null;
+    html = html.replace(new RegExp('\\(((?:\\d+\\s*d\\s*\\d+)(?:\\s*[+-]\\s*\\d+(?:\\s*d\\s*\\d+)?)*)\\)(\\s*)(' + _SD_TYPES + ')?', 'gi'),
+      (m, dice, sp, type) => {
+        const canon = dice.replace(/\s+/g, '');
+        const dm = canon.match(/^(\d+d\d+)([+-]\d+)?$/i);
+        const built = dm ? (dm[1] + (type ? ' ' + type : '') + (dm[2] ? ' ' + dm[2] : ''))
+                         : canon + (type ? ' ' + type : '');
+        const idx = _sdRollReg.length;
+        _sdRollReg.push({who, label: wpn, hit: null, dmg: built});
+        if (firstDmg === null) firstDmg = built;
+        return '<span class="sd-roll" title="Roll damage" onclick="_sdRollDmg(' + idx + ')">(' + dice + ')</span>' + sp + (type || '');
+      });
+    html = html.replace(/([+-]\d+)\s+to hit/i, (m, bonus) => {
+      const idx = _sdRollReg.length;
+      _sdRollReg.push({who, label: wpn, hit: parseInt(bonus, 10), dmg: firstDmg});
+      return '<span class="sd-roll" title="Roll attack (Shift = adv, Ctrl = dis)" onclick="_sdRollHit(' + idx + ',event)">' + bonus + ' to hit</span>';
+    });
+    entry.innerHTML = html;
+  });
+}
+function _sdRollHit(i, ev) {
+  const r = _sdRollReg[i];
+  if (!r) return;
+  _gmRollD20(r.who, r.label + ' — attack', r.hit, ev, r.dmg);
+}
+function _sdRollDmg(i) {
+  const r = _sdRollReg[i];
+  if (!r) return;
+  _gmRollDamage(r.who, r.label, r.dmg, false);
 }
 
 // Init
@@ -1163,6 +1453,9 @@ document.addEventListener('DOMContentLoaded', function() {
   combatRender();
   const savedView = localStorage.getItem('gm_dash_view');
   if (savedView === 'combat') showView('combat');
+  _gmSetShare(_gmShare);
+  const gmCmd = document.getElementById('gm-dice-cmd');
+  if (gmCmd) gmCmd.addEventListener('input', _trayRefresh);
   _voxInit();
 });
 </script>
