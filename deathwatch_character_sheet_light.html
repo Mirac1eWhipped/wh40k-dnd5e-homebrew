@@ -610,7 +610,15 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .de-dmg-btn:hover{border-color:var(--gold);color:var(--gold-light);}
 .de-dmg-btn.crit{border-color:var(--gold);color:var(--gold-light);box-shadow:0 0 6px rgba(200,164,74,.4);}
 .dice-empty{font-size:10.5pt;color:var(--silver-dim);opacity:.75;padding:2px 0;}
-#dice-cmd-row{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--border2);}
+.dice-tray-row{display:flex;gap:5px;padding:10px 12px 0;align-items:center;border-top:1px solid var(--border2);}
+.dice-tray-btn{position:relative;flex:1;font-family:var(--font-label);font-size:8.5pt;letter-spacing:.03em;background:var(--panel2);border:1px solid var(--border2);color:var(--silver);padding:7px 2px;cursor:pointer;border-radius:2px;white-space:nowrap;}
+.dice-tray-btn:hover{border-color:var(--gold-dim);color:var(--gold-light);}
+.dice-tray-btn .tray-count{position:absolute;top:-7px;right:-5px;min-width:16px;height:16px;line-height:15px;font-size:7.5pt;background:var(--gold);color:#1a1408;border-radius:8px;padding:0 3px;display:none;font-weight:600;text-align:center;}
+.dice-tray-btn.has{border-color:var(--gold);color:var(--gold-light);background:rgba(200,164,74,.10);}
+.dice-tray-btn.has .tray-count{display:block;}
+.dice-tray-clear{font-family:var(--font-label);font-size:9pt;background:transparent;border:1px solid var(--border2);color:var(--silver-dim);padding:7px 8px;cursor:pointer;border-radius:2px;flex:0 0 auto;}
+.dice-tray-clear:hover{border-color:#a04040;color:#cc6060;}
+#dice-cmd-row{display:flex;gap:8px;padding:10px 12px;}
 #dice-cmd{flex:1;min-width:0;background:var(--panel2);border:1px solid var(--border2);color:var(--text);font-family:var(--font-body);font-size:12pt;padding:6px 10px;outline:none;}
 #dice-cmd:focus{border-color:var(--gold-dim);}
 #dice-cmd-go{font-family:var(--font-label);font-size:9pt;letter-spacing:.12em;text-transform:uppercase;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);padding:5px 16px;cursor:pointer;border-radius:2px;}
@@ -3469,6 +3477,58 @@ function _diceCmdRoll() {
   inp.select();
 }
 
+/* ── Dice tray: DDB-style click-to-build pool (3 clicks on d10 = 3d10) ──
+   The buttons read and rewrite #dice-cmd, so typed formulas and tray clicks mix freely. */
+var _TRAY_DICE = [4, 6, 8, 10, 12, 20, 100];
+function _trayParse() {
+  var inp = document.getElementById('dice-cmd');
+  var s = inp ? inp.value : '';
+  var pool = {}, mod = 0, m;
+  var re = /(\d*)\s*d\s*(\d+)/gi;
+  while ((m = re.exec(s)) !== null) {
+    var sides = parseInt(m[2], 10);
+    pool[sides] = (pool[sides] || 0) + parseInt(m[1] || '1', 10);
+  }
+  var rest = s.replace(/(\d*)\s*d\s*(\d+)/gi, ' ');
+  var fre = /[+-]\s*\d+/g, fm;
+  while ((fm = fre.exec(rest)) !== null) mod += parseInt(fm[0].replace(/\s+/g, ''), 10);
+  return {pool: pool, mod: mod};
+}
+function _trayBuild(p) {
+  var parts = [];
+  _TRAY_DICE.forEach(function(d) { if (p.pool[d]) parts.push(p.pool[d] + 'd' + d); });
+  Object.keys(p.pool).forEach(function(k) {
+    if (_TRAY_DICE.indexOf(parseInt(k, 10)) === -1 && p.pool[k]) parts.push(p.pool[k] + 'd' + k);
+  });
+  var s = parts.join(' + ');
+  if (p.mod) s += (s ? ' ' : '') + (p.mod > 0 ? '+' : '') + p.mod;
+  return s;
+}
+function _trayAdd(sides, ev) {
+  var p = _trayParse();
+  var delta = (ev && ev.shiftKey) ? -1 : 1;
+  p.pool[sides] = Math.max(0, Math.min(40, (p.pool[sides] || 0) + delta));
+  var inp = document.getElementById('dice-cmd');
+  if (inp) inp.value = _trayBuild(p);
+  _trayRefresh();
+}
+function _trayClear() {
+  var inp = document.getElementById('dice-cmd');
+  if (inp) inp.value = '';
+  _trayRefresh();
+}
+function _trayRefresh() {
+  var p = _trayParse();
+  _TRAY_DICE.forEach(function(d) {
+    var b = document.querySelector('.dice-tray-btn[data-die="' + d + '"]');
+    if (!b) return;
+    var c = p.pool[d] || 0;
+    b.classList.toggle('has', c > 0);
+    var badge = b.querySelector('.tray-count');
+    if (badge) badge.textContent = c;
+  });
+}
+
 function _diceWireSheet() {
   function rowName(row) {
     var nm = row.querySelector('.dos-sv-name');
@@ -3532,6 +3592,8 @@ function _diceWireSheet() {
       if (p) p.classList.remove('open');
     }
   });
+  var cmdInp = document.getElementById('dice-cmd');
+  if (cmdInp) cmdInp.addEventListener('input', _trayRefresh);
   _voxInit();
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _diceWireSheet);
@@ -3558,6 +3620,16 @@ else _diceWireSheet();
   </div>
   <div class="dice-mode-note" id="dice-mode-note"></div>
   <div id="dice-log"><div class="dice-empty">++ Awaiting rolls — click any skill, save, weapon, or the initiative hex ++</div></div>
+  <div class="dice-tray-row">
+    <button class="dice-tray-btn" data-die="4" onclick="_trayAdd(4,event)" title="Add a d4 (Shift-click removes)">d4<span class="tray-count"></span></button>
+    <button class="dice-tray-btn" data-die="6" onclick="_trayAdd(6,event)" title="Add a d6 (Shift-click removes)">d6<span class="tray-count"></span></button>
+    <button class="dice-tray-btn" data-die="8" onclick="_trayAdd(8,event)" title="Add a d8 (Shift-click removes)">d8<span class="tray-count"></span></button>
+    <button class="dice-tray-btn" data-die="10" onclick="_trayAdd(10,event)" title="Add a d10 (Shift-click removes)">d10<span class="tray-count"></span></button>
+    <button class="dice-tray-btn" data-die="12" onclick="_trayAdd(12,event)" title="Add a d12 (Shift-click removes)">d12<span class="tray-count"></span></button>
+    <button class="dice-tray-btn" data-die="20" onclick="_trayAdd(20,event)" title="Add a d20 (Shift-click removes)">d20<span class="tray-count"></span></button>
+    <button class="dice-tray-btn" data-die="100" onclick="_trayAdd(100,event)" title="Add a d100 (Shift-click removes)">d%<span class="tray-count"></span></button>
+    <button class="dice-tray-clear" onclick="_trayClear()" title="Clear the dice pool">✕</button>
+  </div>
   <div id="dice-cmd-row">
     <input type="text" id="dice-cmd" placeholder="Custom roll — e.g. 2d6+4" onkeydown="if(event.key==='Enter')_diceCmdRoll()">
     <button id="dice-cmd-go" onclick="_diceCmdRoll()">Roll</button>
