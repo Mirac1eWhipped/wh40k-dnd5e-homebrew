@@ -257,6 +257,35 @@
     .combat-form-row { grid-template-columns:1fr 1fr; }
     #stat-drawer { width:100vw;max-width:100vw; }
   }
+
+  /* ── Vox Log: live player dice rolls ── */
+  #vox-fab{position:fixed;right:18px;bottom:18px;z-index:400;width:60px;height:60px;border-radius:50%;background:var(--bg2);border:2px solid var(--gold-dim);color:var(--gold);font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 14px rgba(0,0,0,.65);}
+  #vox-fab:hover{border-color:var(--gold);color:var(--gold-light);}
+  #vox-panel{position:fixed;right:18px;bottom:92px;z-index:400;width:360px;max-width:calc(100vw - 36px);background:var(--panel);border:1px solid var(--border2);box-shadow:0 4px 24px rgba(0,0,0,.7);display:none;flex-direction:column;}
+  #vox-panel.open{display:flex;}
+  .vox-head{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--border2);background:var(--bg2);}
+  .vox-head-lbl{font-family:'Cinzel',serif;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);}
+  #vox-status{width:9px;height:9px;border-radius:50%;background:#555;display:inline-block;margin-right:7px;}
+  #vox-status.on{background:#3c8a4a;box-shadow:0 0 5px rgba(60,138,74,.6);}
+  #vox-status.err{background:#a04040;}
+  .vox-close{background:none;border:none;color:var(--silver-dim);font-size:16px;cursor:pointer;line-height:1;}
+  .vox-close:hover{color:var(--gold-light);}
+  #vox-log{max-height:380px;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:8px;}
+  .vox-entry{font-size:15px;color:var(--text);border-left:2px solid var(--border2);padding:3px 0 3px 10px;line-height:1.45;}
+  .vox-entry .de-label{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--silver-dim);display:block;}
+  .vox-entry .de-total{color:var(--gold-light);font-weight:600;font-size:17px;}
+  .vox-entry.crit{border-left-color:var(--gold);}
+  .vox-entry.fumble{border-left-color:var(--red-bright);}
+  .vox-entry.fumble .de-total{color:var(--red-bright);}
+  .vox-entry.heal{border-left-color:#3c8a4a;}
+  .vox-entry.heal .de-total{color:#8fd39b;}
+  .vox-entry.private{border-left-color:#8a76d8;}
+  .vox-entry.private .de-label{color:#a99ae0;}
+  .vox-empty{font-size:13px;color:var(--text-dim);padding:2px 0;}
+  #vox-toast{position:fixed;right:92px;bottom:24px;z-index:399;background:var(--panel);border:1px solid var(--border2);border-left:3px solid var(--gold-dim);padding:9px 16px;max-width:400px;box-shadow:0 4px 18px rgba(0,0,0,.7);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;transform:translateY(6px);font-size:15px;cursor:pointer;}
+  #vox-toast.show{opacity:1;transform:translateY(0);pointer-events:auto;}
+  #vox-toast .de-label{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--silver-dim);display:block;}
+  #vox-toast .de-total{color:var(--gold-light);font-weight:600;font-size:17px;}
 </style>
 </head>
 <body>
@@ -402,6 +431,18 @@
   <div class="sd-body" id="sd-body"></div>
 </div>
 
+<!-- Vox Log: live player dice rolls -->
+<button id="vox-fab" onclick="voxToggle()" title="Vox Log — live player rolls">⚅</button>
+<div id="vox-panel">
+  <div class="vox-head">
+    <span class="vox-head-lbl"><span id="vox-status" title="Vox link offline"></span>✠ Vox Log</span>
+    <button class="vox-close" onclick="voxToggle()" title="Close">✕</button>
+  </div>
+  <div id="vox-log"><div class="vox-empty">++ Listening for kill team rolls… ++</div></div>
+</div>
+<div id="vox-toast" onclick="voxToggle()"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 const SUPA_URL = 'https://uggazjqvwyndpcxrkazx.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnZ2F6anF2d3luZHBjeHJrYXp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4MTcxOTAsImV4cCI6MjA5NDM5MzE5MH0.6dcsbi-lzQJUQS5UZTVg-tI_mFuy8yfAlfWsf0ennpU';
@@ -1057,6 +1098,60 @@ document.addEventListener('keydown', e => {
   }
 });
 
+/* ── Vox Log: live player dice rolls via Supabase realtime broadcast ── */
+let _voxToastTimer = null;
+function voxToggle() {
+  const p = document.getElementById('vox-panel');
+  if (p) p.classList.toggle('open');
+  const t = document.getElementById('vox-toast');
+  if (t) t.classList.remove('show');
+}
+function _voxEsc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function _voxRecv(p) {
+  if (!p) return;
+  const cls = (p.cls === 'crit' || p.cls === 'fumble' || p.cls === 'heal') ? p.cls : '';
+  const isPriv = p.to === 'gm'; // whispered roll — only the GM dashboard displays these
+  const body = _voxEsc(String(p.body || '').slice(0, 600))
+    .replace(/= (-?\d+)/g, '= <span class="de-total">$1</span>')
+    .replace(/\n/g, '<br>');
+  const html = '<span class="de-label">' + (isPriv ? '⚿ ' : '') + _voxEsc(String(p.who || '?').slice(0, 60))
+    + ' · ' + _voxEsc(String(p.label || 'roll').slice(0, 120)) + (isPriv ? ' · private' : '') + '</span>' + body;
+  const log = document.getElementById('vox-log');
+  if (log) {
+    const empty = log.querySelector('.vox-empty');
+    if (empty) empty.remove();
+    const e = document.createElement('div');
+    e.className = 'vox-entry' + (cls ? ' ' + cls : '') + (isPriv ? ' private' : '');
+    e.innerHTML = html;
+    log.insertBefore(e, log.firstChild);
+    while (log.children.length > 50) log.removeChild(log.lastChild);
+    log.scrollTop = 0;
+  }
+  const panel = document.getElementById('vox-panel');
+  const t = document.getElementById('vox-toast');
+  if (t && !(panel && panel.classList.contains('open'))) {
+    t.innerHTML = html;
+    t.classList.add('show');
+    clearTimeout(_voxToastTimer);
+    _voxToastTimer = setTimeout(() => t.classList.remove('show'), 6000);
+  }
+}
+function _voxInit() {
+  const d = document.getElementById('vox-status');
+  if (typeof supabase === 'undefined' || !supabase.createClient) return;
+  try {
+    const client = supabase.createClient(SUPA_URL, SUPA_KEY, {auth: {persistSession: false, autoRefreshToken: false}});
+    const ch = client.channel('vox-log-v1', {config: {broadcast: {self: false}}});
+    ch.on('broadcast', {event: 'roll'}, msg => _voxRecv(msg.payload));
+    ch.subscribe(status => {
+      if (d) {
+        d.className = status === 'SUBSCRIBED' ? 'on' : ((status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') ? 'err' : '');
+        d.title = status === 'SUBSCRIBED' ? 'Vox link active — receiving kill team rolls' : 'Vox link offline';
+      }
+    });
+  } catch (e) { if (d) d.className = 'err'; }
+}
+
 // Init
 document.addEventListener('DOMContentLoaded', function() {
   if (_loggedIn()) {
@@ -1068,6 +1163,7 @@ document.addEventListener('DOMContentLoaded', function() {
   combatRender();
   const savedView = localStorage.getItem('gm_dash_view');
   if (savedView === 'combat') showView('combat');
+  _voxInit();
 });
 </script>
 </body>
