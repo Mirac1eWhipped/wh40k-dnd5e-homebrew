@@ -433,6 +433,7 @@ async function gmSignIn() {
     });
     if (d.access_token) {
       localStorage.setItem('gm_supa_tok', d.access_token);
+      if (d.refresh_token) localStorage.setItem('gm_supa_rtok', d.refresh_token);
       localStorage.setItem('gm_supa_email', d.user.email);
       document.getElementById('auth-modal').style.display = 'none';
       document.getElementById('gm-email').textContent = d.user.email;
@@ -446,18 +447,74 @@ async function gmSignIn() {
 
 function gmSignOut() {
   localStorage.removeItem('gm_supa_tok');
+  localStorage.removeItem('gm_supa_rtok');
   localStorage.removeItem('gm_supa_email');
   document.getElementById('auth-modal').style.display = 'flex';
   document.getElementById('gm-email').textContent = '';
   document.getElementById('cards-grid').innerHTML = '<div class="loading">++ Awaiting Authentication — Stand By ++</div>';
 }
 
-async function loadAllChars() {
+/* ── Token lifecycle — access tokens expire after ~1h; refresh silently ── */
+function _gmTokenExpired() {
+  const t = localStorage.getItem('gm_supa_tok');
+  if (!t) return false;
+  try { const p = JSON.parse(atob(t.split('.')[1])); return p.exp && (Date.now()/1000) > (p.exp - 60); }
+  catch(e) { return false; }
+}
+
+async function _gmRefreshToken() {
+  const rt = localStorage.getItem('gm_supa_rtok');
+  if (!rt) return false;
+  try {
+    const r = await fetch(SUPA_URL + '/auth/v1/token?grant_type=refresh_token', {
+      method: 'POST',
+      headers: { 'apikey': SUPA_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token: rt })
+    });
+    const d = await r.json();
+    if (d.access_token) {
+      localStorage.setItem('gm_supa_tok', d.access_token);
+      if (d.refresh_token) localStorage.setItem('gm_supa_rtok', d.refresh_token);
+      return true;
+    }
+  } catch(e) {}
+  return false;
+}
+
+function _gmSessionExpired() {
+  localStorage.removeItem('gm_supa_tok');
+  localStorage.removeItem('gm_supa_rtok');
+  localStorage.removeItem('gm_supa_email');
+  document.getElementById('auth-modal').style.display = 'flex';
+  document.getElementById('gm-email').textContent = '';
+  document.getElementById('auth-err').textContent = 'Session expired — sign in again.';
+  document.getElementById('cards-grid').innerHTML = '<div class="loading">++ Awaiting Authentication — Stand By ++</div>';
+}
+
+async function _ensureFreshToken() {
+  if (!_loggedIn()) return false;
+  if (_gmTokenExpired()) {
+    if (!(await _gmRefreshToken())) { _gmSessionExpired(); return false; }
+  }
+  return true;
+}
+
+async function loadAllChars(retried) {
   const grid = document.getElementById('cards-grid');
+  if (!(await _ensureFreshToken())) return;
   grid.innerHTML = '<div class="loading">++ Retrieving Operative Records ++</div>';
   try {
-    // Use the service role endpoint to get all characters (GM sees everything via RLS policy)
-    let rows = await _sfetch('/rest/v1/characters?select=*&order=updated_at.desc', { method:'GET' });
+    // GM sees every character via RLS policy
+    const r = await fetch(SUPA_URL + '/rest/v1/characters?select=*&order=updated_at.desc', {
+      headers: { 'apikey': SUPA_KEY, 'Content-Type': 'application/json', ..._authHdr() }
+    });
+    if (r.status === 401 || r.status === 403) {
+      // Token rejected server-side — try one silent refresh, then re-prompt
+      if (!retried && await _gmRefreshToken()) return loadAllChars(true);
+      _gmSessionExpired();
+      return;
+    }
+    let rows = await r.json();
     if (!Array.isArray(rows)) {
       grid.innerHTML = '<div class="loading">++ No records found or insufficient clearance ++</div>';
       return;
@@ -744,6 +801,11 @@ async function combatImportKillTeam(btn) {
   btn.textContent = 'Importing…';
   try {
     if (!_allChars.length) await loadAllChars();
+    if (!_loggedIn()) {
+      btn.textContent = 'Sign In First';
+      setTimeout(() => { btn.textContent = orig; }, 1800);
+      return;
+    }
     let added = 0;
     _allChars.forEach(row => {
       const ex = row.extra || {};
