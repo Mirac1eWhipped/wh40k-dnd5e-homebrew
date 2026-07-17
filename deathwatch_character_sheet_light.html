@@ -153,6 +153,8 @@ body{background:var(--bg-page);font-family:var(--font-body);color:var(--text);fo
 }
 .dos-ac-val{font-family:var(--font-label);font-size:22pt;font-weight:700;color:var(--text);line-height:1.15;display:block;white-space:nowrap;}
 .dos-ac-lbl{font-family:var(--font-label);font-size:7.5pt;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);display:block;margin-top:1px;white-space:nowrap;}
+.dos-ac-box{cursor:pointer;}
+.dos-ac-box:hover .dos-ac-lbl{color:var(--gold-light);}
 .dos-cond-box{background:var(--panel2);border:1px solid var(--border2);padding:6px 8px;}
 
 /* ── Section Block ── */
@@ -228,15 +230,33 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .atk-table td input[readonly]{color:var(--gold-light)!important;cursor:default!important;}
 .atk-table td select{font-size:10pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:2px 0!important;background:var(--panel)!important;color:var(--text)!important;outline:none!important;width:100%!important;}
 .atk-table td select:focus{border-bottom-color:var(--gold)!important;}
-/* ── ARMOR BLOCK ── */
-.ac-block{display:flex;align-items:center;gap:14px;background:var(--panel2);border:1px solid var(--gold-dim);padding:10px 14px;margin:8px 0;}
-.ac-shield{text-align:center;flex-shrink:0;}
-.ac-shield-num{font-family:var(--font-label);font-size:40pt;font-weight:700;color:var(--text);line-height:1;display:block;}
-.ac-shield-lbl{font-family:var(--font-label);font-size:9pt;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);}
-.ac-formula{font-family:var(--font-label);font-size:9pt;color:var(--text-dim);margin-top:4px;}
-.ac-formula span{color:var(--gold-light);}
+/* ── AC BREAKDOWN PANEL (opens from the dossier Armor Class shield — relocated at runtime by _mountAcPanel) ── */
+.ac-panel{display:none;position:fixed;z-index:800;width:400px;max-width:94vw;max-height:82vh;overflow-y:auto;background:var(--panel);border:1px solid var(--gold-dim);box-shadow:0 10px 40px rgba(0,0,0,.55);padding:12px 14px;}
+.ac-panel.open{display:block;}
+.ac-panel-hdr{display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--gold-dim);padding-bottom:8px;margin-bottom:8px;}
+.armor-strip-ac{display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;min-width:50px;border:1px solid var(--gold-dim);background:var(--panel2);padding:3px 8px 4px;}
+.armor-strip-ac-num{font-family:var(--font-label);font-size:17pt;font-weight:700;color:var(--text);line-height:1.1;}
+.armor-strip-ac-lbl{font-family:var(--font-label);font-size:6.5pt;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);}
+.armor-summary-wrap{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;justify-content:center;}
+.armor-summary-lbl{font-family:var(--font-label);font-size:6.5pt;letter-spacing:.18em;text-transform:uppercase;color:var(--silver-dim);}
+.armor-summary{font-family:var(--font-label);font-size:11pt;color:var(--gold-light);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.armor-summary.unarmored{color:var(--text-dim);}
+.ac-panel-close{margin-left:auto;width:24px;height:24px;flex-shrink:0;background:transparent;border:1px solid var(--border2);border-radius:3px;color:var(--text-dim);font-size:11px;line-height:1;cursor:pointer;}
+.ac-panel-close:hover{border-color:var(--gold-dim);color:var(--gold-dim);}
+.ac-panel-sec{font-family:var(--font-label);font-size:8pt;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;}
+.acb-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:3px 2px;border-bottom:1px solid var(--border);}
+.acb-row.acb-total{border-bottom:none;border-top:1px solid var(--gold-dim);margin-top:2px;padding-top:5px;}
+.acb-src{font-family:var(--font-label);font-size:9.5pt;color:var(--text);min-width:0;}
+.acb-val{font-family:var(--font-label);font-size:10.5pt;font-weight:600;color:var(--gold-light);flex-shrink:0;}
+.acb-total .acb-src{color:var(--gold);text-transform:uppercase;letter-spacing:.14em;font-size:8.5pt;}
+.acb-total .acb-val{font-size:13pt;color:var(--text);}
+.acb-tag{font-size:6.5pt;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);border:1px solid var(--border2);padding:0 4px;border-radius:3px;vertical-align:1px;}
+.acb-note{font-size:7.5pt;color:var(--text-dim);}
+.armor-manual-hint{font-family:var(--font-label);font-size:7pt;letter-spacing:.08em;color:var(--text-dim);opacity:.8;margin-top:2px;text-transform:uppercase;}
+.armor-shield-chip{display:flex;align-items:center;gap:5px;flex-shrink:0;border:1px solid var(--border2);background:var(--panel2);padding:5px 9px;cursor:pointer;font-family:var(--font-label);font-size:8pt;letter-spacing:.12em;text-transform:uppercase;color:var(--silver-dim);user-select:none;margin-bottom:1px;white-space:nowrap;}
+.armor-shield-chip input{width:12px;height:12px;margin:0;accent-color:var(--gold);cursor:pointer;}
+.armor-shield-chip:has(input:checked){border-color:var(--gold);color:var(--gold-light);background:rgba(200,164,74,.12);}
 .armor-row{display:grid;gap:6px;align-items:end;margin-top:8px;}
-.armor-row.r4{grid-template-columns:1fr 1fr;}
 .field-group select{font-family:var(--font-body);font-size:10pt;background:transparent;border:none;border-bottom:1px solid var(--line);color:var(--text);outline:none;padding:2px 0;width:100%;}
 .field-group select:focus{border-bottom-color:var(--gold);}
 
@@ -294,6 +314,8 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
   .sheet-header{position:static!important;}
   .tab-panel{display:block!important;}
   .rc-tab-panel{display:block!important;}
+  .ac-panel{display:block!important;position:static!important;width:auto!important;max-height:none!important;box-shadow:none!important;}
+  .ac-panel-close{display:none!important;}
 }
 
 
@@ -791,7 +813,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
       <input type="text" id="stat-initiative" placeholder="+0">
       <span class="dos-init-lbl">Initiative</span>
     </div>
-    <div class="dos-ac-box">
+    <div class="dos-ac-box" id="dos-ac-box" onclick="_acPanelToggle(event)" title="Click for AC breakdown &amp; overrides">
       <span class="dos-ac-val" id="ac-display-dossier">10</span>
       <span id="ac-display-val" style="display:none;">10</span>
       <span class="dos-ac-lbl">Armor Class</span>
@@ -1031,53 +1053,55 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 
       <!-- WARGEAR tab (content from panel-wargear) -->
       <div class="rc-tab-panel" id="rc-wargear">
-        <div class="g2" style="margin-bottom:10px;">
-          <div class="section">
-            <div class="sec-title">Armor &amp; Protection</div>
-            <div style="display:flex;flex-direction:column;gap:7px;">
-              <div class="armor-row" style="grid-template-columns:1fr 1fr;">
-                <div class="field-group"><label>Armor Name</label><input type="text" id="armor-name" placeholder="e.g. Tacticus, Phobos…"></div>
-                <div class="field-group"><label>Armor Type</label>
-                  <select id="armor-type" onchange="onArmorTypeChange()">
-                    <option value="phobos">Phobos (12 + DEX)</option>
-                    <option value="tacticus">Tacticus (16)</option>
-                    <option value="gravis">Gravis (18)</option>
-                    <option value="terminator">Terminator (20)</option>
-                    <option value="custom">Custom</option>
-                  </select>
-                </div>
+        <div class="g2" style="margin-bottom:10px;" id="wg-row1">
+          <!-- AC BREAKDOWN PANEL — opened by clicking the dossier Armor Class shield
+               (relocated at runtime by _mountAcPanel). Saves are positional by source order,
+               so this block must NOT move in the source — only ids/labels/layout inside it
+               may change, and the field order (armor-name, armor-type, armor-base-ac,
+               armor-dex-mod, armor-bonus, armor-special, armor-str-req) must stay fixed. -->
+          <div id="armor-inline-block" class="ac-panel">
+            <div class="ac-panel-hdr">
+              <div class="armor-strip-ac" title="Armor Class"><span class="armor-strip-ac-num" id="ac-display-val-wg">10</span><span class="armor-strip-ac-lbl">AC</span></div>
+              <div class="armor-summary-wrap">
+                <span class="armor-summary-lbl">Protection</span>
+                <span class="armor-summary" id="armor-summary">Unarmored</span>
               </div>
-              <div class="ac-block">
-                <div class="ac-shield">
-                  <span class="ac-shield-num" id="ac-display-val-wg">10</span>
-                  <span class="ac-shield-lbl">Armor Class</span>
-                </div>
-                <div style="flex:1;min-width:0;">
-                  <div class="ac-formula" id="ac-formula-txt">Base <span id="acf-base">10</span> + DEX <span id="acf-dex">+0</span> + Other <span id="acf-other">+0</span></div>
-                </div>
-              </div>
-              <div class="armor-row r4">
-                <div class="field-group"><label>Base AC</label><input type="number" id="armor-base-ac" placeholder="10" oninput="calcAC()"></div>
-                <div class="field-group"><label>DEX Bonus</label>
-                  <select id="armor-dex-mod" onchange="calcAC()">
-                    <option value="full">Full DEX</option>
-                    <option value="max2">Max +2</option>
-                    <option value="none">None</option>
-                  </select>
-                </div>
-                <div class="field-group"><label>Other Bonus</label><input type="number" id="armor-bonus" placeholder="0" oninput="calcAC()"></div>
-                <div class="field-group" style="align-items:center;display:flex;flex-direction:column;gap:2px;">
-                  <label style="text-align:center;">Shield +2</label>
-                  <input type="checkbox" id="armor-shield" onchange="calcAC()" style="width:16px;height:16px;margin-top:2px;">
-                </div>
-              </div>
-              <div class="armor-row" style="grid-template-columns:1fr 80px;">
-                <div class="field-group"><label>Special Properties</label><input type="text" id="armor-special" placeholder="e.g. Stealth disadvantage, Power field…"></div>
-                <div class="field-group"><label>Str Req.</label><input type="text" id="armor-str-req" placeholder="—"></div>
+              <button type="button" class="ac-panel-close" onclick="_acPanelToggle()" title="Close">✕</button>
+            </div>
+            <div class="ac-panel-sec">Contributing to AC</div>
+            <div id="ac-breakdown"></div>
+            <div class="ac-panel-sec" style="margin-top:10px;">Armor &amp; Overrides</div>
+            <div class="armor-manual-hint">Set automatically when armor or a shield is equipped in the wargear list — edit here for homebrew gear or manual overrides.</div>
+            <div class="armor-row" style="grid-template-columns:2fr 1fr;">
+              <div class="field-group"><label>Armor Name</label><input type="text" id="armor-name" placeholder="e.g. Tacticus, Phobos…" oninput="calcAC()"></div>
+              <div class="field-group"><label>Type</label>
+                <select id="armor-type" onchange="onArmorTypeChange()">
+                  <option value="phobos">Phobos (12 + DEX)</option>
+                  <option value="tacticus">Tacticus (16)</option>
+                  <option value="gravis">Gravis (18)</option>
+                  <option value="terminator">Terminator (20)</option>
+                  <option value="custom">Custom</option>
+                </select>
               </div>
             </div>
+            <div class="armor-row" style="grid-template-columns:1fr 1fr 1fr auto;">
+              <div class="field-group"><label>Base AC</label><input type="number" id="armor-base-ac" placeholder="10" oninput="calcAC()"></div>
+              <div class="field-group"><label>DEX Bonus</label>
+                <select id="armor-dex-mod" onchange="calcAC()">
+                  <option value="full">Full DEX</option>
+                  <option value="max2">Max +2</option>
+                  <option value="none">None</option>
+                </select>
+              </div>
+              <div class="field-group"><label>Other Bonus</label><input type="number" id="armor-bonus" placeholder="0" oninput="calcAC()"></div>
+              <label class="armor-shield-chip" title="+2 AC — manual override; equipping a shield in the wargear list applies this automatically"><input type="checkbox" id="armor-shield" onchange="calcAC()"><span>⛨ Shield +2</span></label>
+            </div>
+            <div class="armor-row" style="grid-template-columns:1fr 80px;">
+              <div class="field-group"><label>Special Properties</label><input type="text" id="armor-special" placeholder="e.g. Stealth disadvantage, Power field…"></div>
+              <div class="field-group"><label>Str Req.</label><input type="text" id="armor-str-req" placeholder="—"></div>
+            </div>
           </div>
-          <div class="section">
+          <div class="section" id="wg-currency-section">
             <div class="sec-title">Currency &amp; Requisition</div>
             <div class="cur-boxes">
               <div class="cur-box" style="flex:1;padding:14px 20px;"><input type="text" id="req-points" placeholder="0" style="font-size:20pt!important;"><span class="ab-lbl" style="font-size:9pt;margin-top:4px;">Requisition Points</span></div>
@@ -1087,7 +1111,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
           </div>
         </div>
         <div class="g2">
-          <div class="section">
+          <div class="section" id="wg-equip-section">
             <div class="sec-title" style="display:flex;align-items:center;">Equipment &amp; Wargear<button class="sreq-open-btn" onclick="_sreqOpen()">+ Requisitorium</button></div>
             <div style="display:grid;grid-template-columns:22px 3fr 1fr 2fr;gap:4px;padding:3px 4px;border-bottom:1px solid var(--gold-dim);">
               <span></span>
@@ -1110,7 +1134,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 <div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(12)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
 <div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(13)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
           </div>
-          <div>
+          <div id="wg-right-col">
             <div class="section" style="margin-bottom:10px;">
               <div class="sec-title">Ammunition Tracking</div>
               <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:4px;padding:3px 4px;border-bottom:1px solid var(--gold-dim);">
@@ -1543,10 +1567,67 @@ function _toggleEquip(idx) {
   var btn = document.querySelectorAll('.wg-equip-btn')[idx];
   if (!btn) return;
   if (!_wargearMeta[idx]) _wargearMeta[idx] = {equipped:false};
-  _wargearMeta[idx].equipped = !_wargearMeta[idx].equipped;
-  btn.classList.toggle('equipped', _wargearMeta[idx].equipped);
+  var meta = _wargearMeta[idx];
+  var nowEquipped = !meta.equipped;
+  // Only one suit of armor can be worn at a time — equipping one unequips the rest
+  if (meta.is_armor && nowEquipped) {
+    var btns = document.querySelectorAll('.wg-equip-btn');
+    _wargearMeta.forEach(function(m, j) {
+      if (m && m.is_armor && m.equipped && j !== idx) {
+        m.equipped = false;
+        if (btns[j]) btns[j].classList.remove('equipped');
+      }
+    });
+  }
+  meta.equipped = nowEquipped;
+  btn.classList.toggle('equipped', nowEquipped);
+  if (meta.is_armor || meta.is_shield) _applyArmorFromWargear();
   syncQuickActionsFromWargear();
   _schedSave();
+}
+
+/* True when any equipped wargear row is a shield (drives the +2 in calcAC) */
+function _shieldRowEquipped() {
+  for (var i = 0; i < _wargearMeta.length; i++) {
+    var m = _wargearMeta[i];
+    if (m && m.is_shield && m.equipped) return true;
+  }
+  return false;
+}
+
+/* Writes the equipped armor row's stats into the manual armor fields (the persistent
+   AC backing store), then recalcs. Unequipping everything reverts to unarmored. */
+function _applyArmorFromWargear() {
+  var armorIdx = -1;
+  for (var i = 0; i < _wargearMeta.length; i++) {
+    var m = _wargearMeta[i];
+    if (m && m.is_armor && m.equipped) { armorIdx = i; break; }
+  }
+  var nameEl = document.getElementById('armor-name');
+  var typeEl = document.getElementById('armor-type');
+  var spEl   = document.getElementById('armor-special');
+  var srEl   = document.getElementById('armor-str-req');
+  if (armorIdx !== -1) {
+    var meta = _wargearMeta[armorIdx];
+    var it = (meta.id && typeof REQ_ITEMS !== 'undefined')
+      ? REQ_ITEMS.find(function(x){ return x.id === meta.id; }) : null;
+    var rowIns = document.querySelectorAll('.wg-equip-row')[armorIdx];
+    var rowName = rowIns ? (rowIns.querySelectorAll('input')[0] || {}).value : '';
+    if (nameEl) nameEl.value = it ? it.name : (rowName || '').trim();
+    if (typeEl) typeEl.value = (it && it.armor_type) ? it.armor_type : 'custom';
+    if (spEl)   spEl.value   = it ? (it.effects || '') : spEl.value;
+    if (srEl)   srEl.value   = it ? (it.str_req || '—') : srEl.value;
+  } else {
+    if (nameEl) nameEl.value = '';
+    if (typeEl) typeEl.value = 'custom';
+    if (spEl)   spEl.value   = '';
+    if (srEl)   srEl.value   = '';
+    var baseEl = document.getElementById('armor-base-ac');
+    var dexEl  = document.getElementById('armor-dex-mod');
+    if (baseEl) baseEl.value = '';
+    if (dexEl)  dexEl.value  = 'full';
+  }
+  onArmorTypeChange(); // fills Base AC / DEX from the type defaults, then calcAC()
 }
 
 var _qaFilter = 'all';
@@ -1829,7 +1910,9 @@ function calcAC() {
   var dexType = (document.getElementById('armor-dex-mod')||{}).value || 'full';
   var dexBonus = dexType === 'none' ? 0 : (dexType === 'max2' ? Math.min(dexMod, 2) : dexMod);
   var other  = parseInt((document.getElementById('armor-bonus')||{}).value) || 0;
-  var shield = (document.getElementById('armor-shield')||{}).checked ? 2 : 0;
+  // Shield +2 comes from an equipped shield in the wargear list OR the manual override chip
+  var shieldOn = (document.getElementById('armor-shield')||{}).checked || _shieldRowEquipped();
+  var shield = shieldOn ? 2 : 0;
   var total  = base + dexBonus + other + shield;
   // Update all AC display mirrors
   var dispEl = document.getElementById('ac-display-val');
@@ -1840,12 +1923,91 @@ function calcAC() {
   if (dispDos) dispDos.textContent = total;
   var acEl = document.getElementById('stat-ac');
   if (acEl) acEl.value = total;
-  var fBase  = document.getElementById('acf-base');
-  var fDex   = document.getElementById('acf-dex');
-  var fOther = document.getElementById('acf-other');
-  if (fBase)  fBase.textContent  = base;
-  if (fDex)   fDex.textContent   = (dexBonus >= 0 ? '+' : '') + dexBonus;
-  if (fOther) fOther.textContent = (other + shield >= 0 ? '+' : '') + (other + shield);
+  var sumEl = document.getElementById('armor-summary');
+  if (sumEl) {
+    var nm = ((document.getElementById('armor-name')||{}).value || '').trim();
+    sumEl.textContent = (nm || 'Unarmored') + (shieldOn ? ' · ⛨ Shield' : '');
+    sumEl.classList.toggle('unarmored', !nm && !shieldOn);
+  }
+  _acBreakdownRender({base: base, dexBonus: dexBonus, dexType: dexType, other: other, shield: shield, shieldOn: shieldOn, total: total});
+}
+/* Renders the per-source list in the AC panel ("what makes up your AC") */
+function _acBreakdownRender(v) {
+  var el = document.getElementById('ac-breakdown');
+  if (!el) return;
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  function tag(t){ return ' <span class="acb-tag">'+t+'</span>'; }
+  var armorRowName = null, shieldRowName = null;
+  var wgRows = document.querySelectorAll('.wg-equip-row');
+  for (var i = 0; i < _wargearMeta.length; i++) {
+    var m = _wargearMeta[i];
+    if (!m || !m.equipped) continue;
+    var nm = wgRows[i] ? ((wgRows[i].querySelectorAll('input')[0]||{}).value||'').trim() : '';
+    if (m.is_armor  && armorRowName  === null) armorRowName  = nm;
+    if (m.is_shield && shieldRowName === null) shieldRowName = nm;
+  }
+  var armorName = ((document.getElementById('armor-name')||{}).value || '').trim();
+  var rows = '';
+  rows += '<div class="acb-row"><span class="acb-src">'
+        + (armorName ? esc(armorName) + tag(armorRowName ? 'wargear' : 'manual') : 'Unarmored')
+        + '</span><span class="acb-val">' + v.base + '</span></div>';
+  var dexNote = v.dexType === 'none' ? ' <span class="acb-note">not applied</span>'
+              : (v.dexType === 'max2' ? ' <span class="acb-note">max +2</span>' : '');
+  rows += '<div class="acb-row"><span class="acb-src">DEX modifier' + dexNote
+        + '</span><span class="acb-val">' + (v.dexBonus >= 0 ? '+' : '') + v.dexBonus + '</span></div>';
+  if (v.shieldOn) {
+    rows += '<div class="acb-row"><span class="acb-src">'
+          + (shieldRowName ? esc(shieldRowName) + tag('wargear') : 'Shield' + tag('manual'))
+          + '</span><span class="acb-val">+' + v.shield + '</span></div>';
+  }
+  if (v.other) {
+    rows += '<div class="acb-row"><span class="acb-src">Other bonus' + tag('manual')
+          + '</span><span class="acb-val">' + (v.other >= 0 ? '+' : '') + v.other + '</span></div>';
+  }
+  rows += '<div class="acb-row acb-total"><span class="acb-src">Armor Class</span><span class="acb-val">' + v.total + '</span></div>';
+  el.innerHTML = rows;
+}
+function _acPanelToggle(e) {
+  var p = document.getElementById('armor-inline-block');
+  if (!p) return;
+  var open = !p.classList.contains('open');
+  p.classList.toggle('open', open);
+  if (!open) return;
+  calcAC(); // refresh the breakdown on open
+  var box = document.getElementById('dos-ac-box');
+  if (box) {
+    var r = box.getBoundingClientRect();
+    p.style.left = Math.max(8, Math.min(r.left, window.innerWidth - p.offsetWidth - 12)) + 'px';
+    p.style.top  = Math.max(8, Math.min(r.bottom + 8, window.innerHeight - p.offsetHeight - 12)) + 'px';
+  }
+}
+/* The armor inputs must keep their source position for the positional save format, but the
+   editor now lives in the AC panel opened from the dossier Armor Class shield. Runs after
+   _wireFields() has memoized _fields()/_checkboxes(), so relocating the DOM here cannot
+   affect save order. */
+function _mountAcPanel() {
+  _fields(); _checkboxes();  // ensure caches are primed before any DOM moves
+  var panel = document.getElementById('armor-inline-block');
+  var row   = document.querySelector('.dos-status-row');
+  var cur   = document.getElementById('wg-currency-section');
+  var right = document.getElementById('wg-right-col');
+  var row1  = document.getElementById('wg-row1');
+  if (panel && row) row.insertAdjacentElement('afterend', panel);
+  if (cur && right) { right.insertBefore(cur, right.firstChild); cur.style.marginBottom = '10px'; }
+  if (row1 && panel && !row1.contains(panel)) row1.remove();
+  // Close the panel on outside click or Esc
+  document.addEventListener('mousedown', function(ev) {
+    var p = document.getElementById('armor-inline-block');
+    if (!p || !p.classList.contains('open')) return;
+    var box = document.getElementById('dos-ac-box');
+    if (p.contains(ev.target) || (box && box.contains(ev.target))) return;
+    p.classList.remove('open');
+  });
+  document.addEventListener('keydown', function(ev) {
+    if (ev.key !== 'Escape') return;
+    var p = document.getElementById('armor-inline-block');
+    if (p) p.classList.remove('open');
+  });
 }
 
 /* ── Class features renderer ── */
@@ -2087,18 +2249,24 @@ async function _refreshToken() {
   _clearSession(); return false;
 }
 
+// Both lists are MEMOIZED on first call (from _wireFields at DOMContentLoaded), while every
+// input is still at its source position. _mountAcPanel() then relocates the armor block in
+// the DOM; the cached order keeps saves positionally identical to pre-merge saves.
+var _fieldsCache = null, _checkboxCache = null;
 function _fields() {
   // #skill-arcana excluded — added after live saves existed; fields restore by DOM
   // position, and its value is derived on recalc anyway (prof saves via extra.arcana_prof)
   // #dice-cmd excluded — dice roller scratch input, never persisted
-  return Array.from(document.querySelectorAll(
+  if (!_fieldsCache) _fieldsCache = Array.from(document.querySelectorAll(
     'input:not([readonly]):not([type=button]):not([type=submit]):not([type=file]):not([type=checkbox]):not(.auth-inp):not(#skill-arcana):not(#dice-cmd),' +
     'textarea:not(.auth-inp),select:not(#cls-select):not(#sub-select)'
   ));
+  return _fieldsCache;
 }
 function _checkboxes() {
   // #skill-arcana-prof excluded for the same positional-save reason as #skill-arcana
-  return Array.from(document.querySelectorAll('input[type=checkbox]:not(.exp-chk):not(#skill-arcana-prof)'));
+  if (!_checkboxCache) _checkboxCache = Array.from(document.querySelectorAll('input[type=checkbox]:not(.exp-chk):not(#skill-arcana-prof)'));
+  return _checkboxCache;
 }
 function _charName() {
   const el = document.getElementById('char-name');
@@ -2790,7 +2958,10 @@ function _sreqRender(items) {
   if (!items.length) { grid.innerHTML = '<div class="sreq-empty">No items found.</div>'; return; }
   grid.innerHTML = items.map(it => {
     if (it.cat === 'Armor') {
-      return `<div class="sreq-card"><div class="sreq-card-name">${it.name}</div><div class="sreq-card-stat">AC: ${it.base_ac}${it.dex_mod === 'full' ? ' + DEX' : ''} &bull; Str: ${it.str_req}</div><div class="sreq-card-stat">${it.effects}</div><div class="sreq-card-stat">Cost: ${it.cost}</div><button class="sreq-add" onclick="_sreqAdd('${it.id}')">Equip Armor</button></div>`;
+      const acLine = it.shield_bonus
+        ? `AC: +${it.shield_bonus} while equipped`
+        : `AC: ${it.base_ac}${it.dex_mod === 'full' ? ' + DEX' : ''} &bull; Str: ${it.str_req}`;
+      return `<div class="sreq-card"><div class="sreq-card-name">${it.name}</div><div class="sreq-card-stat">${acLine}</div><div class="sreq-card-stat">${it.effects}</div><div class="sreq-card-stat">Cost: ${it.cost}</div><button class="sreq-add" onclick="_sreqAdd('${it.id}')">${it.shield_bonus ? 'Equip Shield' : 'Equip Armor'}</button></div>`;
     }
     if (it.cat === 'Ammo') {
       const c = it.caps;
@@ -2806,11 +2977,28 @@ function _sreqAdd(id) {
   const it = (typeof REQ_ITEMS !== 'undefined' ? REQ_ITEMS : []).find(x => x.id === id);
   if (!it) return;
   if (it.cat === 'Armor') {
-    const nameEl = document.getElementById('armor-name');
-    const typeEl = document.getElementById('armor-type');
-    if (nameEl) nameEl.value = it.name;
-    if (typeEl) { typeEl.value = it.armor_type; onArmorTypeChange(); }
-    _sreqClose(); _schedSave(); return;
+    // Armor & shields land in the wargear list like any other item; the ⚔ toggle drives AC
+    const aRows = document.querySelectorAll('.wg-equip-row');
+    for (let ai = 0; ai < aRows.length; ai++) {
+      const ins = aRows[ai].querySelectorAll('input');
+      if (!ins.length || ins[0].value.trim()) continue;
+      ins[0].value = it.name;
+      if (ins[1]) ins[1].value = '1';
+      if (ins[2]) {
+        const bits = it.shield_bonus
+          ? [it.effects]
+          : ['AC ' + it.base_ac + (it.dex_mod === 'full' ? ' + DEX' : ''), (it.str_req && it.str_req !== '—') ? 'Str: ' + it.str_req : '', it.effects];
+        ins[2].value = bits.filter(Boolean).join(' · ');
+      }
+      [ins[0], ins[1], ins[2]].filter(Boolean).forEach(el => { el.dispatchEvent(new Event('input')); el.dispatchEvent(new Event('change')); });
+      _wargearMeta[ai] = it.shield_bonus
+        ? {id: it.id, is_shield: true, is_weapon: false, equipped: false}
+        : {id: it.id, is_armor: true, is_weapon: false, equipped: false};
+      _toggleEquip(ai);   // auto-equip: handles armor exclusivity, AC recompute, and save
+      break;
+    }
+    _sreqClose();
+    return;
   }
   if (it.cat === 'Ammo') {
     const armorType = (document.getElementById('armor-type')||{}).value || 'tacticus';
@@ -2879,6 +3067,7 @@ function _sreqAdd(id) {
 document.addEventListener('DOMContentLoaded', async function() {
   STATS.forEach(s => calcMod(s));
   _wireFields();
+  _mountAcPanel();
 
   // Silently refresh an expired token before proceeding
   if (_loggedIn() && _tokenExpired()) {
