@@ -152,8 +152,9 @@
   .cond-chip:hover { background:rgba(239,68,68,0.18); }
   .cond-chip.add { border-color:var(--border2);color:var(--text-dim); }
   .combatant-hp-block { display:flex;flex-direction:column;gap:4px; }
-  .hp-text { font-family:'Cinzel',serif;font-size:13px;color:var(--silver);letter-spacing:1px;text-align:center;cursor:pointer;border:1px solid transparent; }
-  .hp-text:hover { border-color:var(--border2); }
+  .hp-text { font-family:'Cinzel',serif;font-size:13px;color:var(--silver);letter-spacing:1px;text-align:center; }
+  .hp-seg { cursor:pointer;border:1px solid transparent;padding:0 3px; }
+  .hp-seg:hover { border-color:var(--border2); }
   .hp-input { width:56px;background:var(--bg);border:1px solid var(--gold-dim);color:var(--silver);font-family:'Cinzel',serif;font-size:13px;text-align:center;padding:1px;outline:none; }
   .hp-bar-track { height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:2px; }
   .hp-bar-fill { height:100%;border-radius:2px;transition:width .3s,background .3s; }
@@ -618,6 +619,7 @@ let combat = { combatants: [], round: 1, activeIdx: 0 };
 let _condTargetId = null;
 let _editingInitId = null;
 let _editingHpId = null;
+let _editingMaxHpId = null;
 
 const ALL_CONDITIONS = ['Blinded','Charmed','Deafened','Frightened','Grappled','Incapacitated',
   'Invisible','Paralyzed','Pinned','Poisoned','Prone','Restrained','Stunned','Unconscious'];
@@ -657,11 +659,18 @@ function combatRender() {
            onblur="commitInit('${c.id}', this.value)"
            onkeydown="if(event.key==='Enter')this.blur();if(event.key==='Escape'){_editingInitId=null;combatRender();}">`
       : `<div class="combatant-init" onclick="editInit('${c.id}')" title="Click to edit initiative">${c.initiative}</div>`;
-    const hpCell = _editingHpId === c.id
-      ? `<input class="hp-input" id="hp-edit-inp" type="number" value="${c.hp}"
+    let hpCell;
+    if (_editingHpId === c.id) {
+      hpCell = `<div class="hp-text"><input class="hp-input" id="hp-edit-inp" type="number" value="${c.hp}"
            onblur="commitHp('${c.id}', this.value)"
-           onkeydown="if(event.key==='Enter')this.blur();if(event.key==='Escape'){_editingHpId=null;combatRender();}"> / ${c.maxHp}`
-      : `<div class="hp-text" onclick="editHp('${c.id}')" title="Click to set HP">${c.hp} / ${c.maxHp}</div>`;
+           onkeydown="if(event.key==='Enter')this.blur();if(event.key==='Escape'){_editingHpId=null;combatRender();}"> / ${c.maxHp}</div>`;
+    } else if (_editingMaxHpId === c.id) {
+      hpCell = `<div class="hp-text">${c.hp} / <input class="hp-input" id="maxhp-edit-inp" type="number" value="${c.maxHp}"
+           onblur="commitMaxHp('${c.id}', this.value)"
+           onkeydown="if(event.key==='Enter')this.blur();if(event.key==='Escape'){_editingMaxHpId=null;combatRender();}"></div>`;
+    } else {
+      hpCell = `<div class="hp-text"><span class="hp-seg" onclick="editHp('${c.id}')" title="Click to set current HP">${c.hp}</span>/<span class="hp-seg" onclick="editMaxHp('${c.id}')" title="Click to set max HP">${c.maxHp}</span></div>`;
+    }
     const condHtml = (c.conditions || []).map(cd =>
       `<span class="cond-chip" onclick="combatToggleCond('${c.id}','${cd}')" title="Click to remove">${cd}</span>`).join('');
     return `<div class="combatant-row${isActive ? ' active-turn' : ''}${isDead ? ' is-dead' : ''}">
@@ -696,8 +705,9 @@ function combatRender() {
       <button class="c-remove-btn" onclick="combatRemove('${c.id}')" title="Remove">&#x2715;</button>
     </div>`;
   }).join('');
-  if (_editingInitId) { const el = document.getElementById('init-edit-inp'); if (el) { el.focus(); el.select(); } }
-  if (_editingHpId)   { const el = document.getElementById('hp-edit-inp');   if (el) { el.focus(); el.select(); } }
+  if (_editingInitId)  { const el = document.getElementById('init-edit-inp');  if (el) { el.focus(); el.select(); } }
+  if (_editingHpId)    { const el = document.getElementById('hp-edit-inp');    if (el) { el.focus(); el.select(); } }
+  if (_editingMaxHpId) { const el = document.getElementById('maxhp-edit-inp'); if (el) { el.focus(); el.select(); } }
 }
 
 function _byId(id) { return combat.combatants.find(c => c.id === id); }
@@ -714,6 +724,19 @@ function commitHp(id, val) {
   const c = _byId(id);
   if (c) { const n = parseInt(val, 10); if (!isNaN(n)) c.hp = Math.max(0, Math.min(c.maxHp, n)); }
   _editingHpId = null;
+  combatSave(); combatRender();
+}
+function editMaxHp(id) { _editingMaxHpId = id; combatRender(); }
+function commitMaxHp(id, val) {
+  const c = _byId(id);
+  if (c) {
+    const n = parseInt(val, 10);
+    if (!isNaN(n) && n >= 1) {
+      c.maxHp = n;
+      if (c.hp > n) c.hp = n;
+    }
+  }
+  _editingMaxHpId = null;
   combatSave(); combatRender();
 }
 
