@@ -889,6 +889,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
         <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Fire</span>
         <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Cold</span>
         <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Lightning</span>
+        <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Acid</span>
         <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Radiant</span>
         <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Poison</span>
         <span class="dos-def-chip" onclick="_defToggle(this,'resist')">Psychic</span>
@@ -1735,6 +1736,23 @@ function _applySpeedMod(newMod) {
   }
   _autoGrants.speedMod = newMod;
 }
+/* Armor trait resistances (Kinetic Diffusion / Thermal Core choices): light the
+   matching Defenses chips while the armor is equipped; only chips WE lit are
+   tracked in extra.auto_grants.armorResist, so a player's own chips survive. */
+function _applyArmorResists(want) {
+  if (typeof _autoGrants === 'undefined' || !_autoGrants) return;
+  var cur = _autoGrants.armorResist || [];
+  cur.forEach(function(n) {
+    if (want.indexOf(n) === -1) { var c = _resistChipEl(n); if (c) c.classList.remove('resist'); }
+  });
+  var next = cur.filter(function(n){ return want.indexOf(n) !== -1; });
+  want.forEach(function(n) {
+    if (next.indexOf(n) !== -1) return;
+    var c = _resistChipEl(n);
+    if (c && !c.classList.contains('resist')) { c.classList.add('resist'); next.push(n); }
+  });
+  _autoGrants.armorResist = next;
+}
 function _applyArmorFromWargear() {
   var armorIdx = -1;
   for (var i = 0; i < _wargearMeta.length; i++) {
@@ -1768,13 +1786,16 @@ function _applyArmorFromWargear() {
     if (dexEl)  dexEl.value  = 'full';
   }
   var _spdMod = (_armorIt && _armorIt.speed_mod) ? _armorIt.speed_mod : 0;
+  var _resWant = [];
   if (armorIdx !== -1 && typeof _upgTraitDefs === 'function') {
     _upgTraitDefs(_wargearMeta[armorIdx]).forEach(function(ut) {   // Reinforced Joints etc.
       var h = ut.def.hooks || {};
       if (h.speed_add) _spdMod += h.speed_add;
+      if (h.resist_choice && ut.choice) _resWant.push(ut.choice);
     });
   }
   _applySpeedMod(_spdMod);
+  _applyArmorResists(_resWant);
   onArmorTypeChange(); // fills Base AC / DEX from the type defaults, then calcAC()
 }
 
@@ -4073,7 +4094,7 @@ const CHAPTER_GRANTS = {
   'Iron Hands':     { tools: ['Servo-arms & Mechadendrites'] },
   'Imperial Fists': { tools: ['Demolitions Kit'] }
 };
-function _agDefaults() { return { chapter: '', skills: {}, tools: [], resist: [], toolItems: {}, cls: '', clsSkills: {}, clsSaves: {}, clsArmor: [], clsWeapons: [], clsTools: [], racial: false, speedMod: 0 }; }
+function _agDefaults() { return { chapter: '', skills: {}, tools: [], resist: [], toolItems: {}, cls: '', clsSkills: {}, clsSaves: {}, clsArmor: [], clsWeapons: [], clsTools: [], racial: false, speedMod: 0, armorResist: [] }; }
 var _autoGrants = _agDefaults();
 function _profTA(which) {
   var tas = document.querySelectorAll('.dos-prof-ta');
