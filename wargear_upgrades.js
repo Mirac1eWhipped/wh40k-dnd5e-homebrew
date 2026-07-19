@@ -93,7 +93,8 @@ const UPGRADE_TRAITS = [
 
   // ── ARMOUR AUGMETIC TRAITS (generic) ──────────────────────────────
   {id:'reinforced_joints', name:'Reinforced Joints', slot:'armor', tier:1,
-   desc:'Your movement speed while wearing this armour increases by <strong>5 ft</strong>.'},
+   desc:'Your movement speed while wearing this armour increases by <strong>5 ft</strong>.',
+   hooks:{speed_add:5}},
   {id:'auto_sealing', name:'Auto-Sealing Plates', slot:'armor', tier:1,
    desc:'You have <strong>advantage</strong> on saving throws to avoid being Blinded or Deafened by explosions, flares, or other sudden environmental shocks while wearing this armour.'},
   {id:'dampening_lining', name:'Dampening Lining', slot:'armor', tier:1,

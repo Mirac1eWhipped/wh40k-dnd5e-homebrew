@@ -1757,7 +1757,14 @@ function _applyArmorFromWargear() {
     if (baseEl) baseEl.value = '';
     if (dexEl)  dexEl.value  = 'full';
   }
-  _applySpeedMod(_armorIt && _armorIt.speed_mod ? _armorIt.speed_mod : 0);
+  var _spdMod = (_armorIt && _armorIt.speed_mod) ? _armorIt.speed_mod : 0;
+  if (armorIdx !== -1 && typeof _upgTraitDefs === 'function') {
+    _upgTraitDefs(_wargearMeta[armorIdx]).forEach(function(ut) {   // Reinforced Joints etc.
+      var h = ut.def.hooks || {};
+      if (h.speed_add) _spdMod += h.speed_add;
+    });
+  }
+  _applySpeedMod(_spdMod);
   onArmorTypeChange(); // fills Base AC / DEX from the type defaults, then calcAC()
 }
 
@@ -1874,6 +1881,7 @@ function _upgClose() {
 function _upgApply() {
   _upgBtnsRefresh();
   syncQuickActionsFromWargear();
+  _applyArmorFromWargear();   // armor trait hooks (speed etc.) recompute on install/remove
   calcAC();
   _schedSave();
 }
