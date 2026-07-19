@@ -261,13 +261,19 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .field-group select:focus{border-bottom-color:var(--gold);}
 
 /* ── WARGEAR TAB ── */
-.wg-equip-row{display:grid;grid-template-columns:22px 3fr 1fr 2fr;gap:6px;align-items:center;padding:3px 4px;border-bottom:1px solid var(--border);}
+.wg-equip-row{display:grid;grid-template-columns:22px 3fr 1fr 2fr 20px;gap:6px;align-items:center;padding:3px 4px;border-bottom:1px solid var(--border);}
 .wg-equip-row:nth-child(even){background:rgba(13,16,24,.4);}
 .wg-equip-row input{font-family:var(--font-body)!important;font-size:12pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:2px 0!important;background:transparent!important;color:var(--text)!important;outline:none!important;width:100%!important;}
 .wg-equip-row input:focus{border-bottom-color:var(--gold)!important;}
 .wg-equip-btn{width:20px;height:20px;padding:0;background:transparent;border:1px solid var(--border2);border-radius:3px;color:var(--text-dim);font-size:11px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .wg-equip-btn:hover{border-color:var(--gold-dim);color:var(--gold-dim);}
 .wg-equip-btn.equipped{border-color:var(--gold);color:var(--gold);background:rgba(180,140,60,.15);}
+/* Wargear Upgrade (✦) button — visible only on rows holding an upgradeable catalog item */
+.wg-upg-btn{width:20px;height:20px;padding:0;background:transparent;border:1px solid var(--border2);border-radius:3px;color:var(--text-dim);font-size:11px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;visibility:hidden;position:relative;}
+.wg-upg-btn.avail{visibility:visible;}
+.wg-upg-btn:hover{border-color:var(--gold-dim);color:var(--gold-dim);}
+.wg-upg-btn.upgraded{border-color:var(--gold);color:var(--gold);background:rgba(180,140,60,.15);visibility:visible;}
+.wg-upg-btn.upgraded::after{content:attr(data-tier);position:absolute;top:-7px;right:-7px;font-family:var(--font-label);font-size:6pt;font-weight:700;background:var(--gold);color:#000;border-radius:2px;padding:0 2px;line-height:1.5;}
 .wg-ammo-row{display:grid;grid-template-columns:2fr 1fr 1fr;gap:6px;align-items:center;padding:3px 4px;border-bottom:1px solid var(--border);}
 .wg-ammo-row input{font-family:var(--font-body)!important;font-size:12pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:2px 0!important;background:transparent!important;color:var(--text)!important;outline:none!important;width:100%!important;}
 .wg-ammo-row input:focus{border-bottom-color:var(--gold)!important;}
@@ -412,6 +418,10 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .dos-atk-table tbody tr{border-bottom:1px solid var(--border);}
 .dos-atk-table tbody tr:last-child{border-bottom:none;}
 .qa-mod-pill{display:inline-block;font-family:var(--font-label);font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-light);background:rgba(212,160,48,.12);border:1px solid rgba(212,160,48,.3);border-radius:3px;padding:1px 5px;margin:1px 2px 1px 0;white-space:nowrap;cursor:pointer;transition:background .15s;}.qa-mod-pill:hover{background:rgba(212,160,48,.28);}
+/* Upgrade trait pills + the gold +N badge on upgraded weapons */
+.qa-upg-pill{display:inline-block;font-family:var(--font-label);font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;color:#b06818;background:rgba(216,132,42,.12);border:1px solid rgba(216,132,42,.4);border-radius:3px;padding:1px 5px;margin:1px 2px 1px 0;white-space:nowrap;cursor:pointer;transition:background .15s;}
+.qa-upg-pill:hover{background:rgba(216,132,42,.28);}
+.qa-upg-plus{font-family:var(--font-label);font-size:8pt;font-weight:700;color:var(--gold-light);border:1px solid var(--gold-dim);border-radius:3px;padding:0 4px;margin-left:5px;background:rgba(200,164,74,.12);white-space:nowrap;}
 /* ── Quick Actions filter buttons ── */
 .qa-filter-btn{font-family:var(--font-label);font-size:7pt;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--silver-dim);padding:2px 8px;cursor:pointer;border-radius:2px;transition:all .15s;white-space:nowrap;}
 .qa-filter-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(200,164,74,.08);}
@@ -1112,20 +1122,20 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
               <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Qty</span>
               <span style="font-family:var(--font-label);font-size:9pt;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;">Field Notes</span>
             </div>
-<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(0)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Designation…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes · disposition…"></div>
-<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(1)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(2)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(3)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(4)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(5)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(6)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(7)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(8)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(9)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(10)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(11)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(12)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
-<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(13)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(0)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Designation…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes · disposition…"><button class="wg-upg-btn" onclick="_upgOpenFromBtn(this)" title="Wargear Upgrades">✦</button></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(1)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"><button class="wg-upg-btn" onclick="_upgOpenFromBtn(this)" title="Wargear Upgrades">✦</button></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(2)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"><button class="wg-upg-btn" onclick="_upgOpenFromBtn(this)" title="Wargear Upgrades">✦</button></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(3)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"><button class="wg-upg-btn" onclick="_upgOpenFromBtn(this)" title="Wargear Upgrades">✦</button></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(4)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"><button class="wg-upg-btn" onclick="_upgOpenFromBtn(this)" title="Wargear Upgrades">✦</button></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(5)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"><button class="wg-upg-btn" onclick="_upgOpenFromBtn(this)" title="Wargear Upgrades">✦</button></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(6)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"><button class="wg-upg-btn" onclick="_upgOpenFromBtn(this)" title="Wargear Upgrades">✦</button></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(7)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"><button class="wg-upg-btn" onclick="_upgOpenFromBtn(this)" title="Wargear Upgrades">✦</button></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(8)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"><button class="wg-upg-btn" onclick="_upgOpenFromBtn(this)" title="Wargear Upgrades">✦</button></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(9)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"><button class="wg-upg-btn" onclick="_upgOpenFromBtn(this)" title="Wargear Upgrades">✦</button></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(10)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"><button class="wg-upg-btn" onclick="_upgOpenFromBtn(this)" title="Wargear Upgrades">✦</button></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(11)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"><button class="wg-upg-btn" onclick="_upgOpenFromBtn(this)" title="Wargear Upgrades">✦</button></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(12)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"><button class="wg-upg-btn" onclick="_upgOpenFromBtn(this)" title="Wargear Upgrades">✦</button></div>
+<div class="wg-equip-row"><button class="wg-equip-btn" onclick="_toggleEquip(13)" title="Equip / Unequip">⚔</button><input type="text" placeholder="Item name…"><input type="text" placeholder="Qty" style="text-align:center;"><input type="text" placeholder="Notes / weight / location…"><button class="wg-upg-btn" onclick="_upgOpenFromBtn(this)" title="Wargear Upgrades">✦</button></div>
           </div>
           <div id="wg-right-col">
             <div class="section" style="margin-bottom:10px;">
@@ -1343,6 +1353,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 <script src="spells.js"></script>
 <script src="classes.js"></script>
 <script src="req_items.js"></script>
+<script src="wargear_upgrades.js"></script>
 <style>
 #sreq-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:1000;align-items:center;justify-content:center;}
 #sreq-overlay.open{display:flex;}
@@ -1390,6 +1401,52 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
       </div>
     </div>
     <div class="sreq-grid" id="sreq-grid"></div>
+  </div>
+</div>
+<!-- Wargear Upgrade Console Overlay — content is built dynamically (buttons/divs only; adds no
+     persisted inputs, so the positional save format is untouched) -->
+<style>
+#upg-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;align-items:center;justify-content:center;}
+#upg-overlay.open{display:flex;}
+#upg-modal{background:var(--panel-bg,var(--panel));border:1px solid var(--gold);border-radius:4px;width:min(640px,95vw);max-height:82vh;display:flex;flex-direction:column;overflow:hidden;}
+.upg-body{padding:12px 14px;overflow-y:auto;}
+.upg-item-line{font-family:var(--font-label);font-size:11pt;color:var(--gold-light);margin-bottom:10px;letter-spacing:.05em;}
+.upg-item-line .upg-item-sub{color:var(--text-dim);font-size:8.5pt;letter-spacing:.1em;text-transform:uppercase;}
+.upg-tier-track{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px;}
+.upg-tier-card{border:1px solid var(--border2);border-radius:3px;padding:7px 8px;cursor:pointer;text-align:center;background:transparent;transition:all .15s;}
+.upg-tier-card:hover{border-color:var(--gold-dim);}
+.upg-tier-card.active{border-color:var(--gold);background:rgba(200,164,74,.12);box-shadow:0 0 8px rgba(200,164,74,.25);}
+.upg-tier-name{font-family:var(--font-label);font-size:7.5pt;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-light);line-height:1.3;}
+.upg-tier-bonus{font-family:var(--font-label);font-size:11pt;color:var(--gold);font-weight:700;margin:3px 0 2px;}
+.upg-tier-cost{font-size:8pt;color:var(--text-dim);line-height:1.3;}
+.upg-slot{border:1px solid var(--border2);border-radius:3px;padding:8px 10px;margin-bottom:8px;}
+.upg-slot-hdr{display:flex;align-items:center;gap:8px;}
+.upg-slot-ttl{font-family:var(--font-label);font-size:8.5pt;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);flex:1;}
+.upg-slot-btn{font-family:var(--font-label);font-size:8pt;letter-spacing:.08em;text-transform:uppercase;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);padding:2px 8px;cursor:pointer;border-radius:2px;flex-shrink:0;}
+.upg-slot-btn:hover{background:var(--gold-dim);color:#fff;}
+.upg-slot-btn.rm{border-color:#a05050;color:#a04040;}
+.upg-slot-btn.rm:hover{background:#a05050;color:#fff;}
+.upg-slot-trait{font-family:var(--font-label);font-size:10pt;color:var(--gold-light);margin-top:5px;}
+.upg-slot-desc{font-size:9.5pt;color:var(--text-dim);line-height:1.45;margin-top:3px;}
+.upg-slot-desc strong{color:var(--gold-light);}
+.upg-slot-empty{font-size:9.5pt;color:var(--text-dim);font-style:italic;margin-top:4px;}
+.upg-note{font-size:8.5pt;color:var(--text-dim);font-style:italic;line-height:1.5;border-top:1px solid var(--border2);padding-top:8px;margin-top:4px;}
+.upg-pick-card{border:1px solid var(--border2);border-radius:3px;padding:7px 10px;margin-bottom:6px;cursor:pointer;transition:all .15s;}
+.upg-pick-card:hover{border-color:var(--gold);background:rgba(200,164,74,.07);}
+.upg-pick-name{font-family:var(--font-label);font-size:9.5pt;color:var(--gold-light);display:flex;justify-content:space-between;gap:8px;align-items:baseline;}
+.upg-pick-tier{font-size:7.5pt;color:#b06818;letter-spacing:.1em;white-space:nowrap;}
+.upg-pick-desc{font-size:9pt;color:var(--text-dim);line-height:1.4;margin-top:2px;}
+.upg-pick-desc strong{color:var(--gold-light);}
+.upg-choice-btn{font-family:var(--font-label);font-size:8.5pt;letter-spacing:.08em;text-transform:uppercase;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);padding:3px 10px;cursor:pointer;border-radius:2px;margin:3px 4px 0 0;}
+.upg-choice-btn:hover{background:var(--gold-dim);color:#fff;}
+</style>
+<div id="upg-overlay">
+  <div id="upg-modal">
+    <div class="sreq-hdr">
+      <span class="sreq-ttl">✦ Upgrade Console</span>
+      <button class="sreq-x" onclick="_upgClose()">&#10005;</button>
+    </div>
+    <div class="upg-body" id="upg-body"></div>
   </div>
 </div>
 <!-- Spell Browser Overlay -->
@@ -1622,6 +1679,232 @@ function _applyArmorFromWargear() {
   onArmorTypeChange(); // fills Base AC / DEX from the type defaults, then calcAC()
 }
 
+/* ── Wargear Upgrade Console (Sanctioned Upgrade Patterns) ──
+   Upgrade state lives on the wargear row's meta as meta.upg = {tier, traits:[{id, choice?}...]}
+   and persists id-based via extra.wargear_meta — the positional save arrays never change.
+   Trait data + eligibility rules come from wargear_upgrades.js (shared with the reference page).
+   traits[0..2] are the Tier I–III slots; traits[3] is the bonus Tier-I slot granted by
+   Modular Hardpoints. The modal is rebuilt as innerHTML on every action — buttons/divs only. */
+var _upgIdx = -1;
+var _UPG_ROMAN = ['I', 'II', 'III'];
+
+function _upgItemFor(idx) {
+  var meta = _wargearMeta[idx];
+  if (!meta || !meta.id || typeof REQ_ITEMS === 'undefined' || typeof upgradeItemEligible !== 'function') return null;
+  var it = REQ_ITEMS.find(function(x){ return x.id === meta.id; });
+  return (it && upgradeItemEligible(it)) ? it : null;
+}
+function _upgData(meta) {
+  if (!meta.upg) meta.upg = {tier: 0, traits: []};
+  if (!Array.isArray(meta.upg.traits)) meta.upg.traits = [];
+  return meta.upg;
+}
+/* Resolved trait defs (with install-time choice) for a row's meta — [] when un-upgraded */
+function _upgTraitDefs(meta) {
+  var out = [];
+  if (!meta || !meta.upg || !meta.upg.tier || typeof upgradeTraitById !== 'function') return out;
+  (meta.upg.traits || []).forEach(function(tr) {
+    if (tr && tr.id) {
+      var d = upgradeTraitById(tr.id);
+      if (d) out.push({def: d, choice: tr.choice});
+    }
+  });
+  return out;
+}
+/* Tier of the currently equipped armor row's upgrade (drives the AC bonus) */
+function _armorUpgTier() {
+  for (var i = 0; i < _wargearMeta.length; i++) {
+    var m = _wargearMeta[i];
+    if (m && m.is_armor && m.equipped && m.upg && m.upg.tier) return m.upg.tier;
+  }
+  return 0;
+}
+/* Show/hide the ✦ buttons and their +N tier badges to match current row contents */
+function _upgBtnsRefresh() {
+  var rows = document.querySelectorAll('.wg-equip-row');
+  var btns = document.querySelectorAll('.wg-upg-btn');
+  for (var i = 0; i < btns.length; i++) {
+    var it = _upgItemFor(i);
+    var named = rows[i] ? ((rows[i].querySelectorAll('input')[0] || {}).value || '').trim() : '';
+    var meta = _wargearMeta[i];
+    var tier = (it && named && meta && meta.upg && meta.upg.tier) || 0;
+    btns[i].classList.toggle('avail', !!(it && named));
+    btns[i].classList.toggle('upgraded', tier > 0);
+    if (tier > 0) btns[i].setAttribute('data-tier', '+' + tier);
+    else btns[i].removeAttribute('data-tier');
+  }
+}
+function _upgOpenFromBtn(btn) {
+  var rows = Array.prototype.slice.call(document.querySelectorAll('.wg-equip-row'));
+  var idx = rows.indexOf(btn.closest('.wg-equip-row'));
+  if (idx !== -1) _upgOpen(idx);
+}
+function _upgOpen(idx) {
+  if (!_upgItemFor(idx)) return;
+  _upgIdx = idx;
+  var ov = document.getElementById('upg-overlay');
+  if (ov) ov.classList.add('open');
+  _upgRender();
+}
+function _upgClose() {
+  var ov = document.getElementById('upg-overlay');
+  if (ov) ov.classList.remove('open');
+  _upgIdx = -1;
+}
+/* Re-apply upgrade effects everywhere after any change in the console */
+function _upgApply() {
+  _upgBtnsRefresh();
+  syncQuickActionsFromWargear();
+  calcAC();
+  _schedSave();
+}
+function _upgRender() {
+  var body = document.getElementById('upg-body');
+  var it = _upgItemFor(_upgIdx);
+  if (!body || !it) { _upgClose(); return; }
+  var meta = _wargearMeta[_upgIdx];
+  var u = _upgData(meta);
+  var isArmor = it.cat === 'Armor';
+  var html = '<div class="upg-item-line">' + it.name
+    + ' <span class="upg-item-sub">· ' + it.cat + ' · '
+    + (isArmor ? 'tier bonus applies to AC' : 'tier bonus applies to attack & damage') + '</span></div>';
+  html += '<div class="upg-tier-track">';
+  html += '<div class="upg-tier-card' + (u.tier === 0 ? ' active' : '') + '" onclick="_upgSetTier(0)">'
+    + '<div class="upg-tier-name">Standard Issue</div><div class="upg-tier-bonus">—</div>'
+    + '<div class="upg-tier-cost">no upgrade</div></div>';
+  UPGRADE_TIERS.forEach(function(tt) {
+    html += '<div class="upg-tier-card' + (u.tier === tt.tier ? ' active' : '') + '" onclick="_upgSetTier(' + tt.tier + ')">'
+      + '<div class="upg-tier-name">' + tt.name + '</div>'
+      + '<div class="upg-tier-bonus">+' + tt.bonus + (isArmor ? ' AC' : '') + '</div>'
+      + '<div class="upg-tier-cost">' + tt.cost + ' RP install<br>' + tt.total + ' RP total</div></div>';
+  });
+  html += '</div>';
+  var hasModular = u.traits.some(function(x){ return x && x.id === 'modular_hardpoints'; });
+  var slotIdxs = [];
+  for (var s = 0; s < u.tier; s++) slotIdxs.push(s);
+  if (hasModular) slotIdxs.push(3);
+  slotIdxs.forEach(function(s) {
+    var slotTier = s === 3 ? 1 : s + 1;
+    var ttl = s === 3
+      ? 'Bonus Slot · Modular Hardpoints · Tier I pick'
+      : 'Trait Slot ' + _UPG_ROMAN[s] + ' · Tier ' + _UPG_ROMAN[slotTier - 1] + ' or lower';
+    var tr = u.traits[s];
+    var d = tr && tr.id ? upgradeTraitById(tr.id) : null;
+    html += '<div class="upg-slot"><div class="upg-slot-hdr"><span class="upg-slot-ttl">' + ttl + '</span>';
+    if (d) {
+      html += '<button class="upg-slot-btn" onclick="_upgPickRender(' + s + ')">Swap</button>'
+        + '<button class="upg-slot-btn rm" onclick="_upgClearSlot(' + s + ')" title="Remove trait">✕</button></div>'
+        + '<div class="upg-slot-trait">✦ ' + d.name + (tr.choice ? ' — ' + tr.choice : '') + '</div>';
+      if (d.choose && !tr.choice) {
+        html += '<div class="upg-slot-desc" style="color:var(--gold);">' + d.choose.label + ': '
+          + d.choose.options.map(function(o) {
+              return '<button class="upg-choice-btn" onclick="_upgSetChoice(' + s + ',\'' + o.replace(/'/g, "\\'") + '\')">' + o + '</button>';
+            }).join('') + '</div>';
+      }
+      html += '<div class="upg-slot-desc">' + (d.elig ? '<strong>Eligible:</strong> ' + d.elig + ' ' : '') + d.desc + '</div>';
+    } else {
+      html += '<button class="upg-slot-btn" onclick="_upgPickRender(' + s + ')">Choose Trait</button></div>'
+        + '<div class="upg-slot-empty">No trait consecrated in this slot yet.</div>';
+    }
+    html += '</div>';
+  });
+  if (u.tier === 0) {
+    html += '<div class="upg-slot-empty" style="margin-bottom:8px;">Select a pattern tier to unlock Augmetic Trait slots — see the <a href="Wargear_Upgrades.html" target="_blank" style="color:var(--gold);">Wargear Upgrades</a> reference for the full rules.</div>';
+  }
+  html += '<div class="upg-note">RP costs are bookkeeping only — settle them against your Requisition tally. Techmarines &amp; Tech-Priests pay 25% less (round down to 5 RP); Artificer\'s Tools proficiency grants 10% off. Swapping an installed trait costs 50 RP × the incoming trait\'s tier, between missions. Relics cannot carry upgrades.</div>';
+  body.innerHTML = html;
+}
+function _upgPickRender(slot) {
+  var body = document.getElementById('upg-body');
+  var it = _upgItemFor(_upgIdx);
+  if (!body || !it) return;
+  var meta = _wargearMeta[_upgIdx];
+  var u = _upgData(meta);
+  var slotTier = slot === 3 ? 1 : slot + 1;
+  var taken = [];
+  u.traits.forEach(function(x, i) { if (x && x.id && i !== slot) taken.push(x.id); });
+  var list = upgradeEligibleTraits(it, slotTier, taken);
+  var html = '<div class="upg-slot-hdr" style="margin-bottom:8px;"><span class="upg-slot-ttl">Choose a trait — '
+    + (slot === 3 ? 'Bonus Slot' : 'Slot ' + _UPG_ROMAN[slot]) + ' (Tier ' + _UPG_ROMAN[slotTier - 1] + ' or lower)</span>'
+    + '<button class="upg-slot-btn" onclick="_upgRender()">← Back</button></div>';
+  if (!list.length) html += '<div class="upg-slot-empty">No eligible traits for this item at this tier.</div>';
+  list.forEach(function(t) {
+    html += '<div class="upg-pick-card" onclick="_upgInstall(' + slot + ',\'' + t.id + '\')">'
+      + '<div class="upg-pick-name"><span>' + t.name + '</span><span class="upg-pick-tier">TIER ' + _UPG_ROMAN[t.tier - 1]
+      + (t.family ? ' · ' + t.family.toUpperCase() : '') + (t.pattern ? ' · ' + t.pattern.toUpperCase() : '') + '</span></div>'
+      + '<div class="upg-pick-desc">' + (t.elig ? '<strong>Eligible:</strong> ' + t.elig + ' ' : '') + t.desc + '</div></div>';
+  });
+  body.innerHTML = html;
+}
+function _upgInstall(slot, traitId) {
+  var meta = _wargearMeta[_upgIdx];
+  if (!meta) return;
+  var u = _upgData(meta);
+  u.traits[slot] = {id: traitId};
+  _upgDropOrphanExtra(u);
+  _upgApply();
+  _upgRender();
+}
+function _upgSetChoice(slot, choice) {
+  var meta = _wargearMeta[_upgIdx];
+  if (!meta || !meta.upg) return;
+  var tr = meta.upg.traits[slot];
+  if (tr) tr.choice = choice;
+  _upgApply();
+  _upgRender();
+}
+function _upgClearSlot(slot) {
+  var meta = _wargearMeta[_upgIdx];
+  if (!meta || !meta.upg) return;
+  meta.upg.traits[slot] = null;
+  _upgDropOrphanExtra(meta.upg);
+  _upgApply();
+  _upgRender();
+}
+/* The bonus slot (index 3) only exists while Modular Hardpoints is installed */
+function _upgDropOrphanExtra(u) {
+  var hasModular = u.traits.some(function(x){ return x && x.id === 'modular_hardpoints'; });
+  if (!hasModular && u.traits.length > 3) u.traits.length = 3;
+}
+function _upgSetTier(t) {
+  var meta = _wargearMeta[_upgIdx];
+  if (!meta) return;
+  var u = _upgData(meta);
+  if (t === u.tier) return;
+  if (t < u.tier) {
+    var dropping = u.traits.slice(t).some(function(x){ return x && x.id; });
+    if (dropping && !confirm('Lowering the pattern tier strips the traits consecrated in the lost slots. Continue?')) return;
+    u.traits.length = Math.min(u.traits.length, t);
+  }
+  u.tier = t;
+  _upgApply();
+  _upgRender();
+}
+/* Popup for a trait pill (Quick Actions / AC panel) — reuses the mod popup box */
+function _upgTraitPopup(e, traitId, choice) {
+  var box = document.getElementById('act-popup-box');
+  if (!box) return;
+  var t = (typeof upgradeTraitById === 'function') ? upgradeTraitById(traitId) : null;
+  var desc = t ? String(t.desc).replace(/<[^>]*>/g, '') : 'No description available.';
+  if (choice) desc = 'Installed choice: ' + choice + '. ' + desc;
+  box.querySelector('.act-popup-badge').textContent = 'Augmetic Trait';
+  box.querySelector('.act-popup-badge').className = 'act-popup-badge act-badge act';
+  box.querySelector('.act-popup-name').textContent = t ? t.name : traitId;
+  box.querySelector('.act-popup-desc').textContent = desc;
+  var x = Math.min(e.clientX + 10, window.innerWidth - 270);
+  var y = e.clientY + 10;
+  if (y + 140 > window.innerHeight) y = e.clientY - 150;
+  box.style.left = x + 'px';
+  box.style.top  = y + 'px';
+  box.classList.add('open');
+  e.stopPropagation();
+}
+document.addEventListener('DOMContentLoaded', function() {
+  var ov = document.getElementById('upg-overlay');
+  if (ov) ov.addEventListener('mousedown', function(e){ if (e.target === ov) _upgClose(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') _upgClose(); });
+});
+
 var _qaFilter = 'all';
 function _qaSetFilter(btn, f) {
   _qaFilter = f;
@@ -1634,6 +1917,7 @@ function syncQuickActionsFromWargear() {
   var tbody = document.getElementById('quick-actions-tbody');
   if (!tbody) return;
   _qaRollReg = [];
+  if (typeof _upgBtnsRefresh === 'function') _upgBtnsRefresh();
   var lvl = parseInt((document.getElementById('char-level')||{}).value) || 1;
   var pb  = Math.ceil(lvl / 4) + 1;
   function _mod(s) {
@@ -1655,7 +1939,13 @@ function syncQuickActionsFromWargear() {
       var _ref = REQ_ITEMS.find(function(x){ return x.id === meta.id; });
       if (_ref) {
         if (!Array.isArray(meta.mods))  meta.mods = _ref.mods || [];
-        meta.shots_max = _ref.shots || 0;                          // always sync from catalog
+        var _sm = _ref.shots || 0;                                 // always sync from catalog
+        if (_sm && typeof _upgTraitDefs === 'function') {
+          _upgTraitDefs(meta).forEach(function(ut) {               // Extended Magazine etc.
+            if (ut.def.hooks && ut.def.hooks.shots_mult) _sm = Math.ceil(_sm * ut.def.hooks.shots_mult);
+          });
+        }
+        meta.shots_max = _sm;
         if (meta.shots_cur === undefined || meta.shots_cur > meta.shots_max) meta.shots_cur = meta.shots_max;
         meta.dmg   = _ref.dmg   || meta.dmg   || '';
         meta.wtype = _ref.wtype  || meta.wtype  || '';
@@ -1701,14 +1991,31 @@ function syncQuickActionsFromWargear() {
     if (Array.isArray(meta.mods) && meta.mods.indexOf('Finesse') !== -1) {
       stat = _mod('dex') >= _mod('str') ? 'dex' : 'str';
     }
-    var hit   = fmt(_mod(stat) + pb);
+    // Sanctioned Upgrade Pattern: +tier to hit & damage, plus per-trait hooks
+    var upgTier = (meta.upg && meta.upg.tier) || 0;
+    var upgDefs = (typeof _upgTraitDefs === 'function') ? _upgTraitDefs(meta) : [];
+    var critMin = 20;
+    var hit   = fmt(_mod(stat) + pb + upgTier);
     var dmg   = meta.dmg  || '—';
     var range = meta.range || '—';
-    if (dmg !== '—') { dmg = dmg + ' ' + fmt(_mod(stat)); }
+    upgDefs.forEach(function(ut) {
+      var h = ut.def.hooks || {};
+      if (h.crit_range) critMin -= h.crit_range;
+      if (h.dmg_add) dmg = (dmg === '—') ? h.dmg_add : dmg + ' + ' + h.dmg_add;
+      if (h.range_mult && range !== '—') {
+        range = range.replace(/\d+/g, function(n){ return Math.ceil(parseInt(n, 10) * h.range_mult); });
+      }
+    });
+    if (dmg !== '—') { dmg = dmg + ' ' + fmt(_mod(stat) + upgTier); }
     var wtype = meta.wtype || '';
     var mods = (Array.isArray(meta.mods) && meta.mods.length)
       ? meta.mods.map(function(m){ return '<span class="qa-mod-pill" onclick="_modPopup(event,\''+m.replace(/\\/g,'\\\\').replace(/'/g,"\\'")+'\')" title="'+m+'">'+m+'</span>'; }).join('')
       : '';
+    upgDefs.forEach(function(ut) {
+      var lbl = ut.def.name + (ut.choice ? ' — ' + ut.choice : '');
+      mods += '<span class="qa-upg-pill" onclick="_upgTraitPopup(event,\'' + ut.def.id + '\',\''
+        + (ut.choice || '').replace(/'/g, "\\'") + '\')" title="' + lbl.replace(/"/g, '&quot;') + '">✦ ' + lbl + '</span>';
+    });
     var sMax = meta.shots_max || 0;
     var sCur = (meta.shots_cur !== undefined) ? meta.shots_cur : sMax;
     var shots = sMax > 0
@@ -1735,11 +2042,12 @@ function syncQuickActionsFromWargear() {
     }
     var wtypeBadge = wtype ? '<span class="qa-wtype-badge '+wBadgeCls+'">'+wtype+'</span>' : '';
     var metaRow = (wtypeBadge || mods) ? '<div class="qa-meta-row">'+wtypeBadge+mods+'</div>' : '';
-    var nameSpan = meta.id
-      ? '<span class="dp-clickable" style="font-family:var(--font-label);font-size:10pt;color:var(--gold-light);" onclick="_weaponPopup(event,\''+meta.id+'\')">'+name+'</span>'
-      : '<span style="font-family:var(--font-label);font-size:10pt;color:var(--text);">'+name+'</span>';
+    var upgPlus = upgTier ? '<span class="qa-upg-plus">+' + upgTier + '</span>' : '';
+    var nameSpan = (meta.id
+      ? '<span class="dp-clickable" style="font-family:var(--font-label);font-size:10pt;color:var(--gold-light);" onclick="_weaponPopup(event,\''+meta.id+'\','+i+')">'+name+'</span>'
+      : '<span style="font-family:var(--font-label);font-size:10pt;color:var(--text);">'+name+'</span>') + upgPlus;
     var rIdx = _qaRollReg.length;
-    _qaRollReg.push({label: name, hit: _mod(stat) + pb, dmg: dmg});
+    _qaRollReg.push({label: name + (upgTier ? ' +' + upgTier : ''), hit: _mod(stat) + pb + upgTier, dmg: dmg, critMin: critMin});
     var dmgRollable = _diceHasDice(dmg);
     rows += '<tr>'
       + '<td style="text-align:center;color:var(--silver-dim);font-size:11pt;padding:3px 2px;">'+wIcon+'</td>'
@@ -1905,7 +2213,9 @@ function calcAC() {
   // Shield +2 comes from an equipped shield in the wargear list OR the manual override chip
   var shieldOn = (document.getElementById('armor-shield')||{}).checked || _shieldRowEquipped();
   var shield = shieldOn ? 2 : 0;
-  var total  = base + dexBonus + other + shield;
+  // Sanctioned Upgrade Pattern on the equipped armor row (+1/+2/+3 AC)
+  var upgAc  = (typeof _armorUpgTier === 'function') ? _armorUpgTier() : 0;
+  var total  = base + dexBonus + other + shield + upgAc;
   // Update all AC display mirrors
   var dispEl = document.getElementById('ac-display-val');
   if (dispEl) dispEl.textContent = total;
@@ -1918,10 +2228,10 @@ function calcAC() {
   var sumEl = document.getElementById('armor-summary');
   if (sumEl) {
     var nm = ((document.getElementById('armor-name')||{}).value || '').trim();
-    sumEl.textContent = (nm || 'Unarmored') + (shieldOn ? ' · ⛨ Shield' : '');
+    sumEl.textContent = (nm || 'Unarmored') + (upgAc ? ' +' + upgAc : '') + (shieldOn ? ' · ⛨ Shield' : '');
     sumEl.classList.toggle('unarmored', !nm && !shieldOn);
   }
-  _acBreakdownRender({base: base, dexBonus: dexBonus, dexType: dexType, other: other, shield: shield, shieldOn: shieldOn, total: total});
+  _acBreakdownRender({base: base, dexBonus: dexBonus, dexType: dexType, other: other, shield: shield, shieldOn: shieldOn, upg: upgAc, total: total});
 }
 /* Renders the per-source list in the AC panel ("what makes up your AC") */
 function _acBreakdownRender(v) {
@@ -1929,13 +2239,13 @@ function _acBreakdownRender(v) {
   if (!el) return;
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
   function tag(t){ return ' <span class="acb-tag">'+t+'</span>'; }
-  var armorRowName = null, shieldRowName = null;
+  var armorRowName = null, shieldRowName = null, armorMetaRef = null;
   var wgRows = document.querySelectorAll('.wg-equip-row');
   for (var i = 0; i < _wargearMeta.length; i++) {
     var m = _wargearMeta[i];
     if (!m || !m.equipped) continue;
     var nm = wgRows[i] ? ((wgRows[i].querySelectorAll('input')[0]||{}).value||'').trim() : '';
-    if (m.is_armor  && armorRowName  === null) armorRowName  = nm;
+    if (m.is_armor  && armorRowName  === null) { armorRowName = nm; armorMetaRef = m; }
     if (m.is_shield && shieldRowName === null) shieldRowName = nm;
   }
   var armorName = ((document.getElementById('armor-name')||{}).value || '').trim();
@@ -1943,6 +2253,21 @@ function _acBreakdownRender(v) {
   rows += '<div class="acb-row"><span class="acb-src">'
         + (armorName ? esc(armorName) + tag(armorRowName ? 'wargear' : 'manual') : 'Unarmored')
         + '</span><span class="acb-val">' + v.base + '</span></div>';
+  if (v.upg) {
+    var tn = (typeof UPGRADE_TIERS !== 'undefined' && UPGRADE_TIERS[v.upg - 1]) ? UPGRADE_TIERS[v.upg - 1].name : 'Upgrade';
+    rows += '<div class="acb-row"><span class="acb-src">' + tn + tag('upgrade')
+          + '</span><span class="acb-val">+' + v.upg + '</span></div>';
+    // Augmetic trait pills for the equipped armour
+    if (armorMetaRef && typeof _upgTraitDefs === 'function') {
+      var tp = '';
+      _upgTraitDefs(armorMetaRef).forEach(function(ut) {
+        var lbl = ut.def.name + (ut.choice ? ' — ' + ut.choice : '');
+        tp += '<span class="qa-upg-pill" onclick="_upgTraitPopup(event,\'' + ut.def.id + '\',\''
+          + (ut.choice || '').replace(/'/g, "\\'") + '\')" title="' + lbl.replace(/"/g, '&quot;') + '">✦ ' + lbl + '</span>';
+      });
+      if (tp) rows += '<div class="acb-row"><span class="acb-src" style="line-height:2;">' + tp + '</span></div>';
+    }
+  }
   var dexNote = v.dexType === 'none' ? ' <span class="acb-note">not applied</span>'
               : (v.dexType === 'max2' ? ' <span class="acb-note">max +2</span>' : '');
   rows += '<div class="acb-row"><span class="acb-src">DEX modifier' + dexNote
@@ -2955,7 +3280,7 @@ function _sreqAdd(id) {
       }
     }
   }
-  if (added) { _sreqClose(); _schedSave(); }
+  if (added) { syncQuickActionsFromWargear(); _sreqClose(); _schedSave(); }
   else { alert('No empty equipment slots available!'); }
 }
 document.addEventListener('DOMContentLoaded', async function() {
@@ -3236,10 +3561,24 @@ function _detailPopup(e, html) {
   box.classList.add('open');
   e.stopPropagation();
 }
-function _weaponPopup(e, itemId) {
+function _weaponPopup(e, itemId, wgIdx) {
   if (typeof REQ_ITEMS === 'undefined') return;
   var item = REQ_ITEMS.find(function(x){ return x.id === itemId; });
   if (!item) return;
+  // Installed Sanctioned Upgrade Pattern (when opened from an upgraded wargear row)
+  var upgHtml = '';
+  if (wgIdx !== undefined && typeof _wargearMeta !== 'undefined' && _wargearMeta[wgIdx]
+      && _wargearMeta[wgIdx].upg && _wargearMeta[wgIdx].upg.tier && typeof UPGRADE_TIERS !== 'undefined') {
+    var _um = _wargearMeta[wgIdx];
+    var _ut = UPGRADE_TIERS[_um.upg.tier - 1];
+    var _lines = '';
+    _upgTraitDefs(_um).forEach(function(ut) {
+      _lines += '<div style="margin-top:3px;"><span style="color:var(--gold-light);font-family:var(--font-label);font-size:8.5pt;">✦ '
+        + ut.def.name + (ut.choice ? ' — ' + ut.choice : '') + '</span></div>';
+    });
+    upgHtml = '<hr class="dp-divider"><div style="font-family:var(--font-label);font-size:8.5pt;letter-spacing:.12em;text-transform:uppercase;color:#b06818;">'
+      + _ut.name + ' · +' + _ut.bonus + ' attack &amp; damage</div>' + _lines;
+  }
   var modsHtml = (item.mods && item.mods.length)
     ? '<div class="dp-mods">' + item.mods.map(function(m){
         return '<span class="dp-mod-pill" onclick="_modPopup(event,\''+m.replace(/'/g,"\\'")+'\')" title="Click for details">'+m+'</span>';
@@ -3260,6 +3599,7 @@ function _weaponPopup(e, itemId) {
       '<div class="dp-stat"><strong>Cost</strong>'+(item.cost||'—')+'</div>' +
     '</div>' +
     modsHtml +
+    upgHtml +
     (item.lore ? '<hr class="dp-divider"><div class="dp-desc">'+item.lore+'</div>' : '') +
     notesHtml;
   _detailPopup(e, html);
@@ -3426,7 +3766,8 @@ function _voxRecv(p) {
   _diceLog(html, (cls ? cls + ' ' : '') + 'remote');
 }
 
-function _rollD20(label, mod, ev, dmgStr) {
+function _rollD20(label, mod, ev, dmgStr, critMin) {
+  var cm = (critMin >= 2 && critMin <= 20) ? critMin : 20;  // Honed Edge widens crit range
   var mode = _diceMode;
   if (ev && ev.shiftKey) mode = 'adv';
   else if (ev && (ev.ctrlKey || ev.altKey)) mode = 'dis';
@@ -3435,17 +3776,18 @@ function _rollD20(label, mod, ev, dmgStr) {
   else if (mode === 'dis') { used = Math.min(d1, d2); diceTxt = 'd20 [' + d1 + ', ' + d2 + '] dis → ' + used; }
   else                     { diceTxt = 'd20 (' + used + ')'; }
   var total = used + mod;
-  var cls = used === 20 ? 'crit' : (used === 1 ? 'fumble' : '');
-  var flairTxt = used === 20 ? '✠ Emperor\'s blessing — critical!'
-               : used === 1  ? 'The dice betray you' : '';
+  var isCrit = used >= cm;
+  var cls = isCrit ? 'crit' : (used === 1 ? 'fumble' : '');
+  var flairTxt = isCrit ? '✠ Emperor\'s blessing — critical!' + (used !== 20 ? ' (crit range ' + cm + '–20)' : '')
+               : used === 1 ? 'The dice betray you' : '';
   var flair = flairTxt ? '<span class="de-flair">' + flairTxt + '</span>' : '';
   var html = '<span class="de-label">' + _diceEsc(label) + '</span>'
     + diceTxt + ' ' + (mod >= 0 ? '+' : '') + mod + ' = <span class="de-total">' + total + '</span>' + flair;
   if (dmgStr && _diceHasDice(dmgStr) && used !== 1) {
     var di = _diceDmgReg.length;
-    _diceDmgReg.push({label: label, dmg: dmgStr, crit: used === 20});
-    html += '<br><button class="de-dmg-btn' + (used === 20 ? ' crit' : '') + '" onclick="_diceDmgFromReg(' + di + ')">'
-      + (used === 20 ? '⚔ Roll crit damage' : '⚔ Roll damage') + '</button>';
+    _diceDmgReg.push({label: label, dmg: dmgStr, crit: isCrit});
+    html += '<br><button class="de-dmg-btn' + (isCrit ? ' crit' : '') + '" onclick="_diceDmgFromReg(' + di + ')">'
+      + (isCrit ? '⚔ Roll crit damage' : '⚔ Roll damage') + '</button>';
   }
   _diceLog(html, cls, {label: label, body: diceTxt + ' ' + (mod >= 0 ? '+' : '') + mod + ' = ' + total + (flairTxt ? '\n' + flairTxt : '')});
   if (_diceMode !== 'norm') _diceSetMode('norm');
@@ -3526,7 +3868,7 @@ function _spellHealStr(sp, modFn) {
 function _qaRollHit(i, ev) {
   var r = _qaRollReg[i];
   if (!r) return;
-  _rollD20(r.label + ' — attack', r.hit, ev, r.dmg);
+  _rollD20(r.label + ' — attack', r.hit, ev, r.dmg, r.critMin);
 }
 function _qaRollDmg(i) {
   var r = _qaRollReg[i];

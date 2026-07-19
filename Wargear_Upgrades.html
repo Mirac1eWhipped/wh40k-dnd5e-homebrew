@@ -89,6 +89,7 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <p>This system runs alongside, not in place of, the Techmarine's <strong>Mechanicus Enhancement</strong> class feature — that remains a temporary per-resupply buff layered on top of whatever permanent upgrade tier the item already carries. None of the traits below duplicate or outclass an existing class's signature feature — where an idea overlapped (Terminator's Ceramite Wall, Close Combat Operative's Ceramite Bulwark, Gravis Operative's Iron Halo/Unyielding Platform, or the Hexagrammic Ward relic), it was reworked into a distinct niche instead.</p>
     <p><strong>Weapon-Family Traits:</strong> a number of Augmetic Traits are restricted to specific weapon patterns — they graft an existing named weapon property (drawn straight from the Requisitorium's own modifier list) onto a compatible weapon that doesn't already have it. A Las Fusil can requisition an <strong>Overcharge Coil</strong> because Las weapons already run this exact risk in their lore; a Bolt weapon cannot, because there's no in-fiction mechanism for a solid mass-reactive round to "overcharge." These traits still occupy a normal trait slot at the tier listed and cost nothing beyond reaching that tier — they're restricted by <em>eligibility</em>, not by extra price. A weapon can never take a Family Trait for a property it already has baked into its base <code>mods</code> list. GM has final say on borderline cases (a homebrew Las-pattern rifle added later, for instance, should qualify for the same Las-family traits).</p>
     <p><strong>Armor Pattern Traits:</strong> likewise, each of the four Armor Patterns (Phobos, Tacticus, Gravis, and Terminator) has two Augmetic Traits available only to that pattern, reflecting its distinct construction and role on the battlefield. Like Weapon-Family Traits, these occupy a normal trait slot at the tier listed with no extra RP cost, and require both the matching armor pattern and proficiency to wear it.</p>
+    <p><strong>On your character sheet:</strong> every upgrade below can be installed directly from the sheet — click the <strong>&#10022;</strong> button on a weapon or armour row in the Wargear panel to open its Upgrade Console, set the tier, and consecrate traits into its slots. Attack, damage, AC, ammo capacity, and crit range adjust automatically.</p>
   </div>
 </div>
 
@@ -139,277 +140,51 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
 
 <div class="section-title">Weapon Augmetic Traits</div>
 <div class="rank-note">Chosen when a weapon is upgraded to the matching tier. A weapon's total trait count equals its tier (Tier III weapons carry three).</div>
-<div class="power-grid">
-
-  <div class="power-card t1" data-slot="weapon" data-tier="t1" data-family="any">
-    <div class="power-card-top"><div class="power-name">Balanced Grip</div><div class="power-cost-badge cost-t1">TIER I</div></div>
-    <div class="power-desc">You have <strong>advantage</strong> on the first attack roll made with this weapon in each combat encounter.</div>
-  </div>
-
-  <div class="power-card t1" data-slot="weapon" data-tier="t1" data-family="any">
-    <div class="power-card-top"><div class="power-name">Extended Magazine</div><div class="power-cost-badge cost-t1">TIER I</div></div>
-    <div class="power-desc">This weapon's ammo capacity (shots per clip) increases by <strong>50%</strong>, rounded up.</div>
-  </div>
-
-  <div class="power-card t1" data-slot="weapon" data-tier="t1" data-family="any">
-    <div class="power-card-top"><div class="power-name">Marked for the Kill</div><div class="power-cost-badge cost-t1">TIER I</div></div>
-    <div class="power-desc">You gain <strong>+2 to attack rolls</strong> with this weapon against any creature at or below half its maximum HP.</div>
-  </div>
-
-  <div class="power-card t1" data-slot="weapon" data-tier="t1" data-family="any">
-    <div class="power-card-top"><div class="power-name">Steady Recoil Compensation</div><div class="power-cost-badge cost-t1">TIER I</div></div>
-    <div class="power-desc">You ignore disadvantage on attack rolls made with this weapon at long range.</div>
-  </div>
-
-  <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="any">
-    <div class="power-card-top"><div class="power-name">Cogitator-Guided Targeting</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc">This weapon's fire-control cogitator tracks every foe you engage. You have <strong>advantage</strong> on attack rolls made with this weapon against a creature you have already hit with it since the start of the current combat.</div>
-  </div>
-
-  <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="any">
-    <div class="power-card-top"><div class="power-name">Searing Rounds</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc">On a hit, this weapon deals an additional <strong>1d4 Fire damage</strong>.</div>
-  </div>
-
-  <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="any">
-    <div class="power-card-top"><div class="power-name">Overcharged Cell</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc">On a critical hit with this weapon, deal <strong>maximum damage</strong> on all dice, plus one additional damage die of the weapon's primary type.</div>
-  </div>
-
-  <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="any">
-    <div class="power-card-top"><div class="power-name">Honed Edge</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc">This weapon's critical hit range increases by <strong>1</strong> (stacks with other sources — e.g. 20 becomes 19–20, or 19–20 becomes 18–20).</div>
-  </div>
-
-  <div class="power-card t3" data-slot="weapon" data-tier="t3" data-family="any">
-    <div class="power-card-top"><div class="power-name">Zealot's Bane</div><div class="power-cost-badge cost-t3">TIER III</div></div>
-    <div class="power-desc">At the start of each day, designate one creature type (Xenos, Heretic, Daemon, or Ork). This weapon deals an additional <strong>1d6 damage</strong> of its primary type against that type until the next dawn.</div>
-  </div>
-
-  <div class="power-card t3" data-slot="weapon" data-tier="t3" data-family="any">
-    <div class="power-card-top"><div class="power-name">Disintegration Coil</div><div class="power-cost-badge cost-t3">TIER III</div></div>
-    <div class="power-desc">On a critical hit against a creature already at or below 25% of its maximum HP, that creature must succeed on a <strong>CON save</strong> (DC 8 + your Proficiency Bonus + relevant modifier) or be instantly slain, leaving no recoverable remains.</div>
-  </div>
-
-  <div class="power-card t3" data-slot="weapon" data-tier="t3" data-family="any">
-    <div class="power-card-top"><div class="power-name">Perfect Balance</div><div class="power-cost-badge cost-t3">TIER III</div></div>
-    <div class="power-desc">Attack rolls with this weapon are never affected by disadvantage from situational penalties (cover, range, awkward positioning — natural disadvantage from conditions like Blinded still applies). Once per turn, add your Proficiency Bonus to one damage roll with this weapon.</div>
-  </div>
-
-  <div class="power-card t3" data-slot="weapon" data-tier="t3" data-family="any">
-    <div class="power-card-top"><div class="power-name">Sanctified Core</div><div class="power-cost-badge cost-t3">TIER III</div></div>
-    <div class="power-desc">This weapon counts as magical for the purpose of overcoming resistance and immunity. It deals an additional <strong>1d8 Radiant damage</strong> against Daemons and Chaos-aligned creatures.</div>
-  </div>
-
-</div>
+<div class="power-grid" id="upg-grid-weapon"></div>
 
 <div class="section-title">Weapon-Family Traits <span style="font-size:10pt;color:var(--text-dim);font-family:var(--font-body);font-weight:400;letter-spacing:0">(Pattern-Restricted)</span></div>
 <div class="rank-note">Only available to the listed weapon pattern(s), and only if the weapon doesn't already carry that property natively. These occupy a normal trait slot at the tier shown — no extra RP cost beyond reaching that tier.</div>
-<div class="power-grid">
-
-  <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="las">
-    <div class="power-card-top"><div class="power-name">Overcharge Coil</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> Las-pattern energy weapons (e.g. Las Fusil) that lack Overcharge. Grants <strong>Overcharge</strong>: before rolling to hit, declare Overcharge. Roll 1d6 — on a 1 or 2 the weapon misfires (take 1d8 Radiant, lose the attack). On a 3+ deal an additional 1d8 damage.</div>
-  </div>
-
-  <div class="power-card t3" data-slot="weapon" data-tier="t3" data-family="plasma">
-    <div class="power-card-top"><div class="power-name">Stabilised Overcharge Matrix</div><div class="power-cost-badge cost-t3">TIER III</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> any Plasma-pattern weapon. Refines its existing Overcharge mod: it now only misfires on a natural <strong>1</strong> instead of a 1 or 2.</div>
-  </div>
-
-  <div class="power-card t1" data-slot="weapon" data-tier="t1" data-family="melta">
-    <div class="power-card-top"><div class="power-name">Focusing Coil</div><div class="power-cost-badge cost-t1">TIER I</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> any Melta-pattern weapon. Increases the weapon's range by <strong>50%</strong>, rounded up.</div>
-  </div>
-
-  <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="melta">
-    <div class="power-card-top"><div class="power-name">Armour Pierce Lens</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> Melta-pattern weapons lacking Armour Pierce. Grants <strong>Armour Pierce</strong>: ignores AC bonuses from non-magical armour — use the target's unarmoured AC (10 + DEX modifier) when attacking.</div>
-  </div>
-
-  <div class="power-card t3" data-slot="weapon" data-tier="t3" data-family="volkite">
-    <div class="power-card-top"><div class="power-name">Cascading Deflagration</div><div class="power-cost-badge cost-t3">TIER III</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> any Volkite-pattern weapon. Expands its Deflagrate chain-reaction radius from 5 ft to <strong>10 ft</strong> — matching the Volkite Culverin's heavier pattern.</div>
-  </div>
-
-  <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="grav">
-    <div class="power-card-top"><div class="power-name">Crush Emitter</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> Grav-pattern weapons lacking Crush. Grants <strong>Crush</strong>: deals an additional 1d6 Force damage for each AC point above 15 the target has (maximum +3d6).</div>
-  </div>
-
-  <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="needle">
-    <div class="power-card-top"><div class="power-name">Neurotoxin Reservoir</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> any Needle-pattern weapon. On a hit, the target must succeed on a DC 13 CON save or be <strong>Poisoned</strong> until the end of its next turn, in addition to normal damage.</div>
-  </div>
-
-  <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="bolt">
-    <div class="power-card-top"><div class="power-name">Adamantium Penetrator Rounds</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> Bolt-pattern weapons lacking Armour Pierce. Grants <strong>Armour Pierce</strong> (as above) — the same principle behind Sternguard Kraken Penetrator rounds, scaled down to a field-installable coating.</div>
-  </div>
-
-  <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="bolt">
-    <div class="power-card-top"><div class="power-name">Rapid Cycling Mechanism</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> Bolt-pattern weapons lacking Rapid Fire (e.g. Bolt Sniper Rifle, Stalker Bolt Rifle). Grants <strong>Rapid Fire</strong>: gain an additional attack if you have not moved this turn.</div>
-  </div>
-
-  <div class="power-card t2" data-slot="weapon" data-tier="t2" data-family="physical">
-    <div class="power-card-top"><div class="power-name">Reinforced Tooth Assembly</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> Chain-pattern weapons lacking Shatter (e.g. Chainsword, Chainaxe). Grants <strong>Shatter</strong>: deals double damage against structures and vehicles. You also have <strong>advantage</strong> on Strength checks made to break, sunder, or force open objects and doors using this weapon.</div>
-  </div>
-
-  <div class="power-card t3" data-slot="weapon" data-tier="t3" data-family="power">
-    <div class="power-card-top"><div class="power-name">Kinetic Shock Coil</div><div class="power-cost-badge cost-t3">TIER III</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> Power-pattern weapons lacking Stunning (e.g. Power Sword, Power Fist). Grants <strong>Stunning</strong>: on a successful hit, target makes a DC 13 CON save or is stunned until the end of its next turn (once per creature per combat).</div>
-  </div>
-
-</div>
+<div class="power-grid" id="upg-grid-family"></div>
 
 <div class="section-title">Armour Augmetic Traits</div>
 <div class="rank-note">Chosen when a piece of armour is upgraded to the matching tier. An armour piece's total trait count equals its tier (Tier III armour carries three).</div>
-<div class="power-grid">
-
-  <div class="power-card t1" data-slot="armor" data-tier="t1">
-    <div class="power-card-top"><div class="power-name">Reinforced Joints</div><div class="power-cost-badge cost-t1">TIER I</div></div>
-    <div class="power-desc">Your movement speed while wearing this armour increases by <strong>5 ft</strong>.</div>
-  </div>
-
-  <div class="power-card t1" data-slot="armor" data-tier="t1">
-    <div class="power-card-top"><div class="power-name">Auto-Sealing Plates</div><div class="power-cost-badge cost-t1">TIER I</div></div>
-    <div class="power-desc">You have <strong>advantage</strong> on saving throws to avoid being Blinded or Deafened by explosions, flares, or other sudden environmental shocks while wearing this armour.</div>
-  </div>
-
-  <div class="power-card t1" data-slot="armor" data-tier="t1">
-    <div class="power-card-top"><div class="power-name">Dampening Lining</div><div class="power-cost-badge cost-t1">TIER I</div></div>
-    <div class="power-desc">When you take falling damage, treat the fall as <strong>10 ft shorter</strong> than it actually was for the purpose of calculating damage.</div>
-  </div>
-
-  <div class="power-card t1" data-slot="armor" data-tier="t1">
-    <div class="power-card-top"><div class="power-name">Signal Ward</div><div class="power-cost-badge cost-t1">TIER I</div></div>
-    <div class="power-desc">You have <strong>advantage</strong> on checks and saves to avoid being detected by auspex scanners, vox-tracking, or other technological detection while wearing this armour.</div>
-  </div>
-
-  <div class="power-card t2" data-slot="armor" data-tier="t2">
-    <div class="power-card-top"><div class="power-name">Kinetic Diffusion Plating</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc">Choose Bludgeoning, Piercing, or Slashing at installation. You have <strong>resistance</strong> to that damage type from non-magical sources while wearing this armour.</div>
-  </div>
-
-  <div class="power-card t2" data-slot="armor" data-tier="t2">
-    <div class="power-card-top"><div class="power-name">Thermal Regulation Core</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc">Choose a damage type at installation — Fire, Cold, Lightning, or Acid — that you do not already have resistance to from another source. You have <strong>resistance</strong> to that damage type while wearing this armour.</div>
-  </div>
-
-  <div class="power-card t2" data-slot="armor" data-tier="t2">
-    <div class="power-card-top"><div class="power-name">Reactive Counter-Plating</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc">Once per turn when a creature hits you with a melee attack while you wear this armour, that creature takes <strong>1d6 damage</strong> of the same type they dealt.</div>
-  </div>
-
-  <div class="power-card t2" data-slot="armor" data-tier="t2">
-    <div class="power-card-top"><div class="power-name">Stabilised Void Plating</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc">You have <strong>advantage</strong> on saving throws and ability checks to avoid being knocked prone or restrained while wearing this armour.</div>
-  </div>
-
-  <div class="power-card t3" data-slot="armor" data-tier="t3">
-    <div class="power-card-top"><div class="power-name">Voidhardened Plating</div><div class="power-cost-badge cost-t3">TIER III</div></div>
-    <div class="power-desc">You are <strong>immune</strong> to the effects of vacuum exposure, extreme heat, extreme cold, and radiation while wearing this armour.</div>
-  </div>
-
-  <div class="power-card t3" data-slot="armor" data-tier="t3">
-    <div class="power-card-top"><div class="power-name">Multi-Spectrum Sensorium</div><div class="power-cost-badge cost-t3">TIER III</div></div>
-    <div class="power-desc">You can see clearly through non-magical smoke, fog, and heavy foliage as if they weren't there, and you automatically sense the presence (though not the exact location) of invisible creatures within <strong>30 feet</strong> of you.</div>
-  </div>
-
-  <div class="power-card t3" data-slot="armor" data-tier="t3">
-    <div class="power-card-top"><div class="power-name">Overwatch Protocol</div><div class="power-cost-badge cost-t3">TIER III</div></div>
-    <div class="power-desc">Once per short rest, when a creature you can see moves more than 5 ft while within 30 ft of you, you may use your reaction to make one attack against it with a ranged weapon you are holding.</div>
-  </div>
-
-  <div class="power-card t3" data-slot="armor" data-tier="t3">
-    <div class="power-card-top"><div class="power-name">Adaptive Camouflage Weave</div><div class="power-cost-badge cost-t3">TIER III</div></div>
-    <div class="power-desc">If you have not moved since the start of your last turn, attacks against you are made with <strong>disadvantage</strong> until you move or take an action other than Ready.</div>
-  </div>
-
-</div>
+<div class="power-grid" id="upg-grid-armor"></div>
 
 <div class="section-title">Armor Pattern Traits <span style="font-size:10pt;color:var(--text-dim);font-family:var(--font-body);font-weight:400;letter-spacing:0">(Pattern-Restricted)</span></div>
 <div class="rank-note">Only available to the listed armor pattern, and only to a character with proficiency to wear it. These occupy a normal trait slot at the tier shown — no extra RP cost beyond reaching that tier.</div>
-<div class="power-grid">
-
-  <div class="power-card t1" data-slot="armor" data-tier="t1" data-pattern="phobos">
-    <div class="power-card-top"><div class="power-name">Umbral Weave</div><div class="power-cost-badge cost-t1">TIER I</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> Phobos-pattern armour only. You leave no tracks, scent trail, or other physical evidence of your passage, and creatures relying on non-visual senses (scent, vibration, tremorsense) cannot pinpoint your location.</div>
-  </div>
-
-  <div class="power-card t1" data-slot="armor" data-tier="t1" data-pattern="phobos">
-    <div class="power-card-top"><div class="power-name">Marksman's Discipline</div><div class="power-cost-badge cost-t1">TIER I</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> Phobos-pattern armour only. While benefiting from the Silence of Thunder rule, you may fire one additional time (<strong>three shots total</strong>) from the same location before your stealth breaks.</div>
-  </div>
-
-  <div class="power-card t2" data-slot="armor" data-tier="t2" data-pattern="phobos">
-    <div class="power-card-top"><div class="power-name">Evasive Instincts</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> Phobos-pattern armour only. The first time each combat that an attack misses you, you may immediately move up to <strong>10 feet</strong> without provoking opportunity attacks.</div>
-  </div>
-
-  <div class="power-card t3" data-slot="armor" data-tier="t3" data-pattern="phobos">
-    <div class="power-card-top"><div class="power-name">Grapnel Line</div><div class="power-cost-badge cost-t3">TIER III</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> Phobos-pattern armour only. Once per short rest, as a bonus action, you may fire an integrated grapnel line to pull yourself up to <strong>30 feet</strong> toward a fixed point you can see, ignoring difficult terrain along the way. This movement does not provoke opportunity attacks.</div>
-  </div>
-
-  <div class="power-card t1" data-slot="armor" data-tier="t1" data-pattern="tacticus">
-    <div class="power-card-top"><div class="power-name">Efficient Loadout</div><div class="power-cost-badge cost-t1">TIER I</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> Tacticus-pattern armour only. Once per combat, when a weapon you are holding would run dry, you may ignore this — a reserve magazine you didn't know you were carrying covers the gap.</div>
-  </div>
-
-  <div class="power-card t2" data-slot="armor" data-tier="t2" data-pattern="tacticus">
-    <div class="power-card-top"><div class="power-name">Requisition Efficiency</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> Tacticus-pattern armour only. Whenever you requisition standard-issue equipment (not relics) during a resupply, its RP cost is reduced by <strong>15%</strong>.</div>
-  </div>
-
-  <div class="power-card t2" data-slot="armor" data-tier="t2" data-pattern="tacticus">
-    <div class="power-card-top"><div class="power-name">Adaptive Combat Doctrine</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> Tacticus-pattern armour only. When this trait is installed, choose two weapon categories from <strong>Primary Ranged, Secondary Ranged, or Melee</strong>. You gain a <strong>+1 bonus</strong> to attack rolls with weapons from your chosen categories.</div>
-  </div>
-
-  <div class="power-card t3" data-slot="armor" data-tier="t3" data-pattern="tacticus">
-    <div class="power-card-top"><div class="power-name">Modular Hardpoints</div><div class="power-cost-badge cost-t3">TIER III</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> Tacticus-pattern armour only. This armour gains one additional Augmetic Trait slot, filled with a Tier I trait of your choice, beyond what its tier would normally allow.</div>
-  </div>
-
-  <div class="power-card t1" data-slot="armor" data-tier="t1" data-pattern="gravis">
-    <div class="power-card-top"><div class="power-name">Blast-Dampening Plating</div><div class="power-cost-badge cost-t1">TIER I</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> Gravis-pattern armour only. You and any creature within 5 ft of you take half damage from the blast radius of your own Heavy Ordinance weapons.</div>
-  </div>
-
-  <div class="power-card t2" data-slot="armor" data-tier="t2" data-pattern="gravis">
-    <div class="power-card-top"><div class="power-name">Ammunition Sled Integration</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> Gravis-pattern armour only. Weapons with the Stationary or Heavy Ordinance tag no longer count against your carrying capacity, and you may carry one additional Heavy weapon without penalty.</div>
-  </div>
-
-  <div class="power-card t3" data-slot="armor" data-tier="t3" data-pattern="gravis">
-    <div class="power-card-top"><div class="power-name">Servo-Harness Mounting</div><div class="power-cost-badge cost-t3">TIER III</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> Gravis-pattern armour only. You can draw or stow a Heavy weapon as part of your movement, without spending your object interaction for the turn. If you draw a Stationary-tagged weapon this way, your first attack with it this turn still gains that weapon's bonus for not having moved, even though you did.</div>
-  </div>
-
-  <div class="power-card t1" data-slot="armor" data-tier="t1" data-pattern="terminator">
-    <div class="power-card-top"><div class="power-name">Voidshield Reactor</div><div class="power-cost-badge cost-t1">TIER I</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> Terminator-pattern armour only. As a bonus action, you may vent your armour's void-shield reactor to gain <strong>10 temporary hit points</strong>. These follow standard temporary HP rules. You may use this a number of times equal to <strong>3 per resupply</strong>.</div>
-  </div>
-
-  <div class="power-card t2" data-slot="armor" data-tier="t2" data-pattern="terminator">
-    <div class="power-card-top"><div class="power-name">Graze-Ward Plating</div><div class="power-cost-badge cost-t2">TIER II</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> Terminator-pattern armour only. Since this armour cannot Dodge, its plating compensates: any attack that hits you with a total exactly equal to your AC deals no damage.</div>
-  </div>
-
-  <div class="power-card t3" data-slot="armor" data-tier="t3" data-pattern="terminator">
-    <div class="power-card-top"><div class="power-name">Teleportarium Lock</div><div class="power-cost-badge cost-t3">TIER III</div></div>
-    <div class="power-desc"><strong>Eligible:</strong> Terminator-pattern armour only. Once per resupply as an action, you may teleport up to <strong>60 feet</strong> to an unoccupied space you can see, ignoring cover and obstacles. This movement does not provoke opportunity attacks.</div>
-  </div>
-
-</div>
+<div class="power-grid" id="upg-grid-pattern"></div>
 
 <div class="page-footer">Adeptus Inquisitorium &middot; Wargear Upgrades Reference &middot; Jericho Reach Campaign</div>
 
 </div>
 
+<script src="wargear_upgrades.js"></script>
+<script>
+/* Trait cards render from wargear_upgrades.js — the shared single source of truth
+   also consumed by the character sheets' Upgrade Console. */
+(function(){
+  function card(t){
+    var attrs = 'data-slot="'+t.slot+'" data-tier="t'+t.tier+'"';
+    if (t.slot === 'weapon') attrs += ' data-family="'+(t.family||'any')+'"';
+    if (t.pattern) attrs += ' data-pattern="'+t.pattern+'"';
+    var tierTxt = t.tier === 1 ? 'TIER I' : (t.tier === 2 ? 'TIER II' : 'TIER III');
+    var desc = (t.elig ? '<strong>Eligible:</strong> '+t.elig+' ' : '') + t.desc;
+    return '<div class="power-card t'+t.tier+'" '+attrs+'>'
+      + '<div class="power-card-top"><div class="power-name">'+t.name+'</div><div class="power-cost-badge cost-t'+t.tier+'">'+tierTxt+'</div></div>'
+      + '<div class="power-desc">'+desc+'</div>'
+      + '</div>';
+  }
+  function fill(id, list){
+    var el = document.getElementById(id);
+    if (el) el.innerHTML = list.map(card).join('\n');
+  }
+  var T = (typeof UPGRADE_TRAITS !== 'undefined') ? UPGRADE_TRAITS : [];
+  fill('upg-grid-weapon',  T.filter(function(t){ return t.slot === 'weapon' && !t.family;   }));
+  fill('upg-grid-family',  T.filter(function(t){ return t.slot === 'weapon' && !!t.family;  }));
+  fill('upg-grid-armor',   T.filter(function(t){ return t.slot === 'armor'  && !t.pattern;  }));
+  fill('upg-grid-pattern', T.filter(function(t){ return t.slot === 'armor'  && !!t.pattern; }));
+})();
+</script>
 <script>
 (function(){
   const slotBtns = document.querySelectorAll('.fbtn[data-slot]');
