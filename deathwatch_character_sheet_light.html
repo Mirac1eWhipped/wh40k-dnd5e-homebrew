@@ -2285,7 +2285,7 @@ function syncQuickActionsFromWargear() {
       ? '<span class="dp-clickable" style="font-family:var(--font-label);font-size:10pt;color:var(--gold-light);" onclick="_weaponPopup(event,\''+meta.id+'\','+i+')">'+name+'</span>'
       : '<span style="font-family:var(--font-label);font-size:10pt;color:var(--text);">'+name+'</span>') + upgPlus;
     var rIdx = _qaRollReg.length;
-    _qaRollReg.push({label: name + (upgTier ? ' +' + upgTier : ''), hit: _mod(stat) + pb + upgTier, dmg: dmg, critMin: critMin});
+    _qaRollReg.push({label: name + (upgTier ? ' +' + upgTier : ''), hit: _mod(stat) + pb + upgTier, dmg: dmg, critMin: critMin, wgIdx: i});
     var dmgRollable = _diceHasDice(dmg);
     rows += '<tr>'
       + '<td style="text-align:center;color:var(--silver-dim);font-size:11pt;padding:3px 2px;">'+wIcon+'</td>'
@@ -4317,7 +4317,19 @@ function _spellHealStr(sp, modFn) {
 function _qaRollHit(i, ev) {
   var r = _qaRollReg[i];
   if (!r) return;
+  // Ranged weapons: each attack roll expends a round; a dry magazine blocks the shot
+  if (r.wgIdx !== undefined) {
+    var m = _wargearMeta[r.wgIdx];
+    if (m && (m.shots_max || 0) > 0) {
+      var cur = (m.shots_cur !== undefined) ? m.shots_cur : m.shots_max;
+      if (cur <= 0) { _reloadPrompt(r.wgIdx); return; }
+    }
+  }
   _rollD20(r.label + ' — attack', r.hit, ev, r.dmg, r.critMin);
+  if (r.wgIdx !== undefined) {
+    var m2 = _wargearMeta[r.wgIdx];
+    if (m2 && (m2.shots_max || 0) > 0) _shotDec(r.wgIdx);   // sync + save + empty-mag prompt
+  }
 }
 function _qaRollDmg(i) {
   var r = _qaRollReg[i];
