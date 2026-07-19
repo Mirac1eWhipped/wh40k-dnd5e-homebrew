@@ -1705,6 +1705,26 @@ function _shieldRowEquipped() {
 
 /* Writes the equipped armor row's stats into the manual armor fields (the persistent
    AC backing store), then recalcs. Unequipping everything reverts to unarmored. */
+/* Armor speed modifier (Phobos +5, Gravis −5, Terminator −10): applied as a
+   delta to the Speed stat on equip/unequip; the applied value persists in
+   extra.auto_grants.speedMod so armor swaps and reloads stay consistent. */
+function _applySpeedMod(newMod) {
+  if (typeof _autoGrants === 'undefined' || !_autoGrants) return;
+  var cur = _autoGrants.speedMod || 0;
+  if (newMod === cur) return;
+  var sp = document.getElementById('stat-speed');
+  if (sp) {
+    var m = sp.value.match(/-?\d+/);
+    if (m) {
+      sp.value = sp.value.replace(/-?\d+/, String(parseInt(m[0], 10) - cur + newMod));
+      sp.dispatchEvent(new Event('input')); sp.dispatchEvent(new Event('change'));
+    } else if (newMod !== 0) {
+      sp.value = (35 + newMod) + ' ft';   // blank field: assume the Astartes 35 ft base
+      sp.dispatchEvent(new Event('input')); sp.dispatchEvent(new Event('change'));
+    }
+  }
+  _autoGrants.speedMod = newMod;
+}
 function _applyArmorFromWargear() {
   var armorIdx = -1;
   for (var i = 0; i < _wargearMeta.length; i++) {
@@ -1715,10 +1735,12 @@ function _applyArmorFromWargear() {
   var typeEl = document.getElementById('armor-type');
   var spEl   = document.getElementById('armor-special');
   var srEl   = document.getElementById('armor-str-req');
+  var _armorIt = null;
   if (armorIdx !== -1) {
     var meta = _wargearMeta[armorIdx];
     var it = (meta.id && typeof REQ_ITEMS !== 'undefined')
       ? REQ_ITEMS.find(function(x){ return x.id === meta.id; }) : null;
+    _armorIt = it;
     var rowIns = document.querySelectorAll('.wg-equip-row')[armorIdx];
     var rowName = rowIns ? (rowIns.querySelectorAll('input')[0] || {}).value : '';
     if (nameEl) nameEl.value = it ? it.name : (rowName || '').trim();
@@ -1735,6 +1757,7 @@ function _applyArmorFromWargear() {
     if (baseEl) baseEl.value = '';
     if (dexEl)  dexEl.value  = 'full';
   }
+  _applySpeedMod(_armorIt && _armorIt.speed_mod ? _armorIt.speed_mod : 0);
   onArmorTypeChange(); // fills Base AC / DEX from the type defaults, then calcAC()
 }
 
@@ -4033,7 +4056,7 @@ const CHAPTER_GRANTS = {
   'Iron Hands':     { tools: ['Servo-arms & Mechadendrites'] },
   'Imperial Fists': { tools: ['Demolitions Kit'] }
 };
-function _agDefaults() { return { chapter: '', skills: {}, tools: [], resist: [], toolItems: {}, cls: '', clsSkills: {}, clsSaves: {}, clsArmor: [], clsWeapons: [], clsTools: [], racial: false }; }
+function _agDefaults() { return { chapter: '', skills: {}, tools: [], resist: [], toolItems: {}, cls: '', clsSkills: {}, clsSaves: {}, clsArmor: [], clsWeapons: [], clsTools: [], racial: false, speedMod: 0 }; }
 var _autoGrants = _agDefaults();
 function _profTA(which) {
   var tas = document.querySelectorAll('.dos-prof-ta');
