@@ -2214,6 +2214,17 @@ function syncQuickActionsFromWargear() {
             + '<button class="shot-rl" onclick="_shotRld('+i+')" title="Reload">↺</button>'
             + '</div>'
         : '<span style="opacity:.35;">—</span>';
+      // Thrown/AOE ordnance: track quantity remaining from the row's Qty column
+      var uQtyTracked = (itemThrown || itemSave) && !(uMax > 0);
+      if (uQtyTracked) {
+        var uQty = parseInt(ins[1] ? ins[1].value : '', 10); if (isNaN(uQty)) uQty = 0;
+        uShots = '<div class="shot-tracker" title="Quantity remaining">'
+          + '<button class="shot-btn" onclick="_qtyDec('+i+')">−</button>'
+          + '<span class="shot-disp'+(uQty===0?' empty':'')+'">×'+uQty+'</span>'
+          + '<button class="shot-btn" onclick="_qtyInc('+i+')">+</button>'
+          + '</div>';
+        if (uRollable) _qaRollReg[uIdx].wgQty = i;   // effect roll consumes one
+      }
       var uNameSpan = meta.id
         ? '<span class="dp-clickable" style="font-family:var(--font-label);font-size:10pt;color:var(--gold-light);" onclick="_weaponPopup(event,\''+meta.id+'\')">'+name+'</span>'
         : '<span style="font-family:var(--font-label);font-size:10pt;color:var(--text);">'+name+'</span>';
@@ -2441,6 +2452,42 @@ function _reloadClose() {
   _rldIdx = -1;
 }
 document.addEventListener('keydown', function(e){ if (e.key === 'Escape') _reloadClose(); });
+
+/* ── Ordnance quantity tracking (grenades etc.) — backed by the row's Qty input ── */
+function _qtyGet(idx) {
+  var row = document.querySelectorAll('.wg-equip-row')[idx];
+  var q = row ? row.querySelectorAll('input')[1] : null;
+  var v = q ? parseInt(q.value, 10) : NaN;
+  return isNaN(v) ? 0 : v;
+}
+function _qtySet(idx, d) {
+  var row = document.querySelectorAll('.wg-equip-row')[idx];
+  var q = row ? row.querySelectorAll('input')[1] : null;
+  if (!q) return;
+  var v = parseInt(q.value, 10); if (isNaN(v)) v = 0;
+  q.value = String(Math.max(0, v + d));
+  q.dispatchEvent(new Event('input')); q.dispatchEvent(new Event('change'));
+  syncQuickActionsFromWargear(); _schedSave();
+}
+function _qtyDec(idx) { _qtySet(idx, -1); }
+function _qtyInc(idx) { _qtySet(idx, 1); }
+function _ordnancePrompt(idx) {
+  var ov = document.getElementById('rld-overlay');
+  var body = document.getElementById('rld-body');
+  var hdr = document.getElementById('rld-hdr');
+  if (!ov || !body || !hdr) return;
+  var rows = document.querySelectorAll('.wg-equip-row');
+  var name = rows[idx] ? ((rows[idx].querySelector('input')||{}).value || 'Ordnance') : 'Ordnance';
+  var esc = function(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); };
+  hdr.textContent = '⚠ Ordnance Depleted';
+  body.innerHTML = '<div class="rld-wpn">' + esc(name) + '</div>'
+    + '<div class="rld-sub">Quantity exhausted — adjust the Qty column after resupply.</div>'
+    + '<div class="rld-btns">'
+    + '<div class="rld-dry">++ None remaining — resupply required ++</div>'
+    + '<button class="rld-no" onclick="_reloadClose()">Close</button>'
+    + '</div>';
+  ov.classList.add('open');
+}
 
 /* ── Ammo tracker ── */
 function renderAmmoTracker() {
@@ -4342,6 +4389,13 @@ function _qaRollHit(i, ev) {
 function _qaRollDmg(i) {
   var r = _qaRollReg[i];
   if (!r) return;
+  // Thrown/AOE ordnance: each effect roll expends one; none left blocks the throw
+  if (r.wgQty !== undefined) {
+    if (_qtyGet(r.wgQty) <= 0) { _ordnancePrompt(r.wgQty); return; }
+    _rollDamage(r.label, r.dmg, false);
+    _qtySet(r.wgQty, -1);
+    return;
+  }
   _rollDamage(r.label, r.dmg, false);
 }
 
