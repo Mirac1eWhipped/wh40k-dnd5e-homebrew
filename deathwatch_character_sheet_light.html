@@ -517,6 +517,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .qa-wtype-badge.wt-pistol{background:rgba(80,180,120,.14);color:#70c490;border:1px solid rgba(80,180,120,.3);}
 .qa-wtype-badge.wt-other{background:rgba(150,130,80,.14);color:#c0a860;border:1px solid rgba(150,130,80,.3);}
 .qa-type-icon{width:20px;text-align:center;font-size:11pt;color:var(--silver-dim);flex-shrink:0;}
+.qa-save-badge{display:inline-block;font-family:var(--font-label);font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;font-weight:600;border-radius:3px;padding:2px 6px;white-space:nowrap;background:rgba(160,40,40,.07);color:#a02828;border:1px solid rgba(160,40,40,.35);cursor:help;}
 
 /* ── DDB-style saves: [circle][value][name] ── */
 .dos-save-row{display:grid;grid-template-columns:18px 1fr 36px;align-items:center;gap:5px;padding:3px 2px;border-bottom:1px solid rgba(42,58,80,.3);}
@@ -1863,7 +1864,9 @@ function _upgRender() {
       + box('RANGE', range)
       + box('MAG', mx ? cur + ' / ' + mx : '—')
       + (isW ? box('TO HIT', fmt(_mod(wStat) + pb + tier)) : box('COST', it.cost || '—'))
+      + (it.save ? box('SAVE', 'DC ' + it.save.dc + ' ' + it.save.ability) : '')
       + '</div>';
+    if (it.save) html += '<div class="upg-slot-desc" style="margin:0 0 10px;color:#a02828;">⚠ DC ' + it.save.dc + ' ' + it.save.ability + ' save — ' + it.save.effect + '</div>';
   } else {
     html += '<div class="upg-stat-grid" style="grid-template-columns:1fr 1fr;">' + box('TYPE', it.wtype || '—') + box('COST', it.cost || '—') + '</div>';
     if (it.use) html += '<div class="upg-slot-desc" style="margin:0 0 10px;">' + it.use + '</div>';
@@ -2113,9 +2116,11 @@ function syncQuickActionsFromWargear() {
     if (!name) continue;
     // Back-fill fields from REQ_ITEMS for weapons saved before shots/mods tracking
     var itemAction = 'Action';
+    var itemSave = null;   // reset each row — catalog is the source of truth for AOE saves
     if (meta.id && typeof REQ_ITEMS !== 'undefined') {
       var _ref = REQ_ITEMS.find(function(x){ return x.id === meta.id; });
       if (_ref) {
+        itemSave = _ref.save || null;
         if (!Array.isArray(meta.mods))  meta.mods = _ref.mods || [];
         var _sm = _ref.shots || 0;                                 // always sync from catalog
         if (_sm && typeof _upgTraitDefs === 'function') {
@@ -2133,13 +2138,15 @@ function syncQuickActionsFromWargear() {
     }
     // Apply action-type filter
     if (_qaFilter !== 'all' && itemAction !== _qaFilter) continue;
-    // Non-weapon gear (stims, utility items): show a "use" row when its effect has dice to roll
+    // Non-weapon gear (stims, grenades, utility items): show a "use" row when its
+    // effect has dice to roll OR it forces a saving throw (AOE grenades)
     if (!meta.is_weapon) {
       var uDmg = (meta.dmg || '').trim();
-      if (!_diceHasDice(uDmg)) continue;
+      var uRollable = _diceHasDice(uDmg);
+      if (!uRollable && !itemSave) continue;
       var uIdx = _qaRollReg.length;
-      _qaRollReg.push({label: name, hit: null, dmg: uDmg});
-      var uHeal = /heal|regain|\bhp\b/i.test(uDmg);
+      if (uRollable) _qaRollReg.push({label: name, hit: null, dmg: uDmg});
+      var uHeal = uRollable && /heal|regain|\bhp\b/i.test(uDmg);
       var uMax = parseInt(meta.shots_max, 10) || 0;
       var uCur = isNaN(parseInt(meta.shots_cur, 10)) ? uMax : parseInt(meta.shots_cur, 10);
       var uShots = uMax > 0
@@ -2154,11 +2161,14 @@ function syncQuickActionsFromWargear() {
         ? '<span class="dp-clickable" style="font-family:var(--font-label);font-size:10pt;color:var(--gold-light);" onclick="_weaponPopup(event,\''+meta.id+'\')">'+name+'</span>'
         : '<span style="font-family:var(--font-label);font-size:10pt;color:var(--text);">'+name+'</span>';
       var uBadge = meta.wtype ? '<div class="qa-meta-row"><span class="qa-wtype-badge wt-other">'+meta.wtype+'</span></div>' : '';
+      var uSaveCell = itemSave
+        ? '<span class="qa-save-badge" title="DC '+itemSave.dc+' '+itemSave.ability+' save — '+itemSave.effect+'">DC '+itemSave.dc+' '+itemSave.ability+'</span>'
+        : '—';
       rows += '<tr>'
         + '<td style="text-align:center;color:'+(uHeal?'#8fd39b':'var(--silver-dim)')+';font-size:11pt;padding:3px 2px;">'+(uHeal?'✚':'◈')+'</td>'
         + '<td><div class="qa-name-cell">'+uNameSpan+uBadge+'</div></td>'
-        + '<td style="text-align:center;color:var(--text-dim);font-size:10pt;">—</td>'
-        + '<td class="qa-roll" title="'+(uHeal?'Roll healing':'Roll effect dice')+'" onclick="_qaRollDmg('+uIdx+')" style="text-align:center;color:'+(uHeal?'#8fd39b':'var(--text)')+';font-size:10pt;">'+uDmg+'</td>'
+        + '<td style="text-align:center;color:var(--text-dim);font-size:10pt;">'+uSaveCell+'</td>'
+        + '<td'+(uRollable ? ' class="qa-roll" title="'+(uHeal?'Roll healing':'Roll effect dice')+'" onclick="_qaRollDmg('+uIdx+')"' : '')+' style="text-align:center;color:'+(uHeal?'#8fd39b':'var(--text)')+';font-size:10pt;">'+(uDmg||'—')+'</td>'
         + '<td style="text-align:center;font-size:10pt;">'+(meta.range||'—')+'</td>'
         + '<td>'+uShots+'</td>'
         + '</tr>';
@@ -3368,7 +3378,7 @@ function _sreqRender(items) {
     if (it.cat === 'Tools') {
       return `<div class="sreq-card"><div class="sreq-card-name">${it.name}</div><div class="sreq-card-stat">Tools &bull; ${it.wtype}</div><div class="sreq-card-stat">${it.use}</div><div class="sreq-card-stat">Cost: ${it.cost}</div><button class="sreq-add" onclick="_sreqAdd('${it.id}')">+ Add to Wargear</button></div>`;
     }
-    return `<div class="sreq-card"><div class="sreq-card-name">${it.name}</div><div class="sreq-card-stat">${it.cat} &bull; ${it.wtype}</div><div class="sreq-card-stat">${it.dmg}</div><div class="sreq-card-stat">Range: ${it.range}</div><div class="sreq-card-stat">Cost: ${it.cost}</div><button class="sreq-add" onclick="_sreqAdd('${it.id}')">+ Add to Wargear</button></div>`;
+    return `<div class="sreq-card"><div class="sreq-card-name">${it.name}</div><div class="sreq-card-stat">${it.cat} &bull; ${it.wtype}</div><div class="sreq-card-stat">${it.dmg}</div>${it.save ? `<div class="sreq-card-stat" style="color:#a02828;">DC ${it.save.dc} ${it.save.ability} save</div>` : ''}<div class="sreq-card-stat">Range: ${it.range}</div><div class="sreq-card-stat">Cost: ${it.cost}</div><button class="sreq-add" onclick="_sreqAdd('${it.id}')">+ Add to Wargear</button></div>`;
   }).join('');
 }
 function _sreqAdd(id) {
@@ -3425,7 +3435,7 @@ function _sreqAdd(id) {
       if (ins[2]) {
         const parts = it.cat === 'Tools'
           ? ['Tool Proficiency Kit', it.use]
-          : [it.dmg, it.range !== 'N/A' && it.range !== '5 ft Melee' ? 'Range: ' + it.range : '', it.shots && it.shots !== 'N/A' ? 'Shots: ' + it.shots : '', it.notes].filter(Boolean);
+          : [it.dmg, it.range !== 'N/A' && it.range !== '5 ft Melee' ? 'Range: ' + it.range : '', it.save ? 'DC ' + it.save.dc + ' ' + it.save.ability + ' save' : '', it.shots && it.shots !== 'N/A' ? 'Shots: ' + it.shots : '', it.notes].filter(Boolean);
         ins[2].value = parts.join(' · ');
       }
       [ins[0], ins[1], ins[2]].filter(Boolean).forEach(el => { el.dispatchEvent(new Event('input')); el.dispatchEvent(new Event('change')); });
@@ -3773,10 +3783,12 @@ function _weaponPopup(e, itemId, wgIdx) {
     '<div class="dp-stats">' +
       '<div class="dp-stat"><strong>Damage</strong>'+item.dmg+'</div>' +
       '<div class="dp-stat"><strong>Range</strong>'+item.range+'</div>' +
+      (item.save ? '<div class="dp-stat"><strong>Save</strong>DC '+item.save.dc+' '+item.save.ability+'</div>' : '') +
       '<div class="dp-stat"><strong>Ammo</strong>'+(item.ammo||'—')+'</div>' +
       '<div class="dp-stat"><strong>Shots / Mag</strong>'+(item.shots||'—')+'</div>' +
       '<div class="dp-stat"><strong>Cost</strong>'+(item.cost||'—')+'</div>' +
     '</div>' +
+    (item.save ? '<div style="margin-top:6px;font-family:var(--font-label);font-size:8pt;letter-spacing:.06em;color:#a02828;">⚠ DC '+item.save.dc+' '+item.save.ability+' save — '+item.save.effect+'</div>' : '') +
     modsHtml +
     upgHtml +
     (item.lore ? '<hr class="dp-divider"><div class="dp-desc">'+item.lore+'</div>' : '') +

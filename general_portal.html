@@ -2394,7 +2394,7 @@
       const items = REQ_ITEMS.filter(item => {
         if (item.cat !== cat) return false;
         if (!q) return true;
-        const searchStr = [item.name, item.wtype, item.cat, (item.mods||[]).join(' '), item.notes||'', item.lore||'', item.effects||'', item.use||'', item.checks||''].join(' ').toLowerCase();
+        const searchStr = [item.name, item.wtype, item.cat, (item.mods||[]).join(' '), item.notes||'', item.lore||'', item.effects||'', item.use||'', item.checks||'', item.save ? `dc ${item.save.dc} ${item.save.ability} save` : ''].join(' ').toLowerCase();
         return searchStr.includes(q);
       });
       if (!items.length) return;
@@ -2445,6 +2445,7 @@
             <div class="req-card-name">${item.name}</div>
             <div class="req-card-type">${item.wtype} Weapon</div>
             <div class="req-card-dmg">${item.dmg}</div>
+            ${item.save ? `<div class="req-card-type" style="color:#c86060;">DC ${item.save.dc} ${item.save.ability} save</div>` : ''}
             <div class="req-card-footer">
               <span class="req-cat-badge ${bc}">${item.cat}</span>
               <span class="req-cost-tag">${item.cost}</span>
@@ -2563,9 +2564,11 @@
             <div class="rmd-stat-value" style="font-size:18px;color:var(--gold)">${item.dmg}</div>
           </div>
           <div class="rmd-stat-cell"><div class="rmd-stat-label">Range</div><div class="rmd-stat-value">${item.range}</div></div>
+          ${item.save ? `<div class="rmd-stat-cell"><div class="rmd-stat-label">Saving Throw</div><div class="rmd-stat-value" style="color:#c86060">DC ${item.save.dc} ${item.save.ability}</div></div>` : ''}
           <div class="rmd-stat-cell"><div class="rmd-stat-label">Cost</div><div class="rmd-stat-value" style="color:var(--gold-dim)">${item.cost}</div></div>
           ${ammoLine}
         </div>
+        ${item.save ? `<div class="rmd-section-title">Saving Throw</div><div class="rmd-notes">Targets in the area make a DC ${item.save.dc} ${item.save.ability} saving throw — ${item.save.effect}.</div>` : ''}
         ${modBlock}
         ${notesBlock}
         <div class="rmd-section-title">Lore</div>
