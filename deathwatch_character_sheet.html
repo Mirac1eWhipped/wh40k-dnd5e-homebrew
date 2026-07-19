@@ -531,8 +531,8 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .dos-textarea{width:100%;background:var(--panel2);border:1px solid var(--border2);color:var(--text);font-family:var(--font-body);font-size:10pt;outline:none;resize:none;padding:6px 8px;box-sizing:border-box;margin-top:4px;}
 
 /* ── HP Heal / Damage buttons ── */
-.dos-hp-btns{display:flex;gap:4px;}
-.hp-action-btn{font-family:var(--font-label);font-size:7.5pt;letter-spacing:.12em;text-transform:uppercase;padding:4px 8px;cursor:pointer;border:1px solid;transition:all .2s;white-space:nowrap;}
+.dos-hp-btns{display:flex;gap:4px;white-space:nowrap;}
+.hp-action-btn{flex:1;font-family:var(--font-label);font-size:7.5pt;letter-spacing:.12em;text-transform:uppercase;padding:4px 6px;cursor:pointer;border:1px solid;transition:all .2s;}
 .heal-btn{background:rgba(60,140,80,.12);border-color:rgba(60,140,80,.4);color:#70c488;}
 .heal-btn:hover{background:rgba(60,140,80,.25);}
 .dmg-btn{background:rgba(160,50,50,.12);border-color:rgba(160,50,50,.4);color:#cc6060;}
@@ -1020,8 +1020,8 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
       <div class="rc-tabs">
         <button class="rc-tab-btn active" onclick="rcTab(this,'rc-actions')">Actions</button>
         <button class="rc-tab-btn" onclick="rcTab(this,'rc-wargear')">Wargear</button>
-        <button class="rc-tab-btn" id="rc-spells-btn" onclick="rcTab(this,'rc-spells')" style="display:none;">Spells</button>
         <button class="rc-tab-btn" onclick="rcTab(this,'rc-requisitorium')">Requisitorium</button>
+        <button class="rc-tab-btn" id="rc-spells-btn" onclick="rcTab(this,'rc-spells')" style="display:none;">Spells</button>
         <button class="rc-tab-btn" onclick="rcTab(this,'rc-abilities')">Abilities</button>
         <button class="rc-tab-btn" onclick="rcTab(this,'rc-notes')">Notes</button>
       </div>
@@ -1548,6 +1548,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 #spell-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:1000;align-items:center;justify-content:center;}
 #spell-overlay.open{display:flex;}
 #spell-modal{background:var(--panel-bg,var(--panel));border:1px solid var(--gold);border-radius:4px;width:min(680px,95vw);max-height:80vh;display:flex;flex-direction:column;overflow:hidden;}
+.spell-card-active{display:flex;align-items:flex-start;gap:6px;padding:4px 0;border-bottom:1px solid var(--border);}
 </style>
 <div id="spell-overlay" onclick="if(event.target===this)_spellClose()">
   <div id="spell-modal">
@@ -3576,8 +3577,8 @@ function _spellRemove(id) {
   var pidx = _pinnedSpells.indexOf(id);
   if (pidx !== -1) _pinnedSpells.splice(pidx, 1);
   renderActivePowers();
-  _syncPreparedDisplay();
   _spellFilter();
+  _syncPreparedDisplay();
   syncQuickActionsFromWargear();
   _schedSave();
 }
@@ -3989,6 +3990,7 @@ async function _loadSheetForUser(uid) {
     renderActivePowers();
     _updatePowerTracker();
     _syncPowerDisplay();
+    _syncPreparedDisplay();
     STATS.forEach(function(s){ calcMod(s); });
     _status('loaded', 'Viewing ' + (rows[0].name || 'player') + '\'s sheet');
   } catch(e) { _status('error','Could not load player sheet'); }
