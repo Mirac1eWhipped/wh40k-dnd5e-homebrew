@@ -274,6 +274,9 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .wg-upg-btn:hover{border-color:var(--gold-dim);color:var(--gold-dim);}
 .wg-upg-btn.upgraded{border-color:var(--gold);color:var(--gold);background:rgba(180,140,60,.15);visibility:visible;}
 .wg-upg-btn.upgraded::after{content:attr(data-tier);position:absolute;top:-7px;right:-7px;font-family:var(--font-label);font-size:6pt;font-weight:700;background:var(--gold);color:#000;border-radius:2px;padding:0 2px;line-height:1.5;}
+/* Catalog-bound rows: the name becomes a click-target that opens the Item Record */
+.wg-name-locked{color:var(--gold-light)!important;font-family:var(--font-label)!important;font-size:10pt!important;letter-spacing:.03em;cursor:pointer;}
+.wg-name-locked:hover{text-decoration:underline;text-decoration-color:var(--gold-dim);}
 .wg-ammo-row{display:grid;grid-template-columns:2fr 1fr 1fr;gap:6px;align-items:center;padding:3px 4px;border-bottom:1px solid var(--border);}
 .wg-ammo-row input{font-family:var(--font-body)!important;font-size:12pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:2px 0!important;background:transparent!important;color:var(--text)!important;outline:none!important;width:100%!important;}
 .wg-ammo-row input:focus{border-bottom-color:var(--gold)!important;}
@@ -1450,11 +1453,29 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .upg-pick-desc strong{color:var(--gold-light);}
 .upg-choice-btn{font-family:var(--font-label);font-size:8.5pt;letter-spacing:.08em;text-transform:uppercase;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);padding:3px 10px;cursor:pointer;border-radius:2px;margin:3px 4px 0 0;}
 .upg-choice-btn:hover{background:var(--gold-dim);color:#000;}
+.upg-name-inp{flex:1;background:transparent;border:none;border-bottom:1px solid var(--border2);color:var(--gold-light);font-family:var(--font-label);font-size:12.5pt;padding:2px 0;outline:none;min-width:0;}
+.upg-name-inp:focus{border-bottom-color:var(--gold);}
+.upg-ident{font-family:var(--font-label);font-size:7.5pt;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);margin:3px 0 10px;}
+.upg-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;}
+.upg-stat{background:var(--panel2);border:1px solid var(--border2);padding:5px 8px;}
+.upg-stat-l{font-family:var(--font-label);font-size:7pt;letter-spacing:.1em;color:var(--gold);text-transform:uppercase;}
+.upg-stat-v{font-size:9.5pt;color:var(--text);line-height:1.35;}
+.upg-edit-grid{display:grid;grid-template-columns:70px 1fr;gap:8px;margin:0 0 10px;}
+.upg-edit-inp{background:var(--panel2);border:1px solid var(--border2);color:var(--text);font-family:var(--font-body);font-size:9.5pt;padding:5px 8px;border-radius:3px;outline:none;}
+.upg-edit-inp:focus{border-color:var(--gold-dim);}
+.upg-act-row{display:flex;gap:8px;margin-bottom:12px;}
+.upg-eqp-btn{flex:1;font-family:var(--font-label);font-size:8.5pt;letter-spacing:.14em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--text-dim);padding:7px 0;border-radius:3px;cursor:pointer;}
+.upg-eqp-btn:hover{border-color:var(--gold-dim);color:var(--gold);}
+.upg-eqp-btn.on{background:rgba(180,140,60,.15);border-color:var(--gold);color:var(--gold-light);}
+.upg-rm-btn{width:120px;font-family:var(--font-label);font-size:8.5pt;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid #7a3030;color:#c06060;padding:7px 0;border-radius:3px;cursor:pointer;}
+.upg-rm-btn:hover{background:#7a3030;color:#fff;}
+.upg-sec-ttl{font-family:var(--font-label);font-size:8.5pt;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);border-top:1px solid var(--border2);padding-top:10px;margin-bottom:8px;}
+.upg-lore{font-size:9pt;font-style:italic;color:var(--text-dim);border-top:1px solid var(--border2);margin-top:10px;padding-top:8px;line-height:1.5;}
 </style>
 <div id="upg-overlay">
   <div id="upg-modal">
     <div class="sreq-hdr">
-      <span class="sreq-ttl">✦ Upgrade Console</span>
+      <span class="sreq-ttl">✦ Item Record</span>
       <button class="sreq-x" onclick="_upgClose()">&#10005;</button>
     </div>
     <div class="upg-body" id="upg-body"></div>
@@ -1700,9 +1721,15 @@ var _UPG_ROMAN = ['I', 'II', 'III'];
 
 function _upgItemFor(idx) {
   var meta = _wargearMeta[idx];
-  if (!meta || !meta.id || typeof REQ_ITEMS === 'undefined' || typeof upgradeItemEligible !== 'function') return null;
-  var it = REQ_ITEMS.find(function(x){ return x.id === meta.id; });
-  return (it && upgradeItemEligible(it)) ? it : null;
+  if (!meta || !meta.id || typeof REQ_ITEMS === 'undefined') return null;
+  return REQ_ITEMS.find(function(x){ return x.id === meta.id; }) || null;
+}
+/* Row inputs for a wargear row: {name, qty, notes} */
+function _upgRowInputs(idx) {
+  var row = document.querySelectorAll('.wg-equip-row')[idx];
+  if (!row) return {};
+  var ii = row.querySelectorAll('input');
+  return {name: ii[0], qty: ii[1], notes: ii[2]};
 }
 function _upgData(meta) {
   if (!meta.upg) meta.upg = {tier: 0, traits: []};
@@ -1729,20 +1756,39 @@ function _armorUpgTier() {
   }
   return 0;
 }
-/* Show/hide the ✦ buttons and their +N tier badges to match current row contents */
+/* Show/hide the ✦ buttons and their +N tier badges to match current row contents.
+   Catalog-bound rows also lock their name input into a click-target (D&D-Beyond-style):
+   readOnly + .wg-name-locked, opened via the click wiring below. readOnly is only ever
+   set at runtime (never in source), after load hydration, so positional saves and the
+   _loadSheet readOnly-skip are unaffected. */
 function _upgBtnsRefresh() {
   var rows = document.querySelectorAll('.wg-equip-row');
   var btns = document.querySelectorAll('.wg-upg-btn');
   for (var i = 0; i < btns.length; i++) {
     var it = _upgItemFor(i);
-    var named = rows[i] ? ((rows[i].querySelectorAll('input')[0] || {}).value || '').trim() : '';
+    var nameEl = rows[i] ? rows[i].querySelectorAll('input')[0] : null;
+    var named = nameEl ? (nameEl.value || '').trim() : '';
     var meta = _wargearMeta[i];
     var tier = (it && named && meta && meta.upg && meta.upg.tier) || 0;
-    btns[i].classList.toggle('avail', !!(it && named));
+    var bound = !!(it && named);
+    btns[i].classList.toggle('avail', bound);
     btns[i].classList.toggle('upgraded', tier > 0);
     if (tier > 0) btns[i].setAttribute('data-tier', '+' + tier);
     else btns[i].removeAttribute('data-tier');
+    if (nameEl) {
+      nameEl.readOnly = bound;
+      nameEl.classList.toggle('wg-name-locked', bound);
+      nameEl.title = bound ? 'Open Item Record' : '';
+    }
   }
+}
+/* Unlock every wargear name input — run before load hydration so restored values
+   are never skipped by the readOnly check in _loadSheet */
+function _rowTriggersReset() {
+  document.querySelectorAll('.wg-equip-row').forEach(function(row) {
+    var inp = row.querySelectorAll('input')[0];
+    if (inp) { inp.readOnly = false; inp.classList.remove('wg-name-locked'); inp.title = ''; }
+  });
 }
 function _upgOpenFromBtn(btn) {
   var rows = Array.prototype.slice.call(document.querySelectorAll('.wg-equip-row'));
@@ -1775,9 +1821,74 @@ function _upgRender() {
   var meta = _wargearMeta[_upgIdx];
   var u = _upgData(meta);
   var isArmor = it.cat === 'Armor';
-  var html = '<div class="upg-item-line">' + it.name
-    + ' <span class="upg-item-sub">· ' + it.cat + ' · '
-    + (isArmor ? 'tier bonus applies to AC' : 'tier bonus applies to attack & damage') + '</span></div>';
+  var canUpg = (typeof upgradeItemEligible === 'function') && upgradeItemEligible(it);
+  var rowIns = _upgRowInputs(_upgIdx);
+  var upgDefs = _upgTraitDefs(meta);
+  var tier = u.tier || 0;
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;'); }
+  function _mod(s){ var sc = parseInt((document.getElementById(s+'-score')||{}).value); return isNaN(sc) ? 0 : Math.floor((sc-10)/2); }
+  function fmt(n){ return n >= 0 ? '+'+n : String(n); }
+  function box(l, v){ return '<div class="upg-stat"><div class="upg-stat-l">'+l+'</div><div class="upg-stat-v">'+v+'</div></div>'; }
+  var curName = rowIns.name ? rowIns.name.value : it.name;
+  var html = '<div style="display:flex;gap:10px;align-items:baseline;">'
+    + '<input class="upg-name-inp" value="' + esc(curName) + '" oninput="_upgFieldEdit(\'name\',this.value)" onchange="_upgNameCommit()">'
+    + '<button class="upg-slot-btn" onclick="_upgRestoreName()" title="Restore catalog name">↺</button></div>';
+  html += '<div class="upg-ident">' + it.name + ' · ' + it.cat + (it.wtype ? ' · ' + it.wtype : '') + (it.cost ? ' · ' + it.cost : '') + '</div>';
+  if (isArmor) {
+    var acTxt = it.shield_bonus
+      ? '+' + it.shield_bonus
+      : String((it.base_ac || 10) + tier) + (it.dex_mod === 'full' ? ' + DEX' : '') + (tier ? ' ✦' : '');
+    html += '<div class="upg-stat-grid">' + box('AC', acTxt) + box('STR REQ', it.str_req || '—')
+      + box('PATTERN', it.armor_type || (it.shield_bonus ? 'shield' : '—')) + box('COST', it.cost || '—') + '</div>';
+    if (it.effects) html += '<div class="upg-slot-desc" style="margin:0 0 10px;">' + it.effects + '</div>';
+  } else if (it.dmg && it.dmg !== 'N/A') {
+    var wStat = _wpnStatFromCat(it.cat);
+    if ((it.mods || []).indexOf('Finesse') !== -1) wStat = _mod('dex') >= _mod('str') ? 'dex' : 'str';
+    var lvl = parseInt((document.getElementById('char-level')||{}).value) || 1;
+    var pb = Math.ceil(lvl / 4) + 1;
+    var isW = it.cat !== 'Equipment' && it.cat !== 'Tools' && it.cat !== 'Relic' ? true : !!meta.is_weapon;
+    var dmg = it.dmg, range = it.range || '—';
+    var mx = (it.shots && it.shots !== 'N/A') ? it.shots : 0;
+    upgDefs.forEach(function(ut) {
+      var h = ut.def.hooks || {};
+      if (h.dmg_add) dmg = dmg + ' + ' + h.dmg_add;
+      if (h.range_mult && range !== '—') range = range.replace(/\d+/g, function(n){ return Math.ceil(parseInt(n,10) * h.range_mult); });
+      if (h.shots_mult && mx) mx = Math.ceil(mx * h.shots_mult);
+    });
+    var cur = (meta.shots_cur !== undefined && mx) ? Math.min(meta.shots_cur, mx) : mx;
+    html += '<div class="upg-stat-grid">'
+      + box(isW ? 'DAMAGE' : 'EFFECT', dmg + (isW ? ' ' + fmt(_mod(wStat) + tier) : ''))
+      + box('RANGE', range)
+      + box('MAG', mx ? cur + ' / ' + mx : '—')
+      + (isW ? box('TO HIT', fmt(_mod(wStat) + pb + tier)) : box('COST', it.cost || '—'))
+      + '</div>';
+  } else {
+    html += '<div class="upg-stat-grid" style="grid-template-columns:1fr 1fr;">' + box('TYPE', it.wtype || '—') + box('COST', it.cost || '—') + '</div>';
+    if (it.use) html += '<div class="upg-slot-desc" style="margin:0 0 10px;">' + it.use + '</div>';
+  }
+  var pills = '';
+  (it.mods || []).forEach(function(m) {
+    pills += '<span class="qa-mod-pill" onclick="_modPopup(event,\'' + m.replace(/\\/g,'\\\\').replace(/'/g,"\\'") + '\')">' + m + '</span>';
+  });
+  upgDefs.forEach(function(ut) {
+    var lbl = ut.def.name + (ut.choice ? ' — ' + ut.choice : '');
+    pills += '<span class="qa-upg-pill" onclick="_upgTraitPopup(event,\'' + ut.def.id + '\',\'' + (ut.choice || '').replace(/'/g,"\\'") + '\')">✦ ' + lbl + '</span>';
+  });
+  if (pills) html += '<div style="margin-bottom:10px;">' + pills + '</div>';
+  html += '<div class="upg-edit-grid">'
+    + '<input class="upg-edit-inp" style="text-align:center;" placeholder="Qty" value="' + esc(rowIns.qty ? rowIns.qty.value : '') + '" oninput="_upgFieldEdit(\'qty\',this.value)">'
+    + '<input class="upg-edit-inp" placeholder="Notes / disposition…" value="' + esc(rowIns.notes ? rowIns.notes.value : '') + '" oninput="_upgFieldEdit(\'notes\',this.value)">'
+    + '</div>';
+  html += '<div class="upg-act-row">'
+    + '<button class="upg-eqp-btn' + (meta.equipped ? ' on' : '') + '" onclick="_upgEquipToggle()">⚔ ' + (meta.equipped ? 'Equipped' : 'Equip') + '</button>'
+    + '<button class="upg-rm-btn" onclick="_upgRemove()">✕ Remove</button></div>';
+  if (!canUpg) {
+    if (it.cat === 'Relic') html += '<div class="upg-note">Relics cannot carry Sanctioned Upgrade Patterns — they are already singular artefacts with their own fixed properties.</div>';
+    if (it.lore) html += '<div class="upg-lore">' + it.lore + '</div>';
+    body.innerHTML = html;
+    return;
+  }
+  html += '<div class="upg-sec-ttl">Sanctioned Upgrade Pattern</div>';
   html += '<div class="upg-tier-track">';
   html += '<div class="upg-tier-card' + (u.tier === 0 ? ' active' : '') + '" onclick="_upgSetTier(0)">'
     + '<div class="upg-tier-name">Standard Issue</div><div class="upg-tier-bonus">—</div>'
@@ -1822,6 +1933,7 @@ function _upgRender() {
     html += '<div class="upg-slot-empty" style="margin-bottom:8px;">Select a pattern tier to unlock Augmetic Trait slots — see the <a href="Wargear_Upgrades.html" target="_blank" style="color:var(--gold);">Wargear Upgrades</a> reference for the full rules.</div>';
   }
   html += '<div class="upg-note">RP costs are bookkeeping only — settle them against your Requisition tally. Techmarines &amp; Tech-Priests pay 25% less (round down to 5 RP); Artificer\'s Tools proficiency grants 10% off. Swapping an installed trait costs 50 RP × the incoming trait\'s tier, between missions. Relics cannot carry upgrades.</div>';
+  if (it.lore) html += '<div class="upg-lore">' + it.lore + '</div>';
   body.innerHTML = html;
 }
 function _upgPickRender(slot) {
@@ -1909,10 +2021,64 @@ function _upgTraitPopup(e, traitId, choice) {
   box.classList.add('open');
   e.stopPropagation();
 }
+/* Write a pane edit through to the backing row input (keeps positional saves the
+   source of truth); dispatching input/change fires the existing _schedSave wiring */
+function _upgFieldEdit(kind, val) {
+  var ins = _upgRowInputs(_upgIdx);
+  var el = ins[kind];
+  if (!el) return;
+  el.value = val;
+  el.dispatchEvent(new Event('input'));
+  el.dispatchEvent(new Event('change'));
+}
+function _upgNameCommit() {
+  var meta = _wargearMeta[_upgIdx];
+  if (meta && (meta.is_armor || meta.is_shield) && meta.equipped) _applyArmorFromWargear();
+  syncQuickActionsFromWargear();
+}
+function _upgRestoreName() {
+  var it = _upgItemFor(_upgIdx);
+  if (!it) return;
+  _upgFieldEdit('name', it.name);
+  _upgNameCommit();
+  _upgRender();
+}
+function _upgEquipToggle() {
+  if (_upgIdx < 0) return;
+  _toggleEquip(_upgIdx);   // handles armor exclusivity, AC, Quick Actions, save
+  _upgRender();
+}
+/* Strike the item from the sheet entirely: clears the row, wipes its meta
+   (including upgrades), unequips armor effects, and frees the slot for reuse */
+function _upgRemove() {
+  var idx = _upgIdx;
+  var meta = _wargearMeta[idx];
+  if (idx < 0 || !meta) return;
+  if (!confirm('Strike this item from the manifest? Its upgrades — and the RP invested in them — are lost with it.')) return;
+  var wasArmor = (meta.is_armor || meta.is_shield) && meta.equipped;
+  var ins = _upgRowInputs(idx);
+  _rowTriggersReset();
+  ['name', 'qty', 'notes'].forEach(function(k) {
+    if (ins[k]) { ins[k].value = ''; ins[k].dispatchEvent(new Event('input')); ins[k].dispatchEvent(new Event('change')); }
+  });
+  _wargearMeta[idx] = null;
+  var eqBtns = document.querySelectorAll('.wg-equip-btn');
+  if (eqBtns[idx]) eqBtns[idx].classList.remove('equipped');
+  if (wasArmor) _applyArmorFromWargear();
+  _upgClose();
+  _upgApply();
+}
 document.addEventListener('DOMContentLoaded', function() {
   var ov = document.getElementById('upg-overlay');
   if (ov) ov.addEventListener('mousedown', function(e){ if (e.target === ov) _upgClose(); });
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape') _upgClose(); });
+  // Catalog-bound row names open the Item Record instead of editing inline
+  document.querySelectorAll('.wg-equip-row').forEach(function(row, i) {
+    var inp = row.querySelectorAll('input')[0];
+    if (inp) inp.addEventListener('click', function() {
+      if (inp.classList.contains('wg-name-locked')) _upgOpen(i);
+    });
+  });
 });
 
 var _qaFilter = 'all';
@@ -2744,6 +2910,7 @@ async function _loadSheet(adminOverrideId) {
       _adminMode = true;
       _showAdminBanner(rows[0].name || 'Unknown Operative');
     }
+    if (typeof _rowTriggersReset === 'function') _rowTriggersReset();  // unlock before hydration
     const ff = _fields();
     (rows[0].fields || []).forEach((v, i) => { if (ff[i] && !ff[i].readOnly) ff[i].value = v || ''; });
     const cc = _checkboxes();
