@@ -1523,19 +1523,6 @@
         <label>Operative Class</label>
         <select id="add-class"></select>
       </div>
-      <div class="add-field">
-        <label>Character Sheet Style</label>
-        <div class="sheet-picker" id="sheet-picker">
-          <div class="sheet-pick-card selected" data-file="deathwatch_character_sheet.html" onclick="pickSheet(this)">
-            <div class="sheet-pick-name">Deathwatch — Dark</div>
-            <div class="sheet-pick-desc">Black + gold. Matches the portal aesthetic. Deathwatch-specific fields.</div>
-          </div>
-          <div class="sheet-pick-card" data-file="deathwatch_character_sheet_light.html" onclick="pickSheet(this)">
-            <div class="sheet-pick-name">Deathwatch — Light</div>
-            <div class="sheet-pick-desc">White + silver. High contrast for printing. Deathwatch-specific fields.</div>
-          </div>
-        </div>
-      </div>
       <div class="add-field" style="margin-top:8px;">
         <label style="font-size:12px;letter-spacing:.15em;color:#8a9bb5;">Player UID <span style="font-weight:400;color:#4a6080;">(optional — paste from player's "Copy UID" button)</span></label>
         <input type="text" id="add-player-uid" placeholder="Leave blank for your own sheet" style="font-size:12px;" />
@@ -1584,8 +1571,8 @@
 
   // Sheet file display names
   var SHEET_LABELS = {
-    "deathwatch_character_sheet.html":       "Deathwatch — Dark",
-    "deathwatch_character_sheet_light.html": "Deathwatch — Light"
+    "deathwatch_character_sheet.html":       "Deathwatch",
+    "deathwatch_character_sheet_light.html": "Deathwatch"
   };
 
   var STORAGE_KEY    = 'dw_kill_team_roster_v2';
@@ -1607,7 +1594,19 @@
   // ── Data helpers ─────────────────────────────────────────────
   function loadRoster() {
     var raw = localStorage.getItem(STORAGE_KEY);
-    try { return raw ? JSON.parse(raw) : []; } catch(e) { return []; }
+    var data;
+    try { data = raw ? JSON.parse(raw) : []; } catch(e) { return []; }
+    // The light sheet was consolidated into the main sheet (themes are now
+    // chosen in-sheet) — self-heal legacy roster entries so dedup keys match.
+    var healed = false;
+    data.forEach(function(op) {
+      if (op && op.sheetFile === 'deathwatch_character_sheet_light.html') {
+        op.sheetFile = 'deathwatch_character_sheet.html';
+        healed = true;
+      }
+    });
+    if (healed) saveRoster(data);
+    return data;
   }
   function saveRoster(data) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
@@ -1647,7 +1646,7 @@
       var hp    = parseInt(op.hpCurrent) || 0;
       var hpMax = parseInt(op.hpMax) || 1;
       var hpPct = Math.max(0, Math.min(100, Math.round((hp / hpMax) * 100)));
-      var sheetLabel = SHEET_LABELS[op.sheetFile] || op.sheetFile || 'Deathwatch — Dark';
+      var sheetLabel = SHEET_LABELS[op.sheetFile] || op.sheetFile || 'Deathwatch';
       var isAdmin = _portalLoggedIn() && _portalUid() === ADMIN_UID;
       var card = document.createElement('div');
       card.className = 'op-card';
@@ -1704,14 +1703,9 @@
   }
 
   // ── Sheet picker ─────────────────────────────────────────────
-  function pickSheet(el) {
-    var cards = document.querySelectorAll('.sheet-pick-card');
-    cards.forEach(function(c) { c.classList.remove('selected'); });
-    el.classList.add('selected');
-  }
   function getPickedSheet() {
-    var sel = document.querySelector('.sheet-pick-card.selected');
-    return sel ? sel.getAttribute('data-file') : 'deathwatch_character_sheet.html';
+    // One consolidated sheet — players pick their theme in-sheet via the 🎨 button
+    return 'deathwatch_character_sheet.html';
   }
 
   // ── Add Operative Modal ──────────────────────────────────────
@@ -1781,13 +1775,14 @@
 
   function _adminEditSheet(cloudId, sheetFile) {
     if (!cloudId || !sheetFile) { alert('No cloud save found for this operative — they may not have logged in yet.'); return; }
+    if (sheetFile === 'deathwatch_character_sheet_light.html') sheetFile = 'deathwatch_character_sheet.html';
     window.location.href = sheetFile + '?cloudId=' + encodeURIComponent(cloudId);
   }
 
   // ── Sync roster from Supabase cloud ──────────────────────────
   var SHEET_TYPE_MAP = {
     'dw_dark':    'deathwatch_character_sheet.html',
-    'dw_light':   'deathwatch_character_sheet_light.html'
+    'dw_light':   'deathwatch_character_sheet.html'
   };
   var _syncPollInterval = null;
   var _syncInProgress   = false;

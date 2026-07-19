@@ -645,10 +645,10 @@ function _renderStats(rows) {
 
 const SHEET_URLS = {
   dw_dark:  'deathwatch_character_sheet.html',
-  dw_light: 'deathwatch_character_sheet_light.html',
+  dw_light: 'deathwatch_character_sheet.html',
 };
 const TYPE_LABELS = {
-  dw_dark:'Dark Theme', dw_light:'Light Theme'
+  dw_dark:'Deathwatch', dw_light:'Deathwatch'
 };
 
 function _esc(s) {
@@ -680,7 +680,9 @@ function _renderCards(rows) {
   grid.innerHTML = rows.map(row => {
     const updated = new Date(row.updated_at).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'});
     const sheetUrl = SHEET_URLS[row.sheet_type] || '#';
-    const typeLabel = TYPE_LABELS[row.sheet_type] || row.sheet_type;
+    // Show the character's chosen theme; fall back to the sheet-type label for pre-theme rows
+    const typeLabel = (row.extra && row.extra.theme && row.extra.theme.label)
+      || TYPE_LABELS[row.sheet_type] || row.sheet_type;
     const previewHtml = _previewFields(row).map(p =>
       `<div class="card-field"><div class="cf-lbl">${p.label}</div><div class="cf-val">${_esc(p.value)}</div></div>`
     ).join('');
