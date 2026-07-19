@@ -3120,7 +3120,7 @@ async function _doSave() {
       // Admin mode without a charId — should not happen; bail out safely
       _status('error', 'GM Edit Mode: no character ID — reload the sheet from the portal');
     } else {
-      const ex = await _sfetch('/rest/v1/characters?user_id=eq.' + _uid() + '&sheet_type=eq.' + _STYPE + '&select=id', {method:'GET'});
+      const ex = await _sfetch('/rest/v1/characters?user_id=eq.' + _uid() + '&sheet_type=in.(dw_dark,dw_light)&select=id&order=updated_at.desc&limit=1', {method:'GET'});
       if (Array.isArray(ex) && ex.length) {
         _charId = ex[0].id;
         await _sfetch('/rest/v1/characters?id=eq.' + _charId, {
@@ -3294,7 +3294,7 @@ async function _loadSheet(adminOverrideId) {
     if (adminOverrideId && _uid() === ADMIN_UID) {
       rows = await _sfetch('/rest/v1/characters?id=eq.' + encodeURIComponent(adminOverrideId), {method:'GET'});
     } else {
-      rows = await _sfetch('/rest/v1/characters?user_id=eq.' + _uid() + '&sheet_type=eq.' + _STYPE + '&order=updated_at.desc&limit=1', {method:'GET'});
+      rows = await _sfetch('/rest/v1/characters?user_id=eq.' + _uid() + '&sheet_type=in.(dw_dark,dw_light)&order=updated_at.desc&limit=1', {method:'GET'});
     }
     if (!Array.isArray(rows) || !rows.length) {
       if (adminOverrideId) { _status('error', 'Character not found in cloud.'); return; }
@@ -3950,7 +3950,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 /* ══ VIEW-ONLY MODE (viewing another player's sheet) ══ */
 async function _loadSheetForUser(uid) {
   try {
-    var rows = await _sfetch('/rest/v1/characters?user_id=eq.' + uid + '&sheet_type=eq.' + _STYPE + '&order=updated_at.desc&limit=1', {method:'GET'});
+    var rows = await _sfetch('/rest/v1/characters?user_id=eq.' + uid + '&sheet_type=in.(dw_dark,dw_light)&order=updated_at.desc&limit=1', {method:'GET'});
     if (!Array.isArray(rows) || !rows.length) { _status('loaded','No data found for this player'); return; }
     var ff = _fields();
     (rows[0].fields || []).forEach(function(v,i){ if(ff[i]) ff[i].value = v||''; });
