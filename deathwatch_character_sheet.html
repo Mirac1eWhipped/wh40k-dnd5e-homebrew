@@ -274,9 +274,16 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .wg-upg-btn:hover{border-color:var(--gold-dim);color:var(--gold-dim);}
 .wg-upg-btn.upgraded{border-color:var(--gold);color:var(--gold);background:rgba(180,140,60,.15);visibility:visible;}
 .wg-upg-btn.upgraded::after{content:attr(data-tier);position:absolute;top:-7px;right:-7px;font-family:var(--font-label);font-size:6pt;font-weight:700;background:var(--gold);color:#000;border-radius:2px;padding:0 2px;line-height:1.5;}
-/* Catalog-bound rows: the name becomes a click-target that opens the Item Record */
-.wg-name-locked{color:var(--gold-light)!important;font-family:var(--font-label)!important;font-size:10pt!important;letter-spacing:.03em;cursor:pointer;}
-.wg-name-locked:hover{text-decoration:underline;text-decoration-color:var(--gold-dim);}
+/* Catalog-bound rows render as item entries (D&D-Beyond-style), not text boxes:
+   gold accent rail, tinted background, item-name as the click-target, qty/notes demoted
+   to quiet metadata. .item-eq marks the equipped item's row. */
+.wg-equip-row.item-bound{background:rgba(200,164,74,.05);border-left:2px solid var(--gold-dim);padding-left:4px;}
+.wg-equip-row.item-bound:hover{background:rgba(200,164,74,.11);}
+.wg-equip-row.item-bound.item-eq{border-left-color:var(--gold);background:rgba(200,164,74,.09);}
+.wg-equip-row input.wg-name-locked{color:var(--gold-light)!important;font-family:var(--font-label)!important;font-size:10.5pt!important;letter-spacing:.03em;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.wg-equip-row input.wg-name-locked:hover{text-decoration:underline;text-decoration-color:var(--gold-dim);}
+.wg-equip-row.item-bound input:nth-of-type(2){color:var(--text-dim)!important;font-size:10.5pt!important;}
+.wg-equip-row.item-bound input:nth-of-type(3){color:var(--text-dim)!important;font-size:9.5pt!important;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .wg-ammo-row{display:grid;grid-template-columns:2fr 1fr 1fr;gap:6px;align-items:center;padding:3px 4px;border-bottom:1px solid var(--border);}
 .wg-ammo-row input{font-family:var(--font-body)!important;font-size:12pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:2px 0!important;background:transparent!important;color:var(--text)!important;outline:none!important;width:100%!important;}
 .wg-ammo-row input:focus{border-bottom-color:var(--gold)!important;}
@@ -1780,6 +1787,10 @@ function _upgBtnsRefresh() {
       nameEl.classList.toggle('wg-name-locked', bound);
       nameEl.title = bound ? 'Open Item Record' : '';
     }
+    if (rows[i]) {
+      rows[i].classList.toggle('item-bound', bound);
+      rows[i].classList.toggle('item-eq', !!(bound && meta && meta.equipped));
+    }
   }
 }
 /* Unlock every wargear name input — run before load hydration so restored values
@@ -1788,6 +1799,7 @@ function _rowTriggersReset() {
   document.querySelectorAll('.wg-equip-row').forEach(function(row) {
     var inp = row.querySelectorAll('input')[0];
     if (inp) { inp.readOnly = false; inp.classList.remove('wg-name-locked'); inp.title = ''; }
+    row.classList.remove('item-bound', 'item-eq');
   });
 }
 function _upgOpenFromBtn(btn) {
