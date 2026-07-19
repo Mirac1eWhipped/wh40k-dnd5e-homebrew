@@ -246,7 +246,7 @@ const WEAPON_MODS = {
   'Surgical Precision':   'As an action, restore 1d8+WIS HP to a creature in melee range. Excess becomes temp HP. Use a number of times equal to your PB per resupply. Also instantly stabilise downed allies.',
   "Omnissiah's Blessing": 'While equipped, use as a catalyst for Mechanicus abilities. Deals an additional 1d6 lightning damage.',
   'Servo Assisted':       'Use your bonus action to make an attack with this weapon.',
-  'Thrown':               'Hurled as an action. Throwing range is 30 ft + 10 ft per point of STR modifier.',
+  'Thrown':               'Hurled as an action. Throwing range is 30 ft + 10 ft per point of STR modifier, minimum 40 ft — negative modifiers cannot reduce it below that.',
   'Disintegrate':         'Creatures reduced to 0 HP by this weapon are fully disintegrated — no body, equipment, or trace remains.',
 };
 
@@ -256,7 +256,8 @@ function reqThrownText(it, strMod) {
   if (!it.thrown) return it.range;
   var t = it.thrown;
   if (strMod === null || strMod === undefined) {
-    return 'Thrown ' + t.base + '+' + t.perStr + '×STR ft · ' + it.range;
+    return 'Thrown ' + t.base + '+' + t.perStr + '×STR ft (min 40) · ' + it.range;
   }
-  return 'Thrown ' + Math.max(10, t.base + t.perStr * strMod) + ' ft · ' + it.range;
+  // 40 ft floor — negative STR modifiers can never drag a throw below it
+  return 'Thrown ' + Math.max(40, t.base + t.perStr * strMod) + ' ft · ' + it.range;
 }
