@@ -84,7 +84,7 @@ body{background:var(--bg-page);font-family:var(--font-body);color:var(--text);fo
 .auth-subtitle{font-family:var(--font-label);font-size:9pt;color:var(--silver-dim);letter-spacing:.28em;text-transform:uppercase;text-align:center;margin-bottom:20px;}
 .auth-inp{width:100%;background:var(--panel2);border:1px solid var(--border2);color:var(--text);font-family:var(--font-body);font-size:13pt;padding:8px 10px;outline:none;margin-bottom:10px;}
 .auth-inp:focus{border-color:var(--gold);}
-.auth-btn{width:100%;background:var(--gold-dim);border:none;color:#000;font-family:var(--font-label);font-size:9pt;letter-spacing:.26em;text-transform:uppercase;padding:10px;cursor:pointer;margin-top:4px;transition:all .2s;}
+.auth-btn{width:100%;background:var(--gold-dim);border:none;color:var(--hover-ink);font-family:var(--font-label);font-size:9pt;letter-spacing:.26em;text-transform:uppercase;padding:10px;cursor:pointer;margin-top:4px;transition:all .2s;}
 .auth-btn:hover{background:var(--gold);}
 .auth-err{color:var(--red);font-size:9.5pt;margin-top:8px;min-height:16px;text-align:center;font-family:var(--font-label);}
 .auth-toggle{text-align:center;margin-top:12px;font-family:var(--font-label);font-size:9pt;color:var(--silver-dim);letter-spacing:.12em;cursor:pointer;text-transform:uppercase;}
@@ -298,7 +298,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .wg-upg-btn.avail{visibility:visible;}
 .wg-upg-btn:hover{border-color:var(--gold-dim);color:var(--gold-dim);}
 .wg-upg-btn.upgraded{border-color:var(--gold);color:var(--gold);background:rgba(180,140,60,.15);visibility:visible;}
-.wg-upg-btn.upgraded::after{content:attr(data-tier);position:absolute;top:-7px;right:-7px;font-family:var(--font-label);font-size:6pt;font-weight:700;background:var(--gold);color:#000;border-radius:2px;padding:0 2px;line-height:1.5;}
+.wg-upg-btn.upgraded::after{content:attr(data-tier);position:absolute;top:-7px;right:-7px;font-family:var(--font-label);font-size:6pt;font-weight:700;background:var(--gold);color:var(--hover-ink);border-radius:2px;padding:0 2px;line-height:1.5;}
 /* Catalog-bound rows render as item entries (D&D-Beyond-style), not text boxes:
    gold accent rail, tinted background, item-name as the click-target, qty/notes demoted
    to quiet metadata. .item-eq marks the equipped item's row. */
@@ -501,7 +501,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .dp-stat strong{display:block;font-family:var(--font-label);font-size:8.5pt;letter-spacing:.1em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:2px;}
 .dp-mods{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
 .dp-mod-pill{font-family:var(--font-label);font-size:8pt;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border:1px solid var(--gold-dim);color:var(--gold-dim);border-radius:2px;cursor:pointer;}
-.dp-mod-pill:hover{background:var(--gold-dim);color:#000;}
+.dp-mod-pill:hover{background:var(--gold-dim);color:var(--hover-ink);}
 .dp-divider{border:none;border-top:1px solid var(--border);margin:10px 0;}
 .dp-desc{font-size:11pt;color:var(--text);line-height:1.65;font-style:italic;}
 .dp-notes{font-size:10pt;color:var(--gold-dim);margin-top:8px;font-style:normal;}
@@ -1416,7 +1416,7 @@ try {
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;">
       <button onclick="_hdPopupCancel()" style="background:transparent;border:1px solid var(--border2);color:var(--silver-dim);font-family:var(--font-label);font-size:8pt;letter-spacing:.14em;text-transform:uppercase;padding:6px 14px;cursor:pointer;">Cancel</button>
-      <button onclick="_hdPopupConfirm()" style="background:var(--gold-dim);border:none;color:#000;font-family:var(--font-label);font-size:8pt;letter-spacing:.14em;text-transform:uppercase;padding:6px 14px;cursor:pointer;">Rest &amp; Roll</button>
+      <button onclick="_hdPopupConfirm()" style="background:var(--gold-dim);border:none;color:var(--hover-ink);font-family:var(--font-label);font-size:8pt;letter-spacing:.14em;text-transform:uppercase;padding:6px 14px;cursor:pointer;">Rest &amp; Roll</button>
     </div>
   </div>
 </div>
@@ -1438,16 +1438,16 @@ try {
 .sreq-search:focus{outline:none;border-color:var(--gold);}
 .sreq-filters{display:flex;flex-wrap:wrap;gap:4px;}
 .sreq-fbtn{font-family:var(--font-label);font-size:9pt;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border:1px solid var(--gold-dim);background:transparent;color:var(--gold-dim);border-radius:2px;cursor:pointer;}
-.sreq-fbtn:hover,.sreq-fbtn.active{background:var(--gold);color:#000;border-color:var(--gold);}
+.sreq-fbtn:hover,.sreq-fbtn.active{background:var(--gold);color:var(--hover-ink);border-color:var(--gold);}
 .sreq-grid{overflow-y:auto;padding:8px 10px;display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:6px;}
 .sreq-card{background:var(--panel-bg);border:1px solid var(--gold-dim);border-radius:3px;padding:6px 8px;display:flex;flex-direction:column;gap:3px;}
 .sreq-card-name{font-family:var(--font-label);font-size:9pt;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);}
 .sreq-card-stat{font-size:9pt;color:var(--text-dim,#999);}
 .sreq-add{margin-top:4px;font-family:var(--font-label);font-size:9pt;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;border:1px solid var(--gold);background:transparent;color:var(--gold);border-radius:2px;cursor:pointer;align-self:flex-start;}
-.sreq-add:hover{background:var(--gold);color:#000;}
+.sreq-add:hover{background:var(--gold);color:var(--hover-ink);}
 .sreq-empty{grid-column:1/-1;text-align:center;padding:24px;color:var(--text-dim,#888);font-size:9.5pt;font-style:italic;}
 .sreq-open-btn{font-family:var(--font-label);font-size:9pt;letter-spacing:.1em;text-transform:uppercase;padding:1px 7px;border:1px solid var(--gold-dim);background:transparent;color:var(--gold-dim);border-radius:2px;cursor:pointer;margin-left:auto;}
-.sreq-open-btn:hover{background:var(--gold-dim);color:#000;}
+.sreq-open-btn:hover{background:var(--gold-dim);color:var(--hover-ink);}
 </style>
 <div id="sreq-overlay">
   <div id="sreq-modal">
@@ -1646,16 +1646,18 @@ const THEMES = {
     'tier':'#f8a850','tier-soft':'#f0b060','tier-border':'rgba(216,132,42,.35)',
     'gold-wash':'rgba(var(--gold-rgb),.05)','gold-wash-hover':'rgba(var(--gold-rgb),.11)','gold-wash-eq':'rgba(var(--gold-rgb),.09)',
     'go-bg':'rgba(var(--gold-rgb),.12)','frame-fill':'#0d1018','frame-stroke':'#2a3a52'}},
-  dw_light: {label:'Crimson Vellum', vars:{
-    'bg-page':'#120608','bg':'#1c0a0c','panel':'#280e10','panel2':'#341214','panel3':'#401618',
-    'gold':'#c8a44a','gold-rgb':'200,164,74','gold-light':'#e8c870','gold-dim':'#7a6228','silver':'#d4c8b0','silver-dim':'#7a6858',
-    'red':'#8b1a1a','text':'#ede8d8','text-dim':'#9a8878','border':'#4a1e20','border2':'#6e3032','line':'#582428',
-    'hover-ink':'#fff','overlay-bg':'rgba(0,0,0,.55)','modal-shadow':'0 6px 30px rgba(0,0,0,.25)',
-    'warn-text':'#a02828','warn-bg':'rgba(160,40,40,.07)','warn-border':'rgba(160,40,40,.35)',
-    'remove':'#a04040','remove-border':'#a05050','dry-text':'#a02828','dry-border':'#c08080',
-    'tier':'#b06818','tier-soft':'#b06818','tier-border':'rgba(216,132,42,.4)',
-    'gold-wash':'rgba(var(--gold-rgb),.07)','gold-wash-hover':'rgba(var(--gold-rgb),.14)','gold-wash-eq':'rgba(var(--gold-rgb),.11)',
-    'go-bg':'rgba(176,104,24,.10)','frame-fill':'#341214','frame-stroke':'#6e3032'}},
+  /* The only light-background theme: aged parchment with red-ink trim.
+     Hand-tuned — the hue generator only produces dark themes. */
+  parchment: {label:'Parchment & Ink', vars:{
+    'bg-page':'#d4c5a2','bg':'#e2d4b4','panel':'#ecdfc2','panel2':'#e2d3ae','panel3':'#d8c9a2',
+    'gold':'#9e2222','gold-rgb':'158,34,34','gold-light':'#7e1616','gold-dim':'#b87858','silver':'#7a5f38','silver-dim':'#99835e',
+    'red':'#8b1a1a','text':'#35281a','text-dim':'#6e5c42','border':'#a89468','border2':'#8a7850','line':'#b8a684',
+    'hover-ink':'#fff','overlay-bg':'rgba(60,44,24,.45)','modal-shadow':'0 6px 30px rgba(80,60,30,.4)',
+    'warn-text':'#7a1010','warn-bg':'rgba(160,40,40,.08)','warn-border':'rgba(160,40,40,.35)',
+    'remove':'#964040','remove-border':'#b87070','dry-text':'#7a1010','dry-border':'#b87070',
+    'tier':'#7a4a10','tier-soft':'#7a4a10','tier-border':'rgba(122,74,16,.4)',
+    'gold-wash':'rgba(var(--gold-rgb),.06)','gold-wash-hover':'rgba(var(--gold-rgb),.12)','gold-wash-eq':'rgba(var(--gold-rgb),.09)',
+    'go-bg':'rgba(var(--gold-rgb),.10)','frame-fill':'#ecdfc2','frame-stroke':'#8a7850'}},
   /* Chapter presets: base hue/saturation tints the sheet, accent = the chapter's
      canonical trim color (drives the gold family, washes, glows, frames).
      Ultramarines and Blood Angels keep Imperial gold — that IS their trim. */
@@ -3636,9 +3638,8 @@ async function _loadSheet(adminOverrideId) {
     const cc = _checkboxes();
     (rows[0].checkboxes || []).forEach((v, i) => { if (cc[i]) cc[i].checked = !!v; });
     const ext = rows[0].extra || {};
-    // Legacy rows without a saved theme keep the look of the sheet they came from
-    applyTheme(ext.theme || (rows[0].sheet_type === 'dw_light'
-      ? {id:'dw_light', label:'Crimson Vellum'} : {id:'dw_dark', label:'Deathwatch Black'}));
+    // Rows without a saved theme default to Deathwatch Black (no dw_light rows exist in the wild)
+    applyTheme(ext.theme || {id:'dw_dark', label:'Deathwatch Black'});
     const arcProf = document.getElementById('skill-arcana-prof');
     if (arcProf) arcProf.checked = !!ext.arcana_prof;
     const clsSel = document.getElementById('cls-select');
@@ -4286,8 +4287,7 @@ async function _loadSheetForUser(uid) {
     (rows[0].checkboxes || []).forEach(function(v,i){ if(cc[i]) cc[i].checked = !!v; });
     var ext = rows[0].extra || {};
     // Render the viewed character in THEIR theme (mirror writes are disabled in this mode)
-    applyTheme(ext.theme || (rows[0].sheet_type === 'dw_light'
-      ? {id:'dw_light', label:'Crimson Vellum'} : {id:'dw_dark', label:'Deathwatch Black'}));
+    applyTheme(ext.theme || {id:'dw_dark', label:'Deathwatch Black'});
     var clsSel = document.getElementById('cls-select');
     var subSel = document.getElementById('sub-select');
     var featLvl = document.getElementById('feat-level');
