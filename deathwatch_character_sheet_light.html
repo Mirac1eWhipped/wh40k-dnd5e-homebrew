@@ -1850,7 +1850,8 @@ function _upgRender() {
     var lvl = parseInt((document.getElementById('char-level')||{}).value) || 1;
     var pb = Math.ceil(lvl / 4) + 1;
     var isW = it.cat !== 'Equipment' && it.cat !== 'Tools' && it.cat !== 'Relic' ? true : !!meta.is_weapon;
-    var dmg = it.dmg, range = it.range || '—';
+    var dmg = it.dmg;
+    var range = (it.thrown && typeof reqThrownText === 'function') ? reqThrownText(it, _mod('str')) : (it.range || '—');
     var mx = (it.shots && it.shots !== 'N/A') ? it.shots : 0;
     upgDefs.forEach(function(ut) {
       var h = ut.def.hooks || {};
@@ -2117,10 +2118,12 @@ function syncQuickActionsFromWargear() {
     // Back-fill fields from REQ_ITEMS for weapons saved before shots/mods tracking
     var itemAction = 'Action';
     var itemSave = null;   // reset each row — catalog is the source of truth for AOE saves
+    var itemThrown = null; // catalog item ref when it has a STR-scaled throw range
     if (meta.id && typeof REQ_ITEMS !== 'undefined') {
       var _ref = REQ_ITEMS.find(function(x){ return x.id === meta.id; });
       if (_ref) {
         itemSave = _ref.save || null;
+        itemThrown = _ref.thrown ? _ref : null;
         if (!Array.isArray(meta.mods))  meta.mods = _ref.mods || [];
         var _sm = _ref.shots || 0;                                 // always sync from catalog
         if (_sm && typeof _upgTraitDefs === 'function') {
@@ -2164,12 +2167,15 @@ function syncQuickActionsFromWargear() {
       var uSaveCell = itemSave
         ? '<span class="qa-save-badge" title="DC '+itemSave.dc+' '+itemSave.ability+' save — '+itemSave.effect+'">DC '+itemSave.dc+' '+itemSave.ability+'</span>'
         : '—';
+      var uRange = (itemThrown && typeof reqThrownText === 'function')
+        ? reqThrownText(itemThrown, _mod('str'))
+        : (meta.range || '—');
       rows += '<tr>'
         + '<td style="text-align:center;color:'+(uHeal?'#8fd39b':'var(--silver-dim)')+';font-size:11pt;padding:3px 2px;">'+(uHeal?'✚':'◈')+'</td>'
         + '<td><div class="qa-name-cell">'+uNameSpan+uBadge+'</div></td>'
         + '<td style="text-align:center;color:var(--text-dim);font-size:10pt;">'+uSaveCell+'</td>'
         + '<td'+(uRollable ? ' class="qa-roll" title="'+(uHeal?'Roll healing':'Roll effect dice')+'" onclick="_qaRollDmg('+uIdx+')"' : '')+' style="text-align:center;color:'+(uHeal?'#8fd39b':'var(--text)')+';font-size:10pt;">'+(uDmg||'—')+'</td>'
-        + '<td style="text-align:center;font-size:10pt;">'+(meta.range||'—')+'</td>'
+        + '<td style="text-align:center;font-size:10pt;">'+uRange+'</td>'
         + '<td>'+uShots+'</td>'
         + '</tr>';
       continue;
@@ -3364,6 +3370,8 @@ function _sreqFilter() {
 function _sreqRender(items) {
   const grid = document.getElementById('sreq-grid');
   if (!items.length) { grid.innerHTML = '<div class="sreq-empty">No items found.</div>'; return; }
+  const _sv = parseInt((document.getElementById('str-score')||{}).value);
+  const strM = isNaN(_sv) ? 0 : Math.floor((_sv - 10) / 2);
   grid.innerHTML = items.map(it => {
     if (it.cat === 'Armor') {
       const acLine = it.shield_bonus
@@ -3378,7 +3386,7 @@ function _sreqRender(items) {
     if (it.cat === 'Tools') {
       return `<div class="sreq-card"><div class="sreq-card-name">${it.name}</div><div class="sreq-card-stat">Tools &bull; ${it.wtype}</div><div class="sreq-card-stat">${it.use}</div><div class="sreq-card-stat">Cost: ${it.cost}</div><button class="sreq-add" onclick="_sreqAdd('${it.id}')">+ Add to Wargear</button></div>`;
     }
-    return `<div class="sreq-card"><div class="sreq-card-name">${it.name}</div><div class="sreq-card-stat">${it.cat} &bull; ${it.wtype}</div><div class="sreq-card-stat">${it.dmg}</div>${it.save ? `<div class="sreq-card-stat" style="color:#a02828;">DC ${it.save.dc} ${it.save.ability} save</div>` : ''}<div class="sreq-card-stat">Range: ${it.range}</div><div class="sreq-card-stat">Cost: ${it.cost}</div><button class="sreq-add" onclick="_sreqAdd('${it.id}')">+ Add to Wargear</button></div>`;
+    return `<div class="sreq-card"><div class="sreq-card-name">${it.name}</div><div class="sreq-card-stat">${it.cat} &bull; ${it.wtype}</div><div class="sreq-card-stat">${it.dmg}</div>${it.save ? `<div class="sreq-card-stat" style="color:#a02828;">DC ${it.save.dc} ${it.save.ability} save</div>` : ''}<div class="sreq-card-stat">Range: ${(it.thrown && typeof reqThrownText === 'function') ? reqThrownText(it, strM) : it.range}</div><div class="sreq-card-stat">Cost: ${it.cost}</div><button class="sreq-add" onclick="_sreqAdd('${it.id}')">+ Add to Wargear</button></div>`;
   }).join('');
 }
 function _sreqAdd(id) {
@@ -3435,7 +3443,7 @@ function _sreqAdd(id) {
       if (ins[2]) {
         const parts = it.cat === 'Tools'
           ? ['Tool Proficiency Kit', it.use]
-          : [it.dmg, it.range !== 'N/A' && it.range !== '5 ft Melee' ? 'Range: ' + it.range : '', it.save ? 'DC ' + it.save.dc + ' ' + it.save.ability + ' save' : '', it.shots && it.shots !== 'N/A' ? 'Shots: ' + it.shots : '', it.notes].filter(Boolean);
+          : [it.dmg, it.range !== 'N/A' && it.range !== '5 ft Melee' ? 'Range: ' + ((it.thrown && typeof reqThrownText === 'function') ? reqThrownText(it, null) : it.range) : '', it.save ? 'DC ' + it.save.dc + ' ' + it.save.ability + ' save' : '', it.shots && it.shots !== 'N/A' ? 'Shots: ' + it.shots : '', it.notes].filter(Boolean);
         ins[2].value = parts.join(' · ');
       }
       [ins[0], ins[1], ins[2]].filter(Boolean).forEach(el => { el.dispatchEvent(new Event('input')); el.dispatchEvent(new Event('change')); });
@@ -3774,6 +3782,10 @@ function _weaponPopup(e, itemId, wgIdx) {
       }).join('') + '</div>'
     : '';
   var notesHtml = item.notes ? '<div class="dp-notes">'+item.notes+'</div>' : '';
+  var _pStr = parseInt((document.getElementById('str-score')||{}).value);
+  var rangeTxt = (item.thrown && typeof reqThrownText === 'function')
+    ? reqThrownText(item, isNaN(_pStr) ? 0 : Math.floor((_pStr - 10) / 2))
+    : item.range;
   var html =
     '<div class="dp-badges">' +
       '<span class="dp-badge" style="background:rgba(200,164,74,.18);color:var(--gold);">'+item.cat+'</span>' +
@@ -3782,7 +3794,7 @@ function _weaponPopup(e, itemId, wgIdx) {
     '<span class="dp-name">'+item.name+'</span>' +
     '<div class="dp-stats">' +
       '<div class="dp-stat"><strong>Damage</strong>'+item.dmg+'</div>' +
-      '<div class="dp-stat"><strong>Range</strong>'+item.range+'</div>' +
+      '<div class="dp-stat"><strong>Range</strong>'+rangeTxt+'</div>' +
       (item.save ? '<div class="dp-stat"><strong>Save</strong>DC '+item.save.dc+' '+item.save.ability+'</div>' : '') +
       '<div class="dp-stat"><strong>Ammo</strong>'+(item.ammo||'—')+'</div>' +
       '<div class="dp-stat"><strong>Shots / Mag</strong>'+(item.shots||'—')+'</div>' +

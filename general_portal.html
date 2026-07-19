@@ -2563,7 +2563,7 @@
             <div class="rmd-stat-label">Damage</div>
             <div class="rmd-stat-value" style="font-size:18px;color:var(--gold)">${item.dmg}</div>
           </div>
-          <div class="rmd-stat-cell"><div class="rmd-stat-label">Range</div><div class="rmd-stat-value">${item.range}</div></div>
+          <div class="rmd-stat-cell"><div class="rmd-stat-label">Range</div><div class="rmd-stat-value">${typeof reqThrownText === 'function' ? reqThrownText(item, null) : item.range}</div></div>
           ${item.save ? `<div class="rmd-stat-cell"><div class="rmd-stat-label">Saving Throw</div><div class="rmd-stat-value" style="color:#c86060">DC ${item.save.dc} ${item.save.ability}</div></div>` : ''}
           <div class="rmd-stat-cell"><div class="rmd-stat-label">Cost</div><div class="rmd-stat-value" style="color:var(--gold-dim)">${item.cost}</div></div>
           ${ammoLine}
