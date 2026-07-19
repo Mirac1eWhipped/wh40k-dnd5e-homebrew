@@ -284,6 +284,13 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .wg-equip-row input.wg-name-locked:hover{text-decoration:underline;text-decoration-color:var(--gold-dim);}
 .wg-equip-row.item-bound input:nth-of-type(2){color:var(--text-dim)!important;font-size:10.5pt!important;}
 .wg-equip-row.item-bound input:nth-of-type(3){color:var(--text-dim)!important;font-size:9.5pt!important;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+/* Ammo rows bind the same way when their type matches the catalog */
+.wg-ammo-row.item-bound{background:rgba(200,164,74,.05);border-left:2px solid var(--gold-dim);padding-left:4px;}
+.wg-ammo-row.item-bound:hover{background:rgba(200,164,74,.11);}
+.wg-ammo-row input.wg-name-locked{color:var(--gold-light)!important;font-family:var(--font-label)!important;font-size:10.5pt!important;letter-spacing:.03em;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.wg-ammo-row input.wg-name-locked:hover{text-decoration:underline;text-decoration-color:var(--gold-dim);}
+.wg-ammo-row.item-bound input:nth-of-type(2){color:var(--text-dim)!important;font-size:10.5pt!important;}
+.wg-ammo-row.item-bound input:nth-of-type(3){color:var(--text-dim)!important;font-size:10.5pt!important;}
 .wg-ammo-row{display:grid;grid-template-columns:2fr 1fr 1fr;gap:6px;align-items:center;padding:3px 4px;border-bottom:1px solid var(--border);}
 .wg-ammo-row input{font-family:var(--font-body)!important;font-size:12pt!important;border:none!important;border-bottom:1px solid transparent!important;padding:2px 0!important;background:transparent!important;color:var(--text)!important;outline:none!important;width:100%!important;}
 .wg-ammo-row input:focus{border-bottom-color:var(--gold)!important;}
@@ -1802,6 +1809,11 @@ function _rowTriggersReset() {
     if (inp) { inp.readOnly = false; inp.classList.remove('wg-name-locked'); inp.title = ''; }
     row.classList.remove('item-bound', 'item-eq');
   });
+  document.querySelectorAll('.wg-ammo-row').forEach(function(row) {
+    var inp = row.querySelectorAll('input')[0];
+    if (inp) { inp.readOnly = false; inp.classList.remove('wg-name-locked'); inp.title = ''; }
+    row.classList.remove('item-bound');
+  });
 }
 function _upgOpenFromBtn(btn) {
   var rows = Array.prototype.slice.call(document.querySelectorAll('.wg-equip-row'));
@@ -1811,6 +1823,7 @@ function _upgOpenFromBtn(btn) {
 function _upgOpen(idx) {
   if (!_upgItemFor(idx)) return;
   _upgIdx = idx;
+  _ammoRecIdx = -1;
   var ov = document.getElementById('upg-overlay');
   if (ov) ov.classList.add('open');
   _upgRender();
@@ -1819,6 +1832,7 @@ function _upgClose() {
   var ov = document.getElementById('upg-overlay');
   if (ov) ov.classList.remove('open');
   _upgIdx = -1;
+  _ammoRecIdx = -1;
 }
 /* Re-apply upgrade effects everywhere after any change in the console */
 function _upgApply() {
@@ -2095,6 +2109,13 @@ document.addEventListener('DOMContentLoaded', function() {
       if (inp.classList.contains('wg-name-locked')) _upgOpen(i);
     });
   });
+  // Bound ammo types open the Ammo Record the same way
+  document.querySelectorAll('.wg-ammo-row').forEach(function(row, i) {
+    var inp = row.querySelectorAll('input')[0];
+    if (inp) inp.addEventListener('click', function() {
+      if (inp.classList.contains('wg-name-locked')) _ammoOpen(i);
+    });
+  });
 });
 
 var _qaFilter = 'all';
@@ -2334,6 +2355,7 @@ function _shotRld(idx) {
 function renderAmmoTracker() {
   var container = document.getElementById('ammo-tracker-container');
   if (!container) return;
+  if (typeof _ammoBoundRefresh === 'function') _ammoBoundRefresh();
   var ammoRows = document.querySelectorAll('.wg-ammo-row');
   var html = '';
   ammoRows.forEach(function(row, idx) {
@@ -2349,8 +2371,12 @@ function renderAmmoTracker() {
     if (_ammoClips[idx] === undefined) _ammoClips[idx] = max;
     var cur = _ammoClips[idx];
     var isEmpty = cur === 0;
+    var bound = ins[0] && ins[0].classList.contains('wg-name-locked');
+    if (bound && ins[1]) ins[1].value = String(cur);   // Stk column mirrors the live counter
     html += '<div class="ammo-trk-row">'
-      + '<span class="ammo-trk-name" title="'+type+'">'+type+'</span>'
+      + (bound
+          ? '<span class="ammo-trk-name dp-clickable" style="color:var(--gold-light);cursor:pointer;" title="Open Ammo Record" onclick="_ammoOpen('+idx+')">'+type+'</span>'
+          : '<span class="ammo-trk-name" title="'+type+'">'+type+'</span>')
       + '<div class="ammo-trk-ctrl">'
       + '<button class="ammo-btn" onclick="_ammoDec('+idx+')">−</button>'
       + '<span class="ammo-cur'+(isEmpty?' empty':'')+'" id="ammo-cur-'+idx+'">'+cur+'</span>'
@@ -2385,6 +2411,118 @@ function _ammoRld(idx) {
   var max = parseInt((ins[2] ? ins[2].value : '') || '0') || 0;
   _ammoClips[idx] = max;
   renderAmmoTracker(); _schedSave();
+}
+
+/* ── Ammo Record (catalog-bound ammo rows, same treatment as wargear items) ──
+   Ammo has no meta store — binding is by exact name match against the Ammo catalog,
+   which also covers rows on old saves. Bound rows lock their type input into a
+   click-target, auto-sync their Cap column to the worn armor pattern, and open an
+   Ammo Record pane in the shared #upg-overlay modal. */
+var _ammoRecIdx = -1;
+function _ammoItemForRow(idx) {
+  if (typeof REQ_ITEMS === 'undefined') return null;
+  var row = document.querySelectorAll('.wg-ammo-row')[idx];
+  var inp = row ? row.querySelectorAll('input')[0] : null;
+  var nm = inp ? inp.value.trim().toLowerCase() : '';
+  if (!nm) return null;
+  return REQ_ITEMS.find(function(x){ return x.cat === 'Ammo' && x.name.toLowerCase() === nm; }) || null;
+}
+/* Index of the ammo row already holding this ammo type, or -1 (duplicate guard) */
+function _ammoRowByName(name) {
+  var nm = String(name).trim().toLowerCase();
+  var rows = document.querySelectorAll('.wg-ammo-row');
+  for (var i = 0; i < rows.length; i++) {
+    var inp = rows[i].querySelectorAll('input')[0];
+    if (inp && inp.value.trim().toLowerCase() === nm) return i;
+  }
+  return -1;
+}
+/* Lock/style bound ammo rows and keep their Cap column tracking the worn armor pattern */
+function _ammoBoundRefresh() {
+  var rows = document.querySelectorAll('.wg-ammo-row');
+  var armorType = (document.getElementById('armor-type')||{}).value || '';
+  rows.forEach(function(row, i) {
+    var ins = row.querySelectorAll('input');
+    var it = _ammoItemForRow(i);
+    var bound = !!it;
+    if (ins[0]) {
+      ins[0].readOnly = bound;
+      ins[0].classList.toggle('wg-name-locked', bound);
+      ins[0].title = bound ? 'Open Ammo Record' : '';
+    }
+    row.classList.toggle('item-bound', bound);
+    if (bound && it.caps && it.caps[armorType] !== undefined) {
+      var cap = it.caps[armorType];
+      if (ins[2]) ins[2].value = String(cap);
+      if (_ammoClips[i] !== undefined && _ammoClips[i] > cap) _ammoClips[i] = cap;
+    }
+  });
+}
+function _ammoOpen(idx) {
+  if (!_ammoItemForRow(idx)) return;
+  _upgIdx = -1;
+  _ammoRecIdx = idx;
+  var ov = document.getElementById('upg-overlay');
+  if (ov) ov.classList.add('open');
+  _ammoRecRender();
+}
+function _ammoRecRender() {
+  var body = document.getElementById('upg-body');
+  var it = _ammoItemForRow(_ammoRecIdx);
+  if (!body || !it) { _upgClose(); return; }
+  var idx = _ammoRecIdx;
+  var ins = document.querySelectorAll('.wg-ammo-row')[idx].querySelectorAll('input');
+  var max = parseInt((ins[2] ? ins[2].value : '') || '0') || 0;
+  var cur = (_ammoClips[idx] !== undefined) ? _ammoClips[idx] : max;
+  var armorType = (document.getElementById('armor-type')||{}).value || '';
+  function capBox(key, label) {
+    var worn = armorType === key;
+    var v = (it.caps && it.caps[key] !== undefined) ? it.caps[key] : '—';
+    return '<div class="upg-stat"' + (worn ? ' style="border-color:var(--gold);"' : '') + '>'
+      + '<div class="upg-stat-l">' + label + (worn ? ' · worn' : '') + '</div>'
+      + '<div class="upg-stat-v"' + (worn ? ' style="color:var(--gold-light);"' : '') + '>' + v + ' clips</div></div>';
+  }
+  var html = '<div style="font-family:var(--font-label);font-size:12.5pt;color:var(--gold-light);border-bottom:1px solid var(--border2);padding-bottom:2px;">' + it.name + '</div>'
+    + '<div class="upg-ident">Ammunition · ' + (it.wtype || '—') + ' · ' + (it.cost || '—') + '</div>'
+    + '<div class="upg-stat-grid">'
+    + capBox('phobos', 'PHOBOS') + capBox('tacticus', 'TACTICUS') + capBox('gravis', 'GRAVIS') + capBox('terminator', 'TERMINATOR')
+    + '</div>'
+    + (it.notes ? '<div class="upg-slot-desc" style="margin:0 0 10px;">' + it.notes + '</div>' : '')
+    + '<div class="upg-slot" style="display:flex;align-items:center;gap:10px;">'
+    + '<span class="upg-slot-ttl">Clips carried</span>'
+    + '<button class="upg-slot-btn" onclick="_ammoRecDec()">−</button>'
+    + '<span style="font-family:var(--font-label);font-size:12pt;color:' + (cur === 0 ? '#c06060' : 'var(--gold-light)') + ';">' + cur + ' / ' + max + '</span>'
+    + '<button class="upg-slot-btn" onclick="_ammoRecInc()">+</button>'
+    + '<button class="upg-slot-btn" onclick="_ammoRecRld()" title="Restock to capacity">↺</button>'
+    + '</div>'
+    + '<div class="upg-act-row" style="margin-top:12px;"><span style="flex:1;"></span>'
+    + '<button class="upg-rm-btn" onclick="_ammoRecRemove()">✕ Remove</button></div>'
+    + '<div class="upg-note">One entry per ammunition type — requisitioning a type you already carry restocks it instead of duplicating it. Clip capacity follows your worn armour pattern, and a full Resupply refills every type.</div>';
+  body.innerHTML = html;
+}
+function _ammoRecDec() { _ammoDec(_ammoRecIdx); _ammoRecRender(); }
+function _ammoRecInc() { _ammoInc(_ammoRecIdx); _ammoRecRender(); }
+function _ammoRecRld() { _ammoRld(_ammoRecIdx); _ammoRecRender(); }
+function _ammoRecRemove() {
+  var idx = _ammoRecIdx;
+  if (idx < 0) return;
+  if (!confirm('Strike this ammunition from the manifest?')) return;
+  var row = document.querySelectorAll('.wg-ammo-row')[idx];
+  if (row) {
+    row.querySelectorAll('input').forEach(function(inp) {
+      inp.readOnly = false;
+      inp.classList.remove('wg-name-locked');
+      inp.value = '';
+      inp.dispatchEvent(new Event('input'));
+      inp.dispatchEvent(new Event('change'));
+    });
+    row.classList.remove('item-bound');
+  }
+  delete _ammoClips[idx];
+  delete _ammoTypeCache[idx];
+  _upgClose();
+  renderAmmoTracker();
+  _schedSave();
 }
 
 /* ── Armor Class calculation ── */
@@ -2889,8 +3027,16 @@ function _doResupply() {
     });
     if (typeof syncQuickActionsFromWargear === 'function') syncQuickActionsFromWargear();
   }
+  // Restock every tracked ammunition type to capacity
+  document.querySelectorAll('.wg-ammo-row').forEach(function(row, idx) {
+    var ins = row.querySelectorAll('input');
+    if (!ins[0] || !ins[0].value.trim()) return;
+    var max = parseInt((ins[2] ? ins[2].value : '') || '0') || 0;
+    if (max > 0) _ammoClips[idx] = max;
+  });
+  renderAmmoTracker();
   _schedSave();
-  alert('Resupply complete — HP, hit dice, and weapon charges restored.');
+  alert('Resupply complete — HP, hit dice, weapon charges, and ammunition restored.');
 }
 function _hpHeal() {
   var amt = parseInt(prompt('Heal amount:'));
@@ -3429,6 +3575,15 @@ function _sreqAdd(id) {
   if (it.cat === 'Ammo') {
     const armorType = (document.getElementById('armor-type')||{}).value || 'tacticus';
     const maxClips = (it.caps && it.caps[armorType] !== undefined) ? String(it.caps[armorType]) : '—';
+    // One entry per ammo type: requisitioning again restocks the existing row
+    const dup = _ammoRowByName(it.name);
+    if (dup !== -1) {
+      const dins = document.querySelectorAll('.wg-ammo-row')[dup].querySelectorAll('input');
+      if (dins[2] && maxClips !== '—') dins[2].value = maxClips;
+      _ammoClips[dup] = parseInt((dins[2] ? dins[2].value : '') || '0') || 0;
+      renderAmmoTracker();
+      _sreqClose(); _schedSave(); return;
+    }
     for (const row of document.querySelectorAll('.wg-ammo-row')) {
       const ins = row.querySelectorAll('input');
       if (ins.length && !ins[0].value.trim()) {
@@ -3472,7 +3627,7 @@ function _sreqAdd(id) {
       break;
     }
   }
-  if (it.ammo && it.ammo !== 'N/A') {
+  if (it.ammo && it.ammo !== 'N/A' && _ammoRowByName(it.ammo) === -1) {
     for (const row of document.querySelectorAll('.wg-ammo-row')) {
       const ins = row.querySelectorAll('input');
       if (ins.length && !ins[0].value.trim()) {
