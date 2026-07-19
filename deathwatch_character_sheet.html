@@ -1747,6 +1747,7 @@ function applyTheme(spec) {
     rs.setProperty('--frame-hex-url', hexUrl);
     rs.setProperty('--frame-shield-url', shieldUrl);
     _themeSpec = spec;
+    if (typeof THEMES === 'object' && THEMES[spec.id] && typeof _themeLastPreset !== 'undefined') _themeLastPreset = spec.id;
     if (!_themeNoMirror) {
       try { localStorage.setItem('dw_theme_v1', JSON.stringify({spec:spec, vars:vars, frames:{hex:hexUrl, shield:shieldUrl}})); } catch(e) {}
     }
@@ -1798,6 +1799,92 @@ function _themePickerRefresh() {
   ov.querySelectorAll('.th-swatch').forEach(function(b) {
     b.classList.toggle('active', b.getAttribute('data-th') === _themeSpec.id);
   });
+}
+/* ── Custom themes ──
+   Quick: one hue pick generates the whole palette. Advanced: 8 core colors,
+   everything else derived, for players forging their own sheet. */
+var _themeLastPreset = 'dw_dark';
+function _genPaletteFull(c) {
+  var v = Object.assign({}, _GEN_FIXED);
+  var bgH = _hexToHsl(c.bgPage), pnH = _hexToHsl(c.panel), bdH = _hexToHsl(c.border);
+  var acH = _hexToHsl(c.accent), svH = _hexToHsl(c.silver), rdH = _hexToHsl(c.red);
+  var L = function(o, dl){ return _hslToHex(o.h, o.s, Math.max(0, Math.min(100, o.l + dl))); };
+  var rgb = function(hex){ var m = /^#?(..)(..)(..)$/.exec(hex); return parseInt(m[1],16) + ',' + parseInt(m[2],16) + ',' + parseInt(m[3],16); };
+  v['bg-page'] = c.bgPage;            v['bg'] = L(bgH, 2.5);
+  v['panel'] = c.panel;               v['panel2'] = L(pnH, 3);   v['panel3'] = L(pnH, 6);
+  v['border'] = c.border;             v['line'] = L(bdH, 5);     v['border2'] = L(bdH, 9);
+  v['gold'] = c.accent;               v['gold-light'] = L(acH, 12); v['gold-dim'] = L(acH, -25);
+  v['text'] = c.text;                 v['text-dim'] = c.textDim;
+  v['silver'] = c.silver;             v['silver-dim'] = L(svH, -20);
+  v['red'] = c.red;
+  v['warn-text'] = _hslToHex(rdH.h, 60, 71);
+  v['warn-bg'] = 'rgba(' + rgb(c.red) + ',.15)';
+  v['warn-border'] = 'rgba(' + rgb(c.red) + ',.4)';
+  v['remove'] = _hslToHex(rdH.h, 45, 57);   v['remove-border'] = _hslToHex(rdH.h, 44, 33);
+  v['dry-text'] = v['remove'];              v['dry-border'] = v['remove-border'];
+  var aw = rgb(c.accent);
+  v['gold-wash'] = 'rgba(' + aw + ',.05)'; v['gold-wash-hover'] = 'rgba(' + aw + ',.11)';
+  v['gold-wash-eq'] = 'rgba(' + aw + ',.09)'; v['go-bg'] = 'rgba(' + aw + ',.12)';
+  v['hover-ink'] = acH.l > 55 ? '#000' : '#fff';
+  v['frame-fill'] = c.panel;          v['frame-stroke'] = v['border2'];
+  return v;
+}
+const _TH_ADV_FIELDS = [
+  {key:'bgPage',  varName:'bg-page',  lbl:'Background'},
+  {key:'panel',   varName:'panel',    lbl:'Panels'},
+  {key:'border',  varName:'border',   lbl:'Borders'},
+  {key:'accent',  varName:'gold',     lbl:'Accent'},
+  {key:'text',    varName:'text',     lbl:'Text'},
+  {key:'textDim', varName:'text-dim', lbl:'Muted Text'},
+  {key:'silver',  varName:'silver',   lbl:'Labels'},
+  {key:'red',     varName:'red',      lbl:'Crimson'},
+];
+function _themeCustomBuild(mount) {
+  if (!mount) return;
+  var vars = _resolveThemeVars(_themeSpec);
+  var quickHex = _themeSpec.id === 'custom' ? _hslToHex(_themeSpec.h, _themeSpec.s, 45) : _hslToHex(220, 40, 45);
+  var advOpen = _themeSpec.id === 'custom_full';
+  var advRows = _TH_ADV_FIELDS.map(function(fd) {
+    var cur = (_themeSpec.id === 'custom_full' && _themeSpec.colors && _themeSpec.colors[fd.key]) || vars[fd.varName];
+    return '<div class="th-row"><span class="th-row-lbl">' + fd.lbl + '</span>'
+      + '<input type="color" class="th-color-inp" data-thkey="' + fd.key + '" value="' + cur + '" oninput="_themeAdvInput()"></div>';
+  }).join('');
+  mount.innerHTML = '<div class="th-sec">Quick Custom — Pick a Hue</div>'
+    + '<div class="th-row"><span class="th-row-lbl">Your chapter\'s color</span>'
+    + '<input type="color" class="th-color-inp" id="th-quick-inp" value="' + quickHex + '" oninput="_themeQuickInput(this.value)"></div>'
+    + '<div class="th-note">The whole sheet is forged from the hue you choose — panels, borders, and trim included.</div>'
+    + '<div class="th-sec">Advanced — Forge Your Own Colors</div>'
+    + '<div id="th-adv-wrap" style="' + (advOpen ? '' : 'display:none;') + '">'
+    + '<div class="th-adv-grid">' + advRows + '</div>'
+    + '<div class="th-row" style="justify-content:flex-end;margin-top:10px;">'
+    + '<button type="button" class="th-reset-btn" onclick="_themeAdvReset()">&#8634; Reset to Last Preset</button></div>'
+    + '<div class="th-note">Secondary shades — hovers, washes, and the stat frames — are derived automatically.</div>'
+    + '</div>'
+    + (advOpen ? '' : '<button type="button" class="th-exp-btn" id="th-adv-btn" onclick="_themeAdvOpen()">Open the Forge</button>');
+}
+function _themeQuickInput(hex) {
+  var hsl = _hexToHsl(hex);
+  applyTheme({id:'custom', label:'Custom', h:Math.round(hsl.h), s:Math.round(Math.max(12, Math.min(60, hsl.s)))});
+  if (!_viewOnly) _schedSave();
+}
+function _themeAdvOpen() {
+  var w = document.getElementById('th-adv-wrap'), b = document.getElementById('th-adv-btn');
+  if (w) w.style.display = '';
+  if (b) b.style.display = 'none';
+}
+function _themeAdvInput() {
+  var colors = {};
+  document.querySelectorAll('#th-adv-wrap .th-color-inp').forEach(function(inp) {
+    colors[inp.getAttribute('data-thkey')] = inp.value;
+  });
+  applyTheme({id:'custom_full', label:'Custom', colors:colors});
+  if (!_viewOnly) _schedSave();
+}
+function _themeAdvReset() {
+  var t = THEMES[_themeLastPreset] || THEMES.dw_dark;
+  applyTheme({id:_themeLastPreset in THEMES ? _themeLastPreset : 'dw_dark', label:t.label});
+  if (!_viewOnly) _schedSave();
+  _themeCustomBuild(document.getElementById('th-custom-mount'));
 }
 
 
