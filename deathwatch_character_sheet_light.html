@@ -714,7 +714,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
         <input type="hidden" id="char-class">
         <div class="sh-detail-field" style="min-width:160px;">
           <label>Specialty / Class</label>
-          <select id="cls-select" onchange="updateSubclassOpts();_schedSave();">
+          <select id="cls-select" onchange="updateSubclassOpts();_applyClassGrants();_schedSave();">
             <option value="">— Select Class —</option>
             <option value="Tactical Operative">Tactical Operative</option>
             <option value="Close Combat Operative">Close Combat Operative</option>
@@ -940,9 +940,9 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
       <div class="section" style="margin-top:8px;">
         <div class="dos-col-hdr"><span class="dos-col-hdr-lbl">Proficiencies &amp; Training</span></div>
         <span class="dos-prof-label">Armor</span>
-        <textarea class="dos-prof-ta" rows="2" placeholder="Power Armor, Terminator Armor…"></textarea>
+        <textarea class="dos-prof-ta" id="prof-armor" rows="2" placeholder="Power Armor, Terminator Armor…"></textarea>
         <span class="dos-prof-label">Weapons</span>
-        <textarea class="dos-prof-ta" rows="2" placeholder="Bolt Pistol, Boltgun, Combat Knife…"></textarea>
+        <textarea class="dos-prof-ta" id="prof-weapons" rows="2" placeholder="Bolt Pistol, Boltgun, Combat Knife…"></textarea>
         <span class="dos-prof-label">Tools</span>
         <textarea class="dos-prof-ta" id="prof-tools" rows="1" placeholder="Servo-tools, Mechadendrite…"></textarea>
         <span class="dos-prof-label">Languages</span>
@@ -3249,9 +3249,10 @@ async function _loadSheet(adminOverrideId) {
         if (exp) exp.checked = true;
       });
     }
-    _autoGrants = (ext.auto_grants && typeof ext.auto_grants === 'object')
-      ? { chapter: ext.auto_grants.chapter || '', skills: ext.auto_grants.skills || {}, tools: ext.auto_grants.tools || [], resist: ext.auto_grants.resist || [], toolItems: ext.auto_grants.toolItems || {} }
-      : { chapter: (document.getElementById('char-chapter')||{}).value || '', skills: {}, tools: [], resist: [], toolItems: {} };
+    _autoGrants = Object.assign(_agDefaults(), (ext.auto_grants && typeof ext.auto_grants === 'object') ? ext.auto_grants : {
+      chapter: (document.getElementById('char-chapter')||{}).value || '',
+      cls: (document.getElementById('cls-select')||{}).value || ''
+    });
     if (ext.wargear_meta && Array.isArray(ext.wargear_meta)) {
       _wargearMeta = ext.wargear_meta;
       const wgBtns = document.querySelectorAll('.wg-equip-btn');
@@ -3892,9 +3893,10 @@ async function _loadSheetForUser(uid) {
         if (exp) exp.checked = true;
       });
     }
-    _autoGrants = (ext.auto_grants && typeof ext.auto_grants === 'object')
-      ? { chapter: ext.auto_grants.chapter || '', skills: ext.auto_grants.skills || {}, tools: ext.auto_grants.tools || [], resist: ext.auto_grants.resist || [], toolItems: ext.auto_grants.toolItems || {} }
-      : { chapter: (document.getElementById('char-chapter')||{}).value || '', skills: {}, tools: [], resist: [], toolItems: {} };
+    _autoGrants = Object.assign(_agDefaults(), (ext.auto_grants && typeof ext.auto_grants === 'object') ? ext.auto_grants : {
+      chapter: (document.getElementById('char-chapter')||{}).value || '',
+      cls: (document.getElementById('cls-select')||{}).value || ''
+    });
     if (ext.spellbook && Array.isArray(ext.spellbook)) _spellbook = ext.spellbook;
     if (ext.pinned_spells && Array.isArray(ext.pinned_spells)) _pinnedSpells = ext.pinned_spells;
     _powerCur = (typeof ext.power_cur === 'number') ? ext.power_cur : 0;
@@ -4031,23 +4033,30 @@ const CHAPTER_GRANTS = {
   'Iron Hands':     { tools: ['Servo-arms & Mechadendrites'] },
   'Imperial Fists': { tools: ['Demolitions Kit'] }
 };
-var _autoGrants = { chapter: '', skills: {}, tools: [], resist: [], toolItems: {} };
-function _profToolsTA() { return document.getElementById('prof-tools') || document.querySelectorAll('.dos-prof-ta')[2]; }
+function _agDefaults() { return { chapter: '', skills: {}, tools: [], resist: [], toolItems: {}, cls: '', clsSkills: {}, clsSaves: {}, clsArmor: [], clsWeapons: [], clsTools: [], racial: false }; }
+var _autoGrants = _agDefaults();
+function _profTA(which) {
+  var tas = document.querySelectorAll('.dos-prof-ta');
+  if (which === 'armor')   return document.getElementById('prof-armor')   || tas[0];
+  if (which === 'weapons') return document.getElementById('prof-weapons') || tas[1];
+  return document.getElementById('prof-tools') || tas[2];
+}
+function _profToolsTA() { return _profTA('tools'); }
 function _taPoke(el) { el.dispatchEvent(new Event('input')); el.dispatchEvent(new Event('change')); }
 /* Name normalizer so 'Vehicles (Land · Air)' matches 'Vehicles (Land · Air · Void)' etc. */
 function _toolKey(n) { return String(n).toLowerCase().replace(/\(.*$/, '').replace(/[^a-z ]/g, '').replace(/\s+/g, ' ').trim(); }
-function _toolAdd(name) {          // → 'added' | 'upgraded' (duplicate → expertise) | null
-  var ta = _profToolsTA(); if (!ta) return null;
+function _listAdd(which, name, allowExp) {   // → 'added' | 'upgraded' (dup → expertise, tools only) | null
+  var ta = _profTA(which); if (!ta) return null;
   var list = ta.value.split(/[,\n]/).map(function(s){ return s.trim(); }).filter(Boolean);
   var key = _toolKey(name);
   var hit = -1;
   for (var i = 0; i < list.length; i++) if (_toolKey(list[i]) === key) { hit = i; break; }
   if (hit === -1) { list.push(name); ta.value = list.join(', '); _taPoke(ta); return 'added'; }
-  if (!/\(expertise\)/i.test(list[hit])) { list[hit] += ' (Expertise)'; ta.value = list.join(', '); _taPoke(ta); return 'upgraded'; }
+  if (allowExp && !/\(expertise\)/i.test(list[hit])) { list[hit] += ' (Expertise)'; ta.value = list.join(', '); _taPoke(ta); return 'upgraded'; }
   return null;
 }
-function _toolRemove(name, op) {
-  var ta = _profToolsTA(); if (!ta) return;
+function _listRemove(which, name, op) {
+  var ta = _profTA(which); if (!ta) return;
   var list = ta.value.split(/[,\n]/).map(function(s){ return s.trim(); }).filter(Boolean);
   var key = _toolKey(name);
   var hit = -1;
@@ -4058,6 +4067,8 @@ function _toolRemove(name, op) {
   ta.value = list.join(', ');
   _taPoke(ta);
 }
+function _toolAdd(name) { return _listAdd('tools', name, true); }
+function _toolRemove(name, op) { _listRemove('tools', name, op); }
 function _skillGrant(skId) {       // → 'prof' | 'exp' (already proficient) | null
   var p = document.getElementById('skill-' + skId + '-prof');
   if (!p) return null;
@@ -4094,6 +4105,70 @@ function _applyChapterGrants() {
     (g.tools || []).forEach(function(n){ var op = _toolAdd(n); if (op) _autoGrants.tools.push({name: n, op: op}); });
     (g.resist || []).forEach(function(n){ var c = _resistChipEl(n); if (c && !c.classList.contains('resist')) { c.classList.add('resist'); _autoGrants.resist.push(n); } });
   }
+  _applyRacial();
+  _recalcDerived();
+  _schedSave();
+}
+
+/* ── Class guaranteed grants: armor / weapons / tools / saves / signature skills.
+   Choose-from lists ("plus one tool kit of your choice", "Choose 3: …") stay manual. */
+const CLASS_GRANTS = {
+  'Tactical Operative':     { armor: ['Phobos Armor', 'Tacticus Armor'],                  weapons: ['Ranged Primary Weapons', 'Ranged Secondary Weapons', 'Physical Melee Weapons'],                                              tools: ["Auspex Operator's Kit"],                 saves: ['dex', 'wis'] },
+  'Close Combat Operative': { armor: ['Phobos Armor', 'Tacticus Armor', 'Gravis Armor'],  weapons: ['Ranged Secondary Weapons', 'Physical Melee Weapons', 'Power Melee Weapons (excl. Thunder Hammer)'],                        tools: ["Auspex Operator's Kit"],                 saves: ['str', 'con'] },
+  'Gravis Operative':       { armor: ['Gravis Armor'],                                    weapons: ['Ranged Primary Weapons', 'Ranged Secondary Weapons', 'Physical Melee Weapons', 'Power Melee (excl. Thunder Hammer & Lightning Claws)'], tools: ["Auspex Operator's Kit"], saves: ['str', 'con'] },
+  'Terminator':             { armor: ['Terminator Armor'],                                weapons: ['All Terminator Weapons', 'Ranged Primary & Secondary Weapons', 'Physical & Power Melee Weapons'],                          tools: ["Auspex Operator's Kit"],                 saves: ['str', 'con'] },
+  'Vanguard Operative':     { armor: ['Phobos Armor'],                                    weapons: ['Ranged Primary Weapons', 'Ranged Secondary Weapons', 'Physical Melee Weapons'],                                              tools: ["Auspex Operator's Kit"],                 saves: ['dex', 'wis'] },
+  'Apothecary':             { armor: ['Tacticus Armor', 'Gravis Armor'],                  weapons: ['Ranged Secondary Weapons', 'Physical Melee Weapons', 'Narthecium'],                                                          tools: ['Medicae Kit', "Auspex Operator's Kit"],  saves: ['wis', 'con'], skills: ['medicine'] },
+  'Chaplain':               { armor: ['Phobos Armor', 'Tacticus Armor'],                  weapons: ['Ranged Secondary Weapons', 'Physical Melee Weapons', 'Power Melee Weapons', 'Crozius Arcanum'],                              tools: ["Auspex Operator's Kit"],                 saves: ['wis', 'cha'], skills: ['religion'] },
+  'Librarian':              { armor: ['Phobos Armor', 'Tacticus Armor', 'Gravis Armor'],  weapons: ['Ranged Secondary Weapons', 'Physical Melee Weapons', 'Force Sword', 'Force Staff'],                                          tools: ["Auspex Operator's Kit"],                 saves: ['int', 'wis'], skills: ['arcana'] },
+  'Techmarine':             { armor: ['Tacticus Armor', 'Gravis Armor'],                  weapons: ['Ranged Primary & Secondary Weapons', 'Physical & Power Melee Weapons', 'Omnissian Power Axe', 'Servo-Arm', 'Mechadendrites'], tools: ["Artificer's Tools", "Auspex Operator's Kit"], saves: ['int', 'con'], skills: ['technology'] }
+};
+function _saveGrant(ab) {
+  var p = document.getElementById('save-' + ab + '-prof');
+  if (!p || p.checked) return null;
+  p.checked = true; p.dispatchEvent(new Event('change'));
+  return 'prof';
+}
+function _saveRevoke(ab, op) {
+  if (op !== 'prof') return;
+  var p = document.getElementById('save-' + ab + '-prof');
+  if (p && p.checked) { p.checked = false; p.dispatchEvent(new Event('change')); }
+}
+/* Astartes racial stats: fill-if-blank only, once per character (never overwrites). */
+function _applyRacial() {
+  if (_autoGrants.racial) return;
+  var picked = (document.getElementById('cls-select')||{}).value || (document.getElementById('char-chapter')||{}).value;
+  if (!picked) return;
+  var sp = document.getElementById('stat-speed');
+  if (sp && !sp.value.trim()) { sp.value = '35 ft'; _taPoke(sp); }
+  var dv = document.getElementById('darkvision');
+  if (dv && !dv.value.trim()) { dv.value = '60'; _taPoke(dv); }
+  var pc = _resistChipEl('Poison');
+  if (pc && !pc.classList.contains('resist')) pc.classList.add('resist');
+  _autoGrants.racial = true;
+}
+function _applyClassGrants() {
+  var el = document.getElementById('cls-select');
+  if (!el) return;
+  var cls = el.value;
+  if (cls === _autoGrants.cls) { _applyRacial(); return; }
+  // withdraw the previous class's grants before applying the new set
+  Object.keys(_autoGrants.clsSkills || {}).forEach(function(id){ _skillRevoke(id, _autoGrants.clsSkills[id]); });
+  Object.keys(_autoGrants.clsSaves || {}).forEach(function(ab){ _saveRevoke(ab, _autoGrants.clsSaves[ab]); });
+  (_autoGrants.clsArmor || []).forEach(function(t){ _listRemove('armor', t.name, t.op); });
+  (_autoGrants.clsWeapons || []).forEach(function(t){ _listRemove('weapons', t.name, t.op); });
+  (_autoGrants.clsTools || []).forEach(function(t){ _listRemove('tools', t.name, t.op); });
+  _autoGrants.clsSkills = {}; _autoGrants.clsSaves = {}; _autoGrants.clsArmor = []; _autoGrants.clsWeapons = []; _autoGrants.clsTools = [];
+  _autoGrants.cls = cls;
+  var g = CLASS_GRANTS[cls];
+  if (g) {
+    (g.armor   || []).forEach(function(n){ var op = _listAdd('armor', n, false);   if (op) _autoGrants.clsArmor.push({name: n, op: op}); });
+    (g.weapons || []).forEach(function(n){ var op = _listAdd('weapons', n, false); if (op) _autoGrants.clsWeapons.push({name: n, op: op}); });
+    (g.tools   || []).forEach(function(n){ var op = _listAdd('tools', n, true);    if (op) _autoGrants.clsTools.push({name: n, op: op}); });
+    (g.saves   || []).forEach(function(ab){ var op = _saveGrant(ab);               if (op) _autoGrants.clsSaves[ab] = op; });
+    (g.skills  || []).forEach(function(id){ var op = _skillGrant(id);              if (op) _autoGrants.clsSkills[id] = op; });
+  }
+  _applyRacial();
   _recalcDerived();
   _schedSave();
 }
