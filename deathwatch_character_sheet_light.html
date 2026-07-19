@@ -734,7 +734,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
           </select>
         </div>
         <div class="sh-detail-field"><label>Chapter</label>
-          <select id="char-chapter" onchange="renderLineageTraits()">
+          <select id="char-chapter" onchange="renderLineageTraits();_applyChapterGrants()">
             <option value="">— Chapter —</option>
             <option value="Dark Angels">Dark Angels</option>
             <option value="Space Wolves">Space Wolves</option>
@@ -944,7 +944,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
         <span class="dos-prof-label">Weapons</span>
         <textarea class="dos-prof-ta" rows="2" placeholder="Bolt Pistol, Boltgun, Combat Knife…"></textarea>
         <span class="dos-prof-label">Tools</span>
-        <textarea class="dos-prof-ta" rows="1" placeholder="Servo-tools, Mechadendrite…"></textarea>
+        <textarea class="dos-prof-ta" id="prof-tools" rows="1" placeholder="Servo-tools, Mechadendrite…"></textarea>
         <span class="dos-prof-label">Languages</span>
         <textarea class="dos-prof-ta" rows="1" placeholder="High Gothic, Low Gothic, Xenos…"></textarea>
       </div>
@@ -2099,6 +2099,12 @@ function _upgRemove() {
   if (idx < 0 || !meta) return;
   if (!confirm('Strike this item from the manifest? Its upgrades — and the RP invested in them — are lost with it.')) return;
   var wasArmor = (meta.is_armor || meta.is_shield) && meta.equipped;
+  // Tools items: withdraw the proficiency this kit granted
+  if (meta.id && _autoGrants.toolItems && _autoGrants.toolItems[meta.id]) {
+    var _tg = _autoGrants.toolItems[meta.id];
+    _toolRemove(_tg.name, _tg.op);
+    delete _autoGrants.toolItems[meta.id];
+  }
   var ins = _upgRowInputs(idx);
   _rowTriggersReset();
   ['name', 'qty', 'notes'].forEach(function(k) {
@@ -3001,6 +3007,7 @@ async function _doSave() {
     arcana_prof: !!(document.getElementById('skill-arcana-prof') || {}).checked,
     wargear_meta: _wargearMeta,
     ammo_clips: _ammoClips,
+    auto_grants: _autoGrants,
     inspiration: _inspiration,
     conditions: Array.from(document.querySelectorAll('.dos-cond-chip.active')).map(function(c){ return c.textContent; }),
     conditions_notes: (document.getElementById('conditions-notes') || {value:''}).value
@@ -3242,6 +3249,9 @@ async function _loadSheet(adminOverrideId) {
         if (exp) exp.checked = true;
       });
     }
+    _autoGrants = (ext.auto_grants && typeof ext.auto_grants === 'object')
+      ? { chapter: ext.auto_grants.chapter || '', skills: ext.auto_grants.skills || {}, tools: ext.auto_grants.tools || [], resist: ext.auto_grants.resist || [], toolItems: ext.auto_grants.toolItems || {} }
+      : { chapter: (document.getElementById('char-chapter')||{}).value || '', skills: {}, tools: [], resist: [], toolItems: {} };
     if (ext.wargear_meta && Array.isArray(ext.wargear_meta)) {
       _wargearMeta = ext.wargear_meta;
       const wgBtns = document.querySelectorAll('.wg-equip-btn');
@@ -3770,7 +3780,14 @@ function _sreqAdd(id) {
       }
     }
   }
-  if (added) { syncQuickActionsFromWargear(); _sreqClose(); _schedSave(); }
+  if (added) {
+    if (it.cat === 'Tools') {
+      // Proficiency kits write their training into the Tools slot (duplicate → Expertise)
+      var _top = _toolAdd(it.name);
+      if (_top) _autoGrants.toolItems[it.id] = { name: it.name, op: _top };
+    }
+    syncQuickActionsFromWargear(); _sreqClose(); _schedSave();
+  }
   else { alert('No empty equipment slots available!'); }
 }
 document.addEventListener('DOMContentLoaded', async function() {
@@ -3875,6 +3892,9 @@ async function _loadSheetForUser(uid) {
         if (exp) exp.checked = true;
       });
     }
+    _autoGrants = (ext.auto_grants && typeof ext.auto_grants === 'object')
+      ? { chapter: ext.auto_grants.chapter || '', skills: ext.auto_grants.skills || {}, tools: ext.auto_grants.tools || [], resist: ext.auto_grants.resist || [], toolItems: ext.auto_grants.toolItems || {} }
+      : { chapter: (document.getElementById('char-chapter')||{}).value || '', skills: {}, tools: [], resist: [], toolItems: {} };
     if (ext.spellbook && Array.isArray(ext.spellbook)) _spellbook = ext.spellbook;
     if (ext.pinned_spells && Array.isArray(ext.pinned_spells)) _pinnedSpells = ext.pinned_spells;
     _powerCur = (typeof ext.power_cur === 'number') ? ext.power_cur : 0;
@@ -3993,6 +4013,89 @@ function renderLineageTraits() {
       '<div class="feat-card-body">' + t.body + '</div>' +
     '</div>';
   }).join('');
+}
+
+/* ── Automatic grants: chapter heritage & tool-kit proficiencies ──
+   Fixed grants only — choose-from skill proficiencies are deliberately NOT
+   automated (reserved for the future character builder). Grants fire on a
+   USER chapter change, never at load: legacy saves restore with the current
+   chapter as a no-op marker so manually-built sheets are never touched. */
+const CHAPTER_GRANTS = {
+  'Dark Angels':    { skills: ['deception', 'insight'] },
+  'Space Wolves':   { skills: ['survival', 'perception'] },
+  'Salamanders':    { tools: ["Smith's Tools"], resist: ['Fire'] },
+  'Ultramarines':   { skills: ['persuasion'] },
+  'Blood Angels':   { skills: ['medicine'] },
+  'Raven Guard':    { skills: ['stealth'] },
+  'White Scars':    { tools: ['Vehicles (Land · Air)'] },
+  'Iron Hands':     { tools: ['Servo-arms & Mechadendrites'] },
+  'Imperial Fists': { tools: ['Demolitions Kit'] }
+};
+var _autoGrants = { chapter: '', skills: {}, tools: [], resist: [], toolItems: {} };
+function _profToolsTA() { return document.getElementById('prof-tools') || document.querySelectorAll('.dos-prof-ta')[2]; }
+function _taPoke(el) { el.dispatchEvent(new Event('input')); el.dispatchEvent(new Event('change')); }
+/* Name normalizer so 'Vehicles (Land · Air)' matches 'Vehicles (Land · Air · Void)' etc. */
+function _toolKey(n) { return String(n).toLowerCase().replace(/\(.*$/, '').replace(/[^a-z ]/g, '').replace(/\s+/g, ' ').trim(); }
+function _toolAdd(name) {          // → 'added' | 'upgraded' (duplicate → expertise) | null
+  var ta = _profToolsTA(); if (!ta) return null;
+  var list = ta.value.split(/[,\n]/).map(function(s){ return s.trim(); }).filter(Boolean);
+  var key = _toolKey(name);
+  var hit = -1;
+  for (var i = 0; i < list.length; i++) if (_toolKey(list[i]) === key) { hit = i; break; }
+  if (hit === -1) { list.push(name); ta.value = list.join(', '); _taPoke(ta); return 'added'; }
+  if (!/\(expertise\)/i.test(list[hit])) { list[hit] += ' (Expertise)'; ta.value = list.join(', '); _taPoke(ta); return 'upgraded'; }
+  return null;
+}
+function _toolRemove(name, op) {
+  var ta = _profToolsTA(); if (!ta) return;
+  var list = ta.value.split(/[,\n]/).map(function(s){ return s.trim(); }).filter(Boolean);
+  var key = _toolKey(name);
+  var hit = -1;
+  for (var i = 0; i < list.length; i++) if (_toolKey(list[i]) === key) { hit = i; break; }
+  if (hit === -1) return;
+  if (op === 'added') list.splice(hit, 1);
+  else if (op === 'upgraded') list[hit] = list[hit].replace(/\s*\(Expertise\)/i, '');
+  ta.value = list.join(', ');
+  _taPoke(ta);
+}
+function _skillGrant(skId) {       // → 'prof' | 'exp' (already proficient) | null
+  var p = document.getElementById('skill-' + skId + '-prof');
+  if (!p) return null;
+  if (!p.checked) { p.checked = true; p.dispatchEvent(new Event('change')); return 'prof'; }
+  var e = document.getElementById('skill-' + skId + '-exp');
+  if (e && !e.checked) { e.disabled = false; e.checked = true; e.dispatchEvent(new Event('change')); return 'exp'; }
+  return null;
+}
+function _skillRevoke(skId, op) {
+  var p = document.getElementById('skill-' + skId + '-prof');
+  var e = document.getElementById('skill-' + skId + '-exp');
+  if (op === 'prof') { if (p && p.checked) { p.checked = false; p.dispatchEvent(new Event('change')); } }
+  else if (op === 'exp') { if (e && e.checked) { e.checked = false; e.dispatchEvent(new Event('change')); } }
+}
+function _resistChipEl(name) {
+  var chips = document.querySelectorAll('#def-resist-chips .dos-def-chip');
+  for (var i = 0; i < chips.length; i++) if (chips[i].textContent.trim() === name) return chips[i];
+  return null;
+}
+function _applyChapterGrants() {
+  var chEl = document.getElementById('char-chapter');
+  if (!chEl) return;
+  var ch = chEl.value;
+  if (ch === _autoGrants.chapter) return;
+  // withdraw the previous chapter's grants before applying the new set
+  Object.keys(_autoGrants.skills || {}).forEach(function(id){ _skillRevoke(id, _autoGrants.skills[id]); });
+  (_autoGrants.tools || []).forEach(function(t){ _toolRemove(t.name, t.op); });
+  (_autoGrants.resist || []).forEach(function(n){ var c = _resistChipEl(n); if (c) c.classList.remove('resist'); });
+  _autoGrants.skills = {}; _autoGrants.tools = []; _autoGrants.resist = [];
+  _autoGrants.chapter = ch;
+  var g = CHAPTER_GRANTS[ch];
+  if (g) {
+    (g.skills || []).forEach(function(id){ var op = _skillGrant(id); if (op) _autoGrants.skills[id] = op; });
+    (g.tools || []).forEach(function(n){ var op = _toolAdd(n); if (op) _autoGrants.tools.push({name: n, op: op}); });
+    (g.resist || []).forEach(function(n){ var c = _resistChipEl(n); if (c && !c.classList.contains('resist')) { c.classList.add('resist'); _autoGrants.resist.push(n); } });
+  }
+  _recalcDerived();
+  _schedSave();
 }
 
 /* ── Action popup ── */
