@@ -1485,6 +1485,29 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
     <div class="upg-body" id="upg-body"></div>
   </div>
 </div>
+<!-- Reload prompt (magazine empty / ammo depleted) -->
+<style>
+#rld-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1100;align-items:center;justify-content:center;}
+#rld-overlay.open{display:flex;}
+#rld-modal{background:var(--panel-bg,var(--panel));border:1px solid var(--gold);border-radius:4px;width:min(400px,92vw);overflow:hidden;box-shadow:0 6px 30px rgba(0,0,0,.25);}
+#rld-hdr{font-family:var(--font-label);font-size:10pt;letter-spacing:.2em;text-transform:uppercase;color:#a02828;border-bottom:1px solid var(--border2);padding:10px 14px;}
+.rld-body{padding:12px 14px;}
+.rld-wpn{font-family:var(--font-label);font-size:12pt;color:var(--gold-light);margin-bottom:4px;}
+.rld-sub{font-size:9pt;color:var(--text-dim);margin-bottom:12px;line-height:1.5;}
+.rld-sub b{color:var(--gold-light);font-weight:600;}
+.rld-btns{display:flex;gap:8px;}
+.rld-go{flex:1;font-family:var(--font-label);font-size:9pt;letter-spacing:.12em;text-transform:uppercase;background:rgba(176,104,24,.10);border:1px solid var(--gold);color:var(--gold-light);padding:9px 0;border-radius:3px;cursor:pointer;}
+.rld-go:hover{background:var(--gold-dim);color:#fff;}
+.rld-no{width:110px;font-family:var(--font-label);font-size:9pt;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--text-dim);padding:9px 0;border-radius:3px;cursor:pointer;}
+.rld-no:hover{border-color:var(--silver-dim);color:var(--text);}
+.rld-dry{flex:1;font-family:var(--font-label);font-size:8.5pt;letter-spacing:.1em;text-transform:uppercase;color:#a02828;border:1px dashed #c08080;border-radius:3px;text-align:center;padding:9px 6px;line-height:1.4;}
+</style>
+<div id="rld-overlay" onmousedown="if(event.target===this)_reloadClose()">
+  <div id="rld-modal">
+    <div id="rld-hdr">⚠ Magazine Empty</div>
+    <div class="rld-body" id="rld-body"></div>
+  </div>
+</div>
 <!-- Spell Browser Overlay -->
 <style>
 #spell-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:1000;align-items:center;justify-content:center;}
@@ -2327,6 +2350,8 @@ function _shotDec(idx) {
   var cur = (_wargearMeta[idx].shots_cur !== undefined) ? _wargearMeta[idx].shots_cur : max;
   if (cur > 0) _wargearMeta[idx].shots_cur = cur - 1;
   syncQuickActionsFromWargear(); _schedSave();
+  // Fired the last round: offer the bonus-action reload
+  if (cur === 1 && max > 0 && _wargearMeta[idx].is_weapon) _reloadPrompt(idx);
 }
 function _shotInc(idx) {
   if (!_wargearMeta[idx]) return;
@@ -2336,10 +2361,76 @@ function _shotInc(idx) {
   syncQuickActionsFromWargear(); _schedSave();
 }
 function _shotRld(idx) {
-  if (!_wargearMeta[idx]) return;
-  _wargearMeta[idx].shots_cur = _wargearMeta[idx].shots_max || 0;
-  syncQuickActionsFromWargear(); _schedSave();
+  var meta = _wargearMeta[idx];
+  if (!meta) return;
+  var max = meta.shots_max || 0;
+  var cur = (meta.shots_cur !== undefined) ? meta.shots_cur : max;
+  if (max > 0 && cur >= max) return;           // already fully loaded — don't burn a clip
+  if (!_reloadDo(idx)) _reloadPrompt(idx);     // dry — surface the depleted prompt
 }
+
+/* ── Reload prompt: reloading consumes a clip from the linked ammo row ── */
+var _rldIdx = -1;
+function _wpnAmmoIdx(idx) {   // ammo-row index holding this weapon's catalog ammo type, or -1
+  var meta = _wargearMeta[idx];
+  if (!meta || !meta.id || typeof REQ_ITEMS === 'undefined') return -1;
+  var it = REQ_ITEMS.find(function(x){ return x.id === meta.id; });
+  if (!it || !it.ammo || it.ammo === 'N/A') return -1;
+  return _ammoRowByName(it.ammo);
+}
+function _reloadDo(idx) {     // burn a clip (when tracked) and refill the magazine
+  var meta = _wargearMeta[idx];
+  if (!meta) return false;
+  var ai = _wpnAmmoIdx(idx);
+  if (ai !== -1) {
+    var clips = (_ammoClips[ai] !== undefined) ? _ammoClips[ai] : 0;
+    if (clips <= 0) return false;
+    _ammoClips[ai] = clips - 1;
+  }
+  meta.shots_cur = meta.shots_max || 0;
+  syncQuickActionsFromWargear(); _schedSave();
+  return true;
+}
+function _reloadPrompt(idx) {
+  var ov = document.getElementById('rld-overlay');
+  var body = document.getElementById('rld-body');
+  var hdr = document.getElementById('rld-hdr');
+  var meta = _wargearMeta[idx];
+  if (!ov || !body || !hdr || !meta) return;
+  var rows = document.querySelectorAll('.wg-equip-row');
+  var name = rows[idx] ? ((rows[idx].querySelector('input')||{}).value || 'Weapon') : 'Weapon';
+  var ai = _wpnAmmoIdx(idx);
+  var clips = (ai !== -1) ? ((_ammoClips[ai] !== undefined) ? _ammoClips[ai] : 0) : null;
+  var ammoIt = (ai !== -1) ? _ammoItemForRow(ai) : null;
+  var ammoName = ammoIt ? ammoIt.name : 'ammunition';
+  var canReload = (clips === null || clips > 0);
+  hdr.textContent = canReload ? '⚠ Magazine Empty' : '⚠ Ammunition Depleted';
+  var sub = clips === null
+    ? 'No linked ammunition is tracked for this weapon.'
+    : 'Reloading expends one clip — <b>' + clips + '</b> clip' + (clips === 1 ? '' : 's') + ' of <b>' + ammoName + '</b> remaining.';
+  var esc = function(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); };
+  body.innerHTML = '<div class="rld-wpn">' + esc(name) + '</div>'
+    + '<div class="rld-sub">' + sub + '</div>'
+    + '<div class="rld-btns">'
+    + (canReload
+        ? '<button class="rld-go" onclick="_reloadConfirm()">⟳ Reload — Bonus Action</button>'
+          + '<button class="rld-no" onclick="_reloadClose()">Hold</button>'
+        : '<div class="rld-dry">++ No ' + esc(ammoName) + ' remaining — resupply required ++</div>'
+          + '<button class="rld-no" onclick="_reloadClose()">Close</button>')
+    + '</div>';
+  _rldIdx = idx;
+  ov.classList.add('open');
+}
+function _reloadConfirm() {
+  if (_rldIdx !== -1) _reloadDo(_rldIdx);
+  _reloadClose();
+}
+function _reloadClose() {
+  var ov = document.getElementById('rld-overlay');
+  if (ov) ov.classList.remove('open');
+  _rldIdx = -1;
+}
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape') _reloadClose(); });
 
 /* ── Ammo tracker ── */
 function renderAmmoTracker() {
