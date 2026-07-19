@@ -27,6 +27,29 @@
   --border:     #1e2840;
   --border2:    #2a3a52;
   --line:       #2a3850;
+  /* Semantic theme vars — every color that differs between themes lives here.
+     applyTheme() overrides these on <html>; keep component CSS/JS pointed at vars. */
+  --hover-ink:      #000;
+  --overlay-bg:     rgba(0,0,0,.72);
+  --modal-shadow:   0 0 30px rgba(0,0,0,.6);
+  --warn-text:      #e08888;
+  --warn-bg:        rgba(192,64,64,.15);
+  --warn-border:    rgba(192,64,64,.4);
+  --remove:         #c06060;
+  --remove-border:  #7a3030;
+  --dry-text:       #c06060;
+  --dry-border:     #7a3030;
+  --tier:           #f8a850;
+  --tier-soft:      #f0b060;
+  --tier-border:    rgba(216,132,42,.35);
+  --gold-wash:      rgba(200,164,74,.05);
+  --gold-wash-hover:rgba(200,164,74,.11);
+  --gold-wash-eq:   rgba(200,164,74,.09);
+  --go-bg:          rgba(200,164,74,.12);
+  --frame-fill:     #0d1018;
+  --frame-stroke:   #2a3a52;
+  --frame-hex-url:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 114'%3E%3Cpolygon points='50%2C2 98%2C27 98%2C87 50%2C112 2%2C87 2%2C27' fill='%230d1018' stroke='%232a3a52' stroke-width='2.5'/%3E%3Cpolygon points='50%2C10 90%2C32 90%2C83 50%2C105 10%2C83 10%2C32' fill='none' stroke='%231e2840' stroke-width='1'/%3E%3C/svg%3E");
+  --frame-shield-url:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 116'%3E%3Cpath d='M4 4 L96 4 L96 74 L50 112 L4 74 Z' fill='%230d1018' stroke='%23c8a44a' stroke-width='2.5'/%3E%3Cpath d='M11 11 L89 11 L89 72 L50 103 L11 72 Z' fill='none' stroke='%237a6128' stroke-width='1'/%3E%3C/svg%3E");
   --font-head:  'Cinzel Decorative','Cinzel',serif;
   --font-label: 'Cinzel',serif;
   --font-body:  'Crimson Text',Georgia,serif;}
@@ -115,7 +138,7 @@ body{background:var(--bg-page);font-family:var(--font-body);color:var(--text);fo
 /* Initiative — hexagonal frame */
 .dos-init-box{
   background-color:var(--panel2);
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 114'%3E%3Cpolygon points='50%2C2 98%2C27 98%2C87 50%2C112 2%2C87 2%2C27' fill='%230d1018' stroke='%232a3a52' stroke-width='2.5'/%3E%3Cpolygon points='50%2C10 90%2C32 90%2C83 50%2C105 10%2C83 10%2C32' fill='none' stroke='%231e2840' stroke-width='1'/%3E%3C/svg%3E");
+  background-image:var(--frame-hex-url);
   background-size:100% 100%;
   background-repeat:no-repeat;
   border:none;
@@ -136,7 +159,7 @@ body{background:var(--bg-page);font-family:var(--font-body);color:var(--text);fo
 /* Armor Class — shield frame */
 .dos-ac-box{
   background-color:var(--panel2);
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 116'%3E%3Cpath d='M4 4 L96 4 L96 74 L50 112 L4 74 Z' fill='%230d1018' stroke='%23c8a44a' stroke-width='2.5'/%3E%3Cpath d='M11 11 L89 11 L89 72 L50 103 L11 72 Z' fill='none' stroke='%237a6128' stroke-width='1'/%3E%3C/svg%3E");
+  background-image:var(--frame-shield-url);
   background-size:100% 100%;
   background-repeat:no-repeat;
   border:none;
@@ -277,16 +300,16 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 /* Catalog-bound rows render as item entries (D&D-Beyond-style), not text boxes:
    gold accent rail, tinted background, item-name as the click-target, qty/notes demoted
    to quiet metadata. .item-eq marks the equipped item's row. */
-.wg-equip-row.item-bound{background:rgba(200,164,74,.05);border-left:2px solid var(--gold-dim);padding-left:4px;}
-.wg-equip-row.item-bound:hover{background:rgba(200,164,74,.11);}
-.wg-equip-row.item-bound.item-eq{border-left-color:var(--gold);background:rgba(200,164,74,.09);}
+.wg-equip-row.item-bound{background:var(--gold-wash);border-left:2px solid var(--gold-dim);padding-left:4px;}
+.wg-equip-row.item-bound:hover{background:var(--gold-wash-hover);}
+.wg-equip-row.item-bound.item-eq{border-left-color:var(--gold);background:var(--gold-wash-eq);}
 .wg-equip-row input.wg-name-locked{color:var(--gold-light)!important;font-family:var(--font-label)!important;font-size:10.5pt!important;letter-spacing:.03em;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .wg-equip-row input.wg-name-locked:hover{text-decoration:underline;text-decoration-color:var(--gold-dim);}
 .wg-equip-row.item-bound input:nth-of-type(2){color:var(--text-dim)!important;font-size:10.5pt!important;}
 .wg-equip-row.item-bound input:nth-of-type(3){color:var(--text-dim)!important;font-size:9.5pt!important;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 /* Ammo rows bind the same way when their type matches the catalog */
-.wg-ammo-row.item-bound{background:rgba(200,164,74,.05);border-left:2px solid var(--gold-dim);padding-left:4px;}
-.wg-ammo-row.item-bound:hover{background:rgba(200,164,74,.11);}
+.wg-ammo-row.item-bound{background:var(--gold-wash);border-left:2px solid var(--gold-dim);padding-left:4px;}
+.wg-ammo-row.item-bound:hover{background:var(--gold-wash-hover);}
 .wg-ammo-row input.wg-name-locked{color:var(--gold-light)!important;font-family:var(--font-label)!important;font-size:10.5pt!important;letter-spacing:.03em;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .wg-ammo-row input.wg-name-locked:hover{text-decoration:underline;text-decoration-color:var(--gold-dim);}
 .wg-ammo-row.item-bound input:nth-of-type(2){color:var(--text-dim)!important;font-size:10.5pt!important;}
@@ -442,7 +465,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .dos-atk-table tbody tr:last-child{border-bottom:none;}
 .qa-mod-pill{display:inline-block;font-family:var(--font-label);font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-light);background:rgba(212,160,48,.12);border:1px solid rgba(212,160,48,.3);border-radius:3px;padding:1px 5px;margin:1px 2px 1px 0;white-space:nowrap;cursor:pointer;transition:background .15s;}.qa-mod-pill:hover{background:rgba(212,160,48,.28);}
 /* Upgrade trait pills + the gold +N badge on upgraded weapons */
-.qa-upg-pill{display:inline-block;font-family:var(--font-label);font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;color:#f0b060;background:rgba(216,132,42,.12);border:1px solid rgba(216,132,42,.35);border-radius:3px;padding:1px 5px;margin:1px 2px 1px 0;white-space:nowrap;cursor:pointer;transition:background .15s;}
+.qa-upg-pill{display:inline-block;font-family:var(--font-label);font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;color:var(--tier-soft);background:rgba(216,132,42,.12);border:1px solid var(--tier-border);border-radius:3px;padding:1px 5px;margin:1px 2px 1px 0;white-space:nowrap;cursor:pointer;transition:background .15s;}
 .qa-upg-pill:hover{background:rgba(216,132,42,.28);}
 .qa-upg-plus{font-family:var(--font-label);font-size:8pt;font-weight:700;color:var(--gold-light);border:1px solid var(--gold-dim);border-radius:3px;padding:0 4px;margin-left:5px;background:rgba(200,164,74,.12);white-space:nowrap;}
 /* ── Quick Actions filter buttons ── */
@@ -530,7 +553,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .qa-wtype-badge.wt-pistol{background:rgba(80,180,120,.14);color:#70c490;border:1px solid rgba(80,180,120,.3);}
 .qa-wtype-badge.wt-other{background:rgba(150,130,80,.14);color:#c0a860;border:1px solid rgba(150,130,80,.3);}
 .qa-type-icon{width:20px;text-align:center;font-size:11pt;color:var(--silver-dim);flex-shrink:0;}
-.qa-save-badge{display:inline-block;font-family:var(--font-label);font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;font-weight:600;border-radius:3px;padding:2px 6px;white-space:nowrap;background:rgba(192,64,64,.15);color:#e08888;border:1px solid rgba(192,64,64,.4);cursor:help;}
+.qa-save-badge{display:inline-block;font-family:var(--font-label);font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;font-weight:600;border-radius:3px;padding:2px 6px;white-space:nowrap;background:var(--warn-bg);color:var(--warn-text);border:1px solid var(--warn-border);cursor:help;}
 
 /* ── DDB-style saves: [circle][value][name] ── */
 .dos-save-row{display:grid;grid-template-columns:18px 1fr 36px;align-items:center;gap:5px;padding:3px 2px;border-bottom:1px solid rgba(42,58,80,.3);}
@@ -1436,7 +1459,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 <!-- Wargear Upgrade Console Overlay — content is built dynamically (buttons/divs only; adds no
      persisted inputs, so the positional save format is untouched) -->
 <style>
-#upg-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:1000;align-items:center;justify-content:center;}
+#upg-overlay{display:none;position:fixed;inset:0;background:var(--overlay-bg);z-index:1000;align-items:center;justify-content:center;}
 #upg-overlay.open{display:flex;}
 #upg-modal{background:var(--panel-bg,var(--panel));border:1px solid var(--gold);border-radius:4px;width:min(640px,95vw);max-height:82vh;display:flex;flex-direction:column;overflow:hidden;}
 .upg-body{padding:12px 14px;overflow-y:auto;}
@@ -1453,9 +1476,9 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .upg-slot-hdr{display:flex;align-items:center;gap:8px;}
 .upg-slot-ttl{font-family:var(--font-label);font-size:8.5pt;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);flex:1;}
 .upg-slot-btn{font-family:var(--font-label);font-size:8pt;letter-spacing:.08em;text-transform:uppercase;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);padding:2px 8px;cursor:pointer;border-radius:2px;flex-shrink:0;}
-.upg-slot-btn:hover{background:var(--gold-dim);color:#000;}
-.upg-slot-btn.rm{border-color:#7a3030;color:#c06060;}
-.upg-slot-btn.rm:hover{background:#7a3030;color:#fff;}
+.upg-slot-btn:hover{background:var(--gold-dim);color:var(--hover-ink);}
+.upg-slot-btn.rm{border-color:var(--remove-border);color:var(--remove);}
+.upg-slot-btn.rm:hover{background:var(--remove-border);color:#fff;}
 .upg-slot-trait{font-family:var(--font-label);font-size:10pt;color:var(--gold-light);margin-top:5px;}
 .upg-slot-desc{font-size:9.5pt;color:var(--text-dim);line-height:1.45;margin-top:3px;}
 .upg-slot-desc strong{color:var(--gold-light);}
@@ -1464,11 +1487,11 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .upg-pick-card{border:1px solid var(--border2);border-radius:3px;padding:7px 10px;margin-bottom:6px;cursor:pointer;transition:all .15s;}
 .upg-pick-card:hover{border-color:var(--gold);background:rgba(200,164,74,.07);}
 .upg-pick-name{font-family:var(--font-label);font-size:9.5pt;color:var(--gold-light);display:flex;justify-content:space-between;gap:8px;align-items:baseline;}
-.upg-pick-tier{font-size:7.5pt;color:#f8a850;letter-spacing:.1em;white-space:nowrap;}
+.upg-pick-tier{font-size:7.5pt;color:var(--tier);letter-spacing:.1em;white-space:nowrap;}
 .upg-pick-desc{font-size:9pt;color:var(--text-dim);line-height:1.4;margin-top:2px;}
 .upg-pick-desc strong{color:var(--gold-light);}
 .upg-choice-btn{font-family:var(--font-label);font-size:8.5pt;letter-spacing:.08em;text-transform:uppercase;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);padding:3px 10px;cursor:pointer;border-radius:2px;margin:3px 4px 0 0;}
-.upg-choice-btn:hover{background:var(--gold-dim);color:#000;}
+.upg-choice-btn:hover{background:var(--gold-dim);color:var(--hover-ink);}
 .upg-name-inp{flex:1;background:transparent;border:none;border-bottom:1px solid var(--border2);color:var(--gold-light);font-family:var(--font-label);font-size:12.5pt;padding:2px 0;outline:none;min-width:0;}
 .upg-name-inp:focus{border-bottom-color:var(--gold);}
 .upg-ident{font-family:var(--font-label);font-size:7.5pt;letter-spacing:.12em;text-transform:uppercase;color:var(--text-dim);margin:3px 0 10px;}
@@ -1483,8 +1506,8 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .upg-eqp-btn{flex:1;font-family:var(--font-label);font-size:8.5pt;letter-spacing:.14em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--text-dim);padding:7px 0;border-radius:3px;cursor:pointer;}
 .upg-eqp-btn:hover{border-color:var(--gold-dim);color:var(--gold);}
 .upg-eqp-btn.on{background:rgba(180,140,60,.15);border-color:var(--gold);color:var(--gold-light);}
-.upg-rm-btn{width:120px;font-family:var(--font-label);font-size:8.5pt;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid #7a3030;color:#c06060;padding:7px 0;border-radius:3px;cursor:pointer;}
-.upg-rm-btn:hover{background:#7a3030;color:#fff;}
+.upg-rm-btn{width:120px;font-family:var(--font-label);font-size:8.5pt;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid var(--remove-border);color:var(--remove);padding:7px 0;border-radius:3px;cursor:pointer;}
+.upg-rm-btn:hover{background:var(--remove-border);color:#fff;}
 .upg-sec-ttl{font-family:var(--font-label);font-size:8.5pt;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);border-top:1px solid var(--border2);padding-top:10px;margin-bottom:8px;}
 .upg-lore{font-size:9pt;font-style:italic;color:var(--text-dim);border-top:1px solid var(--border2);margin-top:10px;padding-top:8px;line-height:1.5;}
 </style>
@@ -1499,20 +1522,20 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 </div>
 <!-- Reload prompt (magazine empty / ammo depleted) -->
 <style>
-#rld-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:1100;align-items:center;justify-content:center;}
+#rld-overlay{display:none;position:fixed;inset:0;background:var(--overlay-bg);z-index:1100;align-items:center;justify-content:center;}
 #rld-overlay.open{display:flex;}
-#rld-modal{background:var(--panel-bg,var(--panel));border:1px solid var(--gold);border-radius:4px;width:min(400px,92vw);overflow:hidden;box-shadow:0 0 30px rgba(0,0,0,.6);}
-#rld-hdr{font-family:var(--font-label);font-size:10pt;letter-spacing:.2em;text-transform:uppercase;color:#e08888;border-bottom:1px solid var(--border2);padding:10px 14px;}
+#rld-modal{background:var(--panel-bg,var(--panel));border:1px solid var(--gold);border-radius:4px;width:min(400px,92vw);overflow:hidden;box-shadow:var(--modal-shadow);}
+#rld-hdr{font-family:var(--font-label);font-size:10pt;letter-spacing:.2em;text-transform:uppercase;color:var(--warn-text);border-bottom:1px solid var(--border2);padding:10px 14px;}
 .rld-body{padding:12px 14px;}
 .rld-wpn{font-family:var(--font-label);font-size:12pt;color:var(--gold-light);margin-bottom:4px;}
 .rld-sub{font-size:9pt;color:var(--text-dim);margin-bottom:12px;line-height:1.5;}
 .rld-sub b{color:var(--gold-light);font-weight:600;}
 .rld-btns{display:flex;gap:8px;}
-.rld-go{flex:1;font-family:var(--font-label);font-size:9pt;letter-spacing:.12em;text-transform:uppercase;background:rgba(200,164,74,.12);border:1px solid var(--gold);color:var(--gold-light);padding:9px 0;border-radius:3px;cursor:pointer;}
-.rld-go:hover{background:var(--gold-dim);color:#000;}
+.rld-go{flex:1;font-family:var(--font-label);font-size:9pt;letter-spacing:.12em;text-transform:uppercase;background:var(--go-bg);border:1px solid var(--gold);color:var(--gold-light);padding:9px 0;border-radius:3px;cursor:pointer;}
+.rld-go:hover{background:var(--gold-dim);color:var(--hover-ink);}
 .rld-no{width:110px;font-family:var(--font-label);font-size:9pt;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--text-dim);padding:9px 0;border-radius:3px;cursor:pointer;}
 .rld-no:hover{border-color:var(--silver-dim);color:var(--text);}
-.rld-dry{flex:1;font-family:var(--font-label);font-size:8.5pt;letter-spacing:.1em;text-transform:uppercase;color:#c06060;border:1px dashed #7a3030;border-radius:3px;text-align:center;padding:9px 6px;line-height:1.4;}
+.rld-dry{flex:1;font-family:var(--font-label);font-size:8.5pt;letter-spacing:.1em;text-transform:uppercase;color:var(--dry-text);border:1px dashed var(--dry-border);border-radius:3px;text-align:center;padding:9px 6px;line-height:1.4;}
 </style>
 <div id="rld-overlay" onmousedown="if(event.target===this)_reloadClose()">
   <div id="rld-modal">
@@ -1966,7 +1989,7 @@ function _upgRender() {
       + (isW ? box('TO HIT', fmt(_mod(wStat) + pb + tier)) : box('COST', it.cost || '—'))
       + (it.save ? box('SAVE', 'DC ' + it.save.dc + ' ' + it.save.ability) : '')
       + '</div>';
-    if (it.save) html += '<div class="upg-slot-desc" style="margin:0 0 10px;color:#e08888;">⚠ DC ' + it.save.dc + ' ' + it.save.ability + ' save — ' + it.save.effect + '</div>';
+    if (it.save) html += '<div class="upg-slot-desc" style="margin:0 0 10px;color:var(--warn-text);">⚠ DC ' + it.save.dc + ' ' + it.save.ability + ' save — ' + it.save.effect + '</div>';
   } else {
     html += '<div class="upg-stat-grid" style="grid-template-columns:1fr 1fr;">' + box('TYPE', it.wtype || '—') + box('COST', it.cost || '—') + '</div>';
     if (it.use) html += '<div class="upg-slot-desc" style="margin:0 0 10px;">' + it.use + '</div>';
@@ -2687,7 +2710,7 @@ function _ammoRecRender() {
     + '<div class="upg-slot" style="display:flex;align-items:center;gap:10px;">'
     + '<span class="upg-slot-ttl">Clips carried</span>'
     + '<button class="upg-slot-btn" onclick="_ammoRecDec()">−</button>'
-    + '<span style="font-family:var(--font-label);font-size:12pt;color:' + (cur === 0 ? '#c06060' : 'var(--gold-light)') + ';">' + cur + ' / ' + max + '</span>'
+    + '<span style="font-family:var(--font-label);font-size:12pt;color:' + (cur === 0 ? 'var(--remove)' : 'var(--gold-light)') + ';">' + cur + ' / ' + max + '</span>'
     + '<button class="upg-slot-btn" onclick="_ammoRecInc()">+</button>'
     + '<button class="upg-slot-btn" onclick="_ammoRecRld()" title="Restock to capacity">↺</button>'
     + '</div>'
@@ -3743,7 +3766,7 @@ function _sreqRender(items) {
     if (it.cat === 'Tools') {
       return `<div class="sreq-card"><div class="sreq-card-name">${it.name}</div><div class="sreq-card-stat">Tools &bull; ${it.wtype}</div><div class="sreq-card-stat">${it.use}</div><div class="sreq-card-stat">Cost: ${it.cost}</div><button class="sreq-add" onclick="_sreqAdd('${it.id}')">+ Add to Wargear</button></div>`;
     }
-    return `<div class="sreq-card"><div class="sreq-card-name">${it.name}</div><div class="sreq-card-stat">${it.cat} &bull; ${it.wtype}</div><div class="sreq-card-stat">${it.dmg}</div>${it.save ? `<div class="sreq-card-stat" style="color:#e08888;">DC ${it.save.dc} ${it.save.ability} save</div>` : ''}<div class="sreq-card-stat">Range: ${(it.thrown && typeof reqThrownText === 'function') ? reqThrownText(it, strM) : it.range}</div><div class="sreq-card-stat">Cost: ${it.cost}</div><button class="sreq-add" onclick="_sreqAdd('${it.id}')">+ Add to Wargear</button></div>`;
+    return `<div class="sreq-card"><div class="sreq-card-name">${it.name}</div><div class="sreq-card-stat">${it.cat} &bull; ${it.wtype}</div><div class="sreq-card-stat">${it.dmg}</div>${it.save ? `<div class="sreq-card-stat" style="color:var(--warn-text);">DC ${it.save.dc} ${it.save.ability} save</div>` : ''}<div class="sreq-card-stat">Range: ${(it.thrown && typeof reqThrownText === 'function') ? reqThrownText(it, strM) : it.range}</div><div class="sreq-card-stat">Cost: ${it.cost}</div><button class="sreq-add" onclick="_sreqAdd('${it.id}')">+ Add to Wargear</button></div>`;
   }).join('');
 }
 function _sreqAdd(id) {
@@ -4304,7 +4327,7 @@ function _weaponPopup(e, itemId, wgIdx) {
       _lines += '<div style="margin-top:3px;"><span style="color:var(--gold-light);font-family:var(--font-label);font-size:8.5pt;">✦ '
         + ut.def.name + (ut.choice ? ' — ' + ut.choice : '') + '</span></div>';
     });
-    upgHtml = '<hr class="dp-divider"><div style="font-family:var(--font-label);font-size:8.5pt;letter-spacing:.12em;text-transform:uppercase;color:#f8a850;">'
+    upgHtml = '<hr class="dp-divider"><div style="font-family:var(--font-label);font-size:8.5pt;letter-spacing:.12em;text-transform:uppercase;color:var(--tier);">'
       + _ut.name + ' · +' + _ut.bonus + ' attack &amp; damage</div>' + _lines;
   }
   var modsHtml = (item.mods && item.mods.length)
@@ -4331,7 +4354,7 @@ function _weaponPopup(e, itemId, wgIdx) {
       '<div class="dp-stat"><strong>Shots / Mag</strong>'+(item.shots||'—')+'</div>' +
       '<div class="dp-stat"><strong>Cost</strong>'+(item.cost||'—')+'</div>' +
     '</div>' +
-    (item.save ? '<div style="margin-top:6px;font-family:var(--font-label);font-size:8pt;letter-spacing:.06em;color:#e08888;">⚠ DC '+item.save.dc+' '+item.save.ability+' save — '+item.save.effect+'</div>' : '') +
+    (item.save ? '<div style="margin-top:6px;font-family:var(--font-label);font-size:8pt;letter-spacing:.06em;color:var(--warn-text);">⚠ DC '+item.save.dc+' '+item.save.ability+' save — '+item.save.effect+'</div>' : '') +
     modsHtml +
     upgHtml +
     (item.lore ? '<hr class="dp-divider"><div class="dp-desc">'+item.lore+'</div>' : '') +
