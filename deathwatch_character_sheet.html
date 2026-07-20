@@ -1396,7 +1396,8 @@ try {
 <div id="hd-popup-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;align-items:center;justify-content:center;">
   <div style="background:var(--panel);border:1px solid var(--gold-dim);padding:22px 24px;min-width:280px;max-width:340px;position:relative;">
     <div style="font-family:var(--font-head);font-size:12pt;color:var(--gold-light);margin-bottom:4px;">Short Rest</div>
-    <div style="font-family:var(--font-label);font-size:8pt;letter-spacing:.18em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:14px;">Spend Hit Dice to recover HP</div>
+    <div style="font-family:var(--font-label);font-size:8pt;letter-spacing:.18em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:4px;">Spend Hit Dice to recover HP</div>
+    <div id="hd-avail" style="font-family:var(--font-label);font-size:8pt;letter-spacing:.1em;color:var(--gold-dim);margin-bottom:14px;"></div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
       <div style="text-align:center;">
         <div style="font-family:var(--font-label);font-size:8pt;color:var(--silver-dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;">Die Type</div>
@@ -3516,6 +3517,12 @@ function _shortRestPopup() {
   if (spendEl) spendEl.value = '1';
   var w = document.getElementById('hd-warn');
   if (w) w.style.display = 'none';
+  var total = parseInt((document.getElementById('hd-total')||{}).value) || 0;
+  var used  = parseInt((document.getElementById('hd-used')||{}).value) || 0;
+  var av = document.getElementById('hd-avail');
+  if (av) av.textContent = total > 0
+    ? (total - used) + ' of ' + total + ' hit dice remaining'
+    : 'Set your die type and total below';
 }
 function _hdPopupCancel() {
   var overlay = document.getElementById('hd-popup-overlay');
@@ -3578,9 +3585,11 @@ function _doResupply() {
     var el = document.getElementById(id);
     if (el) el.checked = false;
   });
-  // Restore all hit dice (set used to 0)
+  // Recover half of spent hit dice (round down, minimum 1)
   var usedEl = document.getElementById('hd-used');
-  if (usedEl) usedEl.value = 0;
+  var hdUsed = usedEl ? (parseInt(usedEl.value) || 0) : 0;
+  var hdRegain = hdUsed > 0 ? Math.max(1, Math.floor(hdUsed / 2)) : 0;
+  if (usedEl && hdRegain > 0) usedEl.value = hdUsed - hdRegain;
   // Refill weapon charges only where no ammo type is tracked — linked magazines
   // reload from requisitioned clips, never for free
   if (typeof _wargearMeta !== 'undefined') {
@@ -3592,7 +3601,9 @@ function _doResupply() {
   // Psychic/holy power reserves back to full
   if (typeof _powerReset === 'function') _powerReset();
   _schedSave();
-  var msg = 'HP, hit dice, and power reserves restored. Ammunition is not replenished — requisition fresh clips.';
+  var msg = 'HP and power reserves restored'
+    + (hdRegain > 0 ? ', ' + hdRegain + ' hit ' + (hdRegain === 1 ? 'die' : 'dice') + ' recovered' : '')
+    + '. Ammunition is not replenished — requisition fresh clips.';
   _diceLog('<span class="de-label">Resupply</span>' + msg, 'heal', {label: 'Resupply', body: msg});
 }
 function _hpHeal() {
