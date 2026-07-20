@@ -1134,6 +1134,10 @@ function _builderCommit() {
   var clsSel = document.getElementById('cls-select');
   if (clsSel) { clsSel.value = st.cls; clsSel.dispatchEvent(new Event('change')); }
 
+  // 3.5 advancement milestones — already baked into the final scores below, so
+  // record them as handled before the level change wakes the sheet's ASI tracker
+  if (typeof _asiBuilderSeed === 'function') _asiBuilderSeed(st.asi);
+
   // 4. level (oninput → onLevelChange) + subclass
   var lvlEl = document.getElementById('char-level');
   if (lvlEl) { lvlEl.value = String(st.level); lvlEl.dispatchEvent(new Event('input')); }

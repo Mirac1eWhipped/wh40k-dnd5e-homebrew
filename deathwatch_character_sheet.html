@@ -1300,6 +1300,18 @@ try {
         <div id="features-list" class="feat-list">
           <div class="no-feats">Select a class and level to load abilities</div>
         </div>
+        <!-- Feats & Advancement — all controls are divs/buttons; picker + panel content
+             is built on open so the positional save caches never see any inputs -->
+        <div class="section" style="margin-top:14px;">
+          <div class="sec-title" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <span>Feats &amp; Advancement</span>
+            <span id="asi-pending-badge" class="asi-badge" style="display:none;" onclick="_asiOpen()" title="Unspent advancement milestone">Milestone available</span>
+            <span style="flex:1;"></span>
+            <button class="sreq-open-btn" id="btn-advance" onclick="_asiOpen()" style="font-size:8pt;padding:3px 10px;">⬆ Advancement</button>
+            <button class="sreq-open-btn" id="btn-addfeat" onclick="_featPickOpen()" style="font-size:8pt;padding:3px 10px;">+ Add Feat</button>
+          </div>
+          <div id="feat-cards" class="feat-list"></div>
+        </div>
         <div class="section" style="margin-top:14px;">
           <div class="sec-title">Spellcasting / Psyker Powers</div>
           <div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;margin-bottom:6px;">
@@ -1423,9 +1435,14 @@ try {
     </div>
   </div>
 </div>
+<!-- Feat picker + Advancement overlays — content built on open (divs/buttons only, no inputs) -->
+<div id="featpick-overlay" class="fx-overlay" onclick="if(event.target===this)_featPickClose()"></div>
+<div id="asi-overlay" class="fx-overlay" onclick="if(event.target===this)_asiClose()"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="spells.js"></script>
 <script src="classes.js"></script>
+<script src="feats.js"></script>
 <script src="req_items.js"></script>
 <script src="wargear_upgrades.js"></script>
 <script src="builder_data.js"></script>
@@ -1559,6 +1576,42 @@ try {
 .rld-no{width:110px;font-family:var(--font-label);font-size:9pt;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--text-dim);padding:9px 0;border-radius:3px;cursor:pointer;}
 .rld-no:hover{border-color:var(--silver-dim);color:var(--text);}
 .rld-dry{flex:1;font-family:var(--font-label);font-size:8.5pt;letter-spacing:.1em;text-transform:uppercase;color:var(--dry-text);border:1px dashed var(--dry-border);border-radius:3px;text-align:center;padding:9px 6px;line-height:1.4;}
+</style>
+<style>
+/* ── Feats & Advancement (picker + milestone panel) ── */
+.fx-overlay{display:none;position:fixed;inset:0;background:var(--overlay-bg,rgba(0,0,0,.75));z-index:600;align-items:flex-start;justify-content:center;overflow-y:auto;padding:40px 16px;}
+.fx-overlay.open{display:flex;}
+.fx-panel{background:var(--panel);border:1px solid var(--gold-dim);max-width:720px;width:100%;padding:20px 22px;position:relative;box-shadow:var(--modal-shadow,0 8px 40px rgba(0,0,0,.6));}
+.fx-hdr{font-family:var(--font-head);font-size:13pt;color:var(--gold-light);margin-bottom:2px;}
+.fx-sub{font-family:var(--font-label);font-size:8pt;letter-spacing:.16em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:14px;}
+.fx-x{position:absolute;top:10px;right:12px;background:none;border:none;color:var(--silver-dim);font-size:13pt;cursor:pointer;line-height:1;}
+.fx-x:hover{color:var(--gold);}
+.fx-cat{font-family:var(--font-label);font-size:9.5pt;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--border2);padding-bottom:3px;margin:16px 0 4px;}
+.fx-note{font-size:9pt;color:var(--text-dim);font-style:italic;margin-bottom:8px;line-height:1.4;}
+.fx-card{border:1px solid var(--border2);padding:8px 10px;margin-bottom:8px;background:rgba(var(--gold-rgb),.03);}
+.fx-card.taken{opacity:.45;}
+.fx-card-top{display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap;}
+.fx-card-name{font-family:var(--font-label);font-size:10pt;color:var(--gold-light);font-weight:600;flex:1;min-width:120px;}
+.fx-badge{font-family:var(--font-label);font-size:6.5pt;letter-spacing:.1em;text-transform:uppercase;padding:1px 6px;border:1px solid var(--gold-dim);color:var(--gold);white-space:nowrap;}
+.fx-take{font-family:var(--font-label);font-size:7.5pt;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;background:var(--gold-dim);border:none;color:var(--hover-ink);cursor:pointer;}
+.fx-take:hover{background:var(--gold);}
+.fx-prereq{font-size:8.5pt;color:var(--text-dim);font-style:italic;margin-bottom:3px;}
+.fx-desc{font-size:9.5pt;color:var(--text);line-height:1.45;}
+.fx-ab-row{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;align-items:center;}
+.fx-ab-btn{font-family:var(--font-label);font-size:8pt;padding:3px 9px;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);cursor:pointer;}
+.fx-ab-btn:hover{background:var(--gold-dim);color:var(--hover-ink);}
+.fx-ms{border:1px solid var(--border2);padding:10px 12px;margin-bottom:10px;}
+.fx-ms-hdr{font-family:var(--font-label);font-size:9.5pt;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-light);margin-bottom:6px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.fx-ms-state{font-size:7.5pt;color:var(--silver-dim);letter-spacing:.08em;text-transform:uppercase;font-family:var(--font-label);}
+.fx-ms-row{display:flex;align-items:center;gap:6px;margin:3px 0;font-size:9.5pt;color:var(--text);flex-wrap:wrap;}
+.fx-mini{font-family:var(--font-label);font-size:10pt;padding:0 8px;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);cursor:pointer;line-height:1.5;}
+.fx-mini:hover{background:var(--gold-dim);color:var(--hover-ink);}
+.fx-mini:disabled{opacity:.3;cursor:default;}
+.fx-mini:disabled:hover{background:transparent;color:var(--gold);}
+.fx-val{font-family:var(--font-label);font-size:10pt;color:var(--gold-light);width:30px;text-align:center;display:inline-block;}
+.asi-badge{font-family:var(--font-label);font-size:7pt;letter-spacing:.12em;text-transform:uppercase;background:var(--gold-dim);color:var(--hover-ink);padding:2px 8px;border-radius:2px;cursor:pointer;}
+.qa-use-pill{font-family:var(--font-label);font-size:6.5pt;letter-spacing:.07em;text-transform:uppercase;color:var(--text-dim);opacity:.85;border-radius:3px;padding:1px 4px;background:rgba(100,100,120,.15);}
+@media print{.fx-overlay,#asi-pending-badge,#btn-advance,#btn-addfeat{display:none!important;}}
 </style>
 <div id="rld-overlay" onmousedown="if(event.target===this)_reloadClose()">
   <div id="rld-modal">
@@ -2027,6 +2080,8 @@ function onLevelChange() {
   updateSubclassOpts();
   if (typeof _updatePowerTracker === 'function') _updatePowerTracker();
   if (typeof _syncPreparedDisplay === 'function') _syncPreparedDisplay();
+  if (typeof _asiBadgeRefresh === 'function') _asiBadgeRefresh();
+  if (typeof syncQuickActionsFromWargear === 'function') syncQuickActionsFromWargear();
 }
 
 /* ── Wargear equip / Quick Actions system ── */
@@ -2772,6 +2827,52 @@ function syncQuickActionsFromWargear() {
     }
     rows += spellRows;
   }
+  // ── Limited-use ability & feat rows (class features, heritage traits, feats) ──
+  var abilityRows = '';
+  if (_qaFilter === 'all' && typeof _usablesList === 'function') {
+    _usablesList().forEach(function(u) {
+      var aMax = u.uses ? _useMax(u.uses) : 0;
+      var aCur = 0;
+      if (u.uses) {
+        if (_abilityUses[u.key] === undefined) _abilityUses[u.key] = aMax;
+        if (_abilityUses[u.key] > aMax) _abilityUses[u.key] = aMax;   // PB pools shrink on level-down
+        aCur = _abilityUses[u.key];
+      }
+      var aHeal = !!(u.dice && /heal|regain|\bhp\b/i.test(u.dice));
+      var aHasDice = !!(u.dice && _diceHasDice(u.dice));
+      var aRollable = aHasDice && (!u.uses || aCur > 0);
+      var aIdx = null;
+      if (aHasDice) {
+        aIdx = _qaRollReg.length;
+        _qaRollReg.push({label: u.name, hit: null, dmg: u.dice, useKey: u.uses ? u.key : null});
+      }
+      var perLbl = u.uses ? (u.uses.per === 'short' ? 'short rest' : 'resupply') : '';
+      var tracker = u.uses
+        ? '<div class="shot-tracker" title="Uses remaining — resets on ' + perLbl + '">'
+          + '<button class="shot-btn" onclick="_useDec(\'' + u.key + '\')">−</button>'
+          + '<span class="shot-disp' + (aCur === 0 ? ' empty' : '') + '">' + aCur + '/' + aMax + '</span>'
+          + '<button class="shot-btn" onclick="_useInc(\'' + u.key + '\')">+</button>'
+          + '</div>'
+        : '<span style="opacity:.35;">—</span>';
+      var aPills = '<div class="qa-meta-row"><span class="qa-use-pill">' + u.src + '</span>'
+        + (u.uses ? '<span class="qa-use-pill">' + (u.uses.label || 'uses') + ' · per ' + perLbl + '</span>' : '') + '</div>';
+      var aTitle = (aHeal ? 'Roll healing' : 'Roll effect') + (u.uses ? ' — spends a use' : '');
+      abilityRows += '<tr>'
+        + '<td style="text-align:center;color:' + (aHeal ? '#8fd39b' : 'var(--gold)') + ';font-size:11pt;padding:3px 2px;">' + (aHeal ? '✚' : '❖') + '</td>'
+        + '<td><div class="qa-name-cell"><span class="dp-clickable" style="font-family:var(--font-label);font-size:10pt;color:var(--gold-light);" onclick="_abilityPopup(event,\'' + u.key + '\')">' + u.name + '</span>' + aPills + '</div></td>'
+        + '<td style="text-align:center;color:var(--text-dim);font-size:10pt;">—</td>'
+        + '<td' + (aRollable ? ' class="qa-roll" title="' + aTitle + '" onclick="_qaRollDmg(' + aIdx + ')"' : '') + ' style="text-align:center;color:' + (aHeal ? '#8fd39b' : 'var(--text)') + ';font-size:10pt;' + (aHasDice && !aRollable ? 'opacity:.4;' : '') + '">' + (u.dice || '—') + '</td>'
+        + '<td style="text-align:center;font-size:10pt;opacity:.35;">—</td>'
+        + '<td>' + tracker + '</td>'
+        + '</tr>';
+    });
+  }
+  if (abilityRows) {
+    if (rows) {
+      rows += '<tr><td colspan="6" style="padding:2px 8px;border-top:1px solid var(--border);"><span style="font-family:var(--font-label);font-size:7pt;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-dim);opacity:.75;">— Abilities &amp; Feats —</span></td></tr>';
+    }
+    rows += abilityRows;
+  }
   var emptyMsg = _qaFilter === 'all'
     ? '++ No weapons equipped — mark armaments as active in the Wargear panel ++'
     : '++ No ' + _qaFilter + ' items found ++';
@@ -3434,6 +3535,9 @@ async function _doSave() {
     conditions_notes: (document.getElementById('conditions-notes') || {value:''}).value
     ,spellbook: _spellbook
     ,pinned_spells: _pinnedSpells
+    ,feats: _charFeats
+    ,asi: _asiState
+    ,ability_uses: _abilityUses
     ,power_cur: _powerCur
     ,power_max: _powerMax
     ,defenses: {
@@ -3563,11 +3667,13 @@ function _hdPopupConfirm() {
   var usedEl = document.getElementById('hd-used');
   if (usedEl) usedEl.value = used + spend;
   _hdPopupCancel();
+  var restored = (typeof _usesRestore === 'function') ? _usesRestore('short') : 0;
   var detail = rolls.map(function(r){ return 'd'+sides+'('+r+')'+(conMod>=0?'+':'')+conMod+'='+(Math.max(1,r+conMod)); }).join(', ');
   var label = 'Short Rest — ' + spend + ' hit ' + (spend === 1 ? 'die' : 'dice');
+  var typesLine = 'Restores ' + total_heal + ' HP' + (restored ? ' · short-rest abilities recharged' : '');
   _diceLog('<span class="de-label">' + label + '</span>' + detail
-    + '<br><span class="de-types">Restores ' + total_heal + ' HP</span>', 'heal',
-    {label: label, body: detail + '\nRestores ' + total_heal + ' HP'});
+    + '<br><span class="de-types">' + typesLine + '</span>', 'heal',
+    {label: label, body: detail + '\n' + typesLine});
   _schedSave();
 }
 /* ── Resupply (full heal + resource reset) ── */
@@ -3600,9 +3706,12 @@ function _doResupply() {
   }
   // Psychic/holy power reserves back to full
   if (typeof _powerReset === 'function') _powerReset();
+  // All limited-use abilities recharge on a resupply
+  var abRestored = (typeof _usesRestore === 'function') ? _usesRestore('all') : 0;
   _schedSave();
   var msg = 'HP and power reserves restored'
     + (hdRegain > 0 ? ', ' + hdRegain + ' hit ' + (hdRegain === 1 ? 'die' : 'dice') + ' recovered' : '')
+    + (abRestored ? ', ability uses recharged' : '')
     + '. Ammunition is not replenished — requisition fresh clips.';
   _diceLog('<span class="de-label">Resupply</span>' + msg, 'heal', {label: 'Resupply', body: msg});
 }
@@ -3736,6 +3845,12 @@ async function _loadSheet(adminOverrideId) {
     }
     if (ext.spellbook && Array.isArray(ext.spellbook)) _spellbook = ext.spellbook;
     if (ext.pinned_spells && Array.isArray(ext.pinned_spells)) _pinnedSpells = ext.pinned_spells;
+    _charFeats = (ext.feats && Array.isArray(ext.feats)) ? ext.feats : [];
+    _abilityUses = (ext.ability_uses && typeof ext.ability_uses === 'object') ? ext.ability_uses : {};
+    if (ext.asi && typeof ext.asi === 'object' && ext.asi.milestones) { _asiState = ext.asi; }
+    else { _asiSeedLegacy(); }   // pre-tracking saves: past milestones assumed applied by hand
+    _featsRender();
+    _asiBadgeRefresh();
     _powerCur = (typeof ext.power_cur === 'number') ? ext.power_cur : 0;
     _powerMax = (typeof ext.power_max === 'number') ? ext.power_max : 0;
     renderActivePowers();
@@ -4341,6 +4456,14 @@ async function _loadSheetForUser(uid) {
     });
     if (ext.spellbook && Array.isArray(ext.spellbook)) _spellbook = ext.spellbook;
     if (ext.pinned_spells && Array.isArray(ext.pinned_spells)) _pinnedSpells = ext.pinned_spells;
+    if (ext.wargear_meta && Array.isArray(ext.wargear_meta)) _wargearMeta = ext.wargear_meta;
+    if (ext.ammo_clips && typeof ext.ammo_clips === 'object') _ammoClips = ext.ammo_clips;
+    _charFeats = (ext.feats && Array.isArray(ext.feats)) ? ext.feats : [];
+    _abilityUses = (ext.ability_uses && typeof ext.ability_uses === 'object') ? ext.ability_uses : {};
+    if (ext.asi && typeof ext.asi === 'object' && ext.asi.milestones) { _asiState = ext.asi; }
+    else { _asiSeedLegacy(); }
+    _featsRender();
+    _asiBadgeRefresh();
     _powerCur = (typeof ext.power_cur === 'number') ? ext.power_cur : 0;
     _powerMax = (typeof ext.power_max === 'number') ? ext.power_max : 0;
     renderActivePowers();
@@ -4348,6 +4471,7 @@ async function _loadSheetForUser(uid) {
     _syncPowerDisplay();
     _syncPreparedDisplay();
     STATS.forEach(function(s){ calcMod(s); });
+    syncQuickActionsFromWargear();
     _status('loaded', 'Viewing ' + (rows[0].name || 'player') + '\'s sheet');
   } catch(e) { _status('error','Could not load player sheet'); }
 }
@@ -4357,6 +4481,10 @@ function _setViewOnly() {
   if (thBtn) thBtn.style.display = 'none';
   var bldBtn = document.getElementById('btn-builder');
   if (bldBtn) bldBtn.style.display = 'none';
+  var advBtn = document.getElementById('btn-advance');
+  if (advBtn) advBtn.style.display = 'none';
+  var afBtn = document.getElementById('btn-addfeat');
+  if (afBtn) afBtn.style.display = 'none';
   _fields().forEach(function(f){ f.readOnly = true; f.style.cursor='default'; });
   _checkboxes().forEach(function(c){ c.disabled = true; });
   var bar = document.createElement('div');
@@ -4398,7 +4526,7 @@ const ASTARTES_TRAITS = [
 const CHAPTER_HERITAGE = {
   'Dark Angels': [
     { badge:'Heritage', name:'Grim Resolve',                    body:'Advantage on saving throws against fear and charm effects. You gain proficiency with the Deception and Insight skills. If you already possess those proficiencies, you gain expertise.' },
-    { badge:'Heritage', name:'Hunt the Fallen',                 body:'Once per resupply, you mark a target in combat. You deal an additional 1d8 damage on attacks made to that creature until it dies.' },
+    { badge:'Heritage', name:'Hunt the Fallen',                 uses:{n:1, per:'resupply'}, body:'Once per resupply, you mark a target in combat. You deal an additional 1d8 damage on attacks made to that creature until it dies.' },
     { badge:'Heritage', name:'Abhor the Heretic, Purge the Xenos', body:'You gain advantage on Perception and Survival checks made to find heretical creatures. You gain advantage on the first attack you make against a Chaos-tainted creature per combat. This effect can trigger on each heretical creature once.' }
   ],
   'Space Wolves': [
@@ -4407,16 +4535,16 @@ const CHAPTER_HERITAGE = {
   ],
   'Salamanders': [
     { badge:'Heritage', name:'Forge Born',       body:'You gain proficiency with Smith\'s tools and resistance to Fire damage. If you already possess that proficiency, you gain expertise. You can craft light bolter ammo, standard bolter ammo, and fuel canisters while deployed on missions (if necessary resources are available).' },
-    { badge:'Heritage', name:'Shield of Vulkan', body:'When an ally within 10 ft is hit by an attack, you can use your reaction to impose disadvantage on the roll. This can be used a number of times equal to your proficiency modifier and resets on a resupply.' }
+    { badge:'Heritage', name:'Shield of Vulkan', uses:{n:'pb', per:'resupply'}, body:'When an ally within 10 ft is hit by an attack, you can use your reaction to impose disadvantage on the roll. This can be used a number of times equal to your proficiency modifier and resets on a resupply.' }
   ],
   'Ultramarines': [
     { badge:'Heritage', name:'Commanding Voice', body:'You can use the Help action as a Bonus Action to grant a single ally advantage on their next attack once per turn.' },
     { badge:'Heritage', name:'Son of Guilliman', body:'You gain proficiency with the Persuasion skill. If you already possess this proficiency, you gain expertise.' },
-    { badge:'Heritage', name:'March for Macragge', body:'Once per resupply, you supply all allies with a 1d6 Inspiration die that can be used on any roll until the next resupply.' }
+    { badge:'Heritage', name:'March for Macragge', uses:{n:1, per:'resupply'}, body:'Once per resupply, you supply all allies with a 1d6 Inspiration die that can be used on any roll until the next resupply.' }
   ],
   'Blood Angels': [
-    { badge:'Heritage', name:'The Red Thirst', body:'If you have less than half your HP total, you may use your action to perform a bite attack. On a hit, roll 1d8 + STR. You heal for the damage dealt. Can be used a number of times equal to your proficiency modifier; resets on a resupply.' },
-    { badge:'Heritage', name:'The Black Rage', body:'Once per resupply, when reduced to 0 HP, you stay conscious and regain 1 HP. If you defeat an enemy in the following round, you regain 1d8 HP.' },
+    { badge:'Heritage', name:'The Red Thirst', uses:{n:'pb', per:'resupply'}, dice:'Heals 1d8 HP', body:'If you have less than half your HP total, you may use your action to perform a bite attack. On a hit, roll 1d8 + STR. You heal for the damage dealt. Can be used a number of times equal to your proficiency modifier; resets on a resupply.' },
+    { badge:'Heritage', name:'The Black Rage', uses:{n:1, per:'resupply'}, body:'Once per resupply, when reduced to 0 HP, you stay conscious and regain 1 HP. If you defeat an enemy in the following round, you regain 1d8 HP.' },
     { badge:'Heritage', name:'Sanguinary Tradition', body:'You gain proficiency with the Medicine skill. If you already possess that proficiency, you gain expertise.' }
   ],
   'Raven Guard': [
@@ -4433,7 +4561,7 @@ const CHAPTER_HERITAGE = {
     { badge:'Heritage', name:'Mechadendrite Interface', body:'You gain proficiency with servo-arms and mechadendrite arms. You gain a retractable mechadendrite arm that can manipulate tools. You have advantage on skill checks involving tools you are proficient with.' }
   ],
   'Imperial Fists': [
-    { badge:'Heritage', name:'Phalanx',            body:'If a creature within 10 ft of you takes damage, you can use your reaction to move 10 ft and take the attack instead. Roll 1d6 and reduce the damage by that amount. Can be used a number of times equal to your proficiency modifier; resets on a resupply.' },
+    { badge:'Heritage', name:'Phalanx',            uses:{n:'pb', per:'resupply'}, body:'If a creature within 10 ft of you takes damage, you can use your reaction to move 10 ft and take the attack instead. Roll 1d6 and reduce the damage by that amount. Can be used a number of times equal to your proficiency modifier; resets on a resupply.' },
     { badge:'Heritage', name:'Defend the Imperium', body:'You gain +1 AC if you have not moved on your turn (excluding Terminator Armour). You cannot be forcibly moved by any effect that moves you less than 10 ft. The Phalanx reaction movement does not affect this ability.' },
     { badge:'Heritage', name:'Siege Masters', body:'You gain proficiency with the Demolitions Kit. If you already possess that proficiency, you gain expertise.' }
   ]
@@ -4480,7 +4608,7 @@ const CHAPTER_GRANTS = {
   'Iron Hands':     { tools: ['Servo-arms & Mechadendrites'] },
   'Imperial Fists': { tools: ['Demolitions Kit'] }
 };
-function _agDefaults() { return { chapter: '', skills: {}, tools: [], resist: [], toolItems: {}, cls: '', clsSkills: {}, clsSaves: {}, clsArmor: [], clsWeapons: [], clsTools: [], racial: false, speedMod: 0, armorResist: [] }; }
+function _agDefaults() { return { chapter: '', skills: {}, tools: [], resist: [], toolItems: {}, cls: '', clsSkills: {}, clsSaves: {}, clsArmor: [], clsWeapons: [], clsTools: [], racial: false, speedMod: 0, armorResist: [], featPlus: {} }; }
 var _autoGrants = _agDefaults();
 function _profTA(which) {
   var tas = document.querySelectorAll('.dos-prof-ta');
@@ -4658,6 +4786,351 @@ document.addEventListener('click', function() {
   var dp = document.getElementById('detail-popup');
   if (dp) dp.classList.remove('open');
 });
+
+/* ══════════════════════════════════════════════════════
+   FEATS, ADVANCEMENT (ASI) & LIMITED-USE ABILITY TRACKING
+   State lives in extra (id-based): feats / asi / ability_uses.
+   All UI is built at open-time from divs+buttons — zero new
+   inputs, so the positional save caches are untouched.
+══════════════════════════════════════════════════════ */
+var _charFeats = [];                  // extra.feats — [{id, choice, ms}]
+var _asiState = { milestones: {} };   // extra.asi — {milestones:{4:{...},...}}
+var _abilityUses = {};                // extra.ability_uses — {key: current}
+var _ASI_LEVELS = [4, 8, 12, 16, 19];
+
+function _lvlNow() { return parseInt((document.getElementById('char-level')||{}).value) || 1; }
+function _pbNow() { return Math.ceil(_lvlNow() / 4) + 1; }
+function _abScoreEl(ab) { return document.getElementById(ab + '-score'); }
+function _abBump(ab, d) {
+  var el = _abScoreEl(ab); if (!el) return;
+  var v = parseInt(el.value); if (isNaN(v)) v = 10;
+  el.value = String(v + d);
+  el.dispatchEvent(new Event('input'));   // fires calcMod → _recalcDerived
+  if (ab === 'dex' && typeof calcAC === 'function') calcAC();
+  if (typeof syncQuickActionsFromWargear === 'function') syncQuickActionsFromWargear();
+}
+function _fxSlug(s) { return String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
+
+/* ── Limited-use registry: class features + heritage traits + feats ── */
+function _useMax(u) { return u.n === 'pb' ? _pbNow() : (parseInt(u.n, 10) || 1); }
+function _usablesList() {
+  var out = [];
+  var lvl = _lvlNow();
+  var cls = (document.getElementById('cls-select')||{}).value || '';
+  var sub = (document.getElementById('sub-select')||{}).value || '';
+  var chap = (document.getElementById('char-chapter')||{}).value || '';
+  if (typeof DW_CLASSES !== 'undefined' && DW_CLASSES[cls]) {
+    (DW_CLASSES[cls].features || []).forEach(function(f) {
+      if (f.uses && f.level <= lvl) out.push({key:'cls:'+_fxSlug(f.name), name:f.name, src:cls, uses:f.uses, dice:f.dice||null, body:f.body});
+    });
+    if (sub && DW_CLASSES[cls].subclasses && DW_CLASSES[cls].subclasses[sub]) {
+      DW_CLASSES[cls].subclasses[sub].forEach(function(f) {
+        if (f.uses && f.level <= lvl) out.push({key:'sub:'+_fxSlug(f.name), name:f.name, src:sub, uses:f.uses, dice:f.dice||null, body:f.body});
+      });
+    }
+  }
+  if (typeof CHAPTER_HERITAGE !== 'undefined' && CHAPTER_HERITAGE[chap]) {
+    CHAPTER_HERITAGE[chap].forEach(function(t) {
+      if (t.uses) out.push({key:'her:'+_fxSlug(t.name), name:t.name, src:chap, uses:t.uses, dice:t.dice||null, body:t.body});
+    });
+  }
+  _charFeats.forEach(function(rec) {
+    var f = (typeof dwFeatById === 'function') ? dwFeatById(rec.id) : null;
+    if (f && (f.uses || f.dice)) out.push({key:'feat:'+f.id, name:f.name, src:'Feat', uses:f.uses||null, dice:f.dice||null, body:f.desc});
+  });
+  return out;
+}
+function _useDec(k) {
+  var v = _abilityUses[k];
+  if (v === undefined || v <= 0) return;
+  _abilityUses[k] = v - 1;
+  syncQuickActionsFromWargear(); _schedSave();
+}
+function _useInc(k) {
+  var u = _usablesList().find(function(x){ return x.key === k; });
+  if (!u || !u.uses) return;
+  var m = _useMax(u.uses);
+  var v = _abilityUses[k] || 0;
+  if (v < m) { _abilityUses[k] = v + 1; syncQuickActionsFromWargear(); _schedSave(); }
+}
+function _usesRestore(scope) {   // scope: 'short' | 'all' — returns how many pools refilled
+  var n = 0;
+  _usablesList().forEach(function(u) {
+    if (!u.uses) return;
+    if (scope === 'all' || u.uses.per === scope) {
+      var m = _useMax(u.uses);
+      if (_abilityUses[u.key] !== m) { _abilityUses[u.key] = m; n++; }
+    }
+  });
+  if (n && typeof syncQuickActionsFromWargear === 'function') syncQuickActionsFromWargear();
+  return n;
+}
+function _abilityPopup(e, key) {
+  var u = _usablesList().find(function(x){ return x.key === key; });
+  if (!u) return;
+  var usesTxt = u.uses ? (_useMax(u.uses) + ' per ' + (u.uses.per === 'short' ? 'short rest' : 'resupply')) : null;
+  _detailPopup(e, '<div style="font-family:var(--font-label);font-size:11pt;color:var(--gold-light);margin-bottom:2px;">' + u.name + '</div>'
+    + '<div style="font-family:var(--font-label);font-size:7.5pt;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:8px;">' + u.src + (usesTxt ? ' · ' + usesTxt : '') + '</div>'
+    + '<div style="font-size:9.5pt;line-height:1.5;color:var(--text);">' + u.body + '</div>');
+}
+
+/* ── Taken feats ── */
+function _featTaken(id) { return _charFeats.some(function(f){ return f.id === id; }); }
+function _featAdd(id, choice, msLevel) {
+  var f = dwFeatById(id);
+  if (!f || _featTaken(id)) return false;
+  _charFeats.push({ id: id, choice: choice || null, ms: msLevel || null });
+  if (f.type === 'half' && choice) {
+    _abBump(choice, 1);
+    if (!_autoGrants.featPlus) _autoGrants.featPlus = {};
+    _autoGrants.featPlus[id] = choice;
+  }
+  if (f.uses) {
+    var k = 'feat:' + id;
+    if (_abilityUses[k] === undefined) _abilityUses[k] = _useMax(f.uses);
+  }
+  _featsRender(); syncQuickActionsFromWargear(); _schedSave();
+  return true;
+}
+function _featRemove(id) {
+  var i = _charFeats.findIndex(function(f){ return f.id === id; });
+  if (i === -1) return;
+  var f = dwFeatById(id);
+  if (!confirm('Remove ' + (f ? f.name : id) + '? Any half-feat +1 is withdrawn, and its milestone reopens.')) return;
+  var rec = _charFeats[i];
+  var ab = _autoGrants.featPlus && _autoGrants.featPlus[id];
+  if (ab) { _abBump(ab, -1); delete _autoGrants.featPlus[id]; }
+  delete _abilityUses['feat:' + id];
+  if (rec.ms && _asiState.milestones[rec.ms] && _asiState.milestones[rec.ms].featId === id) delete _asiState.milestones[rec.ms];
+  _charFeats.splice(i, 1);
+  _featsRender(); _asiBadgeRefresh(); _asiRender();
+  syncQuickActionsFromWargear(); _schedSave();
+}
+function _featsRender() {
+  var host = document.getElementById('feat-cards'); if (!host) return;
+  if (!_charFeats.length) {
+    host.innerHTML = '<div class="no-feats">No feats taken — claim one at an advancement milestone, or add a GM-granted one with + Add Feat.</div>';
+    return;
+  }
+  var h = '';
+  _charFeats.forEach(function(rec) {
+    var f = dwFeatById(rec.id); if (!f) return;
+    var tags = '<span class="fx-badge">' + (f.type === 'half' ? 'Half-Feat' : 'Full Feat') + '</span>';
+    if (rec.choice) tags += '<span class="fx-badge">+1 ' + rec.choice.toUpperCase() + '</span>';
+    if (rec.ms) tags += '<span class="fx-badge">Level ' + rec.ms + ' milestone</span>';
+    if (f.uses) tags += '<span class="fx-badge">' + (f.uses.label || 'Uses') + ': ' + (f.uses.n === 'pb' ? 'PB' : f.uses.n) + ' per ' + (f.uses.per === 'short' ? 'short rest' : 'resupply') + '</span>';
+    h += '<div class="feat-card"><div class="feat-card-hdr"><span class="feat-card-lvl">Feat</span>'
+      + '<span class="feat-card-name">' + f.name + '</span> ' + tags
+      + (_viewOnly ? '' : '<button class="fx-x" style="position:static;margin-left:auto;font-size:10pt;" onclick="_featRemove(\'' + f.id + '\')" title="Remove feat">✕</button>')
+      + '</div><div class="feat-card-body">' + f.desc + '</div></div>';
+  });
+  host.innerHTML = h;
+}
+
+/* ── Feat picker overlay ── */
+var _featPickCtx = null;   // milestone level when picking for a milestone
+var _featPickSel = null;   // half-feat id awaiting its +1 ability choice
+function _featPickOpen(msLevel) {
+  _featPickCtx = (typeof msLevel === 'number') ? msLevel : null;
+  _featPickSel = null;
+  _asiClose();
+  _featPickRender();
+  var ov = document.getElementById('featpick-overlay');
+  if (ov) ov.classList.add('open');
+}
+function _featPickClose() {
+  var ov = document.getElementById('featpick-overlay');
+  if (ov) ov.classList.remove('open');
+  _featPickSel = null;
+}
+function _featPickRender() {
+  var ov = document.getElementById('featpick-overlay');
+  if (!ov || typeof DW_FEATS === 'undefined') return;
+  var h = '<div class="fx-panel"><button class="fx-x" onclick="_featPickClose()">✕</button>'
+    + '<div class="fx-hdr">Feats Codex</div>'
+    + '<div class="fx-sub">' + (_featPickCtx ? 'Level ' + _featPickCtx + ' milestone — a feat instead of +2 ability points' : 'Add a feat (GM-granted or manual)') + '</div>';
+  DW_FEAT_CATS.forEach(function(c) {
+    var fs = DW_FEATS.filter(function(f){ return f.cat === c.id; });
+    if (!fs.length) return;
+    h += '<div class="fx-cat">' + c.label + '</div><div class="fx-note">' + c.note + '</div>';
+    fs.forEach(function(f) {
+      var taken = _featTaken(f.id);
+      h += '<div class="fx-card' + (taken ? ' taken' : '') + '">'
+        + '<div class="fx-card-top"><span class="fx-card-name">' + f.name + '</span>'
+        + '<span class="fx-badge">' + (f.type === 'half' ? 'Half-Feat' : 'Full Feat') + '</span>'
+        + (f.uses ? '<span class="fx-badge">' + (f.uses.label || 'Uses') + ' · ' + (f.uses.n === 'pb' ? 'PB' : f.uses.n) + '/' + (f.uses.per === 'short' ? 'short rest' : 'resupply') + '</span>' : '')
+        + (taken ? '<span class="fx-badge">Taken</span>' : '<button class="fx-take" onclick="_featPickTake(\'' + f.id + '\')">Take</button>')
+        + '</div>'
+        + (f.prereq ? '<div class="fx-prereq">Prerequisite: ' + f.prereq + '</div>' : '')
+        + '<div class="fx-desc">' + f.desc + '</div>';
+      if (_featPickSel === f.id) {
+        var opts = f.half === 'any' ? ['str','dex','con','int','wis','cha'] : (f.half || []);
+        h += '<div class="fx-ab-row"><span style="font-size:8.5pt;color:var(--gold);font-family:var(--font-label);">Apply the +1 to:</span>'
+          + opts.map(function(ab){ return '<button class="fx-ab-btn" onclick="_featPickTake(\'' + f.id + '\',\'' + ab + '\')">' + ab.toUpperCase() + '</button>'; }).join('')
+          + '</div>';
+      }
+      h += '</div>';
+    });
+  });
+  h += '</div>';
+  ov.innerHTML = h;
+}
+function _featPickTake(id, ab) {
+  var f = dwFeatById(id);
+  if (!f || _featTaken(id)) return;
+  if (f.type === 'half' && !ab) {
+    var opts = f.half === 'any' ? ['str','dex','con','int','wis','cha'] : (f.half || []);
+    if (opts.length > 1) { _featPickSel = id; _featPickRender(); return; }
+    ab = opts[0] || null;
+  }
+  var wasMs = _featPickCtx;
+  if (!_featAdd(id, ab || null, wasMs)) return;
+  if (wasMs) { _asiState.milestones[wasMs] = { mode: 'feat', featId: id }; _asiBadgeRefresh(); }
+  _featPickClose();
+  if (wasMs) _asiOpen();
+  _schedSave();
+}
+
+/* ── Advancement (ASI) panel ── */
+function _asiSeedLegacy() {   // saved chars without asi data: assume past milestones were applied by hand
+  _asiState = { milestones: {} };
+  _ASI_LEVELS.filter(function(l){ return l <= _lvlNow(); })
+    .forEach(function(l){ _asiState.milestones[l] = { legacy: true }; });
+}
+function _asiBuilderSeed(list) {   // called by _builderCommit BEFORE it sets the level
+  _asiState = { milestones: {} };
+  (list || []).forEach(function(m) {
+    _asiState.milestones[m.level] = (m.mode === 'feat')
+      ? { mode: 'feat', featNote: m.featNote || '', src: 'builder' }
+      : { mode: 'asi', plus: Object.assign({}, m.plus), src: 'builder' };
+  });
+  _asiBadgeRefresh();
+}
+function _asiPendingCount() {
+  return _ASI_LEVELS.filter(function(l){ return l <= _lvlNow() && !_asiState.milestones[l]; }).length;
+}
+function _asiBadgeRefresh() {
+  var b = document.getElementById('asi-pending-badge');
+  if (!b) return;
+  var n = _asiPendingCount();
+  b.style.display = n > 0 ? '' : 'none';
+  if (n > 0) b.textContent = n === 1 ? 'Milestone available' : n + ' milestones available';
+}
+function _asiOpen() {
+  var ov = document.getElementById('asi-overlay'); if (!ov) return;
+  _asiRender();
+  ov.classList.add('open');
+}
+function _asiClose() { var ov = document.getElementById('asi-overlay'); if (ov) ov.classList.remove('open'); }
+function _asiRender() {
+  var ov = document.getElementById('asi-overlay'); if (!ov) return;
+  var lvl = _lvlNow();
+  var h = '<div class="fx-panel"><button class="fx-x" onclick="_asiClose()">✕</button>'
+    + '<div class="fx-hdr">Advancement</div>'
+    + '<div class="fx-sub">Milestones at levels 4 · 8 · 12 · 16 · 19 — take +2 ability points (max 20) or a feat</div>';
+  var any = false;
+  _ASI_LEVELS.forEach(function(l) {
+    var ms = _asiState.milestones[l];
+    if (l > lvl && !ms) return;
+    any = true;
+    var orphan = l > lvl;
+    h += '<div class="fx-ms"><div class="fx-ms-hdr">Level ' + l + ' Milestone';
+    if (orphan) {
+      h += '<span class="fx-ms-state" style="color:var(--warn-text);">above current level</span></div>'
+        + '<div class="fx-ms-row"><button class="fx-mini" style="font-size:8pt;padding:2px 10px;" onclick="_asiWithdraw(' + l + ')">Withdraw</button></div>';
+    } else if (!ms) {
+      h += '<span class="fx-ms-state" style="color:var(--gold);">available — choose one</span></div>'
+        + '<div class="fx-ms-row">'
+        + '<button class="fx-take" onclick="_asiAlloc(' + l + ')">Ability +2</button>'
+        + '<button class="fx-take" onclick="_featPickOpen(' + l + ')">Take a Feat</button>'
+        + '</div>';
+    } else if (ms.legacy) {
+      h += '<span class="fx-ms-state">handled before advancement tracking — assumed already applied</span></div>';
+    } else if (ms.mode === 'feat') {
+      var fname = ms.featId ? ((dwFeatById(ms.featId) || {}).name || ms.featId) : (ms.featNote || 'Feat');
+      h += '<span class="fx-ms-state">feat' + (ms.src === 'builder' ? ' · applied during induction' : '') + '</span></div>'
+        + '<div class="fx-ms-row">' + fname
+        + (ms.src === 'builder' || !ms.featId ? '' : ' <button class="fx-mini" style="font-size:8pt;padding:2px 10px;" onclick="_featRemove(\'' + ms.featId + '\')">✕ remove</button>')
+        + '</div>';
+    } else {
+      var plus = ms.plus || {};
+      var spent = 0; Object.keys(plus).forEach(function(k){ spent += plus[k]; });
+      if (ms.src === 'builder') {
+        var parts = Object.keys(plus).map(function(k){ return '+' + plus[k] + ' ' + k.toUpperCase(); });
+        h += '<span class="fx-ms-state">ability points · applied during induction</span></div>'
+          + '<div class="fx-ms-row">' + (parts.join(', ') || '—') + '</div>';
+      } else {
+        h += '<span class="fx-ms-state">' + spent + ' / 2 points allocated</span></div>';
+        ['str','dex','con','int','wis','cha'].forEach(function(ab) {
+          var v = plus[ab] || 0;
+          var scoreV = parseInt((_abScoreEl(ab)||{}).value) || 10;
+          h += '<div class="fx-ms-row"><span style="font-family:var(--font-label);width:38px;">' + ab.toUpperCase() + '</span>'
+            + '<button class="fx-mini" onclick="_asiPlus(' + l + ',\'' + ab + '\',-1)"' + (v ? '' : ' disabled') + '>−</button>'
+            + '<span class="fx-val">' + (v ? '+' + v : '·') + '</span>'
+            + '<button class="fx-mini" onclick="_asiPlus(' + l + ',\'' + ab + '\',1)"' + (spent >= 2 || v >= 2 || scoreV >= 20 ? ' disabled' : '') + '>+</button>'
+            + '<span style="font-size:8.5pt;color:var(--text-dim);">score now ' + scoreV + '</span></div>';
+        });
+        h += '<div class="fx-ms-row" style="margin-top:6px;">'
+          + '<button class="fx-mini" style="font-size:8pt;padding:2px 10px;" onclick="_asiWithdraw(' + l + ')">reset</button>'
+          + '<button class="fx-mini" style="font-size:8pt;padding:2px 10px;" onclick="_asiToFeat(' + l + ')">switch to feat</button></div>';
+      }
+    }
+    h += '</div>';
+  });
+  if (!any) h += '<div class="fx-note">No milestones yet — the first arrives at level 4.</div>';
+  h += '</div>';
+  ov.innerHTML = h;
+}
+function _asiAlloc(l) { _asiState.milestones[l] = { mode: 'asi', plus: {} }; _asiRender(); _asiBadgeRefresh(); _schedSave(); }
+function _asiPlus(l, ab, d) {
+  var ms = _asiState.milestones[l];
+  if (!ms || ms.mode !== 'asi' || ms.src === 'builder' || ms.legacy) return;
+  ms.plus = ms.plus || {};
+  var v = ms.plus[ab] || 0;
+  var spent = 0; Object.keys(ms.plus).forEach(function(k){ spent += ms.plus[k]; });
+  if (d > 0) {
+    var scoreV = parseInt((_abScoreEl(ab)||{}).value) || 10;
+    if (spent >= 2 || v >= 2 || scoreV >= 20) return;
+  } else if (v <= 0) return;
+  ms.plus[ab] = v + d;
+  if (!ms.plus[ab]) delete ms.plus[ab];
+  _abBump(ab, d);
+  _asiRender(); _asiBadgeRefresh(); _schedSave();
+}
+function _asiWithdraw(l) {
+  var ms = _asiState.milestones[l];
+  if (!ms) return;
+  if (ms.mode === 'feat' && ms.featId) { _featRemove(ms.featId); return; }   // also deletes this record
+  if (ms.mode === 'asi' && ms.plus && ms.src !== 'builder' && !ms.legacy) {
+    Object.keys(ms.plus).forEach(function(ab){ _abBump(ab, -ms.plus[ab]); });
+  }
+  delete _asiState.milestones[l];
+  _asiRender(); _asiBadgeRefresh(); _schedSave();
+}
+function _asiToFeat(l) {
+  var ms = _asiState.milestones[l];
+  if (ms && ms.mode === 'asi' && ms.plus && ms.src !== 'builder') {
+    Object.keys(ms.plus).forEach(function(ab){ _abBump(ab, -ms.plus[ab]); });
+  }
+  delete _asiState.milestones[l];
+  _asiBadgeRefresh(); _schedSave();
+  _featPickOpen(l);
+}
+
+/* ── Wiring — badge + level-change prompt (change event only, so typing digits never re-prompts) ── */
+function _fxWire() {
+  _featsRender();
+  _asiBadgeRefresh();
+  var lvlEl = document.getElementById('char-level');
+  if (lvlEl) lvlEl.addEventListener('change', function() {
+    if (!_viewOnly && _asiPendingCount() > 0) _asiOpen();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') { _featPickClose(); _asiClose(); }
+  });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', _fxWire);
+else _fxWire();
 
 /* ══ DETAIL POPUP — weapons & spells ══ */
 function _detailPopup(e, html) {
@@ -5010,6 +5483,15 @@ function _qaRollDmg(i) {
     if (_qtyGet(r.wgQty) <= 0) { _ordnancePrompt(r.wgQty); return; }
     _rollDamage(r.label, r.dmg, false);
     _qtySet(r.wgQty, -1);
+    return;
+  }
+  // Limited-use abilities: each effect roll spends a use; none left blocks it
+  if (r.useKey) {
+    var uCur = _abilityUses[r.useKey] || 0;
+    if (uCur <= 0) return;
+    _rollDamage(r.label, r.dmg, false);
+    _abilityUses[r.useKey] = uCur - 1;
+    syncQuickActionsFromWargear(); _schedSave();
     return;
   }
   _rollDamage(r.label, r.dmg, false);
