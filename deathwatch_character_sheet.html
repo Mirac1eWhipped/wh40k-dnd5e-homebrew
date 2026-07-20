@@ -1415,6 +1415,7 @@ try {
         <input type="number" id="hd-spend" placeholder="1" min="0" style="font-family:var(--font-label);font-size:18pt;font-weight:700;color:var(--gold-light);background:transparent;border:none;border-bottom:1px solid var(--line);outline:none;text-align:center;width:56px;">
       </div>
     </div>
+    <div id="hd-warn" style="display:none;font-family:var(--font-label);font-size:8pt;letter-spacing:.1em;color:var(--warn-text);background:var(--warn-bg);border:1px solid var(--warn-border);padding:5px 8px;margin-bottom:12px;"></div>
     <div style="display:flex;gap:8px;justify-content:flex-end;">
       <button onclick="_hdPopupCancel()" style="background:transparent;border:1px solid var(--border2);color:var(--silver-dim);font-family:var(--font-label);font-size:8pt;letter-spacing:.14em;text-transform:uppercase;padding:6px 14px;cursor:pointer;">Cancel</button>
       <button onclick="_hdPopupConfirm()" style="background:var(--gold-dim);border:none;color:var(--hover-ink);font-family:var(--font-label);font-size:8pt;letter-spacing:.14em;text-transform:uppercase;padding:6px 14px;cursor:pointer;">Rest &amp; Roll</button>
@@ -2850,7 +2851,7 @@ function _reloadPrompt(idx) {
     + (canReload
         ? '<button class="rld-go" onclick="_reloadConfirm()">⟳ Reload — Bonus Action</button>'
           + '<button class="rld-no" onclick="_reloadClose()">Hold</button>'
-        : '<div class="rld-dry">++ No ' + esc(ammoName) + ' remaining — resupply required ++</div>'
+        : '<div class="rld-dry">++ No ' + esc(ammoName) + ' remaining — requisition fresh clips ++</div>'
           + '<button class="rld-no" onclick="_reloadClose()">Close</button>')
     + '</div>';
   _rldIdx = idx;
@@ -2895,9 +2896,9 @@ function _ordnancePrompt(idx) {
   var esc = function(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); };
   hdr.textContent = '⚠ Ordnance Depleted';
   body.innerHTML = '<div class="rld-wpn">' + esc(name) + '</div>'
-    + '<div class="rld-sub">Quantity exhausted — adjust the Qty column after resupply.</div>'
+    + '<div class="rld-sub">Quantity exhausted — requisition more from the Requisitorium.</div>'
     + '<div class="rld-btns">'
-    + '<div class="rld-dry">++ None remaining — resupply required ++</div>'
+    + '<div class="rld-dry">++ None remaining — requisition required ++</div>'
     + '<button class="rld-no" onclick="_reloadClose()">Close</button>'
     + '</div>';
   ov.classList.add('open');
@@ -2935,7 +2936,7 @@ function renderAmmoTracker() {
       + '<span class="ammo-sep">/</span>'
       + '<span class="ammo-max">'+max+'</span>'
       + '<button class="ammo-btn" onclick="_ammoInc('+idx+')">+</button>'
-      + '<button class="ammo-rl" onclick="_ammoRld('+idx+')" title="Resupply to max">↺</button>'
+      + '<button class="ammo-rl" onclick="_ammoRld('+idx+')" title="Restock to capacity (manual)">↺</button>'
       + '</div>'
       + '</div>';
   });
@@ -3049,7 +3050,7 @@ function _ammoRecRender() {
     + '</div>'
     + '<div class="upg-act-row" style="margin-top:12px;"><span style="flex:1;"></span>'
     + '<button class="upg-rm-btn" onclick="_ammoRecRemove()">✕ Remove</button></div>'
-    + '<div class="upg-note">One entry per ammunition type — requisitioning a type you already carry restocks it instead of duplicating it. Clip capacity follows your worn armour pattern, and a full Resupply refills every type.</div>';
+    + '<div class="upg-note">One entry per ammunition type — requisitioning a type you already carry restocks it instead of duplicating it. Clip capacity follows your worn armour pattern. Resupply does not restock ammunition — requisition fresh clips from the Requisitorium.</div>';
   body.innerHTML = html;
 }
 function _ammoRecDec() { _ammoDec(_ammoRecIdx); _ammoRecRender(); }
@@ -3513,6 +3514,8 @@ function _shortRestPopup() {
   if (overlay) { overlay.style.display = 'flex'; }
   var spendEl = document.getElementById('hd-spend');
   if (spendEl) spendEl.value = '1';
+  var w = document.getElementById('hd-warn');
+  if (w) w.style.display = 'none';
 }
 function _hdPopupCancel() {
   var overlay = document.getElementById('hd-popup-overlay');
@@ -3525,7 +3528,8 @@ function _hdPopupConfirm() {
   var available = total - used;
   if (spend <= 0) { _hdPopupCancel(); return; }
   if (spend > available) {
-    alert('Not enough hit dice remaining! You have ' + available + ' left.');
+    var w = document.getElementById('hd-warn');
+    if (w) { w.textContent = 'Not enough hit dice — ' + available + ' remaining.'; w.style.display = ''; }
     return;
   }
   // Roll dice: get die size from hd-type field
@@ -3538,7 +3542,7 @@ function _hdPopupConfirm() {
   var total_heal = 0;
   var rolls = [];
   for (var i = 0; i < spend; i++) {
-    var roll = Math.floor(Math.random() * sides) + 1;
+    var roll = _d(sides);
     total_heal += Math.max(1, roll + conMod);
     rolls.push(roll);
   }
@@ -3552,8 +3556,11 @@ function _hdPopupConfirm() {
   var usedEl = document.getElementById('hd-used');
   if (usedEl) usedEl.value = used + spend;
   _hdPopupCancel();
-  var rollStr = rolls.map(function(r,i){ return 'd'+sides+'('+r+')'+(conMod>=0?'+':'')+conMod+'='+(Math.max(1,r+conMod)); }).join(', ');
-  alert('Short Rest: Rolled ' + rollStr + '\nTotal healing: +' + total_heal + ' HP');
+  var detail = rolls.map(function(r){ return 'd'+sides+'('+r+')'+(conMod>=0?'+':'')+conMod+'='+(Math.max(1,r+conMod)); }).join(', ');
+  var label = 'Short Rest — ' + spend + ' hit ' + (spend === 1 ? 'die' : 'dice');
+  _diceLog('<span class="de-label">' + label + '</span>' + detail
+    + '<br><span class="de-types">Restores ' + total_heal + ' HP</span>', 'heal',
+    {label: label, body: detail + '\nRestores ' + total_heal + ' HP'});
   _schedSave();
 }
 /* ── Resupply (full heal + resource reset) ── */
@@ -3574,23 +3581,19 @@ function _doResupply() {
   // Restore all hit dice (set used to 0)
   var usedEl = document.getElementById('hd-used');
   if (usedEl) usedEl.value = 0;
-  // Restore weapon shots
+  // Refill weapon charges only where no ammo type is tracked — linked magazines
+  // reload from requisitioned clips, never for free
   if (typeof _wargearMeta !== 'undefined') {
-    _wargearMeta.forEach(function(meta) {
-      if (meta && meta.shots_max) meta.shots_cur = meta.shots_max;
+    _wargearMeta.forEach(function(meta, idx) {
+      if (meta && meta.shots_max && _wpnAmmoIdx(idx) === -1) meta.shots_cur = meta.shots_max;
     });
     if (typeof syncQuickActionsFromWargear === 'function') syncQuickActionsFromWargear();
   }
-  // Restock every tracked ammunition type to capacity
-  document.querySelectorAll('.wg-ammo-row').forEach(function(row, idx) {
-    var ins = row.querySelectorAll('input');
-    if (!ins[0] || !ins[0].value.trim()) return;
-    var max = parseInt((ins[2] ? ins[2].value : '') || '0') || 0;
-    if (max > 0) _ammoClips[idx] = max;
-  });
-  renderAmmoTracker();
+  // Psychic/holy power reserves back to full
+  if (typeof _powerReset === 'function') _powerReset();
   _schedSave();
-  alert('Resupply complete — HP, hit dice, weapon charges, and ammunition restored.');
+  var msg = 'HP, hit dice, and power reserves restored. Ammunition is not replenished — requisition fresh clips.';
+  _diceLog('<span class="de-label">Resupply</span>' + msg, 'heal', {label: 'Resupply', body: msg});
 }
 function _hpHeal() {
   var amt = parseInt(prompt('Heal amount:'));
