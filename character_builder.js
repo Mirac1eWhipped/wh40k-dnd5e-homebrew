@@ -1236,6 +1236,22 @@ function _builderHintDismiss() {
   var el = document.getElementById('bw-hint');
   if (el) el.remove();
 }
+/* Auto-launch on a fresh character: a signed-in player with a blank sheet goes
+   straight into the wizard. Signed-out visitors (session may still arrive from
+   the portal) and GM ?cloudId= sessions get the passive hint instead — the
+   save-bar button remains the manual entry point for re-runs. Called at load
+   and again whenever a portal session lands and the sheet is still blank. */
+function _builderAutoLaunch() {
+  try {
+    if (typeof _viewOnly !== 'undefined' && _viewOnly) return;
+    if (_bw) return;                          // wizard already open — don't disturb it
+    if (!_bwSheetBlank()) return;
+    var isGm = /[?&]cloudId=/.test(location.search);
+    var signedIn = (typeof _loggedIn === 'function') ? _loggedIn() : false;
+    if (!signedIn || isGm) { _builderMaybeSuggest(); return; }
+    _builderOpen();
+  } catch(e) {}
+}
 function _builderMaybeSuggest() {
   try {
     if (typeof _viewOnly !== 'undefined' && _viewOnly) return;

@@ -4243,8 +4243,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     try { (window.opener || window.parent).postMessage({type: 'sheet-needs-session'}, '*'); } catch(e) {}
   }
 
-  // Offer the character builder when the sheet is blank (defined in character_builder.js)
-  if (typeof _builderMaybeSuggest === 'function') _builderMaybeSuggest();
+  // Fresh character? Launch the builder automatically (defined in character_builder.js)
+  if (typeof _builderAutoLaunch === 'function') _builderAutoLaunch();
 
   // React when the portal logs in/out after the sheet is already loaded
   window.addEventListener('storage', async function(e) {
@@ -4257,6 +4257,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         var uidBtn = document.getElementById('copy-uid-btn');
         if (uidBtn) uidBtn.style.display = '';
         try { (window.opener || window.parent).postMessage({type:'sheet-login', uid:_uid(), email:_uemail()}, '*'); } catch(ee){}
+        if (typeof _builderAutoLaunch === 'function') _builderAutoLaunch();
       }
     } else {
       _charId = null;
@@ -4275,6 +4276,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         await _loadSheet();
         var uidBtn = document.getElementById('copy-uid-btn');
         if (uidBtn) uidBtn.style.display = '';
+        if (typeof _builderAutoLaunch === 'function') _builderAutoLaunch();
       }
     } else if (e.data.type === 'portal-signout') {
       _charId = null;
