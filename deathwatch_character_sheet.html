@@ -2840,14 +2840,27 @@ function syncQuickActionsFromWargear() {
         if (_abilityUses[u.key] > aMax) _abilityUses[u.key] = aMax;   // PB pools shrink on level-down
         aCur = _abilityUses[u.key];
       }
-      var aHeal = !!(u.dice && /heal|regain|\bhp\b/i.test(u.dice));
-      var aHasDice = !!(u.dice && _diceHasDice(u.dice));
+      var aDice = u.dice ? _fxResolveStats(u.dice) : null;
+      var aHeal = !!(aDice && /heal|regain|\bhp\b/i.test(aDice));
+      var aHasDice = !!(aDice && _diceHasDice(aDice));
       var aRollable = aHasDice && (!u.uses || aCur > 0);
       var aIdx = null;
       if (aHasDice) {
         aIdx = _qaRollReg.length;
-        _qaRollReg.push({label: u.name, hit: null, dmg: u.dice, useKey: u.uses ? u.key : null});
+        // Attack abilities spend their use on the ATTACK roll (atkUseKey, like ammo);
+        // plain effect abilities spend on the effect roll (useKey)
+        if (u.atk) _qaRollReg.push({label: u.name, hit: _mod(u.atk.stat) + pb, dmg: aDice, critMin: 20, atkUseKey: u.uses ? u.key : null});
+        else _qaRollReg.push({label: u.name, hit: null, dmg: aDice, useKey: u.uses ? u.key : null});
       }
+      var aHit = u.atk ? fmt(_mod(u.atk.stat) + pb) : null;
+      var aHitRollable = !!(u.atk && aHasDice && (!u.uses || aCur > 0));
+      var aSaveCell = u.save
+        ? '<span class="qa-save-badge" title="DC ' + _fxSaveDc(u.save) + ' ' + u.save.ability + ' save — ' + u.save.effect + '">DC ' + _fxSaveDc(u.save) + ' ' + u.save.ability + '</span>'
+        : (aHit
+          ? (aHitRollable
+            ? '<span class="qa-roll" title="Roll attack (Shift = adv, Ctrl = dis) — spends a use" onclick="_qaRollHit(' + aIdx + ',event)" style="color:var(--gold-light);font-weight:600;">' + aHit + '</span>'
+            : '<span style="opacity:.4;">' + aHit + '</span>')
+          : '—');
       var perLbl = u.uses ? (u.uses.per === 'short' ? 'short rest' : 'resupply') : '';
       var tracker = u.uses
         ? '<div class="shot-tracker" title="Uses remaining — resets on ' + perLbl + '">'
@@ -2859,12 +2872,12 @@ function syncQuickActionsFromWargear() {
       var aPills = '<div class="qa-meta-row"><span class="qa-use-pill">' + u.src + '</span>'
         + (u.action ? '<span class="qa-use-pill">' + u.action + '</span>' : '')
         + (u.uses ? '<span class="qa-use-pill">' + (u.uses.label || 'uses') + ' · per ' + perLbl + '</span>' : '') + '</div>';
-      var aTitle = (aHeal ? 'Roll healing' : 'Roll effect') + (u.uses ? ' — spends a use' : '');
+      var aTitle = (aHeal ? 'Roll healing' : 'Roll effect') + (u.uses && !u.atk ? ' — spends a use' : '');
       abilityRows += '<tr>'
         + '<td style="text-align:center;color:' + (aHeal ? '#8fd39b' : 'var(--gold)') + ';font-size:11pt;padding:3px 2px;">' + (aHeal ? '✚' : '❖') + '</td>'
         + '<td><div class="qa-name-cell"><span class="dp-clickable" style="font-family:var(--font-label);font-size:10pt;color:var(--gold-light);" onclick="_abilityPopup(event,\'' + u.key + '\')">' + u.name + '</span>' + aPills + '</div></td>'
-        + '<td style="text-align:center;color:var(--text-dim);font-size:10pt;">—</td>'
-        + '<td' + (aRollable ? ' class="qa-roll" title="' + aTitle + '" onclick="_qaRollDmg(' + aIdx + ')"' : '') + ' style="text-align:center;color:' + (aHeal ? '#8fd39b' : 'var(--text)') + ';font-size:10pt;' + (aHasDice && !aRollable ? 'opacity:.4;' : '') + '">' + (u.dice || '—') + '</td>'
+        + '<td style="text-align:center;color:var(--text-dim);font-size:10pt;">' + aSaveCell + '</td>'
+        + '<td' + (aRollable ? ' class="qa-roll" title="' + aTitle + '" onclick="_qaRollDmg(' + aIdx + ')"' : '') + ' style="text-align:center;color:' + (aHeal ? '#8fd39b' : 'var(--text)') + ';font-size:10pt;' + (aHasDice && !aRollable ? 'opacity:.4;' : '') + '">' + (aDice || '—') + '</td>'
         + '<td style="text-align:center;font-size:10pt;opacity:.35;">—</td>'
         + '<td>' + tracker + '</td>'
         + '</tr>';
@@ -4546,7 +4559,7 @@ const CHAPTER_HERITAGE = {
     { badge:'Heritage', name:'March for Macragge', uses:{n:1, per:'resupply'}, action:'Action', body:'Once per resupply, you supply all allies with a 1d6 Inspiration die that can be used on any roll until the next resupply.' }
   ],
   'Blood Angels': [
-    { badge:'Heritage', name:'The Red Thirst', uses:{n:'pb', per:'resupply'}, dice:'Heals 1d8 HP', action:'Action', body:'If you have less than half your HP total, you may use your action to perform a bite attack. On a hit, roll 1d8 + STR. You heal for the damage dealt. Can be used a number of times equal to your proficiency modifier; resets on a resupply.' },
+    { badge:'Heritage', name:'The Red Thirst', uses:{n:'pb', per:'resupply'}, atk:{stat:'str'}, dice:'Heals 1d8 + STR HP', action:'Action', body:'If you have less than half your HP total, you may use your action to perform a bite attack. On a hit, roll 1d8 + STR. You heal for the damage dealt. Can be used a number of times equal to your proficiency modifier; resets on a resupply.' },
     { badge:'Heritage', name:'The Black Rage', uses:{n:1, per:'resupply'}, action:'Free', body:'Once per resupply, when reduced to 0 HP, you stay conscious and regain 1 HP. If you defeat an enemy in the following round, you regain 1d8 HP.' },
     { badge:'Heritage', name:'Sanguinary Tradition', body:'You gain proficiency with the Medicine skill. If you already possess that proficiency, you gain expertise.' }
   ],
@@ -4564,7 +4577,7 @@ const CHAPTER_HERITAGE = {
     { badge:'Heritage', name:'Mechadendrite Interface', body:'You gain proficiency with servo-arms and mechadendrite arms. You gain a retractable mechadendrite arm that can manipulate tools. You have advantage on skill checks involving tools you are proficient with.' }
   ],
   'Imperial Fists': [
-    { badge:'Heritage', name:'Phalanx',            uses:{n:'pb', per:'resupply'}, action:'Reaction', body:'If a creature within 10 ft of you takes damage, you can use your reaction to move 10 ft and take the attack instead. Roll 1d6 and reduce the damage by that amount. Can be used a number of times equal to your proficiency modifier; resets on a resupply.' },
+    { badge:'Heritage', name:'Phalanx',            uses:{n:'pb', per:'resupply'}, action:'Reaction', dice:'1d6', body:'If a creature within 10 ft of you takes damage, you can use your reaction to move 10 ft and take the attack instead. Roll 1d6 and reduce the damage by that amount. Can be used a number of times equal to your proficiency modifier; resets on a resupply.' },
     { badge:'Heritage', name:'Defend the Imperium', body:'You gain +1 AC if you have not moved on your turn (excluding Terminator Armour). You cannot be forcibly moved by any effect that moves you less than 10 ft. The Phalanx reaction movement does not affect this ability.' },
     { badge:'Heritage', name:'Siege Masters', body:'You gain proficiency with the Demolitions Kit. If you already possess that proficiency, you gain expertise.' }
   ]
@@ -4813,6 +4826,21 @@ function _abBump(ab, d) {
   if (typeof syncQuickActionsFromWargear === 'function') syncQuickActionsFromWargear();
 }
 function _fxSlug(s) { return String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
+/* Resolve STR/DEX/… tokens in ability dice strings to the live modifier ("1d8 + STR" → "1d8 +3") */
+function _fxResolveStats(str) {
+  function mod(t) {
+    var sc = parseInt((document.getElementById(t.toLowerCase() + '-score')||{}).value);
+    var m = isNaN(sc) ? 0 : Math.floor((sc - 10) / 2);
+    return (m >= 0 ? '+' : '') + m;
+  }
+  return String(str)
+    .replace(/\+\s*(STR|DEX|CON|INT|WIS|CHA)\b/g, function(_, t){ return mod(t); })
+    .replace(/\b(STR|DEX|CON|INT|WIS|CHA)\b/g, function(t){ return mod(t); });
+}
+function _fxSaveDc(sv) { return 8 + _pbNow() + (function(){
+  var sc = parseInt((document.getElementById(sv.stat + '-score')||{}).value);
+  return isNaN(sc) ? 0 : Math.floor((sc - 10) / 2);
+})(); }
 
 /* ── Limited-use registry: class features + heritage traits + feats ── */
 function _useMax(u) { return u.n === 'pb' ? _pbNow() : (parseInt(u.n, 10) || 1); }
@@ -4824,22 +4852,22 @@ function _usablesList() {
   var chap = (document.getElementById('char-chapter')||{}).value || '';
   if (typeof DW_CLASSES !== 'undefined' && DW_CLASSES[cls]) {
     (DW_CLASSES[cls].features || []).forEach(function(f) {
-      if (f.uses && f.level <= lvl) out.push({key:'cls:'+_fxSlug(f.name), name:f.name, src:cls, uses:f.uses, dice:f.dice||null, action:f.action||null, body:f.body});
+      if (f.uses && f.level <= lvl) out.push({key:'cls:'+_fxSlug(f.name), name:f.name, src:cls, uses:f.uses, dice:f.dice||null, atk:f.atk||null, save:f.save||null, action:f.action||null, body:f.body});
     });
     if (sub && DW_CLASSES[cls].subclasses && DW_CLASSES[cls].subclasses[sub]) {
       DW_CLASSES[cls].subclasses[sub].forEach(function(f) {
-        if (f.uses && f.level <= lvl) out.push({key:'sub:'+_fxSlug(f.name), name:f.name, src:sub, uses:f.uses, dice:f.dice||null, action:f.action||null, body:f.body});
+        if (f.uses && f.level <= lvl) out.push({key:'sub:'+_fxSlug(f.name), name:f.name, src:sub, uses:f.uses, dice:f.dice||null, atk:f.atk||null, save:f.save||null, action:f.action||null, body:f.body});
       });
     }
   }
   if (typeof CHAPTER_HERITAGE !== 'undefined' && CHAPTER_HERITAGE[chap]) {
     CHAPTER_HERITAGE[chap].forEach(function(t) {
-      if (t.uses) out.push({key:'her:'+_fxSlug(t.name), name:t.name, src:chap, uses:t.uses, dice:t.dice||null, action:t.action||null, body:t.body});
+      if (t.uses) out.push({key:'her:'+_fxSlug(t.name), name:t.name, src:chap, uses:t.uses, dice:t.dice||null, atk:t.atk||null, save:t.save||null, action:t.action||null, body:t.body});
     });
   }
   _charFeats.forEach(function(rec) {
     var f = (typeof dwFeatById === 'function') ? dwFeatById(rec.id) : null;
-    if (f && (f.uses || f.dice)) out.push({key:'feat:'+f.id, name:f.name, src:'Feat', uses:f.uses||null, dice:f.dice||null, action:f.action||null, body:f.desc});
+    if (f && (f.uses || f.dice)) out.push({key:'feat:'+f.id, name:f.name, src:'Feat', uses:f.uses||null, dice:f.dice||null, atk:f.atk||null, save:f.save||null, action:f.action||null, body:f.desc});
   });
   return out;
 }
@@ -4872,8 +4900,10 @@ function _abilityPopup(e, key) {
   var u = _usablesList().find(function(x){ return x.key === key; });
   if (!u) return;
   var usesTxt = u.uses ? (_useMax(u.uses) + ' per ' + (u.uses.per === 'short' ? 'short rest' : 'resupply')) : null;
+  var atkTxt = u.atk ? (function(){ var sc = parseInt((document.getElementById(u.atk.stat+'-score')||{}).value); var m = isNaN(sc)?0:Math.floor((sc-10)/2)+_pbNow(); return 'Attack ' + (m>=0?'+':'')+m; })() : null;
+  var saveTxt = u.save ? ('DC ' + _fxSaveDc(u.save) + ' ' + u.save.ability + ' save') : null;
   _detailPopup(e, '<div style="font-family:var(--font-label);font-size:11pt;color:var(--gold-light);margin-bottom:2px;">' + u.name + '</div>'
-    + '<div style="font-family:var(--font-label);font-size:7.5pt;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:8px;">' + u.src + (u.action ? ' · ' + u.action : '') + (usesTxt ? ' · ' + usesTxt : '') + '</div>'
+    + '<div style="font-family:var(--font-label);font-size:7.5pt;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:8px;">' + u.src + (u.action ? ' · ' + u.action : '') + (atkTxt ? ' · ' + atkTxt : '') + (saveTxt ? ' · ' + saveTxt : '') + (usesTxt ? ' · ' + usesTxt : '') + '</div>'
     + '<div style="font-size:9.5pt;line-height:1.5;color:var(--text);">' + u.body + '</div>');
 }
 
@@ -5464,6 +5494,15 @@ function _spellHealStr(sp, modFn) {
 function _qaRollHit(i, ev) {
   var r = _qaRollReg[i];
   if (!r) return;
+  // Limited-use attack abilities (e.g. The Red Thirst): the attack roll spends a use
+  if (r.atkUseKey) {
+    var aCur = _abilityUses[r.atkUseKey] || 0;
+    if (aCur <= 0) return;
+    _rollD20(r.label + ' — attack', r.hit, ev, r.dmg, r.critMin);
+    _abilityUses[r.atkUseKey] = aCur - 1;
+    syncQuickActionsFromWargear(); _schedSave();
+    return;
+  }
   // Ranged weapons: each attack roll expends a round; a dry magazine blocks the shot
   if (r.wgIdx !== undefined) {
     var m = _wargearMeta[r.wgIdx];
