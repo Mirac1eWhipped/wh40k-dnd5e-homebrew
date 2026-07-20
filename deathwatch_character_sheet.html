@@ -2829,8 +2829,10 @@ function syncQuickActionsFromWargear() {
   }
   // ── Limited-use ability & feat rows (class features, heritage traits, feats) ──
   var abilityRows = '';
-  if (_qaFilter === 'all' && typeof _usablesList === 'function') {
+  if (typeof _usablesList === 'function') {
     _usablesList().forEach(function(u) {
+      // Untagged abilities (downtime rites etc.) only appear under the All filter
+      if (_qaFilter !== 'all' && u.action !== _qaFilter) return;
       var aMax = u.uses ? _useMax(u.uses) : 0;
       var aCur = 0;
       if (u.uses) {
@@ -2855,6 +2857,7 @@ function syncQuickActionsFromWargear() {
           + '</div>'
         : '<span style="opacity:.35;">—</span>';
       var aPills = '<div class="qa-meta-row"><span class="qa-use-pill">' + u.src + '</span>'
+        + (u.action ? '<span class="qa-use-pill">' + u.action + '</span>' : '')
         + (u.uses ? '<span class="qa-use-pill">' + (u.uses.label || 'uses') + ' · per ' + perLbl + '</span>' : '') + '</div>';
       var aTitle = (aHeal ? 'Roll healing' : 'Roll effect') + (u.uses ? ' — spends a use' : '');
       abilityRows += '<tr>'
@@ -4526,7 +4529,7 @@ const ASTARTES_TRAITS = [
 const CHAPTER_HERITAGE = {
   'Dark Angels': [
     { badge:'Heritage', name:'Grim Resolve',                    body:'Advantage on saving throws against fear and charm effects. You gain proficiency with the Deception and Insight skills. If you already possess those proficiencies, you gain expertise.' },
-    { badge:'Heritage', name:'Hunt the Fallen',                 uses:{n:1, per:'resupply'}, body:'Once per resupply, you mark a target in combat. You deal an additional 1d8 damage on attacks made to that creature until it dies.' },
+    { badge:'Heritage', name:'Hunt the Fallen',                 uses:{n:1, per:'resupply'}, action:'Bonus Action', body:'Once per resupply, you mark a target in combat. You deal an additional 1d8 damage on attacks made to that creature until it dies.' },
     { badge:'Heritage', name:'Abhor the Heretic, Purge the Xenos', body:'You gain advantage on Perception and Survival checks made to find heretical creatures. You gain advantage on the first attack you make against a Chaos-tainted creature per combat. This effect can trigger on each heretical creature once.' }
   ],
   'Space Wolves': [
@@ -4535,16 +4538,16 @@ const CHAPTER_HERITAGE = {
   ],
   'Salamanders': [
     { badge:'Heritage', name:'Forge Born',       body:'You gain proficiency with Smith\'s tools and resistance to Fire damage. If you already possess that proficiency, you gain expertise. You can craft light bolter ammo, standard bolter ammo, and fuel canisters while deployed on missions (if necessary resources are available).' },
-    { badge:'Heritage', name:'Shield of Vulkan', uses:{n:'pb', per:'resupply'}, body:'When an ally within 10 ft is hit by an attack, you can use your reaction to impose disadvantage on the roll. This can be used a number of times equal to your proficiency modifier and resets on a resupply.' }
+    { badge:'Heritage', name:'Shield of Vulkan', uses:{n:'pb', per:'resupply'}, action:'Reaction', body:'When an ally within 10 ft is hit by an attack, you can use your reaction to impose disadvantage on the roll. This can be used a number of times equal to your proficiency modifier and resets on a resupply.' }
   ],
   'Ultramarines': [
     { badge:'Heritage', name:'Commanding Voice', body:'You can use the Help action as a Bonus Action to grant a single ally advantage on their next attack once per turn.' },
     { badge:'Heritage', name:'Son of Guilliman', body:'You gain proficiency with the Persuasion skill. If you already possess this proficiency, you gain expertise.' },
-    { badge:'Heritage', name:'March for Macragge', uses:{n:1, per:'resupply'}, body:'Once per resupply, you supply all allies with a 1d6 Inspiration die that can be used on any roll until the next resupply.' }
+    { badge:'Heritage', name:'March for Macragge', uses:{n:1, per:'resupply'}, action:'Action', body:'Once per resupply, you supply all allies with a 1d6 Inspiration die that can be used on any roll until the next resupply.' }
   ],
   'Blood Angels': [
-    { badge:'Heritage', name:'The Red Thirst', uses:{n:'pb', per:'resupply'}, dice:'Heals 1d8 HP', body:'If you have less than half your HP total, you may use your action to perform a bite attack. On a hit, roll 1d8 + STR. You heal for the damage dealt. Can be used a number of times equal to your proficiency modifier; resets on a resupply.' },
-    { badge:'Heritage', name:'The Black Rage', uses:{n:1, per:'resupply'}, body:'Once per resupply, when reduced to 0 HP, you stay conscious and regain 1 HP. If you defeat an enemy in the following round, you regain 1d8 HP.' },
+    { badge:'Heritage', name:'The Red Thirst', uses:{n:'pb', per:'resupply'}, dice:'Heals 1d8 HP', action:'Action', body:'If you have less than half your HP total, you may use your action to perform a bite attack. On a hit, roll 1d8 + STR. You heal for the damage dealt. Can be used a number of times equal to your proficiency modifier; resets on a resupply.' },
+    { badge:'Heritage', name:'The Black Rage', uses:{n:1, per:'resupply'}, action:'Free', body:'Once per resupply, when reduced to 0 HP, you stay conscious and regain 1 HP. If you defeat an enemy in the following round, you regain 1d8 HP.' },
     { badge:'Heritage', name:'Sanguinary Tradition', body:'You gain proficiency with the Medicine skill. If you already possess that proficiency, you gain expertise.' }
   ],
   'Raven Guard': [
@@ -4561,7 +4564,7 @@ const CHAPTER_HERITAGE = {
     { badge:'Heritage', name:'Mechadendrite Interface', body:'You gain proficiency with servo-arms and mechadendrite arms. You gain a retractable mechadendrite arm that can manipulate tools. You have advantage on skill checks involving tools you are proficient with.' }
   ],
   'Imperial Fists': [
-    { badge:'Heritage', name:'Phalanx',            uses:{n:'pb', per:'resupply'}, body:'If a creature within 10 ft of you takes damage, you can use your reaction to move 10 ft and take the attack instead. Roll 1d6 and reduce the damage by that amount. Can be used a number of times equal to your proficiency modifier; resets on a resupply.' },
+    { badge:'Heritage', name:'Phalanx',            uses:{n:'pb', per:'resupply'}, action:'Reaction', body:'If a creature within 10 ft of you takes damage, you can use your reaction to move 10 ft and take the attack instead. Roll 1d6 and reduce the damage by that amount. Can be used a number of times equal to your proficiency modifier; resets on a resupply.' },
     { badge:'Heritage', name:'Defend the Imperium', body:'You gain +1 AC if you have not moved on your turn (excluding Terminator Armour). You cannot be forcibly moved by any effect that moves you less than 10 ft. The Phalanx reaction movement does not affect this ability.' },
     { badge:'Heritage', name:'Siege Masters', body:'You gain proficiency with the Demolitions Kit. If you already possess that proficiency, you gain expertise.' }
   ]
@@ -4821,22 +4824,22 @@ function _usablesList() {
   var chap = (document.getElementById('char-chapter')||{}).value || '';
   if (typeof DW_CLASSES !== 'undefined' && DW_CLASSES[cls]) {
     (DW_CLASSES[cls].features || []).forEach(function(f) {
-      if (f.uses && f.level <= lvl) out.push({key:'cls:'+_fxSlug(f.name), name:f.name, src:cls, uses:f.uses, dice:f.dice||null, body:f.body});
+      if (f.uses && f.level <= lvl) out.push({key:'cls:'+_fxSlug(f.name), name:f.name, src:cls, uses:f.uses, dice:f.dice||null, action:f.action||null, body:f.body});
     });
     if (sub && DW_CLASSES[cls].subclasses && DW_CLASSES[cls].subclasses[sub]) {
       DW_CLASSES[cls].subclasses[sub].forEach(function(f) {
-        if (f.uses && f.level <= lvl) out.push({key:'sub:'+_fxSlug(f.name), name:f.name, src:sub, uses:f.uses, dice:f.dice||null, body:f.body});
+        if (f.uses && f.level <= lvl) out.push({key:'sub:'+_fxSlug(f.name), name:f.name, src:sub, uses:f.uses, dice:f.dice||null, action:f.action||null, body:f.body});
       });
     }
   }
   if (typeof CHAPTER_HERITAGE !== 'undefined' && CHAPTER_HERITAGE[chap]) {
     CHAPTER_HERITAGE[chap].forEach(function(t) {
-      if (t.uses) out.push({key:'her:'+_fxSlug(t.name), name:t.name, src:chap, uses:t.uses, dice:t.dice||null, body:t.body});
+      if (t.uses) out.push({key:'her:'+_fxSlug(t.name), name:t.name, src:chap, uses:t.uses, dice:t.dice||null, action:t.action||null, body:t.body});
     });
   }
   _charFeats.forEach(function(rec) {
     var f = (typeof dwFeatById === 'function') ? dwFeatById(rec.id) : null;
-    if (f && (f.uses || f.dice)) out.push({key:'feat:'+f.id, name:f.name, src:'Feat', uses:f.uses||null, dice:f.dice||null, body:f.desc});
+    if (f && (f.uses || f.dice)) out.push({key:'feat:'+f.id, name:f.name, src:'Feat', uses:f.uses||null, dice:f.dice||null, action:f.action||null, body:f.desc});
   });
   return out;
 }
@@ -4870,7 +4873,7 @@ function _abilityPopup(e, key) {
   if (!u) return;
   var usesTxt = u.uses ? (_useMax(u.uses) + ' per ' + (u.uses.per === 'short' ? 'short rest' : 'resupply')) : null;
   _detailPopup(e, '<div style="font-family:var(--font-label);font-size:11pt;color:var(--gold-light);margin-bottom:2px;">' + u.name + '</div>'
-    + '<div style="font-family:var(--font-label);font-size:7.5pt;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:8px;">' + u.src + (usesTxt ? ' · ' + usesTxt : '') + '</div>'
+    + '<div style="font-family:var(--font-label);font-size:7.5pt;letter-spacing:.14em;text-transform:uppercase;color:var(--silver-dim);margin-bottom:8px;">' + u.src + (u.action ? ' · ' + u.action : '') + (usesTxt ? ' · ' + usesTxt : '') + '</div>'
     + '<div style="font-size:9.5pt;line-height:1.5;color:var(--text);">' + u.body + '</div>');
 }
 
