@@ -2447,7 +2447,7 @@
             <div class="req-card-type">${item.wtype} Weapon</div>
             <div class="req-card-dmg">${item.dmg}</div>
             ${item.profiles ? `<div class="req-card-type" style="font-size:10px;">${item.profiles.map(p => p.name).join(' · ')}${item.profile_switch ? ` — switch: ${item.profile_switch}` : ''}</div>` : ''}
-            ${item.cat === 'Relic' ? `<div class="req-card-type" style="color:#c9a227;font-size:10px;">✦ Requires Attunement (3 max)</div>` : ''}
+            ${item.cat === 'Relic' && item.attune !== false ? `<div class="req-card-type" style="color:#c9a227;font-size:10px;">✦ Requires Attunement (3 max)</div>` : ''}
             ${item.save ? `<div class="req-card-type" style="color:#c86060;">DC ${item.save.dc} ${item.save.ability} save</div>` : ''}
             <div class="req-card-footer">
               <span class="req-cat-badge ${bc}">${item.cat}</span>
@@ -2579,7 +2579,7 @@
         <div class="rmd-lore">${item.lore}</div>`;
     }
     document.getElementById('req-modal-body').innerHTML = body;
-    if (item.cat === 'Relic') {
+    if (item.cat === 'Relic' && item.attune !== false) {
       const _tr = document.querySelector('#req-modal-body .rmd-type-row');
       if (_tr) _tr.insertAdjacentHTML('beforeend', '<span style="font-family:\'Cinzel\',serif;font-size:11px;color:#c9a227;letter-spacing:1px;">✦ Requires Attunement — 3 relics max</span>');
     }

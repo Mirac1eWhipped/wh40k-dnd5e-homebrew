@@ -2479,6 +2479,18 @@ function _upgItemFor(idx) {
   if (!meta || !meta.id || typeof REQ_ITEMS === 'undefined') return null;
   return REQ_ITEMS.find(function(x){ return x.id === meta.id; }) || null;
 }
+/* Item whose UPGRADE rules apply to a row: for a Combi-Weapon that's the ACTIVE
+   component (each component carries its own Sanctioned Upgrade Pattern) */
+function _upgEffItem(idx) {
+  var it = _upgItemFor(idx);
+  var meta = _wargearMeta[idx];
+  if (it && it.combi && meta && meta.combi) {
+    var plist = _profListFor(it, meta);
+    var p = plist && (plist.find(function(x){ return x.id === meta.profile; }) || plist[0]);
+    if (p && p._comp) return p._comp;
+  }
+  return it;
+}
 /* Row inputs for a wargear row: {name, qty, notes} */
 function _upgRowInputs(idx) {
   var row = document.querySelectorAll('.wg-equip-row')[idx];
@@ -2600,7 +2612,8 @@ function _upgRender() {
   var meta = _wargearMeta[_upgIdx];
   var u = _upgData(meta);
   var isArmor = it.cat === 'Armor';
-  var canUpg = (typeof upgradeItemEligible === 'function') && upgradeItemEligible(it);
+  var effItem = _upgEffItem(_upgIdx);   // combi → the active component takes the upgrades
+  var canUpg = (typeof upgradeItemEligible === 'function') && upgradeItemEligible(effItem);
   var rowIns = _upgRowInputs(_upgIdx);
   var upgDefs = _upgTraitDefs(meta);
   var tier = u.tier || 0;
@@ -2694,12 +2707,13 @@ function _upgRender() {
   if (_eqRelic) html += '<div class="upg-note">✦ Relics demand attunement — a Battle-Brother may hold ' + ATTUNE_MAX + ' such oaths at once (' + _attunedList().length + ' of ' + ATTUNE_MAX + ' sworn).</div>';
   if (it.grants_def) html += '<div class="upg-note" style="color:var(--gold-light);">✦ While ' + (_eqRelic ? 'attuned' : 'equipped') + ': ' + _grantsDefText(it.grants_def) + ' — lights the matching Defenses chips automatically.</div>';
   if (!canUpg) {
-    if (it.cat === 'Relic') html += '<div class="upg-note">Relics cannot carry Sanctioned Upgrade Patterns — they are already singular artefacts with their own fixed properties.</div>';
+    if (it.cat === 'Relic' && !it.combi) html += '<div class="upg-note">Relics cannot carry Sanctioned Upgrade Patterns — they are already singular artefacts with their own fixed properties.</div>';
     if (it.lore) html += '<div class="upg-lore">' + it.lore + '</div>';
     body.innerHTML = html;
     return;
   }
-  html += '<div class="upg-sec-ttl">Sanctioned Upgrade Pattern</div>';
+  html += '<div class="upg-sec-ttl">Sanctioned Upgrade Pattern' + (it.combi && effItem && effItem !== it ? ' — ' + effItem.name : '') + '</div>';
+  if (it.combi) html += '<div class="upg-slot-desc" style="margin:0 0 8px;">Each component carries its own pattern — switch the active component above to consecrate the other half.</div>';
   html += '<div class="upg-tier-track">';
   html += '<div class="upg-tier-card' + (u.tier === 0 ? ' active' : '') + '" onclick="_upgSetTier(0)">'
     + '<div class="upg-tier-name">Standard Issue</div><div class="upg-tier-bonus">—</div>'
@@ -2743,7 +2757,7 @@ function _upgRender() {
   if (u.tier === 0) {
     html += '<div class="upg-slot-empty" style="margin-bottom:8px;">Select a pattern tier to unlock Augmetic Trait slots — see the <a href="Wargear_Upgrades.html" target="_blank" style="color:var(--gold);">Wargear Upgrades</a> reference for the full rules.</div>';
   }
-  html += '<div class="upg-note">RP costs are bookkeeping only — settle them against your Requisition tally. Techmarines &amp; Tech-Priests pay 25% less (round down to 5 RP); Artificer\'s Tools proficiency grants 10% off. Swapping an installed trait costs 50 RP × the incoming trait\'s tier, between missions. Relics cannot carry upgrades.</div>';
+  html += '<div class="upg-note">RP costs are bookkeeping only — settle them against your Requisition tally. Techmarines &amp; Tech-Priests pay 25% less (round down to 5 RP); Artificer\'s Tools proficiency grants 10% off. Swapping an installed trait costs 50 RP × the incoming trait\'s tier, between missions.' + (it.combi ? '' : ' Relics cannot carry upgrades.') + '</div>';
   if (it.lore) html += '<div class="upg-lore">' + it.lore + '</div>';
   body.innerHTML = html;
 }
@@ -2756,7 +2770,7 @@ function _upgPickRender(slot) {
   var slotTier = slot === 3 ? 1 : slot + 1;
   var taken = [];
   u.traits.forEach(function(x, i) { if (x && x.id && i !== slot) taken.push(x.id); });
-  var list = upgradeEligibleTraits(it, slotTier, taken);
+  var list = upgradeEligibleTraits(_upgEffItem(_upgIdx), slotTier, taken);
   var html = '<div class="upg-slot-hdr" style="margin-bottom:8px;"><span class="upg-slot-ttl">Choose a trait — '
     + (slot === 3 ? 'Bonus Slot' : 'Slot ' + _UPG_ROMAN[slot]) + ' (Tier ' + _UPG_ROMAN[slotTier - 1] + ' or lower)</span>'
     + '<button class="upg-slot-btn" onclick="_upgRender()">← Back</button></div>';
@@ -2929,10 +2943,21 @@ function _combiForgeCommit() {
   var mA = parseInt(A.shots, 10) || 0;
   var mB = parseInt(B.shots, 10) || 0;
   var old = _wargearMeta[idx] || {};
+  // Reforge: components that survive unchanged keep their magazine state and
+  // Sanctioned Upgrade Pattern; a swapped component's pattern is lost with it
+  var _oc = old.combi || {}, _os = old.combi_shots || {}, _ou = old.combi_upg || {};
+  var keepShots = {
+    a: (_oc.a === f.a && typeof _os.a === 'number') ? _os.a : mA,
+    b: (_oc.b === f.b && typeof _os.b === 'number') ? _os.b : mB
+  };
+  var keepUpg = {
+    a: (_oc.a === f.a && _ou.a) ? _ou.a : null,
+    b: (_oc.b === f.b && _ou.b) ? _ou.b : null
+  };
   _wargearMeta[idx] = {
     id: 'combi', is_weapon: true, stat: 'str', equipped: !!old.equipped,
-    combi: {a: f.a, b: f.b}, combi_shots: {a: mA, b: mB},
-    profile: 'a', shots_max: mA, shots_cur: mA,
+    combi: {a: f.a, b: f.b}, combi_shots: keepShots, combi_upg: keepUpg,
+    profile: 'a', shots_max: mA, shots_cur: keepShots.a, upg: keepUpg.a || undefined,
     dmg: A.dmg, wtype: 'Multiple', range: A.range, mods: A.mods || []
   };
   _ammoEnsureRow(A.ammo);
@@ -3098,11 +3123,17 @@ function syncQuickActionsFromWargear() {
         meta.wtype = _ref.wtype  || meta.wtype  || '';
         meta.range = _ref.range  || meta.range  || '—';
         if (_ref.action) { itemAction = _ref.action; itemHasAction = true; }
-        // Combi-Weapon: the ACTIVE component drives mods and carries its own magazine.
-        // Runs AFTER the generic back-fill so the catalog's shots:'Varies' never clobbers it.
+        // Combi-Weapon: the ACTIVE component drives mods and carries its own magazine
+        // and upgrade pattern. Runs AFTER the generic back-fill so the catalog's
+        // shots:'Varies' never clobbers it.
         if (_ref.combi && itemProf && itemProf._comp) {
           meta.mods = itemProf._comp.mods || [];
           var _cm = parseInt(itemProf._comp.shots, 10) || 0;
+          if (_cm && typeof _upgTraitDefs === 'function') {
+            _upgTraitDefs(meta).forEach(function(ut) {   // Extended Magazine on this component
+              if (ut.def.hooks && ut.def.hooks.shots_mult) _cm = Math.ceil(_cm * ut.def.hooks.shots_mult);
+            });
+          }
           meta.shots_max = _cm;
           if (!meta.combi_shots) meta.combi_shots = {};
           var _cs = parseInt(meta.combi_shots[meta.profile], 10);
@@ -3110,6 +3141,8 @@ function syncQuickActionsFromWargear() {
           if (typeof meta.shots_cur !== 'number') meta.shots_cur = _cs;
           if (meta.shots_cur > _cm) meta.shots_cur = _cm;
           meta.combi_shots[meta.profile] = meta.shots_cur;   // mirror the live view into the store
+          if (!meta.combi_upg) meta.combi_upg = {};
+          meta.combi_upg[meta.profile] = meta.upg || null;   // keep the pattern store fresh too
         }
       }
     }
@@ -3412,11 +3445,16 @@ function _profSet(wgIdx, profId) {   // switch a weapon's active fire profile (a
   if (!it || !plist) return;
   var p = plist.find(function(x){ return x.id === profId; });
   if (!p || meta.profile === profId) return;
-  // Combi components carry their own magazines: stash the outgoing mag, load the incoming
-  if (it.combi && meta.combi_shots) {
+  // Combi components carry their own magazines AND upgrade patterns:
+  // stash the outgoing component's state, load the incoming component's
+  if (it.combi && meta.combi) {
+    if (!meta.combi_shots) meta.combi_shots = {};
     if (typeof meta.shots_cur === 'number' && meta.profile) meta.combi_shots[meta.profile] = meta.shots_cur;
     var _nx = parseInt(meta.combi_shots[profId], 10);
     meta.shots_cur = isNaN(_nx) ? undefined : _nx;   // sync seeds/clamps from the component
+    if (!meta.combi_upg) meta.combi_upg = {};
+    if (meta.profile) meta.combi_upg[meta.profile] = meta.upg || null;
+    meta.upg = meta.combi_upg[profId] || undefined;
   }
   meta.profile = profId;
   // Declared switches (Sternguard bonus action) go to the Vox Log; free aiming stays silent
