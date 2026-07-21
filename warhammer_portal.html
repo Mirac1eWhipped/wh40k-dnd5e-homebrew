@@ -1929,7 +1929,9 @@
     errEl.textContent = ''; note.style.display = 'none';
     if (!callsign) { errEl.textContent = 'Enter a callsign so the GM knows who you are.'; return; }
     if (!email || !pw) { errEl.textContent = 'Email and password required.'; return; }
-    if (pw.length < 6) { errEl.textContent = 'Password must be at least 6 characters.'; return; }
+    if (pw.length < 6 || !/[a-z]/.test(pw) || !/[A-Z]/.test(pw) || !/[0-9]/.test(pw)) {
+      errEl.textContent = 'Password needs 6+ characters incl. a lowercase, an uppercase, and a number.'; return;
+    }
     if (pw !== pw2) { errEl.textContent = 'Passwords do not match.'; return; }
     try {
       var r = await fetch(_PAB_URL + '/auth/v1/signup', {
