@@ -469,7 +469,7 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 /* Upgrade trait pills + the gold +N badge on upgraded weapons */
 .qa-upg-pill{display:inline-block;font-family:var(--font-label);font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;color:var(--tier-soft);background:rgba(216,132,42,.12);border:1px solid var(--tier-border);border-radius:3px;padding:1px 5px;margin:1px 2px 1px 0;white-space:nowrap;cursor:pointer;transition:background .15s;}
 .qa-upg-pill:hover{background:rgba(216,132,42,.28);}
-.qa-upg-plus{font-family:var(--font-label);font-size:6.5pt;font-weight:700;color:var(--gold-light);border:1px solid var(--gold-dim);border-radius:2px;padding:0 3px;margin-left:4px;background:rgba(var(--gold-rgb),.12);white-space:nowrap;vertical-align:1px;}
+.qa-upg-plus{font-family:var(--font-label);font-size:6.5pt;font-weight:700;color:var(--gold-light);margin-left:3px;white-space:nowrap;vertical-align:2px;}
 /* ── Quick Actions filter buttons ── */
 .qa-filter-btn{font-family:var(--font-label);font-size:7pt;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid var(--border2);color:var(--silver-dim);padding:2px 8px;cursor:pointer;border-radius:2px;transition:all .15s;white-space:nowrap;}
 .qa-filter-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(var(--gold-rgb),.08);}
@@ -3278,9 +3278,11 @@ function syncQuickActionsFromWargear() {
       : '';
     var metaRow = (wtypeBadge || profPills || wSaveBadge || mods) ? '<div class="qa-meta-row">'+wtypeBadge+profPills+wSaveBadge+mods+'</div>' : '';
     var upgPlus = upgTier ? '<span class="qa-upg-plus">+' + upgTier + '</span>' : '';
-    var nameSpan = (meta.id
-      ? '<span class="dp-clickable" style="font-family:var(--font-label);font-size:10pt;color:var(--gold-light);" onclick="_weaponPopup(event,\''+meta.id+'\','+i+')">'+name+'</span>'
-      : '<span style="font-family:var(--font-label);font-size:10pt;color:var(--text);">'+name+'</span>') + upgPlus;
+    // The +N marker lives INSIDE the name span — as a sibling it would become its own
+    // stretched flex row inside .qa-name-cell (flex-column) and render as a wide bar
+    var nameSpan = meta.id
+      ? '<span class="dp-clickable" style="font-family:var(--font-label);font-size:10pt;color:var(--gold-light);" onclick="_weaponPopup(event,\''+meta.id+'\','+i+')">'+name+upgPlus+'</span>'
+      : '<span style="font-family:var(--font-label);font-size:10pt;color:var(--text);">'+name+upgPlus+'</span>';
     var rIdx = _qaRollReg.length;
     _qaRollReg.push({label: name + (itemProf ? ' · ' + itemProf.name : '') + (upgTier ? ' +' + upgTier : ''),
       hit: _mod(stat) + pb + upgTier, dmg: dmg, critMin: critMin, wgIdx: i,
