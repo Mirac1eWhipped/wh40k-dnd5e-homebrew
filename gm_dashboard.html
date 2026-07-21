@@ -111,6 +111,22 @@
   .view-tab { background:transparent;border:none;border-bottom:2px solid transparent;color:var(--text-dim);font-family:'Cinzel',serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;padding:12px 26px;cursor:pointer;transition:all .2s;margin-bottom:-1px; }
   .view-tab:hover { color:var(--gold); }
   .view-tab.active { color:var(--gold);border-bottom-color:var(--gold); }
+  .tab-badge { display:inline-block;margin-left:8px;background:var(--red-bright);color:#fff;border-radius:9px;font-size:11px;padding:1px 7px;letter-spacing:1px;vertical-align:1px; }
+  /* ── Access Requests queue ── */
+  .acc-group-title { font-family:'Cinzel',serif;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--text-dim);margin:26px 0 12px;border-bottom:1px solid var(--border);padding-bottom:6px; }
+  .acc-row { display:flex;align-items:center;gap:14px;background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--gold-dim);padding:12px 16px;margin-bottom:10px;flex-wrap:wrap; }
+  .acc-row.pending { border-left-color:var(--gold); }
+  .acc-row.denied { border-left-color:var(--red-bright);opacity:.75; }
+  .acc-callsign { font-family:'Cinzel',serif;font-size:14px;font-weight:700;color:var(--gold-light);letter-spacing:1px;min-width:140px; }
+  .acc-email { font-size:13px;color:var(--text);flex:1;min-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
+  .acc-date { font-size:12px;color:var(--text-dim);letter-spacing:1px; }
+  .acc-tag { font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--gold);border:1px solid var(--gold-dim);padding:3px 10px; }
+  .acc-btn { font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:6px 14px;cursor:pointer;background:transparent;border:1px solid var(--border2);color:var(--text-dim);transition:all .2s; }
+  .acc-btn.approve { border-color:#3c8a4a;color:#5cb86a; }
+  .acc-btn.approve:hover { background:rgba(60,138,74,.15);color:#7ad088; }
+  .acc-btn.deny { border-color:var(--red-bright);color:var(--red-bright); }
+  .acc-btn.deny:hover { background:rgba(192,48,48,.15); }
+  .acc-empty { text-align:center;padding:30px;color:var(--text-dim);font-family:'Cinzel',serif;font-size:12px;letter-spacing:3px;border:1px dashed var(--border); }
   .view { display:none; }
   .view.active { display:block; }
 
@@ -344,7 +360,7 @@
   </div>
   <div class="topbar-spacer"></div>
   <span class="topbar-email" id="gm-email"></span>
-  <button class="refresh-btn" onclick="loadAllChars()">↻ Refresh</button>
+  <button class="refresh-btn" onclick="loadAllChars();loadProfiles()">↻ Refresh</button>
   <button class="signout-btn" onclick="gmSignOut()">Sign Out</button>
 </div>
 
@@ -354,6 +370,7 @@
   <div class="view-tabs">
     <button class="view-tab active" id="tab-dossiers" onclick="showView('dossiers')">Operative Dossiers</button>
     <button class="view-tab" id="tab-combat" onclick="showView('combat')">Combat Tracker</button>
+    <button class="view-tab" id="tab-access" onclick="showView('access')">Access Requests<span class="tab-badge" id="access-badge" style="display:none;">0</span></button>
   </div>
 
   <!-- ══ VIEW: OPERATIVE DOSSIERS ══ -->
@@ -379,6 +396,21 @@
     <div class="cards-grid" id="cards-grid">
       <div class="loading">++ Awaiting Authentication — Stand By ++</div>
     </div>
+  </div>
+
+  <!-- ══ VIEW: ACCESS REQUESTS ══ -->
+  <div class="view" id="view-access">
+    <div class="page-header">
+      <div class="page-eyebrow">++ Watch Fortress Vetting — Induction Petitions ++</div>
+      <h1 class="page-title">Access Requests</h1>
+      <p class="page-sub">Recruits who signed up from the portal. Approve to unlock their character records — until then they can sign in but see and save nothing.</p>
+      <div class="page-divider">
+        <div class="page-divider-line"></div>
+        <div class="page-divider-diamond"></div>
+        <div class="page-divider-line"></div>
+      </div>
+    </div>
+    <div id="access-list"><div class="loading">++ Awaiting Authentication — Stand By ++</div></div>
   </div>
 
   <!-- ══ VIEW: COMBAT TRACKER ══ -->
@@ -539,6 +571,7 @@ async function gmSignIn() {
       document.getElementById('auth-modal').style.display = 'none';
       document.getElementById('gm-email').textContent = d.user.email;
       await loadAllChars();
+      loadProfiles();
     } else {
       err.textContent = d.error_description || 'Authentication failed.';
     }
@@ -553,6 +586,8 @@ function gmSignOut() {
   document.getElementById('auth-modal').style.display = 'flex';
   document.getElementById('gm-email').textContent = '';
   document.getElementById('cards-grid').innerHTML = '<div class="loading">++ Awaiting Authentication — Stand By ++</div>';
+  document.getElementById('access-list').innerHTML = '<div class="loading">++ Awaiting Authentication — Stand By ++</div>';
+  document.getElementById('access-badge').style.display = 'none';
 }
 
 /* ── Token lifecycle — access tokens expire after ~1h; refresh silently ── */
@@ -628,6 +663,85 @@ async function loadAllChars(retried) {
   } catch(e) {
     grid.innerHTML = '<div class="loading">++ Error retrieving records — check connection ++</div>';
   }
+}
+
+/* ════════════════════════════════════════════
+   ACCESS REQUESTS — signup approval queue
+════════════════════════════════════════════ */
+let _profiles = [];
+
+async function loadProfiles(retried) {
+  if (!(await _ensureFreshToken())) return;
+  try {
+    const r = await fetch(SUPA_URL + '/rest/v1/profiles?select=*&order=requested_at.desc', {
+      headers: { 'apikey': SUPA_KEY, 'Content-Type': 'application/json', ..._authHdr() }
+    });
+    if (r.status === 401 || r.status === 403) {
+      if (!retried && await _gmRefreshToken()) return loadProfiles(true);
+      return;
+    }
+    const rows = await r.json();
+    if (!Array.isArray(rows)) return;
+    _profiles = rows;
+    _renderProfiles();
+  } catch(e) {
+    document.getElementById('access-list').innerHTML =
+      '<div class="acc-empty">++ Error retrieving petitions — check connection ++</div>';
+  }
+}
+
+function _renderProfiles() {
+  const el = document.getElementById('access-list');
+  const pending  = _profiles.filter(p => p.status === 'pending');
+  const approved = _profiles.filter(p => p.status === 'approved');
+  const denied   = _profiles.filter(p => p.status === 'denied');
+
+  const badge = document.getElementById('access-badge');
+  badge.style.display = pending.length ? '' : 'none';
+  badge.textContent = pending.length;
+
+  function row(p) {
+    const uid = String(p.id).replace(/[^0-9a-f-]/gi, '');
+    const isGm = (p.email || '').toLowerCase() === GM_EMAIL.toLowerCase();
+    const when = p.requested_at ? new Date(p.requested_at).toLocaleDateString() : '';
+    let btns = '';
+    if (isGm) {
+      btns = '<span class="acc-tag">Watch Commander</span>';
+    } else if (p.status === 'pending') {
+      btns = `<button class="acc-btn approve" onclick="_setAccess('${uid}','approved')">✓ Approve</button>` +
+             `<button class="acc-btn deny" onclick="_setAccess('${uid}','denied')">✕ Deny</button>`;
+    } else if (p.status === 'approved') {
+      btns = `<button class="acc-btn deny" onclick="_setAccess('${uid}','denied')">✕ Revoke</button>`;
+    } else {
+      btns = `<button class="acc-btn approve" onclick="_setAccess('${uid}','approved')">✓ Approve</button>`;
+    }
+    return `<div class="acc-row ${p.status}">
+      <span class="acc-callsign">${_esc(p.callsign || '—')}</span>
+      <span class="acc-email">${_esc(p.email || '')}</span>
+      <span class="acc-date">${_esc(when)}</span>
+      ${btns}
+    </div>`;
+  }
+
+  let html = '<div class="acc-group-title">Awaiting Judgment (' + pending.length + ')</div>';
+  html += pending.length ? pending.map(row).join('')
+                         : '<div class="acc-empty">++ No petitions awaiting judgment ++</div>';
+  if (approved.length) html += '<div class="acc-group-title">Inducted (' + approved.length + ')</div>' + approved.map(row).join('');
+  if (denied.length)   html += '<div class="acc-group-title">Denied (' + denied.length + ')</div>' + denied.map(row).join('');
+  el.innerHTML = html;
+}
+
+async function _setAccess(id, status) {
+  if (!(await _ensureFreshToken())) return;
+  try {
+    const r = await fetch(SUPA_URL + '/rest/v1/profiles?id=eq.' + id, {
+      method: 'PATCH',
+      headers: { 'apikey': SUPA_KEY, 'Content-Type': 'application/json', ..._authHdr(), 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ status: status, decided_at: new Date().toISOString() })
+    });
+    if (!r.ok && r.status !== 204) throw new Error('HTTP ' + r.status);
+    await loadProfiles();
+  } catch(e) { alert('Update failed — try again.'); }
 }
 
 function _renderStats(rows) {
@@ -1450,11 +1564,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('auth-modal').style.display = 'none';
     document.getElementById('gm-email').textContent = localStorage.getItem('gm_supa_email') || '';
     loadAllChars();
+    loadProfiles();
   }
   combatLoad();
   combatRender();
   const savedView = localStorage.getItem('gm_dash_view');
-  if (savedView === 'combat') showView('combat');
+  if (savedView === 'combat' || savedView === 'access') showView(savedView);
   _gmSetShare(_gmShare);
   const gmCmd = document.getElementById('gm-dice-cmd');
   if (gmCmd) gmCmd.addEventListener('input', _trayRefresh);

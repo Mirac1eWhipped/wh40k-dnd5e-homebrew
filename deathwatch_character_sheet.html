@@ -741,7 +741,7 @@ try {
     <input class="auth-inp" id="auth-pass"  type="password" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')authSubmit()">
     <button class="auth-btn" id="auth-btn" onclick="authSubmit()">Sign In</button>
     <div class="auth-err" id="auth-err"></div>
-    <div class="auth-toggle" style="cursor:default;">Contact your DM to register an account</div>
+    <div class="auth-toggle" onclick="window.location.href='warhammer_portal.html'">New recruit? Request access from the Jericho Portal</div>
   </div>
 </div>
 
@@ -3481,6 +3481,35 @@ async function _refreshToken() {
   _clearSession(); return false;
 }
 
+/* ── GM-approval status (display + UX only — RLS is the real gate) ── */
+var _profApproval = null;
+async function _checkApproval() {
+  if (!_loggedIn()) { _profApproval = null; _approvalBanner(); return true; }
+  try {
+    const rows = await _sfetch('/rest/v1/profiles?id=eq.' + _uid() + '&select=status', {method:'GET'});
+    _profApproval = (Array.isArray(rows) && rows[0]) ? rows[0].status : 'approved';
+  } catch(e) { _profApproval = 'approved'; }
+  _approvalBanner();
+  return _profApproval === 'approved' || _profApproval === null;
+}
+// Banner div is created at runtime only — never in source, so positional saves are untouched
+function _approvalBanner() {
+  let b = document.getElementById('approval-banner');
+  const bad = (_profApproval === 'pending' || _profApproval === 'denied');
+  if (!bad) { if (b) b.remove(); return; }
+  if (!b) {
+    b = document.createElement('div');
+    b.id = 'approval-banner';
+    b.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:900;text-align:center;padding:8px 14px;' +
+      'font-family:var(--font-label);font-size:9.5pt;letter-spacing:.2em;text-transform:uppercase;' +
+      'background:var(--overlay-bg,rgba(0,0,0,.85));color:var(--gold);border-bottom:1px dashed var(--gold-dim);';
+    document.body.appendChild(b);
+  }
+  b.textContent = (_profApproval === 'pending')
+    ? '++ Petition received — awaiting Watch Commander approval before your dossier unlocks ++'
+    : '++ Access denied by the Watch Commander ++';
+}
+
 // Both lists are MEMOIZED on first call (from _wireFields at DOMContentLoaded), while every
 // input is still at its source position. _mountAcPanel() then relocates the armor block in
 // the DOM; the cached order keeps saves positionally identical to pre-merge saves.
@@ -3514,6 +3543,8 @@ function _status(s, m) {
   if (lbl) lbl.textContent = m || MAP[s][1];
 }
 async function _doSave() {
+  // Unapproved accounts can't write anyway (RLS) — fail with a clear status instead of an opaque error
+  if (_profApproval === 'pending' || _profApproval === 'denied') { _status('error', 'Awaiting GM approval'); return; }
   // Guard against concurrent saves — if already in flight, reschedule for after it finishes
   if (_saving) { _schedSave(); return; }
   _saving = true;
@@ -3900,6 +3931,7 @@ async function authSubmit() {
     const d = await _sfetch('/auth/v1/token?grant_type=password', {method:'POST', body:JSON.stringify({email, password:pass})});
     if (d.access_token) {
       _setSession(d); _hideAuth(); _updateBar();
+      await _checkApproval();
       await _loadSheet(); _wireFields();
     } else {
       err.textContent = d.error_description || d.msg || 'Authentication failed.';
@@ -3907,7 +3939,7 @@ async function authSubmit() {
   } catch(e) { err.textContent = e.message || 'Network error — try again.'; }
   btn.disabled = false; btn.textContent = 'Sign In';
 }
-function supaSignOut() { _clearSession(); _charId = null; _updateBar(); showAuth(); }
+function supaSignOut() { _clearSession(); _charId = null; _updateBar(); _profApproval = null; _approvalBanner(); showAuth(); }
 function _updateBar() {
   const em = document.getElementById('save-email');
   const so = document.getElementById('btn-signout');
@@ -4389,7 +4421,10 @@ document.addEventListener('DOMContentLoaded', async function() {
   }
 
   // Fresh character? Launch the builder automatically (defined in character_builder.js)
-  if (typeof _builderAutoLaunch === 'function') _builderAutoLaunch();
+  // — but never for an account still awaiting GM approval (saves would be refused by RLS)
+  if (await _checkApproval()) {
+    if (typeof _builderAutoLaunch === 'function') _builderAutoLaunch();
+  }
 
   // React when the portal logs in/out after the sheet is already loaded
   window.addEventListener('storage', async function(e) {
@@ -4402,11 +4437,14 @@ document.addEventListener('DOMContentLoaded', async function() {
         var uidBtn = document.getElementById('copy-uid-btn');
         if (uidBtn) uidBtn.style.display = '';
         try { (window.opener || window.parent).postMessage({type:'sheet-login', uid:_uid(), email:_uemail()}, '*'); } catch(ee){}
-        if (typeof _builderAutoLaunch === 'function') _builderAutoLaunch();
+        if (await _checkApproval()) {
+          if (typeof _builderAutoLaunch === 'function') _builderAutoLaunch();
+        }
       }
     } else {
       _charId = null;
       _updateBar();
+      _profApproval = null; _approvalBanner();
     }
   });
 
@@ -4421,12 +4459,15 @@ document.addEventListener('DOMContentLoaded', async function() {
         await _loadSheet();
         var uidBtn = document.getElementById('copy-uid-btn');
         if (uidBtn) uidBtn.style.display = '';
-        if (typeof _builderAutoLaunch === 'function') _builderAutoLaunch();
+        if (await _checkApproval()) {
+          if (typeof _builderAutoLaunch === 'function') _builderAutoLaunch();
+        }
       }
     } else if (e.data.type === 'portal-signout') {
       _charId = null;
       _clearSession();
       _updateBar();
+      _profApproval = null; _approvalBanner();
     }
   });
 });
