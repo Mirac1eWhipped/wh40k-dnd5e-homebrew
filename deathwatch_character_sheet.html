@@ -3500,19 +3500,28 @@ function _reloadPrompt(idx) {
   var clips = (ai !== -1) ? ((_ammoClips[ai] !== undefined) ? _ammoClips[ai] : 0) : null;
   var ammoIt = (ai !== -1) ? _ammoItemForRow(ai) : null;
   var ammoName = ammoIt ? ammoIt.name : 'ammunition';
+  var unit = (ammoIt && ammoIt.unit) || 'clip';
+  // Belt-fed heavies reload as a full Action; resolve the active combi component's catalog entry
+  var wIt = (meta.id && typeof REQ_ITEMS !== 'undefined') ? REQ_ITEMS.find(function(x){ return x.id === meta.id; }) : null;
+  if (wIt && wIt.combi && meta.combi) {
+    var ck = meta.combi[meta.profile || 'a'];
+    var comp = ck ? REQ_ITEMS.find(function(x){ return x.id === ck; }) : null;
+    if (comp) wIt = comp;
+  }
+  var rldAct = (wIt && wIt.reload === 'Action') ? 'Action' : 'Bonus Action';
   var canReload = (clips === null || clips > 0);
   hdr.textContent = canReload ? '⚠ Magazine Empty' : '⚠ Ammunition Depleted';
   var sub = clips === null
     ? 'No linked ammunition is tracked for this weapon.'
-    : 'Reloading expends one clip — <b>' + clips + '</b> clip' + (clips === 1 ? '' : 's') + ' of <b>' + ammoName + '</b> remaining.';
+    : 'Reloading expends one ' + unit + ' — <b>' + clips + '</b> ' + unit + (clips === 1 ? '' : 's') + ' of <b>' + ammoName + '</b> remaining.';
   var esc = function(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;'); };
   body.innerHTML = '<div class="rld-wpn">' + esc(name) + '</div>'
     + '<div class="rld-sub">' + sub + '</div>'
     + '<div class="rld-btns">'
     + (canReload
-        ? '<button class="rld-go" onclick="_reloadConfirm()">⟳ Reload — Bonus Action</button>'
+        ? '<button class="rld-go" onclick="_reloadConfirm()">⟳ Reload — ' + rldAct + '</button>'
           + '<button class="rld-no" onclick="_reloadClose()">Hold</button>'
-        : '<div class="rld-dry">++ No ' + esc(ammoName) + ' remaining — requisition fresh clips ++</div>'
+        : '<div class="rld-dry">++ No ' + esc(ammoName) + ' remaining — requisition fresh ' + unit + 's ++</div>'
           + '<button class="rld-no" onclick="_reloadClose()">Close</button>')
     + '</div>';
   _rldIdx = idx;
@@ -3689,12 +3698,14 @@ function _ammoRecRender() {
   var max = parseInt((ins[2] ? ins[2].value : '') || '0') || 0;
   var cur = (_ammoClips[idx] !== undefined) ? _ammoClips[idx] : max;
   var armorType = (document.getElementById('armor-type')||{}).value || '';
+  var unit = it.unit || 'clip';
+  var unitCap = unit.charAt(0).toUpperCase() + unit.slice(1);
   function capBox(key, label) {
     var worn = armorType === key;
     var v = (it.caps && it.caps[key] !== undefined) ? it.caps[key] : '—';
     return '<div class="upg-stat"' + (worn ? ' style="border-color:var(--gold);"' : '') + '>'
       + '<div class="upg-stat-l">' + label + (worn ? ' · worn' : '') + '</div>'
-      + '<div class="upg-stat-v"' + (worn ? ' style="color:var(--gold-light);"' : '') + '>' + v + ' clips</div></div>';
+      + '<div class="upg-stat-v"' + (worn ? ' style="color:var(--gold-light);"' : '') + '>' + v + ' ' + unit + 's</div></div>';
   }
   var html = '<div style="font-family:var(--font-label);font-size:12.5pt;color:var(--gold-light);border-bottom:1px solid var(--border2);padding-bottom:2px;">' + it.name + '</div>'
     + '<div class="upg-ident">Ammunition · ' + (it.wtype || '—') + ' · ' + (it.cost || '—') + '</div>'
@@ -3703,7 +3714,7 @@ function _ammoRecRender() {
     + '</div>'
     + (it.notes ? '<div class="upg-slot-desc" style="margin:0 0 10px;">' + it.notes + '</div>' : '')
     + '<div class="upg-slot" style="display:flex;align-items:center;gap:10px;">'
-    + '<span class="upg-slot-ttl">Clips carried</span>'
+    + '<span class="upg-slot-ttl">' + unitCap + 's carried</span>'
     + '<button class="upg-slot-btn" onclick="_ammoRecDec()">−</button>'
     + '<span style="font-family:var(--font-label);font-size:12pt;color:' + (cur === 0 ? 'var(--remove)' : 'var(--gold-light)') + ';">' + cur + ' / ' + max + '</span>'
     + '<button class="upg-slot-btn" onclick="_ammoRecInc()">+</button>'
