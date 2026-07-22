@@ -3100,7 +3100,7 @@ function syncQuickActionsFromWargear() {
           itemProf = itemProfList.find(function(p){ return p.id === meta.profile; });
           if (itemProf && itemProf.save) itemSave = itemProf.save;
         }
-        if (!Array.isArray(meta.mods))  meta.mods = _ref.mods || [];
+        meta.mods = _ref.mods || [];                               // catalog-owned — always sync so mod rebalances reach saved rows
         var _sm = _ref.shots || 0;                                 // always sync from catalog
         if (_sm && typeof _upgTraitDefs === 'function') {
           _upgTraitDefs(meta).forEach(function(ut) {               // Extended Magazine etc.
