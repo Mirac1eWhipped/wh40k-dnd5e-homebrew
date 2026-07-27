@@ -8,3 +8,15 @@ Thumbs.db
 # Editor
 *.swp
 *.swo
+
+# Spell-migration scratch dumps (pipeline scripts + candidate JS stay visible)
+chap_*.txt
+lib_*.txt
+check_dmg.txt
+debug_*.txt
+spotcheck.txt
+parsed_*.json
+
+# Python
+__pycache__/
+*.pyc

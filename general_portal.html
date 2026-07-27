@@ -1643,6 +1643,13 @@
         <p class="lc-desc">Servant of the Omnissiah in the colours of the Adeptus Astartes. Maintains weapons and armour in the field and calls upon ancient machine-spirits in battle.</p>
         <div class="lc-cta">▶ View Full Class Rules</div>
       </a>
+      <a class="link-card ac-gold" href="Feats.html">
+        <span class="lc-icon"><svg viewBox="0 0 1000 1000" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><polygon points="500,40 618,352 950,362 688,565 782,885 500,695 218,885 312,565 50,362 382,352"/></svg></span>
+        <div class="lc-title">Combat Doctrines — Feats</div>
+        <div class="lc-meta">Advancement &nbsp;·&nbsp; Feat Codex</div>
+        <p class="lc-desc">Specialised training earned at advancement milestones. General, marksman, melee, faith, psyker, tech, and infiltration doctrines for every operative.</p>
+        <div class="lc-cta">▶ View Full Feat Codex</div>
+      </a>
     </div>
   </section>
 
@@ -2296,6 +2303,7 @@
 <!-- ════════════════════ JAVASCRIPT ════════════════════ -->
 <script src="req_items.js"></script>
 <script src="spells.js"></script>
+<script src="feats.js"></script>
 <style>
   /* ── Spell modal overlay (mirrors req-modal-overlay) ── */
   #spell-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;align-items:center;justify-content:center;}
@@ -3051,6 +3059,17 @@
                  go: () => { showSection('spells'); spellOpenModal(sp.id); } });
     });
 
+    // Feats → the standalone Feats.html codex (rendered from the same DW_FEATS data)
+    (typeof DW_FEATS !== 'undefined' ? DW_FEATS : []).forEach(f => {
+      const catLbl = (typeof DW_FEAT_CATS !== 'undefined'
+        ? ((DW_FEAT_CATS.find(c => c.id === f.cat) || {}).label || f.cat) : f.cat);
+      idx.push({ group: 'Feats — Combat Doctrines', title: f.name,
+                 sub: catLbl + (f.type === 'half' ? ' · Half Feat' : '') + (f.prereq ? ' · ' + f.prereq : ''),
+                 snippet: _stripHtml(f.desc || ''),
+                 text: [f.name, catLbl, f.prereq, _stripHtml(f.desc || '')].filter(Boolean).join(' ').toLowerCase(),
+                 href: 'Feats.html' });
+    });
+
     // Rules → open rules section filtered to that rule
     RULES_DATA.forEach(r => {
       idx.push({ group: 'Rules Reference', title: r.name,
@@ -3105,6 +3124,7 @@
   const SEARCH_GROUP_ORDER = [
     'Operative Classes', 'Chapter Heritage', 'Requisitorium — Items',
     'Powers — Inquisitorium Arcanum', 'Wargear — Augmetic Traits',
+    'Feats — Combat Doctrines',
     'Rules Reference', 'Bestiaries', 'Campaigns', 'Portal Sections',
   ];
   const SEARCH_GROUP_CAP = 12; // max results shown per group

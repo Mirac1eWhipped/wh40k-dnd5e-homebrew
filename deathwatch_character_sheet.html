@@ -713,6 +713,36 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 #dice-toast.fumble .de-flair{color:#cc6060;}
 #dice-toast .de-dmg-btn{display:none;}
 @media print{#dice-fab,#dice-panel,#dice-toast{display:none!important;}}
+/* ── PHONE LAYOUT (≤720px) — columns collapse, fixed panels clamp to viewport.
+   CSS-only by design: no DOM moves, no new inputs, positional saves untouched. ── */
+@media (max-width:720px){
+  #save-bar{overflow-x:auto;overflow-y:hidden;scrollbar-width:none;}
+  #save-bar::-webkit-scrollbar{display:none;}
+  #save-bar button{flex:0 0 auto;}
+  #save-bar #save-label,#save-bar #save-email{flex:0 0 auto;white-space:nowrap;}
+  .sheet-header{position:static;grid-template-columns:1fr;gap:8px;}
+  .dossier-layout{grid-template-columns:1fr;}
+  .dos-3col{grid-template-columns:1fr;}
+  /* children carry explicit grid placements — some INLINE (style="grid-row:1/3") —
+     which would force phantom implicit columns once the grid is single-column */
+  .dos-3col > *{grid-column:auto!important;grid-row:auto!important;min-width:0;}
+  .g2,.g3{grid-template-columns:1fr;}
+  input:not([type=checkbox]):not([type=radio]),select,textarea{min-width:0;max-width:100%;}
+  .dos-ab-bar{flex-wrap:wrap;}
+  .dos-status-row{flex-wrap:wrap;}
+  /* stop cond/def boxes shrinking to slivers — force them onto their own wrap row
+     (two-class selector to outweigh the base .dos-status-row rule at the same tier) */
+  .dos-status-row .dos-cond-box,.dos-status-row .dos-def-box{flex:1 1 150px;min-width:150px;}
+  /* Quick Actions table scrolls inside itself instead of panning the page */
+  .dos-atk-table{display:block;overflow-x:auto;}
+  .dos-col-hdr{flex-wrap:wrap;}
+  .ability-list{flex-direction:row;flex-wrap:wrap;gap:6px;}
+  .ab-block{min-width:92px;flex:1 1 30%;}
+  #dice-toast{left:12px;right:12px;max-width:none;}
+  .ac-panel{left:8px!important;right:8px!important;width:auto!important;}
+  /* modest tap-target bump on the smallest toggles */
+  input[type=checkbox]{width:16px;height:16px;}
+}
 </style>
 <script>
 /* Theme pre-paint: restore the mirrored palette before first paint so the sheet
@@ -752,6 +782,8 @@ try {
   <button class="sbar-btn" id="btn-signin" onclick="showAuth()">Sign In</button>
   <button class="sbar-btn" id="btn-signout" onclick="supaSignOut()" style="display:none;">Sign Out</button>
   <button class="sbar-btn" onclick="window.print()">Print</button>
+  <button class="sbar-btn" id="btn-export" title="Download this character as a JSON backup file" onclick="_exportChar()">&#11015; Backup</button>
+  <button class="sbar-btn" id="btn-import" title="Restore a character from a JSON backup file" onclick="_importChar()">&#11014; Restore</button>
   <button class="sbar-btn" id="btn-theme" onclick="_themeOpen()">&#127912; Theme</button>
   <button class="sbar-btn" id="btn-builder" onclick="_builderOpen()">&#9874; Builder</button>
 </div>
@@ -3989,6 +4021,9 @@ var _saveTimer = null;
 var _charId    = null;
 var _saving    = false;
 var _adminMode = false;
+var _loadedOk  = false;      // true only after _loadSheet confirms cloud state (row hydrated, or confirmed-new)
+var _lastLoadArg;            // admin override id, kept so a failed load can be retried with the same target
+var _dirty     = false;      // local edits not yet confirmed saved (pending debounce or failed request)
 
 function _authHdr() {
   const t = localStorage.getItem('supa_tok');
@@ -4098,14 +4133,9 @@ function _status(s, m) {
   dot.style.background = MAP[s][0];
   if (lbl) lbl.textContent = m || MAP[s][1];
 }
-async function _doSave() {
-  // Unapproved accounts can't write anyway (RLS) — fail with a clear status instead of an opaque error
-  if (_profApproval === 'pending' || _profApproval === 'denied') { _status('error', 'Awaiting GM approval'); return; }
-  // Guard against concurrent saves — if already in flight, reschedule for after it finishes
-  if (_saving) { _schedSave(); return; }
-  _saving = true;
-  try {
-  if (!_loggedIn()) { _status('offline'); return; }
+// Snapshot the live sheet into a save record. Shared by cloud save (_doSave) and
+// JSON backup (_exportChar) so the two can never drift apart.
+function _buildSavePayload() {
   const vals = _fields().map(f => f.value);
   const chks = _checkboxes().map(c => c.checked);
   const clsSel = document.getElementById('cls-select');
@@ -4152,9 +4182,23 @@ async function _doSave() {
     }
     ,theme: _themeSpec
   };
-  const name = _charName();
+  // Layout stamp — lets a future load detect positional drift (fields restore by DOM order)
+  extra.fmt = {v: 1, f: vals.length, c: chks.length, at: new Date().toISOString()};
+  return {fields: vals, checkboxes: chks, extra, name: _charName()};
+}
+async function _doSave() {
+  // Unapproved accounts can't write anyway (RLS) — fail with a clear status instead of an opaque error
+  if (_profApproval === 'pending' || _profApproval === 'denied') { _status('error', 'Awaiting GM approval'); return; }
+  // Guard against concurrent saves — if already in flight, reschedule for after it finishes
+  if (_saving) { _schedSave(); return; }
+  _saving = true;
   try {
-    const payload = {fields: vals, checkboxes: chks, extra, name};
+  if (!_loggedIn()) { _status('offline'); return; }
+  // Never write before a confirmed load — a failed load followed by one keystroke would
+  // otherwise query the newest row and PATCH blank defaults over the real character
+  if (!_loadedOk) { _dirty = true; _status('error', 'Load failed — click here to retry'); return; }
+  try {
+    const payload = _buildSavePayload();
     if (_charId) {
       await _sfetch('/rest/v1/characters?id=eq.' + _charId, {
         method: 'PATCH', body: JSON.stringify(payload), headers: {'Prefer': 'return=minimal'}
@@ -4171,17 +4215,103 @@ async function _doSave() {
         });
       } else {
         const cr = await _sfetch('/rest/v1/characters', {
-          method:'POST', body:JSON.stringify({user_id:_uid(), name, sheet_type:_STYPE, ...payload}),
+          method:'POST', body:JSON.stringify({user_id:_uid(), sheet_type:_STYPE, ...payload}),
           headers:{'Prefer':'return=representation'}
         });
         if (Array.isArray(cr) && cr[0]) _charId = cr[0].id;
       }
     }
     _status('saved');
+    _dirty = false;
   } catch(e) { _status('error', e.message || 'Save failed'); console.error('Save error:', e); }
   } finally { _saving = false; }
 }
-function _schedSave() { _status('saving'); clearTimeout(_saveTimer); _saveTimer = setTimeout(_doSave, 800); }
+function _schedSave() { _dirty = true; _status('saving'); clearTimeout(_saveTimer); _saveTimer = setTimeout(_doSave, 800); }
+/* ── A2: JSON backup / restore ─────────────────────────────────────────────
+   Export shares _buildSavePayload with cloud saves; restore shares _applyRecord
+   with cloud loads — neither path can drift from the live formats. */
+function _exportChar() {
+  var p = _buildSavePayload();
+  var out = Object.assign({format: 'dw-sheet-v1', exportedAt: new Date().toISOString(),
+                           sheet_type: (typeof _STYPE !== 'undefined' ? _STYPE : 'dw_dark'),
+                           source_char_id: _charId}, p);
+  var blob = new Blob([JSON.stringify(out, null, 2)], {type: 'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = (p.name || 'operative').replace(/[^\w\- ]+/g, '').trim().replace(/\s+/g, '_').toLowerCase() + '_backup.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function() { URL.revokeObjectURL(a.href); }, 4000);
+}
+// Wipe live sheet state before a restore so keys absent from the backup can't
+// survive from the previous character (chips are additive on hydration).
+function _resetSheetState() {
+  if (typeof _rowTriggersReset === 'function') _rowTriggersReset();
+  _fields().forEach(function(f) { if (!f.readOnly) f.value = ''; });
+  _checkboxes().forEach(function(c) { c.checked = false; });
+  document.querySelectorAll('.exp-chk').forEach(function(c) { c.checked = false; });
+  var arcP = document.getElementById('skill-arcana-prof'); if (arcP) arcP.checked = false;
+  document.querySelectorAll('.dos-cond-chip.active').forEach(function(c) { c.classList.remove('active'); });
+  document.querySelectorAll('.dos-def-chip').forEach(function(c) { c.classList.remove('resist', 'immune', 'vuln'); });
+  document.querySelectorAll('.wg-equip-btn.equipped').forEach(function(b) { b.classList.remove('equipped'); });
+  _wargearMeta = []; _ammoClips = {}; _spellbook = []; _pinnedSpells = [];
+  _charFeats = []; _abilityUses = {}; _asiState = {milestones: {}};
+  _powerCur = 0; _powerMax = 0; _inspiration = false;
+  var inspBox = document.getElementById('insp-box'); if (inspBox) inspBox.classList.remove('active');
+  _autoGrants = _agDefaults();
+  var clsSel = document.getElementById('cls-select'); if (clsSel) clsSel.value = '';
+  var subSel = document.getElementById('sub-select'); if (subSel) subSel.value = '';
+}
+function _importChar() {
+  if (_viewOnly) return;
+  // Runtime-created picker: positional caches were memoized at DOMContentLoaded,
+  // so this input can never enter the save format
+  var inp = document.createElement('input');
+  inp.type = 'file'; inp.accept = '.json,application/json';
+  inp.onchange = function() {
+    var f = inp.files && inp.files[0];
+    if (!f) return;
+    var rd = new FileReader();
+    rd.onload = function() {
+      try {
+        var data = JSON.parse(rd.result);
+        if (!data || !Array.isArray(data.fields) || !Array.isArray(data.checkboxes)) {
+          throw new Error('Not a character backup file');
+        }
+        var warn = '';
+        if (data.fields.length !== _fields().length || data.checkboxes.length !== _checkboxes().length) {
+          warn = '\n\nWARNING: this backup was made on a different sheet layout (' +
+                 data.fields.length + '/' + data.checkboxes.length + ' vs ' +
+                 _fields().length + '/' + _checkboxes().length + ' fields) — some values may land in the wrong boxes.';
+        }
+        if (!confirm('Replace the current sheet with "' + (data.name || 'Unnamed') + '"?\nThis overwrites what is on screen and saves it to the cloud.' + warn)) return;
+        _resetSheetState();
+        _applyRecord(data);
+        _schedSave();
+        _status('loaded', 'Restored from backup — saving…');
+      } catch (e) {
+        alert('Import failed: ' + (e.message || e));
+      }
+    };
+    rd.readAsText(f);
+  };
+  inp.click();
+}
+/* ── A5: unsaved-work protection ── */
+window.addEventListener('beforeunload', function(e) {
+  if (_dirty && _loggedIn() && !_viewOnly) { e.preventDefault(); e.returnValue = ''; }
+});
+window.addEventListener('online', function() {
+  if (!_loggedIn()) return;
+  if (!_loadedOk) { _loadSheet(_lastLoadArg); return; }   // failed load: retry takes priority
+  if (_dirty) _schedSave();                                // failed save: flush pending edits
+});
+// "click here to retry" affordance on the save-bar label after a failed load
+(function() {
+  var lbl = document.getElementById('save-label');
+  if (lbl) lbl.addEventListener('click', function() {
+    if (!_loadedOk && _loggedIn()) { _status('saving', 'Retrying load…'); _loadSheet(_lastLoadArg); }
+  });
+})();
 /* ── Inspiration toggle ── */
 var _inspiration = false;
 function _toggleInspiration() {
@@ -4349,6 +4479,8 @@ function _showAdminBanner(charName) {
 }
 async function _loadSheet(adminOverrideId) {
   if (!_loggedIn()) { _status('offline'); return; }
+  _lastLoadArg = adminOverrideId;
+  _loadedOk = false;
   try {
     let rows;
     if (adminOverrideId && _uid() === ADMIN_UID) {
@@ -4358,6 +4490,7 @@ async function _loadSheet(adminOverrideId) {
     }
     if (!Array.isArray(rows) || !rows.length) {
       if (adminOverrideId) { _status('error', 'Character not found in cloud.'); return; }
+      _loadedOk = true;   // confirmed-new: no row exists, the first save may safely POST
       _status('loaded','New sheet — start filling it in'); return;
     }
     _charId = rows[0].id;
@@ -4365,12 +4498,25 @@ async function _loadSheet(adminOverrideId) {
       _adminMode = true;
       _showAdminBanner(rows[0].name || 'Unknown Operative');
     }
+    const drift = _applyRecord(rows[0]);
+    _loadedOk = true;
+    _status('loaded', _adminMode ? 'GM Edit Mode — changes save to player record'
+                    : drift ? 'Loaded — sheet layout changed since this save; verify data, then re-save'
+                    : 'Sheet loaded — ' + _uemail());
+    return;
+  } catch(e) { _status('error', e.message || 'Load failed — click here to retry'); console.error('Load error:', e); return; }
+}
+
+// Hydrate the sheet DOM + JS state from a character record {fields, checkboxes, extra, name}.
+// Shared by cloud load (_loadSheet) and JSON restore (_importChar). Returns true when the
+// record's saved layout stamp (extra.fmt) no longer matches the live sheet's field counts.
+function _applyRecord(row) {
     if (typeof _rowTriggersReset === 'function') _rowTriggersReset();  // unlock before hydration
     const ff = _fields();
-    (rows[0].fields || []).forEach((v, i) => { if (ff[i] && !ff[i].readOnly) ff[i].value = v || ''; });
+    (row.fields || []).forEach((v, i) => { if (ff[i] && !ff[i].readOnly) ff[i].value = v || ''; });
     const cc = _checkboxes();
-    (rows[0].checkboxes || []).forEach((v, i) => { if (cc[i]) cc[i].checked = !!v; });
-    const ext = rows[0].extra || {};
+    (row.checkboxes || []).forEach((v, i) => { if (cc[i]) cc[i].checked = !!v; });
+    const ext = row.extra || {};
     // Rows without a saved theme default to Deathwatch Black (no dw_light rows exist in the wild)
     applyTheme(ext.theme || {id:'dw_dark', label:'Deathwatch Black'});
     const arcProf = document.getElementById('skill-arcana-prof');
@@ -4470,8 +4616,7 @@ async function _loadSheet(adminOverrideId) {
     syncQuickActionsFromWargear();
     renderAmmoTracker();
     calcAC();
-    _status('loaded', _adminMode ? 'GM Edit Mode — changes save to player record' : 'Sheet loaded — ' + _uemail());
-  } catch(e) { _status('error', e.message || 'Load failed'); console.error('Load error:', e); }
+    return !!(ext.fmt && (ext.fmt.f !== ff.length || ext.fmt.c !== cc.length));
 }
 function showAuth(msg) {
   const m = document.getElementById('auth-modal');
@@ -4501,7 +4646,7 @@ async function authSubmit() {
   } catch(e) { err.textContent = e.message || 'Network error — try again.'; }
   btn.disabled = false; btn.textContent = 'Sign In';
 }
-function supaSignOut() { _clearSession(); _charId = null; _updateBar(); _profApproval = null; _approvalBanner(); showAuth(); }
+function supaSignOut() { _clearSession(); _charId = null; _loadedOk = false; _updateBar(); _profApproval = null; _approvalBanner(); showAuth(); }
 function _updateBar() {
   const em = document.getElementById('save-email');
   const so = document.getElementById('btn-signout');
@@ -5023,6 +5168,7 @@ document.addEventListener('DOMContentLoaded', async function() {
       }
     } else {
       _charId = null;
+      _loadedOk = false;
       _updateBar();
       _profApproval = null; _approvalBanner();
     }
@@ -5045,6 +5191,7 @@ document.addEventListener('DOMContentLoaded', async function() {
       }
     } else if (e.data.type === 'portal-signout') {
       _charId = null;
+      _loadedOk = false;
       _clearSession();
       _updateBar();
       _profApproval = null; _approvalBanner();
@@ -5118,6 +5265,8 @@ function _setViewOnly() {
   if (thBtn) thBtn.style.display = 'none';
   var bldBtn = document.getElementById('btn-builder');
   if (bldBtn) bldBtn.style.display = 'none';
+  var impBtn = document.getElementById('btn-import');
+  if (impBtn) impBtn.style.display = 'none';   // restore is destructive; Backup stays (GM can back up any sheet)
   var advBtn = document.getElementById('btn-advance');
   if (advBtn) advBtn.style.display = 'none';
   var afBtn = document.getElementById('btn-addfeat');

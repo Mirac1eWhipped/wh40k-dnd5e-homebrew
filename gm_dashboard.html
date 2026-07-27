@@ -831,7 +831,9 @@ function showView(name) {
    COMBAT TRACKER — persistent encounter state
 ════════════════════════════════════════════ */
 const COMBAT_KEY = 'gm_combat_v1';
-let combat = { combatants: [], round: 1, activeIdx: 0 };
+// Active turn is anchored by combatant ID, not list position — initiative edits,
+// removals, and mid-fight adds re-sort the list without moving whose turn it is.
+let combat = { combatants: [], round: 1, activeId: null };
 let _condTargetId = null;
 let _editingInitId = null;
 let _editingHpId = null;
@@ -846,7 +848,16 @@ function _cid() { return 'c_' + Date.now() + '_' + Math.random().toString(36).sl
 function combatLoad() {
   try {
     const d = JSON.parse(localStorage.getItem(COMBAT_KEY));
-    if (d && Array.isArray(d.combatants)) combat = d;
+    if (d && Array.isArray(d.combatants)) {
+      combat = d;
+      // Migrate pre-activeId saves: convert the old sorted-position index to an id anchor
+      if (combat.activeId === undefined) {
+        const sorted = [...combat.combatants].sort((a,b) => b.initiative - a.initiative);
+        const idx = (typeof combat.activeIdx === 'number' && sorted.length) ? combat.activeIdx % sorted.length : 0;
+        combat.activeId = sorted.length ? sorted[idx].id : null;
+        delete combat.activeIdx;
+      }
+    }
   } catch(e) {}
 }
 function combatSave() { localStorage.setItem(COMBAT_KEY, JSON.stringify(combat)); }
@@ -862,7 +873,8 @@ function combatRender() {
     document.getElementById('combat-active-name').textContent = '—';
     return;
   }
-  const active = sorted[combat.activeIdx % sorted.length];
+  let active = sorted.find(c => c.id === combat.activeId);
+  if (!active) { active = sorted[0]; combat.activeId = active.id; }
   document.getElementById('combat-active-name').textContent = active
     ? active.name + (active.tag ? ' — ' + active.tag : '') : '—';
   list.innerHTML = sorted.map(c => {
@@ -981,28 +993,43 @@ function combatAdjHP(id, delta) {
 }
 
 function combatNext() {
-  if (!combat.combatants.length) return;
-  combat.activeIdx++;
-  if (combat.activeIdx >= combat.combatants.length) { combat.activeIdx = 0; combat.round++; }
+  const sorted = _sortedCombatants();
+  if (!sorted.length) return;
+  const i = sorted.findIndex(c => c.id === combat.activeId);
+  if (i < 0 || i + 1 >= sorted.length) {
+    if (i >= 0) combat.round++;          // wrapped past the last combatant → new round
+    combat.activeId = sorted[0].id;
+  } else {
+    combat.activeId = sorted[i + 1].id;
+  }
   combatSave(); combatRender();
 }
 function combatPrev() {
-  if (!combat.combatants.length) return;
-  combat.activeIdx--;
-  if (combat.activeIdx < 0) {
-    combat.activeIdx = combat.combatants.length - 1;
-    if (combat.round > 1) combat.round--;
+  const sorted = _sortedCombatants();
+  if (!sorted.length) return;
+  const i = sorted.findIndex(c => c.id === combat.activeId);
+  if (i <= 0) {
+    combat.activeId = sorted[sorted.length - 1].id;
+    if (i === 0 && combat.round > 1) combat.round--;
+  } else {
+    combat.activeId = sorted[i - 1].id;
   }
   combatSave(); combatRender();
 }
 function combatReset() {
   if (!confirm('End the encounter and clear all combatants?')) return;
-  combat = { combatants: [], round: 1, activeIdx: 0 };
+  combat = { combatants: [], round: 1, activeId: null };
   combatSave(); combatRender();
 }
 function combatRemove(id) {
+  if (combat.activeId === id) {
+    // Removing the active combatant: hand the turn to the next in initiative order
+    const sorted = _sortedCombatants();
+    const i = sorted.findIndex(c => c.id === id);
+    const next = sorted[(i + 1) % sorted.length];
+    combat.activeId = (next && next.id !== id) ? next.id : null;
+  }
   combat.combatants = combat.combatants.filter(c => c.id !== id);
-  if (combat.activeIdx >= combat.combatants.length) combat.activeIdx = 0;
   combatSave(); combatRender();
 }
 
@@ -1066,8 +1093,18 @@ async function combatImportKillTeam(btn) {
     _allChars.forEach(row => {
       const ex = row.extra || {};
       const name = row.name || 'Unnamed Operative';
-      if (combat.combatants.some(c => c.srcRowId === row.id)) return;
-      if (combat.combatants.some(c => c.name.toLowerCase() === name.toLowerCase())) return;
+      const tracked = combat.combatants.find(c => c.srcRowId === row.id);
+      if (tracked) {
+        // Already imported: refresh the snapshot (character may have been renamed
+        // or re-statted since). Current HP stays — the tracker owns it mid-fight.
+        tracked.name = name;
+        tracked.maxHp = parseInt(ex.hp_max, 10) || tracked.maxHp;
+        tracked.ac = parseInt(ex.ac, 10) || tracked.ac;
+        return;
+      }
+      // Name guard only against manual rows (no srcRowId link) — a row tracked
+      // under a different character must never block an import
+      if (combat.combatants.some(c => !c.srcRowId && c.name.toLowerCase() === name.toLowerCase())) return;
       combat.combatants.push({
         id: _cid(), srcRowId: row.id, name,
         type: 'player', initiative: 0,
