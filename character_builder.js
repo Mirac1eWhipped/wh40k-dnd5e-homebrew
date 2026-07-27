@@ -223,7 +223,9 @@ function _bwHpMax() {
   var con = _bwMod(fin.con);
   return c.hitDie + con + (_bw.level - 1) * (c.hitDie / 2 + 1 + con);
 }
-/* Granted skills the choose-list must not re-offer: chapter grants + class signature. */
+/* Granted skills, keyed to their source. Class signature skills are locked out of
+   the choose-list; chapter-granted skills stay choosable — picking one duplicates
+   the grant and upgrades it to Expertise (duplicate clause), like tool kits. */
 function _bwGrantedSkills() {
   var g = {};
   var ch = CHAPTER_GRANTS[_bw.chapter];
@@ -709,17 +711,20 @@ function _bwStepSkills() {
   var c = _bwCls();
   if (!c) return '<div class="bw-sub">Choose a class first.</div>';
   var granted = _bwGrantedSkills();
-  var chooseFrom = c.skills.from.filter(function(id){ return !granted[id]; });
+  var chooseFrom = c.skills.from.filter(function(id){ return granted[id] !== _bw.cls; });
   var count = c.skills.count;
   var over = _bw.skills.length > count;
   var h = '<div class="bw-h">Skill Training</div>' +
-    '<div class="bw-sub">' + _bwE(_bw.cls) + ' training grants ' + count + ' skill proficiencies of your choice. Skills already granted by your Chapter or class are shown locked below — they don\'t cost a pick.</div>' +
+    '<div class="bw-sub">' + _bwE(_bw.cls) + ' training grants ' + count + ' skill proficiencies of your choice. Skills already granted by your Chapter or class are shown locked below — they don\'t cost a pick. Picking a skill your Chapter already grants upgrades it to Expertise.</div>' +
     '<div class="bw-count' + (over ? ' over' : '') + '">' + _bw.skills.length + ' of ' + count + ' chosen</div>' +
     '<div class="bw-grid">';
   h += chooseFrom.map(function(id) {
     var on = _bw.skills.indexOf(id) !== -1;
+    var dup = granted[id] === _bw.chapter;
     return '<div class="bw-card' + (on ? ' sel' : '') + '" onclick="_bwTogSkill(\'' + id + '\')">' +
-      '<div class="bw-card-name">' + (on ? '☑' : '☐') + ' ' + _bwE(_BW_SKILL_LABEL[id] || id) + '</div></div>';
+      '<div class="bw-card-name">' + (on ? '☑' : '☐') + ' ' + _bwE(_BW_SKILL_LABEL[id] || id) + '</div>' +
+      (dup ? '<div class="bw-card-stat" style="color:var(--gold);">Chapter already grants this — picking it upgrades to Expertise.</div>' : '') +
+      '</div>';
   }).join('');
   h += '</div>';
   var grantedIds = Object.keys(granted);
@@ -994,7 +999,10 @@ function _bwStepReview() {
   var spent = _bwShopSpent();
   function row(k, v) { return '<div class="bw-summary-row"><div class="bw-summary-k">' + k + '</div><div class="bw-summary-v">' + v + '</div></div>'; }
   var scoreStr = _BW_STATS.map(function(ab){ return ab.toUpperCase() + ' ' + (fin[ab] === null ? '—' : fin[ab] + ' (' + _bwFmt(fin[ab] === null ? 0 : _bwMod(fin[ab])) + ')'); }).join(' · ');
-  var skillStr = _bw.skills.map(function(id){ return _bwE(_BW_SKILL_LABEL[id] || id); }).join(', ') || '—';
+  var skillStr = _bw.skills.map(function(id){
+    var lbl = _bwE(_BW_SKILL_LABEL[id] || id);
+    return granted[id] === _bw.chapter ? lbl + ' <span style="color:var(--gold);">(Expertise)</span>' : lbl;
+  }).join(', ') || '—';
   var grantStr = Object.keys(granted).map(function(id){ return _bwE(_BW_SKILL_LABEL[id] || id); }).join(', ') || '—';
   var kitBits = [];
   if (c) c.kit.forEach(function(entry, i) {
@@ -1153,10 +1161,19 @@ function _builderCommit() {
     if (el && fin[ab] !== null) { el.value = String(fin[ab]); el.dispatchEvent(new Event('input')); }
   });
 
-  // 6. chosen skills — player-owned picks, checked directly (not via _skillGrant)
+  // 6. chosen skills — player-owned picks, checked directly (not via _skillGrant).
+  //    Duplicate clause: a pick the Chapter also grants upgrades to Expertise; the
+  //    chapter's recorded op flips to 'exp' so a later chapter change withdraws
+  //    only the expertise and leaves the player-owned proficiency.
+  var chGrantSkills = (CHAPTER_GRANTS[st.chapter] && CHAPTER_GRANTS[st.chapter].skills) || [];
   st.skills.forEach(function(id) {
     var p = document.getElementById('skill-' + id + '-prof');
     if (p && !p.checked) { p.checked = true; p.dispatchEvent(new Event('change')); }
+    if (chGrantSkills.indexOf(id) !== -1) {
+      var e = document.getElementById('skill-' + id + '-exp');
+      if (e && !e.checked) { e.disabled = false; e.checked = true; e.dispatchEvent(new Event('change')); }
+      if (typeof _autoGrants !== 'undefined' && _autoGrants.skills) _autoGrants.skills[id] = 'exp';
+    }
   });
 
   // 7. tool kit of choice
