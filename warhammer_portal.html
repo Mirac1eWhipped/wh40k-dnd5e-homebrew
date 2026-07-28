@@ -835,25 +835,9 @@
       <div class="section-heading-line"></div>
     </div>
 
-    <div class="lore-entry">
-      <div class="lore-date">+++ Pre-<br/>Deployment +++</div>
-      <div class="lore-dot"></div>
-      <div class="lore-body">
-        <h3>Kill Team Assembled at Watch Fortress Erioch</h3>
-        <span class="lore-tag tag-deathwatch">Deathwatch</span>
-        <p>Watch Commander Mordigael has called the Kill Team to the fortress's Strategium. Each Battle-Brother has been drawn from their Chapter by the black ships of the Deathwatch and brought to Erioch to swear the Long Vigil. Their first deployment together will be Mataras II. They are strangers to one another. They will not remain so.</p>
-      </div>
-    </div>
-
-    <div class="lore-entry">
-      <div class="lore-date">+++ Future<br/>Operations +++</div>
-      <div class="lore-dot" style="background: var(--border2);"></div>
-      <div class="lore-body">
-        <h3>Classified — Pending Operational Development</h3>
-        <span class="lore-tag tag-classified">Sealed</span>
-        <p>Subsequent operational chronicle entries will be added here as the campaign progresses. The Watch Commander's orders are clear: gather intelligence first. Then, if the threat is confirmed — cleanse.</p>
-      </div>
-    </div>
+    <!-- Rendered from CHRONICLE_DATA (script below, next to PLANET_DATA).
+         To log a session: add an entry to that array — never hand-edit HTML here. -->
+    <div id="chronicle-entries"></div>
 
   </section>
 
@@ -1268,6 +1252,38 @@
 
     <!-- Planet Lore Popup JS -->
     <script>
+    /* ── OPERATIONAL CHRONICLE ─────────────────────────────────────────────
+       One object per timeline entry, rendered in order into #chronicle-entries.
+       To log a session: insert a new entry ABOVE the sealed "Future Operations"
+       entry. Fields: date (small left label, <br/> allowed), title, tag
+       ('deathwatch' | 'xenos' | 'classified' | 'intel') + tagLabel, body
+       (string or array of paragraph strings), sealed: true → dim dot. */
+    const CHRONICLE_DATA = [
+      {date: '+++ Pre-<br/>Deployment +++',
+       title: 'Kill Team Assembled at Watch Fortress Erioch',
+       tag: 'deathwatch', tagLabel: 'Deathwatch',
+       body: 'Watch Commander Mordigael has called the Kill Team to the fortress\'s Strategium. Each Battle-Brother has been drawn from their Chapter by the black ships of the Deathwatch and brought to Erioch to swear the Long Vigil. Their first deployment together will be Mataras II. They are strangers to one another. They will not remain so.'},
+      {date: '+++ Future<br/>Operations +++',
+       title: 'Classified — Pending Operational Development',
+       tag: 'classified', tagLabel: 'Sealed', sealed: true,
+       body: 'Subsequent operational chronicle entries will be added here as the campaign progresses. The Watch Commander\'s orders are clear: gather intelligence first. Then, if the threat is confirmed — cleanse.'},
+    ];
+    function renderChronicle() {
+      const host = document.getElementById('chronicle-entries');
+      if (!host) return;
+      host.innerHTML = CHRONICLE_DATA.map(e =>
+        '<div class="lore-entry">' +
+          '<div class="lore-date">' + e.date + '</div>' +
+          '<div class="lore-dot"' + (e.sealed ? ' style="background: var(--border2);"' : '') + '></div>' +
+          '<div class="lore-body">' +
+            '<h3>' + e.title + '</h3>' +
+            '<span class="lore-tag tag-' + e.tag + '">' + e.tagLabel + '</span>' +
+            [].concat(e.body).map(p => '<p>' + p + '</p>').join('') +
+          '</div>' +
+        '</div>').join('');
+    }
+    renderChronicle();
+
     const PLANET_DATA = {
       jericho_maw: {
         name: 'Jericho-Maw Warp Gate',

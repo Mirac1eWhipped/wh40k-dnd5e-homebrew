@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GM Screen — Kill Team: Jericho</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  /* Palette mirrors gm_dashboard.html / general_portal.html */
+  :root {
+    --bg:         #0e0c08;
+    --bg2:        #1a1610;
+    --bg3:        #28200e;
+    --panel:      #120f08;
+    --gold:       #d4a030;
+    --gold-light: #f0cc60;
+    --gold-dim:   #8a6820;
+    --silver:     #e8e0cc;
+    --silver-dim: #c0aa78;
+    --red:        #6a1010;
+    --red-bright: #c03030;
+    --text:       #ede5d0;
+    --text-dim:   #9a8868;
+    --border:     #2e2618;
+    --border2:    #4a3c22;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Text', Georgia, serif;
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 25% 0%, rgba(180,120,20,0.09) 0%, transparent 55%),
+      radial-gradient(ellipse at 75% 0%, rgba(140,50,20,0.06) 0%, transparent 55%);
+  }
+  .topbar { background:rgba(8,10,12,0.97);border-bottom:1px solid var(--border2);backdrop-filter:blur(6px);padding:10px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;flex-wrap:wrap; }
+  .topbar-back { font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;color:var(--text-dim);text-decoration:none;text-transform:uppercase;border:1px solid var(--border2);padding:6px 12px;transition:all 0.2s;white-space:nowrap; }
+  .topbar-back:hover { border-color:var(--gold-dim);color:var(--gold); }
+  .topbar-title { font-family:'Cinzel',serif;font-size:13px;font-weight:700;letter-spacing:3px;color:var(--gold);text-transform:uppercase; }
+  .topbar-spacer { flex:1; }
+
+  .main { padding:36px 24px 80px;max-width:1200px;margin:0 auto; }
+  .page-header { text-align:center;margin-bottom:36px; }
+  .page-header h1 { font-family:'Cinzel',serif;font-size:26px;font-weight:700;letter-spacing:6px;color:var(--gold);text-transform:uppercase; }
+  .page-header p { color:var(--text-dim);letter-spacing:2px;font-size:13px;text-transform:uppercase;margin-top:6px; }
+
+  .section { background:var(--panel);border:1px solid var(--border);border-top:2px solid var(--gold-dim);padding:22px 24px;margin-bottom:28px; }
+  .sec-title { font-family:'Cinzel',serif;font-size:15px;font-weight:700;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:4px; }
+  .sec-sub { font-size:13px;color:var(--text-dim);letter-spacing:1px;margin-bottom:16px; }
+
+  table { border-collapse:collapse;width:100%;font-size:14.5px; }
+  th { font-family:'Cinzel',serif;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--border2);padding:6px 10px;text-align:left; }
+  td { padding:5px 10px;border-bottom:1px solid var(--border);color:var(--silver); }
+  tr:hover td { background:rgba(212,160,48,0.04); }
+  .num { text-align:right;font-variant-numeric:tabular-nums; }
+  .tbl-scroll { overflow-x:auto; }
+  .note { font-size:13.5px;color:var(--text-dim);line-height:1.55;margin-top:12px;border-left:2px solid var(--border2);padding-left:12px; }
+  .note strong { color:var(--silver-dim); }
+
+  /* Encounter calculator */
+  .calc-row { display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px; }
+  .calc-field label { display:block;font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim);margin-bottom:4px; }
+  .calc-field select { background:var(--bg);border:1px solid var(--border2);color:var(--text);font-family:'Crimson Text',Georgia,serif;font-size:15px;padding:7px 10px;outline:none; }
+  .calc-field select:focus { border-color:var(--gold-dim); }
+  .budget-chips { display:flex;gap:10px;flex-wrap:wrap; }
+  .budget-chip { border:1px solid var(--border2);padding:8px 14px;min-width:120px; }
+  .budget-chip .bc-lbl { font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:var(--text-dim); }
+  .budget-chip .bc-val { font-size:19px;color:var(--gold-light);font-variant-numeric:tabular-nums; }
+  .budget-chip.deadly { border-color:var(--red);background:rgba(139,26,26,0.08); }
+  .budget-chip.deadly .bc-val { color:var(--red-bright); }
+
+  /* Threat archive chips */
+  .faction-head { font-family:'Cinzel',serif;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:var(--silver-dim);margin:18px 0 8px;display:flex;align-items:center;gap:10px; }
+  .faction-head .count { font-size:10px;color:var(--text-dim);letter-spacing:1px; }
+  .cr-band { margin-bottom:6px;display:flex;gap:6px;flex-wrap:wrap;align-items:flex-start; }
+  .cr-band-lbl { font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);flex:0 0 92px;padding-top:5px; }
+  .creature-chips { display:flex;gap:6px;flex-wrap:wrap;flex:1;min-width:200px; }
+  .cchip { border:1px solid var(--border2);background:var(--bg2);padding:3px 9px;font-size:13px;color:var(--silver);white-space:nowrap;text-decoration:none;transition:all 0.15s; }
+  .cchip:hover { border-color:var(--gold-dim);color:var(--gold-light); }
+  .cchip .meta { color:var(--text-dim);font-size:11.5px;margin-left:5px; }
+  .archive-status { font-size:13px;color:var(--text-dim);letter-spacing:1px; }
+
+  /* Dramatis personae */
+  .npc-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px; }
+  .npc-card { border:1px solid var(--border);border-left:2px solid var(--gold-dim);background:var(--bg2);padding:12px 16px; }
+  .npc-name { font-family:'Cinzel',serif;font-size:13.5px;font-weight:700;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase; }
+  .npc-role { font-size:11.5px;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px; }
+  .npc-desc { font-size:13.5px;color:var(--silver);line-height:1.5; }
+  .npc-status { display:inline-block;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;border:1px solid var(--border2);padding:1px 7px;margin-top:8px;color:var(--silver-dim); }
+
+  @media (max-width:600px){
+    .main { padding:24px 12px 60px; }
+    .section { padding:16px 14px; }
+    .cr-band-lbl { flex:0 0 100%; padding-top:0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="topbar-back" href="gm_dashboard.html">← Strategium</a>
+  <a class="topbar-back" href="warhammer_portal.html">Jericho Portal</a>
+  <span class="topbar-title">✠ GM Screen</span>
+  <span class="topbar-spacer"></span>
+  <a class="topbar-back" href="general_portal.html">Inquisitorium</a>
+</div>
+
+<div class="main">
+  <div class="page-header">
+    <h1>Watch Commander's Screen</h1>
+    <p>Encounter Doctrine · Requisition Ledger · Dramatis Personae</p>
+  </div>
+
+  <!-- ══════════ ENCOUNTER BUDGET ══════════ -->
+  <div class="section">
+    <div class="sec-title">Encounter Budget</div>
+    <div class="sec-sub">Standard 5E daily-encounter mathematics, adapted for the Kill Team</div>
+    <div class="calc-row">
+      <div class="calc-field">
+        <label>Kill Team Level</label>
+        <select id="calc-level"></select>
+      </div>
+      <div class="calc-field">
+        <label>Operatives</label>
+        <select id="calc-size"></select>
+      </div>
+      <div class="budget-chips">
+        <div class="budget-chip"><div class="bc-lbl">Easy</div><div class="bc-val" id="bud-easy">—</div></div>
+        <div class="budget-chip"><div class="bc-lbl">Medium</div><div class="bc-val" id="bud-med">—</div></div>
+        <div class="budget-chip"><div class="bc-lbl">Hard</div><div class="bc-val" id="bud-hard">—</div></div>
+        <div class="budget-chip deadly"><div class="bc-lbl">Deadly</div><div class="bc-val" id="bud-deadly">—</div></div>
+      </div>
+    </div>
+    <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>Enemies in encounter</th><th class="num">1</th><th class="num">2</th><th class="num">3–6</th><th class="num">7–10</th><th class="num">11–14</th><th class="num">15+</th></tr></thead>
+      <tbody><tr><td>XP multiplier (compare the multiplied total against the budget)</td><td class="num">×1</td><td class="num">×1.5</td><td class="num">×2</td><td class="num">×2.5</td><td class="num">×3</td><td class="num">×4</td></tr></tbody>
+    </table>
+    </div>
+    <div class="note"><strong>Astartes doctrine:</strong> Deathwatch operatives punch above their weight compared to standard 5E characters — power armor, bolters, and homebrew class features run hot. Treat <strong>Hard</strong> as the baseline for a fair fight and <strong>Deadly</strong> as a genuine boss encounter; an Easy-budget wave is horde chaff. XP values per CR are listed with each creature chip below.</div>
+  </div>
+
+  <!-- ══════════ THREAT ARCHIVES ══════════ -->
+  <div class="section">
+    <div class="sec-title">Threat Archives — Encounter Reference</div>
+    <div class="sec-sub">Parsed live from the bestiary masters — always current, grouped by faction and CR band</div>
+    <div class="archive-status" id="archive-status">Consulting the archives…</div>
+    <div id="archive-body"></div>
+    <div class="note">Chips link into the full bestiary page for the statblock. XP shown is the DMG value for that CR — sum the XP of every enemy, apply the multiplier table above, and compare against the budget.</div>
+  </div>
+
+  <!-- ══════════ REQUISITION LEDGER ══════════ -->
+  <div class="section">
+    <div class="sec-title">Requisition Ledger — Award Guidance</div>
+    <div class="sec-sub">Suggested RP awards, calibrated to Requisitorium prices (induction kit = 150 RP)</div>
+    <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>Mission Outcome</th><th class="num">Suggested Award (per operative)</th><th>Reasoning</th></tr></thead>
+      <tbody>
+        <tr><td>Routine operation, objectives met</td><td class="num">40–60 RP</td><td>Covers ammunition resupply (clips run 15–35 RP) with modest savings toward gear</td></tr>
+        <tr><td>Hard-fought success, serious opposition</td><td class="num">75–100 RP</td><td>A sidearm or grenade restock per mission; a primary weapon (75–350 RP) every 2–4 missions</td></tr>
+        <tr><td>Exceptional valor or flawless execution</td><td class="num">+25 RP bonus</td><td>Rewards play without inflating the economy</td></tr>
+        <tr><td>Secondary objective completed</td><td class="num">+15–25 RP each</td><td>Encourages thorough operations over speed-runs</td></tr>
+        <tr><td>Intelligence recovered / first contact documented</td><td class="num">+10 RP</td><td>The Ordo Xenos pays for knowledge</td></tr>
+        <tr><td>Mission failure with honor intact</td><td class="num">20–30 RP</td><td>Ammunition burned is ammunition owed; failure still teaches</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="note"><strong>Economy anchors:</strong> the ammo economy is deliberate — resupply no longer refills clips, so RP awards are the players' ammunition lifeline. At 40–60 RP per routine mission an operative can always reload but must <em>choose</em> between stockpiling clips and saving for the 300–500 RP relic tier. Weapon upgrade rites (Sanctified → Relic-pattern) are the intended long-term RP sink. All figures are suggestions — the Watch Commander's ledger is final.</div>
+  </div>
+
+  <!-- ══════════ DRAMATIS PERSONAE ══════════ -->
+  <div class="section">
+    <div class="sec-title">Dramatis Personae</div>
+    <div class="sec-sub">Named persons of the Jericho deployment — extend the array in this file as the cast grows</div>
+    <div class="npc-grid" id="npc-grid"></div>
+  </div>
+
+</div>
+
+<script>
+/* ══ Dramatis Personae — add entries here as NPCs enter play ══ */
+const NPCS = [
+  {name: 'Watch Commander Mordigael', role: 'Deathwatch · Watch Fortress Erioch',
+   desc: 'Master of the Vigil at Erioch and the Kill Team\'s commanding authority. Issues deployments from the Strategium; expects intelligence before annihilation. His patience is a finite instrument.',
+   status: 'Ally — Command'},
+  {name: 'Governor Theris Malt', role: 'Imperial Civil Authority · Mataras II',
+   desc: 'Planetary governor of Mataras II. Cooperative on the surface, but the sealed site logs and unverified pater-hold reports under his seal invite questions he has not yet been made to answer.',
+   status: 'Contact — Unverified'},
+];
+function renderNpcs() {
+  document.getElementById('npc-grid').innerHTML = NPCS.map(n =>
+    '<div class="npc-card">' +
+      '<div class="npc-name">' + n.name + '</div>' +
+      '<div class="npc-role">' + n.role + '</div>' +
+      '<div class="npc-desc">' + n.desc + '</div>' +
+      (n.status ? '<div class="npc-status">' + n.status + '</div>' : '') +
+    '</div>').join('');
+}
+renderNpcs();
+
+/* ══ Encounter budget calculator (5E DMG thresholds, per character) ══ */
+const XP_THRESHOLDS = {
+  1:[25,50,75,100], 2:[50,100,150,200], 3:[75,150,225,400], 4:[125,250,375,500],
+  5:[250,500,750,1100], 6:[300,600,900,1400], 7:[350,750,1100,1700], 8:[450,900,1400,2100],
+  9:[550,1100,1600,2400], 10:[600,1200,1900,2800], 11:[800,1600,2400,3600], 12:[1000,2000,3000,4500],
+  13:[1100,2200,3400,5100], 14:[1250,2500,3800,5700], 15:[1400,2800,4300,6400], 16:[1600,3200,4800,7200],
+  17:[2000,3900,5900,8800], 18:[2100,4200,6300,9500], 19:[2400,4900,7300,10900], 20:[2800,5700,8500,12700],
+};
+const XP_BY_CR = {
+  '1/8':25, '1/4':50, '1/2':100, '1':200, '2':450, '3':700, '4':1100, '5':1800,
+  '6':2300, '7':2900, '8':3900, '9':5000, '10':5900, '11':7200, '12':8400,
+  '13':10000, '14':11500, '15':13000, '16':15000, '17':18000, '18':20000, '19':22000, '20':25000,
+};
+function calcInit() {
+  const lv = document.getElementById('calc-level');
+  const sz = document.getElementById('calc-size');
+  for (let i = 1; i <= 20; i++) lv.add(new Option('Level ' + i, i));
+  for (let i = 1; i <= 8; i++) sz.add(new Option(i + (i === 1 ? ' operative' : ' operatives'), i));
+  lv.value = '2'; sz.value = '5';
+  lv.onchange = sz.onchange = calcUpdate;
+  calcUpdate();
+}
+function calcUpdate() {
+  const t = XP_THRESHOLDS[+document.getElementById('calc-level').value];
+  const n = +document.getElementById('calc-size').value;
+  const ids = ['bud-easy','bud-med','bud-hard','bud-deadly'];
+  ids.forEach((id, i) => document.getElementById(id).textContent = (t[i] * n).toLocaleString() + ' XP');
+}
+calcInit();
+
+/* ══ Threat Archives — live parse of the bestiary masters ══
+   Same markup contract as gm_dashboard.html's enemy library:
+   .creature-entry → .creature-name / .creature-type / .cr-badge, AC + HP
+   regexed from .top-stats. New bestiary entries appear here automatically. */
+const BESTIARIES = [
+  {file: 'Tyranid_Bestiary_Master.html',     label: 'Tyranid Hive Fleets'},
+  {file: 'Chaos_Bestiary_Master.html',       label: 'Forces of Chaos'},
+  {file: 'Necron_Bestiary_Master.html',      label: 'Necron Dynasties'},
+  {file: 'Genestealer_Bestiary_Master.html', label: 'Genestealer Cults'},
+];
+const CR_BANDS = [
+  {label: 'Chaff · CR ⅛–1',   min: 0,    max: 1},
+  {label: 'Line · CR 2–4',    min: 2,    max: 4},
+  {label: 'Elite · CR 5–8',   min: 5,    max: 8},
+  {label: 'Command · CR 9–13',min: 9,    max: 13},
+  {label: 'Apex · CR 14+',    min: 14,   max: 99},
+];
+function crNum(s) {
+  s = (s || '').replace(/^CR\s*/i, '').trim();
+  if (s.includes('/')) { const p = s.split('/'); return (+p[0]) / (+p[1]) || 0; }
+  return +s || 0;
+}
+async function loadArchives() {
+  const status = document.getElementById('archive-status');
+  const body = document.getElementById('archive-body');
+  const sections = [];
+  let total = 0, failed = [];
+  for (const b of BESTIARIES) {
+    try {
+      const html = await fetch(b.file).then(r => { if (!r.ok) throw new Error(r.status); return r.text(); });
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const creatures = [];
+      doc.querySelectorAll('.creature-entry').forEach(entry => {
+        const name = (entry.querySelector('.creature-name') || {}).textContent || '';
+        if (!name.trim()) return;
+        const crTxt = ((entry.querySelector('.cr-badge') || {}).textContent || '').trim();
+        const top = (entry.querySelector('.top-stats') || {}).textContent || '';
+        const ac = (top.match(/Armor Class\s+(\d+)/) || [])[1] || '?';
+        const hp = (top.match(/Hit Points\s+(\d+)/) || [])[1] || '?';
+        creatures.push({name: name.trim(), crTxt, cr: crNum(crTxt), ac, hp});
+      });
+      total += creatures.length;
+      sections.push({label: b.label, file: b.file, creatures});
+    } catch (e) { failed.push(b.label); }
+  }
+  const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  body.innerHTML = sections.map(sec => {
+    const bands = CR_BANDS.map(band => {
+      const list = sec.creatures.filter(c => c.cr >= band.min && c.cr <= band.max)
+                                .sort((a, b) => a.cr - b.cr || a.name.localeCompare(b.name));
+      if (!list.length) return '';
+      return '<div class="cr-band"><div class="cr-band-lbl">' + band.label + '</div><div class="creature-chips">' +
+        list.map(c => {
+          const xp = XP_BY_CR[c.crTxt.replace(/^CR\s*/i, '').trim()];
+          return '<a class="cchip" href="' + sec.file + '" title="Open bestiary">' + esc(c.name) +
+                 '<span class="meta">' + esc(c.crTxt) + ' · AC ' + esc(c.ac) + ' · ' + esc(c.hp) + ' HP' +
+                 (xp ? ' · ' + xp.toLocaleString() + ' XP' : '') + '</span></a>';
+        }).join('') + '</div></div>';
+    }).join('');
+    return '<div class="faction-head">' + esc(sec.label) +
+           '<span class="count">' + sec.creatures.length + ' entries</span></div>' + bands;
+  }).join('');
+  status.textContent = total + ' threats catalogued across ' + sections.length + ' archives' +
+    (failed.length ? ' — failed to read: ' + failed.join(', ') : '');
+}
+loadArchives();
+</script>
+
+</body>
+</html>
