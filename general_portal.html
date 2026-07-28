@@ -1643,7 +1643,7 @@
         <p class="lc-desc">Servant of the Omnissiah in the colours of the Adeptus Astartes. Maintains weapons and armour in the field and calls upon ancient machine-spirits in battle.</p>
         <div class="lc-cta">▶ View Full Class Rules</div>
       </a>
-      <a class="link-card ac-gold" href="Feats.html">
+      <a class="link-card lc-aux ac-gold" href="Feats.html">
         <span class="lc-icon"><svg viewBox="0 0 1000 1000" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><polygon points="500,40 618,352 950,362 688,565 782,885 500,695 218,885 312,565 50,362 382,352"/></svg></span>
         <div class="lc-title">Combat Doctrines — Feats</div>
         <div class="lc-meta">Advancement &nbsp;·&nbsp; Feat Codex</div>
@@ -2622,7 +2622,7 @@
     set('home-count-rules',    RULES_DATA.length);
     set('home-count-wg',       document.querySelectorAll('#wargear .wg-card').length);
     set('home-count-chapters', CHAPTERS.length);
-    set('home-count-classes',  document.querySelectorAll('#operatives .link-card[href]').length);
+    set('home-count-classes',  document.querySelectorAll('#operatives .link-card[href]:not(.lc-aux)').length);
     set('home-count-bestiary', document.querySelectorAll('#bestiary .link-card[href]').length);
   }
 

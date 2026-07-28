@@ -183,7 +183,9 @@
 </div>
 
 <script>
-/* ══ Dramatis Personae — add entries here as NPCs enter play ══ */
+/* ══ Dramatis Personae ══
+   Live entries come from the campaign_content table (edited in the dashboard's
+   Campaign tab); the array below is the offline/empty fallback. */
 const NPCS = [
   {name: 'Watch Commander Mordigael', role: 'Deathwatch · Watch Fortress Erioch',
    desc: 'Master of the Vigil at Erioch and the Kill Team\'s commanding authority. Issues deployments from the Strategium; expects intelligence before annihilation. His patience is a finite instrument.',
@@ -202,6 +204,20 @@ function renderNpcs() {
     '</div>').join('');
 }
 renderNpcs();
+(async function loadLiveNpcs() {
+  const URL = 'https://uggazjqvwyndpcxrkazx.supabase.co';
+  const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVnZ2F6anF2d3luZHBjeHJrYXp4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg4MTcxOTAsImV4cCI6MjA5NDM5MzE5MH0.6dcsbi-lzQJUQS5UZTVg-tI_mFuy8yfAlfWsf0ennpU';
+  try {
+    const rows = await fetch(URL + '/rest/v1/campaign_content?campaign=eq.jericho&kind=eq.npc&select=data&order=sort.asc', {
+      headers: {'apikey': KEY}
+    }).then(r => r.ok ? r.json() : null);
+    if (Array.isArray(rows) && rows.length) {
+      NPCS.length = 0;
+      rows.forEach(r => NPCS.push(r.data));
+      renderNpcs();
+    }
+  } catch (e) { /* fallback array already rendered */ }
+})();
 
 /* ══ Encounter budget calculator (5E DMG thresholds, per character) ══ */
 const XP_THRESHOLDS = {

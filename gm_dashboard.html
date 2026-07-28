@@ -65,6 +65,30 @@
   .refresh-btn { background:var(--bg3);border:1px solid var(--gold-dim);color:var(--gold);font-family:'Cinzel',serif;font-size:11px;letter-spacing:1px;padding:6px 14px;cursor:pointer;transition:all 0.2s;text-transform:uppercase; }
   .refresh-btn:hover { border-color:var(--gold);color:var(--gold-light); }
 
+  /* ── Campaign builder ── */
+  .camp-sec { margin-bottom:34px; }
+  .camp-sec-title { font-family:'Cinzel',serif;font-size:14px;font-weight:700;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;border-bottom:1px solid var(--border2);padding-bottom:6px;margin-bottom:6px; }
+  .camp-sec-note { font-size:13px;color:var(--text-dim);letter-spacing:0.5px;margin-bottom:14px; }
+  .camp-card { background:var(--panel);border:1px solid var(--border);border-left:2px solid var(--gold-dim);padding:14px 16px;margin-bottom:12px; }
+  .camp-card.draft { border-left-color:var(--red-bright); }
+  .camp-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:10px; }
+  .camp-field label { display:block;font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-dim);margin-bottom:3px; }
+  .camp-field input, .camp-field select, .camp-field textarea { width:100%;background:var(--bg);border:1px solid var(--border2);color:var(--text);font-family:'Crimson Text',Georgia,serif;font-size:14.5px;padding:7px 10px;outline:none; }
+  .camp-field input:focus, .camp-field select:focus, .camp-field textarea:focus { border-color:var(--gold-dim); }
+  .camp-field textarea { resize:vertical;min-height:64px; }
+  .camp-field.wide { grid-column:1/-1; }
+  .camp-actions { display:flex;gap:10px;align-items:center; }
+  .camp-save { background:var(--bg3);border:1px solid var(--gold-dim);color:var(--gold);font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;padding:7px 16px;cursor:pointer;text-transform:uppercase; }
+  .camp-save:hover { border-color:var(--gold);color:var(--gold-light); }
+  .camp-del { background:transparent;border:1px solid var(--border2);color:var(--text-dim);font-family:'Cinzel',serif;font-size:10.5px;letter-spacing:1px;padding:7px 12px;cursor:pointer;text-transform:uppercase; }
+  .camp-del:hover { border-color:var(--red);color:var(--red-bright); }
+  .camp-add { background:transparent;border:1px dashed var(--border2);color:var(--text-dim);font-family:'Cinzel',serif;font-size:11px;letter-spacing:1.5px;padding:8px 18px;cursor:pointer;text-transform:uppercase;width:100%; }
+  .camp-add:hover { border-color:var(--gold-dim);color:var(--gold); }
+  .camp-flash { color:#27ae60;font-size:12px;letter-spacing:1px;font-family:'Cinzel',serif;opacity:0;transition:opacity .3s; }
+  .camp-flash.show { opacity:1; }
+  .camp-chk { display:flex;align-items:center;gap:6px;font-size:13px;color:var(--silver-dim);padding-top:16px; }
+  .camp-chk input { width:auto; }
+
   /* ── Main layout ── */
   .main { padding:36px 24px 80px;max-width:1200px;margin:0 auto; }
   .page-header { text-align:center;margin-bottom:36px; }
@@ -372,6 +396,7 @@
     <button class="view-tab active" id="tab-dossiers" onclick="showView('dossiers')">Operative Dossiers</button>
     <button class="view-tab" id="tab-combat" onclick="showView('combat')">Combat Tracker</button>
     <button class="view-tab" id="tab-access" onclick="showView('access')">Access Requests<span class="tab-badge" id="access-badge" style="display:none;">0</span></button>
+    <button class="view-tab" id="tab-campaign" onclick="showView('campaign')">Campaign</button>
   </div>
 
   <!-- ══ VIEW: OPERATIVE DOSSIERS ══ -->
@@ -412,6 +437,21 @@
       </div>
     </div>
     <div id="access-list"><div class="loading">++ Awaiting Authentication — Stand By ++</div></div>
+  </div>
+
+  <!-- ══ VIEW: CAMPAIGN BUILDER ══ -->
+  <div class="view" id="view-campaign">
+    <div class="page-header">
+      <div class="page-eyebrow">++ Campaign Command — Live Content Control ++</div>
+      <h1 class="page-title">Campaign Builder</h1>
+      <p class="page-sub">Everything here writes to the live campaign record — players see it on their next portal load. No code edits, no deploys: log the session, flip the deployment status, unseal the mission.</p>
+      <div class="page-divider">
+        <div class="page-divider-line"></div>
+        <div class="page-divider-diamond"></div>
+        <div class="page-divider-line"></div>
+      </div>
+    </div>
+    <div id="camp-editor"><div class="loading">++ Awaiting Authentication — Stand By ++</div></div>
   </div>
 
   <!-- ══ VIEW: COMBAT TRACKER ══ -->
@@ -573,6 +613,7 @@ async function gmSignIn() {
       document.getElementById('gm-email').textContent = d.user.email;
       await loadAllChars();
       loadProfiles();
+      campLoad();
     } else {
       err.textContent = d.error_description || 'Authentication failed.';
     }
@@ -589,6 +630,7 @@ function gmSignOut() {
   document.getElementById('cards-grid').innerHTML = '<div class="loading">++ Awaiting Authentication — Stand By ++</div>';
   document.getElementById('access-list').innerHTML = '<div class="loading">++ Awaiting Authentication — Stand By ++</div>';
   document.getElementById('access-badge').style.display = 'none';
+  document.getElementById('camp-editor').innerHTML = '<div class="loading">++ Awaiting Authentication — Stand By ++</div>';
 }
 
 /* ── Token lifecycle — access tokens expire after ~1h; refresh silently ── */
@@ -1596,6 +1638,219 @@ function _sdRollDmg(i) {
   _gmRollDamage(r.who, r.label, r.dmg, false);
 }
 
+/* ════════════════════════════════════════════
+   CAMPAIGN BUILDER — live campaign_content editor
+   Every card is a form; ✔ Save writes that row. Portal + GM Screen
+   render these rows on next load (hardcoded markup is their fallback).
+════════════════════════════════════════════ */
+const CAMP_SLUG = 'jericho';
+const CAMP_COLORS = [['', 'Standard'], ['var(--gold)', 'Gold'], ['var(--red-bright)', 'Red'], ['#27ae60', 'Green'], ['var(--text-dim)', 'Dim']];
+const CAMP_TAGS = [['deathwatch', 'Deathwatch'], ['xenos', 'Xenos'], ['classified', 'Classified'], ['intel', 'Intel']];
+const CAMP_MISSION_STATUS = ['active', 'classified', 'complete', 'unassigned'];
+const CAMP_PLANET_SLOTS = ['jericho_maw','erioch','baraban','hethgard','avalos','spite','vanity','stigmartus','slinnar','aurum','castobel','zayth','mataras','eleusis','mereth','wither','kharon','hadex'];
+let _campRows = [];
+
+async function campLoad() {
+  const host = document.getElementById('camp-editor');
+  if (!host) return;
+  if (!(await _ensureFreshToken())) return;
+  try {
+    const rows = await _sfetch('/rest/v1/campaign_content?campaign=eq.' + CAMP_SLUG + '&select=*&order=sort.asc,updated_at.asc');
+    if (!Array.isArray(rows)) throw new Error(rows.message || 'Fetch failed');
+    _campRows = rows;
+    campRender();
+  } catch (e) {
+    host.innerHTML = '<div class="loading">++ Campaign record unavailable — ' + _esc(e.message || 'error') + ' ++</div>';
+  }
+}
+
+function _campInput(f, label, val, opts) {
+  opts = opts || {};
+  let inner;
+  if (opts.textarea) {
+    inner = '<textarea data-f="' + f + '"' + (opts.rows ? ' rows="' + opts.rows + '"' : '') + '>' + _esc(val == null ? '' : val) + '</textarea>';
+  } else if (opts.select) {
+    inner = '<select data-f="' + f + '">' + opts.select.map(o => {
+      const v = Array.isArray(o) ? o[0] : o, lbl = Array.isArray(o) ? o[1] : o;
+      return '<option value="' + _esc(v) + '"' + (String(val || '') === String(v) ? ' selected' : '') + '>' + _esc(lbl) + '</option>';
+    }).join('') + '</select>';
+  } else {
+    inner = '<input type="' + (opts.type || 'text') + '" data-f="' + f + '" value="' + _esc(val == null ? '' : val) + '"' + (opts.list ? ' list="' + opts.list + '"' : '') + '>';
+  }
+  return '<div class="camp-field' + (opts.wide ? ' wide' : '') + '"><label>' + label + '</label>' + inner + '</div>';
+}
+function _campActions(row) {
+  return '<div class="camp-actions">' +
+    '<button class="camp-save" onclick="campSave(this)">&#10003; Save</button>' +
+    (row.id ? '<button class="camp-del" onclick="campDeleteRow(\'' + row.id + '\')">&#10005; Delete</button>' : '') +
+    '<span class="camp-flash">Inscribed to the record</span></div>';
+}
+function _campCard(row, fieldsHtml) {
+  return '<div class="camp-card' + (row.id ? '' : ' draft') + '" data-id="' + (row.id || '') + '" data-kind="' + row.kind + '"' +
+    (row.slot ? ' data-slot="' + _esc(row.slot) + '"' : '') + '>' +
+    '<div class="camp-grid">' + fieldsHtml + '</div>' + _campActions(row) + '</div>';
+}
+
+function campRender() {
+  const host = document.getElementById('camp-editor');
+  const of = k => _campRows.filter(r => r.kind === k);
+  let html = '';
+
+  // ── Deployment status (singleton) ──
+  const st = of('status')[0] || {kind: 'status', slot: 'status', data: {}};
+  html += '<div class="camp-sec"><div class="camp-sec-title">Deployment Status</div>' +
+    '<div class="camp-sec-note">The three stat chips at the top of the Jericho portal.</div>' +
+    _campCard(st,
+      _campInput('deployment', 'Current Deployment', st.data.deployment) +
+      _campInput('deployment_color', 'Color', st.data.deployment_color, {select: CAMP_COLORS}) +
+      _campInput('theatres', 'Active Theatres', st.data.theatres) +
+      _campInput('theatres_color', 'Color', st.data.theatres_color, {select: CAMP_COLORS}) +
+      _campInput('threat', 'Threat Designation', st.data.threat) +
+      _campInput('threat_color', 'Color', st.data.threat_color, {select: CAMP_COLORS})) +
+    '</div>';
+
+  // ── Chronicle ──
+  html += '<div class="camp-sec"><div class="camp-sec-title">Operational Chronicle</div>' +
+    '<div class="camp-sec-note">Session log on the portal\'s Lore page. Lower sort = higher on the timeline; the sealed entry sits at 9999. Body: blank line = new paragraph.</div>' +
+    of('chronicle').map(r => _campCard(r,
+      _campInput('date', 'Date Label (<br/> ok)', r.data.date) +
+      _campInput('title', 'Title', r.data.title) +
+      _campInput('tag', 'Tag Style', r.data.tag, {select: CAMP_TAGS}) +
+      _campInput('tagLabel', 'Tag Text', r.data.tagLabel) +
+      _campInput('sort', 'Sort', r.sort, {type: 'number'}) +
+      '<div class="camp-chk"><input type="checkbox" data-f="sealed"' + (r.data.sealed ? ' checked' : '') + ' id="chk-' + (r.id || 'new') + '"><label for="chk-' + (r.id || 'new') + '" style="margin:0;">Sealed (dim dot)</label></div>' +
+      _campInput('body', 'Body', Array.isArray(r.data.body) ? r.data.body.join('\n\n') : r.data.body, {textarea: true, wide: true, rows: 4}))).join('') +
+    '<button class="camp-add" onclick="campAdd(\'chronicle\')">+ Log a Chronicle Entry</button></div>';
+
+  // ── Missions ──
+  html += '<div class="camp-sec"><div class="camp-sec-title">Mission Briefings</div>' +
+    '<div class="camp-sec-note">Cards on the portal\'s Missions page. Objectives: one per line. Link is optional — set it when a full briefing page exists.</div>' +
+    of('mission').map(r => _campCard(r,
+      _campInput('number', 'Designation', r.data.number) +
+      _campInput('title', 'Title', r.data.title) +
+      _campInput('status', 'Status', r.data.status, {select: CAMP_MISSION_STATUS}) +
+      _campInput('badge', 'Badge Text', r.data.badge) +
+      _campInput('href', 'Briefing Page Link', r.data.href) +
+      _campInput('sort', 'Sort', r.sort, {type: 'number'}) +
+      _campInput('desc', 'Description', r.data.desc, {textarea: true, wide: true, rows: 3}) +
+      _campInput('objLabel', 'Objectives Label', r.data.objLabel) +
+      _campInput('objectives', 'Objectives (one per line)', (r.data.objectives || []).join('\n'), {textarea: true, wide: true, rows: 3}))).join('') +
+    '<button class="camp-add" onclick="campAdd(\'mission\')">+ Add a Mission Card</button></div>';
+
+  // ── NPCs ──
+  html += '<div class="camp-sec"><div class="camp-sec-title">Dramatis Personae</div>' +
+    '<div class="camp-sec-note">Rendered on the GM Screen. Status examples: "Ally — Command", "Contact — Unverified", "Threat — Confirmed".</div>' +
+    of('npc').map(r => _campCard(r,
+      _campInput('name', 'Name', r.data.name) +
+      _campInput('role', 'Role / Affiliation', r.data.role) +
+      _campInput('status', 'Status Chip', r.data.status) +
+      _campInput('sort', 'Sort', r.sort, {type: 'number'}) +
+      _campInput('desc', 'Description', r.data.desc, {textarea: true, wide: true, rows: 3}))).join('') +
+    '<button class="camp-add" onclick="campAdd(\'npc\')">+ Add an NPC</button></div>';
+
+  // ── Planet intel overrides ──
+  html += '<div class="camp-sec"><div class="camp-sec-title">Sector Intel — Planet Overrides</div>' +
+    '<div class="camp-sec-note">Overrides for the star-chart popups. Leave a field blank to keep the base lore text; only filled fields override. Status colors: hex like #27ae60 (green) / #c0392b (red) / #c8a44a (gold).</div>' +
+    '<datalist id="camp-planet-slots">' + CAMP_PLANET_SLOTS.map(s => '<option value="' + s + '">').join('') + '</datalist>' +
+    of('planet').map(r => _campCard(r,
+      '<div class="camp-field"><label>System (locked)</label><input type="text" value="' + _esc(r.slot) + '" readonly style="opacity:.6;"></div>' +
+      _campInput('status', 'Status Text', r.data.status) +
+      _campInput('statusColor', 'Status Color', r.data.statusColor) +
+      _campInput('type', 'Type Line', r.data.type) +
+      _campInput('lore', 'Lore (blank = keep base)', r.data.lore, {textarea: true, wide: true, rows: 3}) +
+      _campInput('intel', 'Intel Note (blank = keep base)', r.data.intel, {textarea: true, wide: true, rows: 2}))).join('') +
+    '<div class="camp-card draft" data-kind="planet-new"><div class="camp-grid">' +
+      '<div class="camp-field"><label>System Id (pick or type)</label><input type="text" data-f="slot" list="camp-planet-slots" placeholder="mataras"></div>' +
+      _campInput('status', 'Status Text', '') +
+      _campInput('statusColor', 'Status Color', '') +
+      _campInput('intel', 'Intel Note', '', {textarea: true, wide: true, rows: 2}) +
+    '</div><div class="camp-actions"><button class="camp-save" onclick="campSave(this)">&#10003; Create Override</button><span class="camp-flash">Inscribed to the record</span></div></div>' +
+    '</div>';
+
+  host.innerHTML = html;
+}
+
+function campAdd(kind) {
+  const sorts = _campRows.filter(r => r.kind === kind && r.sort < 9999).map(r => r.sort);
+  _campRows.push({id: null, kind, slot: null, sort: (sorts.length ? Math.max(...sorts) : 0) + 10,
+                  data: kind === 'chronicle' ? {tag: 'deathwatch', tagLabel: 'Deathwatch'} :
+                        kind === 'mission' ? {status: 'active', objLabel: 'Primary Objectives'} : {}});
+  campRender();
+}
+
+function _campCollect(card) {
+  const kind = card.dataset.kind === 'planet-new' ? 'planet' : card.dataset.kind;
+  const vals = {};
+  card.querySelectorAll('[data-f]').forEach(el => {
+    vals[el.dataset.f] = el.type === 'checkbox' ? el.checked : el.value;
+  });
+  const sort = vals.sort !== undefined ? (parseInt(vals.sort, 10) || 0) : undefined;
+  delete vals.sort;
+  let slot = card.dataset.slot || null;
+  if (kind === 'planet' && vals.slot !== undefined) { slot = (vals.slot || '').trim(); delete vals.slot; }
+  const data = {};
+  if (kind === 'chronicle') {
+    ['date', 'title', 'tag', 'tagLabel'].forEach(k => data[k] = vals[k] || '');
+    if (vals.sealed) data.sealed = true;
+    const paras = (vals.body || '').split(/\n\s*\n/).map(s => s.trim()).filter(Boolean);
+    data.body = paras.length > 1 ? paras : (paras[0] || '');
+  } else if (kind === 'mission') {
+    ['number', 'title', 'status', 'badge', 'desc', 'objLabel'].forEach(k => data[k] = vals[k] || '');
+    if ((vals.href || '').trim()) data.href = vals.href.trim();
+    data.objectives = (vals.objectives || '').split('\n').map(s => s.trim()).filter(Boolean);
+  } else if (kind === 'npc') {
+    ['name', 'role', 'desc', 'status'].forEach(k => data[k] = vals[k] || '');
+  } else if (kind === 'planet') {
+    Object.keys(vals).forEach(k => { if ((vals[k] || '').trim()) data[k] = vals[k].trim(); });
+  } else {
+    Object.keys(vals).forEach(k => data[k] = vals[k]);
+  }
+  return {id: card.dataset.id || null, kind, slot, data, sort};
+}
+
+async function campSave(btn) {
+  const card = btn.closest('.camp-card');
+  const row = _campCollect(card);
+  if (row.kind === 'planet' && !row.slot) { alert('Pick a system id first.'); return; }
+  if (!(await _ensureFreshToken())) return;
+  btn.disabled = true;
+  try {
+    if (row.id) {
+      const body = {data: row.data};
+      if (row.sort !== undefined) body.sort = row.sort;
+      const r = await fetch(SUPA_URL + '/rest/v1/campaign_content?id=eq.' + row.id, {
+        method: 'PATCH', headers: {'apikey': SUPA_KEY, 'Content-Type': 'application/json', ..._authHdr(), 'Prefer': 'return=minimal'},
+        body: JSON.stringify(body)
+      });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+    } else {
+      const r = await fetch(SUPA_URL + '/rest/v1/campaign_content', {
+        method: 'POST', headers: {'apikey': SUPA_KEY, 'Content-Type': 'application/json', ..._authHdr(), 'Prefer': 'return=minimal'},
+        body: JSON.stringify({campaign: CAMP_SLUG, kind: row.kind, slot: row.slot, data: row.data, sort: row.sort || 0})
+      });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+    }
+    const flash = card.querySelector('.camp-flash');
+    if (flash) { flash.classList.add('show'); setTimeout(() => flash.classList.remove('show'), 1600); }
+    await campLoad();
+  } catch (e) {
+    alert('Save failed: ' + (e.message || e) + ' — check your session and try again.');
+    btn.disabled = false;
+  }
+}
+
+async function campDeleteRow(id) {
+  if (!confirm('Delete this entry from the live campaign record? Players stop seeing it on next load.')) return;
+  if (!(await _ensureFreshToken())) return;
+  try {
+    const r = await fetch(SUPA_URL + '/rest/v1/campaign_content?id=eq.' + id, {
+      method: 'DELETE', headers: {'apikey': SUPA_KEY, ..._authHdr(), 'Prefer': 'return=minimal'}
+    });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    await campLoad();
+  } catch (e) { alert('Delete failed: ' + (e.message || e)); }
+}
+
 // Init
 document.addEventListener('DOMContentLoaded', function() {
   if (_loggedIn()) {
@@ -1603,11 +1858,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('gm-email').textContent = localStorage.getItem('gm_supa_email') || '';
     loadAllChars();
     loadProfiles();
+    campLoad();
   }
   combatLoad();
   combatRender();
   const savedView = localStorage.getItem('gm_dash_view');
-  if (savedView === 'combat' || savedView === 'access') showView(savedView);
+  if (savedView === 'combat' || savedView === 'access' || savedView === 'campaign') showView(savedView);
   _gmSetShare(_gmShare);
   const gmCmd = document.getElementById('gm-dice-cmd');
   if (gmCmd) gmCmd.addEventListener('input', _trayRefresh);

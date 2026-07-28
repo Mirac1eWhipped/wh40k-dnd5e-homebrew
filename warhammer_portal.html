@@ -746,15 +746,15 @@
   <!-- ── CAMPAIGN STATS STRIP ── -->
   <div class="status-strip">
     <div class="status-stat">
-      <div class="status-stat-num" style="color: var(--gold);">MATARAS II</div>
+      <div class="status-stat-num" id="camp-deployment" style="color: var(--gold);">MATARAS II</div>
       <div class="status-stat-label">Current Deployment</div>
     </div>
     <div class="status-stat">
-      <div class="status-stat-num">1</div>
+      <div class="status-stat-num" id="camp-theatres">1</div>
       <div class="status-stat-label">Active Theatres</div>
     </div>
     <div class="status-stat">
-      <div class="status-stat-num" style="color: var(--red-bright);">EXTREMIS</div>
+      <div class="status-stat-num" id="camp-threat" style="color: var(--red-bright);">EXTREMIS</div>
       <div class="status-stat-label">Threat Designation</div>
     </div>
   </div>
@@ -848,7 +848,8 @@
       <div class="section-heading-line"></div>
     </div>
 
-    <div class="mission-grid">
+    <!-- Cards below are the static fallback — live rows from campaign_content replace them -->
+    <div class="mission-grid" id="mission-grid">
 
       <!-- Mission I -->
       <a class="mission-card" href="mission_kethis_inquiry.html" style="text-decoration:none;color:inherit;display:block;">
@@ -1856,6 +1857,76 @@
   function _portalUid()    { return localStorage.getItem('supa_uid')    || ''; }
   function _portalEmail()  { return localStorage.getItem('supa_email')  || ''; }
   function _portalLoggedIn() { return !!localStorage.getItem('supa_tok'); }
+
+  /* ══ CAMPAIGN BUILDER — live content from the campaign_content table ══
+     GM edits via the dashboard's Campaign tab; players see it on next load.
+     Hardcoded markup above stays as the offline/empty fallback. */
+  const CAMPAIGN_SLUG = 'jericho';
+  const MISSION_STYLE = {
+    active:     {bar: 'class="mission-status-bar status-active"',     badge: 'class="mission-badge badge-active"'},
+    classified: {bar: 'class="mission-status-bar status-classified"', badge: 'class="mission-badge badge-classified"'},
+    complete:   {bar: 'class="mission-status-bar" style="background:#27ae60;"', badge: 'class="mission-badge" style="color:#27ae60;border-color:#1a6640;"'},
+    unassigned: {bar: 'class="mission-status-bar" style="background: var(--border2);"', badge: 'class="mission-badge" style="color:var(--text-dim); border-color:var(--border2);"'},
+  };
+  function renderMissionCards(list) {
+    const grid = document.getElementById('mission-grid');
+    if (!grid || !list.length) return;
+    grid.innerHTML = list.map(m => {
+      const sty = MISSION_STYLE[m.status] || MISSION_STYLE.unassigned;
+      const inner =
+        '<div ' + sty.bar + '></div>' +
+        '<div class="mission-inner">' +
+          '<div class="mission-number">' + (m.number || '') + '</div>' +
+          '<div class="mission-title">' + (m.title || '') + '</div>' +
+          '<span ' + sty.badge + '>' + (m.badge || '') + '</span>' +
+          '<p class="mission-desc">' + (m.desc || '') + '</p>' +
+          ((m.objectives && m.objectives.length) ?
+            '<div class="mission-objectives">' +
+              '<div class="mission-objectives-label">' + (m.objLabel || 'Objectives') + '</div>' +
+              m.objectives.map(o => '<div class="objective"><span class="obj-icon">◇</span> ' + o + '</div>').join('') +
+            '</div>' : '') +
+          (m.href ? '<div style="margin-top:16px;font-family:\'Cinzel\',serif;font-size:12px;letter-spacing:2px;color:var(--gold);">▶ Open Full Mission Briefing</div>' : '') +
+        '</div>';
+      return m.href
+        ? '<a class="mission-card" href="' + m.href + '" style="text-decoration:none;color:inherit;display:block;">' + inner + '</a>'
+        : '<div class="mission-card">' + inner + '</div>';
+    }).join('');
+  }
+  async function loadCampaignContent() {
+    let rows;
+    try {
+      rows = await fetch(_PAB_URL + '/rest/v1/campaign_content?campaign=eq.' + CAMPAIGN_SLUG + '&select=*&order=sort.asc,updated_at.asc', {
+        headers: {'apikey': _PAB_KEY}
+      }).then(r => r.ok ? r.json() : null);
+    } catch(e) { return; }
+    if (!Array.isArray(rows) || !rows.length) return;
+    const of = k => rows.filter(r => r.kind === k && r.data);
+    const st = of('status')[0];
+    if (st) {
+      const set = (id, val, col) => {
+        const el = document.getElementById(id);
+        if (el && val != null && val !== '') { el.textContent = val; el.style.color = col || ''; }
+      };
+      set('camp-deployment', st.data.deployment, st.data.deployment_color);
+      set('camp-theatres',   st.data.theatres,   st.data.theatres_color);
+      set('camp-threat',     st.data.threat,     st.data.threat_color);
+    }
+    const ch = of('chronicle');
+    if (ch.length && typeof CHRONICLE_DATA !== 'undefined') {
+      CHRONICLE_DATA.length = 0;
+      ch.forEach(r => CHRONICLE_DATA.push(r.data));
+      renderChronicle();
+    }
+    const ms = of('mission');
+    if (ms.length) renderMissionCards(ms.map(r => r.data));
+    if (typeof PLANET_DATA !== 'undefined') {
+      of('planet').forEach(r => {
+        if (!r.slot) return;
+        PLANET_DATA[r.slot] = Object.assign({}, PLANET_DATA[r.slot] || {}, r.data);
+      });
+    }
+  }
+  loadCampaignContent();
 
   function _portalSetSession(d) {
     if (!d || !d.access_token) return;
