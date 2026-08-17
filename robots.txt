@@ -1,0 +1,11 @@
+# Crawling is deliberately ALLOWED here.
+#
+# De-indexing is handled by the X-Robots-Tag: noindex header in _headers.
+# A crawler has to be able to fetch a page to see that header — adding
+# "Disallow: /" would block the fetch, so the noindex would never be read
+# and already-indexed pages would linger in search results indefinitely.
+#
+# Do not add a blanket Disallow unless the site is already out of the index.
+
+User-agent: *
+Allow: /
