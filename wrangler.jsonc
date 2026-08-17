@@ -1,7 +1,7 @@
 {
   // Static-assets-only Worker: no `main` and no `binding`, because there is
   // no Worker script — Cloudflare just serves the files in `directory`.
-  "name": "sheets",
+  "name": "longvigil",
   "compatibility_date": "2026-08-17",
   "assets": {
     "directory": "."
