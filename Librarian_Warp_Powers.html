@@ -23,20 +23,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
 .section-title{font-family:var(--font-head);font-size:15pt;color:var(--gold-light);letter-spacing:.04em;border-bottom:1px solid var(--gold-dim);padding-bottom:5px;margin-bottom:.12in;text-shadow:0 0 14px rgba(200,164,74,.2);}
 .rank-title{font-family:var(--font-head);font-size:13pt;color:var(--warp-light);letter-spacing:.04em;border-bottom:1px solid var(--warp-dim);padding-bottom:4px;margin-bottom:.1in;margin-top:.18in;text-shadow:0 0 14px rgba(112,96,200,.3);}
 .rank-note{font-size:10pt;color:var(--text-dim);font-style:italic;margin-bottom:.12in;line-height:1.5;}
-.prep-tracker{background:var(--panel);border:1px solid var(--warp-dim);border-top:3px solid var(--warp);padding:.12in .16in;margin-bottom:.18in;}
-.prep-tracker-title{font-family:var(--font-head);font-size:12pt;color:var(--warp-light);margin-bottom:8px;}
-.prep-controls{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end;margin-bottom:10px;}
-.prep-input-group{display:flex;flex-direction:column;gap:3px;}
-.prep-label{font-family:var(--font-label);font-size:10pt;color:var(--gold);letter-spacing:.2em;text-transform:uppercase;}
-.prep-input{background:var(--panel2);border:1px solid var(--border);color:var(--text);font-family:var(--font-label);font-size:12pt;text-align:center;padding:4px 8px;width:100%;-moz-appearance:textfield;}
-.prep-input::-webkit-outer-spin-button,.prep-input::-webkit-inner-spin-button{-webkit-appearance:none;}
-.prep-bar{background:var(--panel2);border:1px solid var(--border);padding:8px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
-.prep-count{font-family:var(--font-head);font-size:16pt;color:var(--warp-light);}
-.prep-count span{font-size:10pt;color:var(--text-dim);}
-.prep-rule{font-size:10pt;color:var(--text-dim);line-height:1.5;flex:1;}
-.prep-rule strong{color:var(--gold);}
-.prep-warn{color:#e06060;font-size:10pt;font-family:var(--font-label);display:none;}
-.prep-warn.visible{display:block;}
 .power-grid{display:grid;grid-template-columns:1fr 1fr;gap:.1in;margin-bottom:.14in;}
 .power-grid.triple{grid-template-columns:1fr 1fr 1fr;}
 .power-card{background:var(--panel2);border:1px solid var(--border);padding:10px 12px;transition:border-color .2s,background .2s;}
@@ -56,12 +42,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
 .power-desc strong{color:var(--gold-light);font-family:var(--font-label);font-size:inherit;}
 .power-desc em{color:var(--text-dim);}
 .peril-tag{display:inline-block;background:rgba(200,60,60,.15);border:1px solid rgba(200,60,60,.4);color:#e07070;font-family:var(--font-label);font-size:10pt;letter-spacing:.15em;text-transform:uppercase;padding:1px 6px;margin-top:4px;}
-.prep-check-wrap{display:flex;align-items:center;gap:6px;margin-top:6px;cursor:pointer;}
-.prep-checkbox{width:14px;height:14px;border:1px solid var(--warp-dim);background:var(--panel);appearance:none;-webkit-appearance:none;cursor:pointer;flex-shrink:0;position:relative;}
-.prep-checkbox:checked{background:var(--warp);border-color:var(--warp-light);}
-.prep-checkbox:checked::after{content:'✓';position:absolute;top:-2px;left:1px;font-size:10px;color:#fff;font-weight:bold;}
-.prep-check-label{font-family:var(--font-label);font-size:10pt;letter-spacing:.15em;text-transform:uppercase;color:var(--text-dim);cursor:pointer;user-select:none;}
-.prepared .prep-check-label{color:var(--warp-light);}
 .page-footer{margin-top:.2in;border-top:1px solid var(--gold-dim);padding-top:.09in;font-family:var(--font-label);font-size:10pt;color:var(--text-dim);letter-spacing:.16em;text-align:center;text-transform:uppercase;}
 .disc-tags{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:5px;}.disc-tag{font-family:var(--font-label);font-size:10pt;letter-spacing:.12em;text-transform:uppercase;padding:1px 6px;border:1px solid;}.disc-tag.biomancy{color:#60b86c;border-color:rgba(96,184,108,.5);background:rgba(96,184,108,.1);}.disc-tag.telepathy{color:#c080f8;border-color:rgba(192,128,248,.5);background:rgba(192,128,248,.1);}.disc-tag.telekinesis{color:#60b0f8;border-color:rgba(96,176,248,.5);background:rgba(96,176,248,.1);}.disc-tag.pyromancy{color:#f07848;border-color:rgba(240,120,72,.5);background:rgba(240,120,72,.1);}.disc-tag.divination{color:#c8a44a;border-color:rgba(200,164,74,.5);background:rgba(200,164,74,.1);}.disc-tag.temporal{color:#60e0d8;border-color:rgba(96,224,216,.5);background:rgba(96,224,216,.1);}.disc-tag.immateria{color:#d060e8;border-color:rgba(200,60,220,.55);background:rgba(200,60,220,.1);}
 .cost-r4{background:#2a0550;color:#d060e8;border:1px solid rgba(200,60,220,.6);}.rank-title.r4{color:#d060e8 !important;border-bottom-color:rgba(200,60,220,.5) !important;text-shadow:0 0 14px rgba(200,60,220,.35) !important;}
@@ -77,7 +57,7 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
 
     <p>All Librarian powers draw on <strong>Warp Resilience Points (WRP)</strong> — the measure of how hard you are pushing into the Immaterium. Your WRP pool resets fully on <strong>resupply</strong>, and you may recover <strong>INT mod &times; Prof Bonus</strong> WRP once per resupply on a short rest by pulling back from the Warp (no risk, no roll). Your <strong>Save DC</strong> for all powers is <strong>8 + Proficiency Bonus + INT modifier</strong>.</p>
 
-    <p>Powers come in two categories. <strong>Base Powers</strong> are always available, always free, and never carry any risk — use them freely and without limit. <strong>Advanced Powers</strong> cost WRP and come in four ranks: <span class="rule-tag rt-r1">Rank I</span> costs 4–6 WRP, <span class="rule-tag rt-r2">Rank II</span> costs 8–12 WRP, <span class="rule-tag rt-r3">Rank III</span> costs 12–18 WRP, and <span class="rule-tag rt-r4">Rank IV</span> costs 18–24 WRP. Higher ranks unlock at higher Librarian levels. Before each mission, you prepare a number of Advanced Powers equal to your <strong>Librarian Level + INT modifier</strong> — this can only change on resupply. Base Powers and your discipline's 4 auto-prepared powers never count against this limit.</p>
+    <p>Powers come in two categories. <strong>Base Powers</strong> are always available, always free, and never carry any risk — use them freely and without limit. <strong>Advanced Powers</strong> cost WRP and come in four ranks: <span class="rule-tag rt-r1">Rank I</span> costs 4–6 WRP, <span class="rule-tag rt-r2">Rank II</span> costs 8–12 WRP, <span class="rule-tag rt-r3">Rank III</span> costs 14–18 WRP, and <span class="rule-tag rt-r4">Rank IV</span> costs 18–24 WRP. Higher ranks unlock at higher Librarian levels. Before each mission, you prepare a number of Advanced Powers equal to your <strong>Librarian Level + INT modifier</strong> — this can only change on resupply. Base Powers and your discipline's 4 auto-prepared powers never count against this limit.</p>
 
     <p>Whenever you spend <strong>6 or more WRP on a single power</strong>, you risk tearing open a hole in your psyche — this is the <strong>Perils of the Warp</strong>. Make a <strong>WIS save</strong> with DC equal to 10 + the number of WRP spent above 5. Only one check is made per power regardless of how many triggers apply; use the highest applicable DC. On a failure, you gain <strong>1d4 Corruption</strong> and the GM may invoke a Warp Influence Effect. On a success, the power fires normally with no consequence.</p>
 
@@ -137,7 +117,7 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
   </div>
 
 
-  <div class="power-card" data-rank="base" data-discs="pyromancy">
+  <div class="power-card base-card" data-rank="base" data-discs="pyromancy">
     <div class="power-card-top"><div class="power-name">Warp Flame</div><div class="power-cost-badge cost-free">FREE</div></div>
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Touch</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
     <div class="disc-tags"><span class="disc-tag pyromancy">Pyromancy</span></div>
@@ -474,7 +454,7 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
 
 <!-- RANK II -->
 <div class="rank-title">⬡ Rank II — Librarian Disciplines &nbsp;<span style="font-family:var(--font-body);font-size:10pt;color:var(--text-dim);font-style:italic;letter-spacing:0">(Level 7+ · 8–12 WRP)</span></div>
-<div class="rank-note">Requires Psyker Ranking 2 (Level 7+). These powers carry meaningful warp energy — turns where total WRP spent exceeds 10 may prompt a Perils of the Warp check at GM discretion.</div>
+<div class="rank-note">Requires Psyker Ranking 2 (Level 7+). These powers carry meaningful warp energy — every one of them costs 6 or more WRP, so each invocation triggers a Perils of the Warp check (WIS save, DC 10 + WRP spent above 5).</div>
 <div class="power-grid">
 
   <div class="power-card" id="pc_might" data-rank="r2" data-discs="biomancy">
@@ -760,8 +740,8 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
 </div>
 
 <!-- RANK III -->
-<div class="rank-title">⬡ Rank III — Chief Librarian Disciplines &nbsp;<span style="font-family:var(--font-body);font-size:10pt;color:#e07070;font-style:italic;letter-spacing:0">(Level 14+ · 12–18 WRP · High Peril Risk)</span></div>
-<div class="rank-note">Requires Psyker Ranking 3 (Level 14+). Powers costing 16+ WRP automatically trigger a Perils of the Warp check (WIS DC 14). These represent the absolute limit of sanctioned psychic capability. Anything beyond this is heresy — or legend.</div>
+<div class="rank-title">⬡ Rank III — Chief Librarian Disciplines &nbsp;<span style="font-family:var(--font-body);font-size:10pt;color:#e07070;font-style:italic;letter-spacing:0">(Level 14+ · 14–18 WRP · High Peril Risk)</span></div>
+<div class="rank-note">Requires Psyker Ranking 3 (Level 14+). Every Rank III power triggers a Perils of the Warp check (WIS save, DC 10 + WRP spent above 5 — DC 19 to 23 at these costs). These represent the absolute limit of sanctioned psychic capability. Anything beyond this is heresy — or legend.</div>
 <div class="power-grid">
 
   <div class="power-card" id="pc_realityanchor" data-rank="r3" data-discs="temporal">
@@ -972,7 +952,7 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
 
 <div class="divider"><div class="divider-line"></div><div class="divider-gem"></div><div class="divider-line"></div></div>
 <!-- RANK IV -->
-<div class="rank-title r4">&#9671; Rank IV &#8212; Immateria &nbsp;<span style="font-family:var(--font-body);font-size:10pt;color:#d060e8;font-style:italic;letter-spacing:0">(Level 17+ &middot; 18&#8211;22 WRP &middot; Mandatory Perils)</span></div>
+<div class="rank-title r4">&#9671; Rank IV &#8212; Immateria &nbsp;<span style="font-family:var(--font-body);font-size:10pt;color:#d060e8;font-style:italic;letter-spacing:0">(Level 17+ &middot; 18&#8211;24 WRP &middot; Mandatory Perils)</span></div>
 <div class="rank-note" style="color:#9060a0;">These are not sanctioned psychic disciplines. They are the raw stuff of the Immaterium given form &#8212; powers the Librarius does not teach because it cannot fully control what happens when they are used. A Librarian who reaches into the Immateria does so as an individual, not a member of a school. Requires <strong style="color:#d060e8;">Warp Mastery (Level 17+)</strong>. <strong>All Immateria powers trigger mandatory Perils checks</strong> regardless of cost, The Push, or Warp Tempering. Discipline Resonance does not apply &#8212; no one truly masters the Immaterium.</div>
 <div class="power-grid">
   <div class="power-card" id="pc_nexus" data-rank="r4" data-discs="immateria">

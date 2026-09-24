@@ -16,6 +16,7 @@
 //   hooks    machine-readable effects the sheets apply automatically:
 //            shots_mult (ammo capacity ×), dmg_add (extra damage dice string),
 //            crit_range (+N crit range), range_mult (range ×), extra_t1_slot (bonus Tier I slot)
+//            speed_add (+N ft speed while worn), resist_choice (lights the chosen resistance chip while worn)
 
 const UPGRADE_TIERS = [
   {tier:1, name:'Sanctified Pattern',     tag:'Tier I',   bonus:1, cost:300, total:300,  swap:50},
@@ -155,10 +156,10 @@ const UPGRADE_TRAITS = [
 
   {id:'blast_dampening', name:'Blast-Dampening Plating', slot:'armor', tier:1, pattern:'gravis',
    elig:'Gravis-pattern armour only.',
-   desc:'You and any creature within 5 ft of you take half damage from the blast radius of your own Heavy Ordinance weapons.'},
+   desc:'You and any creature within 5 ft of you take half damage from the blast radius of your own Heavy Ordnance weapons.'},
   {id:'ammo_sled', name:'Ammunition Sled Integration', slot:'armor', tier:2, pattern:'gravis',
    elig:'Gravis-pattern armour only.',
-   desc:'Weapons with the Stationary or Heavy Ordinance tag no longer count against your carrying capacity, and you may carry one additional Heavy weapon without penalty.'},
+   desc:'Weapons with the Stationary or Heavy Ordnance tag no longer count against your carrying capacity, and you may carry one additional Heavy weapon without penalty.'},
   {id:'servo_harness', name:'Servo-Harness Mounting', slot:'armor', tier:3, pattern:'gravis',
    elig:'Gravis-pattern armour only.',
    desc:'You can draw or stow a Heavy weapon as part of your movement, without spending your object interaction for the turn. If you draw a Stationary-tagged weapon this way, your first attack with it this turn still gains that weapon\'s bonus for not having moved, even though you did.'},

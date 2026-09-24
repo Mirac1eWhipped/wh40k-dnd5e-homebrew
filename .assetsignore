@@ -14,3 +14,20 @@ wrangler.jsonc
 .assetsignore
 .gitignore
 .claude
+
+# Build debris, scratch pipelines and superseded drafts (not site content)
+chap_*.txt
+lib_*.txt
+spotcheck.txt
+check_dmg.txt
+debug_chunk.txt
+parsed_*.json
+*.py
+*.md
+*.xlsx
+*.docx
+spells_new.js
+test_spells.js
+new_spells_body.js
+Tyranid_Genestealer_Statblocks.html
+Tyranid_Statblocks_Part*.html

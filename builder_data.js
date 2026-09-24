@@ -18,7 +18,7 @@
 //       (Equipment items whose mods include 'Thrown', minus excl), each added as its own row
 
 const BUILDER_ASI_LEVELS = [4, 8, 12, 16, 19];
-const BUILDER_SCORE_CAP  = 20;   // standard 5e cap — no homebrew variance found on the class pages
+const BUILDER_SCORE_CAP  = 20;   // standard 5e cap; level-18 features raise it by hand (Chaplain/Librarian/Techmarine 22, Terminator 24)
 
 const BUILDER_CLASSES = {
   'Tactical Operative': {

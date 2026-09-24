@@ -4872,11 +4872,11 @@ function _updatePowerTracker() {
   if (tl) tl.textContent = label;
   if (sl) sl.textContent = label;
   if (show) {
-    // Auto-calculate power max from level: L1=20, L20=80
+    // Auto-calculate power max from level: 16 + 4 × level, 100 at L20 (matches the Librarian/Chaplain class tables)
     var lvlEl = document.getElementById('char-level');
     var lvl = lvlEl ? (parseInt(lvlEl.value) || 1) : 1;
     lvl = Math.max(1, Math.min(20, lvl));
-    _powerMax = Math.round(20 + (lvl - 1) / 19 * 60);
+    _powerMax = (lvl >= 20) ? 100 : 16 + 4 * lvl;
     _syncPowerDisplay();
     _syncPreparedDisplay();
   }
@@ -4929,10 +4929,10 @@ function _syncPreparedDisplay() {
   var stat  = isLib ? 'int' : 'cha';
   var sc    = parseInt((document.getElementById(stat + '-score') || {}).value);
   var mod   = isNaN(sc) ? 0 : Math.floor((sc - 10) / 2);
-  var maxP  = Math.max(1, lvl + mod + pb);
-  var curP  = (typeof _spellbook !== 'undefined') ? _spellbook.length : 0;
+  var maxP  = Math.max(1, lvl + mod);   // class pages: Level + INT/CHA modifier; Base powers never count
+  var curP  = (typeof _spellbook !== 'undefined') ? _spellbook.filter(function(id){ var sp = (typeof SPELLS !== 'undefined') ? SPELLS.find(function(x){ return x.id === id; }) : null; return !sp || sp.tier !== 'base'; }).length : 0;
   var statLabel = isLib ? 'INT' : 'CHA';
-  var formula   = '(Lv' + lvl + ' + ' + statLabel + ' + PB)';
+  var formula   = '(Lv' + lvl + ' + ' + statLabel + ')';
   var overColor = curP > maxP ? '#c04040' : 'var(--gold)';
   // Actions tab
   var pcEl = document.getElementById('prepared-cur');
@@ -6053,7 +6053,7 @@ function _spellPopup(e, spellId) {
       '<div class="dp-stat"><strong>Range</strong>'+sp.range+'</div>' +
       '<div class="dp-stat"><strong>Duration</strong>'+sp.duration+'</div>' +
     '</div>' +
-    (sp.hasPerils ? '<div class="dp-peril">⚠ Spending 16+ WRP triggers a Perils of the Warp check</div>' : '') +
+    (sp.hasPerils ? '<div class="dp-peril">⚠ Perils of the Warp — WIS save, DC 10 + WRP spent above 5</div>' : '') +
     '<hr class="dp-divider"><div class="dp-desc">'+sp.desc+'</div>' +
     (inBook
       ? '<div style="margin-top:10px;text-align:center;"><button onclick="event.stopPropagation();_spellPin(\''+sp.id+'\');_detailClose();" style="font-family:var(--font-label);font-size:8pt;letter-spacing:.12em;text-transform:uppercase;background:transparent;border:1px solid '+(isPinned?'#c04040':'var(--gold-dim)')+';color:'+(isPinned?'#c04040':'var(--gold-dim)')+';padding:4px 14px;cursor:pointer;border-radius:2px;">'+(isPinned?'✕ Unpin from Quick Actions':'★ Pin to Quick Actions')+'</button></div>'
