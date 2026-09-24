@@ -4510,6 +4510,15 @@ async function _loadSheet(adminOverrideId) {
 // Hydrate the sheet DOM + JS state from a character record {fields, checkboxes, extra, name}.
 // Shared by cloud load (_loadSheet) and JSON restore (_importChar). Returns true when the
 // record's saved layout stamp (extra.fmt) no longer matches the live sheet's field counts.
+// Legacy catalog ids -> current ids. Old saves self-heal on load; touches meta objects only,
+// never the positional field/checkbox arrays. (sstorm was the pre-2026-07-17 Equipment-cat Storm Shield.)
+const _META_ID_ALIASES = { sstorm: { id:'shield_storm', is_shield:true, is_weapon:false } };
+function _metaLegacyFix(arr) {
+  return arr.map(function(m) {
+    if (!m || !m.id || !_META_ID_ALIASES[m.id]) return m;
+    return Object.assign({}, m, _META_ID_ALIASES[m.id]);
+  });
+}
 function _applyRecord(row) {
     if (typeof _rowTriggersReset === 'function') _rowTriggersReset();  // unlock before hydration
     const ff = _fields();
@@ -4548,7 +4557,7 @@ function _applyRecord(row) {
       cls: (document.getElementById('cls-select')||{}).value || ''
     });
     if (ext.wargear_meta && Array.isArray(ext.wargear_meta)) {
-      _wargearMeta = ext.wargear_meta;
+      _wargearMeta = _metaLegacyFix(ext.wargear_meta);
       const wgBtns = document.querySelectorAll('.wg-equip-btn');
       _wargearMeta.forEach(function(meta, i) {
         if (meta && meta.equipped && wgBtns[i]) wgBtns[i].classList.add('equipped');
@@ -5240,7 +5249,7 @@ async function _loadSheetForUser(uid) {
     });
     if (ext.spellbook && Array.isArray(ext.spellbook)) _spellbook = ext.spellbook;
     if (ext.pinned_spells && Array.isArray(ext.pinned_spells)) _pinnedSpells = ext.pinned_spells;
-    if (ext.wargear_meta && Array.isArray(ext.wargear_meta)) _wargearMeta = ext.wargear_meta;
+    if (ext.wargear_meta && Array.isArray(ext.wargear_meta)) _wargearMeta = _metaLegacyFix(ext.wargear_meta);
     if (ext.ammo_clips && typeof ext.ammo_clips === 'object') _ammoClips = ext.ammo_clips;
     _charFeats = (ext.feats && Array.isArray(ext.feats)) ? ext.feats : [];
     _abilityUses = (ext.ability_uses && typeof ext.ability_uses === 'object') ? ext.ability_uses : {};

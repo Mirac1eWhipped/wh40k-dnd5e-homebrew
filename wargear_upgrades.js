@@ -59,8 +59,8 @@ const UPGRADE_TRAITS = [
   {id:'overcharge_coil', name:'Overcharge Coil', slot:'weapon', tier:2, family:'las', grants:'Overcharge',
    elig:'Las-pattern energy weapons (e.g. Las Fusil) that lack Overcharge.',
    desc:'Grants <strong>Overcharge</strong>: before rolling to hit, declare Overcharge. Roll 1d6 — on a 1 or 2 the weapon misfires (take 1d8 Radiant, lose the attack). On a 3+ deal an additional 1d8 damage.'},
-  {id:'stabilised_matrix', name:'Stabilised Overcharge Matrix', slot:'weapon', tier:3, family:'plasma',
-   elig:'any Plasma-pattern weapon.',
+  {id:'stabilised_matrix', name:'Stabilised Overcharge Matrix', slot:'weapon', tier:3, family:'plasma', requires:'Overcharge',
+   elig:'any Plasma-pattern weapon that already has Overcharge.',
    desc:'Refines its existing Overcharge mod: it now only misfires on a natural <strong>1</strong> instead of a 1 or 2.'},
   {id:'focusing_coil', name:'Focusing Coil', slot:'weapon', tier:1, family:'melta',
    elig:'any Melta-pattern weapon.',
@@ -214,7 +214,8 @@ function upgradeSlotOf(item) {
    takenIds: trait ids already installed on the item (no duplicates).
    Rules: trait tier ≤ slot tier; slot type must match; family traits need a
    matching family AND the weapon must lack the granted property; pattern
-   traits need the matching armor pattern. The Modular Hardpoints bonus slot
+   traits need the matching armor pattern; a trait with `requires` needs the
+   weapon to already carry that property. The Modular Hardpoints bonus slot
    passes slotTier=1 with allowT1Only. */
 function upgradeEligibleTraits(item, slotTier, takenIds) {
   var slotType = upgradeSlotOf(item);
@@ -228,6 +229,7 @@ function upgradeEligibleTraits(item, slotTier, takenIds) {
     if (t.family && fams.indexOf(t.family) === -1) return false;
     if (t.pattern && item.armor_type !== t.pattern) return false;
     if (t.grants && Array.isArray(item.mods) && item.mods.indexOf(t.grants) !== -1) return false;
+    if (t.requires && !(Array.isArray(item.mods) && item.mods.indexOf(t.requires) !== -1)) return false;
     return true;
   });
 }

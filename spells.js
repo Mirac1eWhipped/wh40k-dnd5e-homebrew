@@ -94,7 +94,7 @@ const SPELLS = [
   {
     id:'wrp_smite_the_unclean', class:'librarian', tier:'rank1', tierLabel:'Rank I',
     name:'Smite the Unclean', cost:4, costType:'WRP', damage:'2d8 psychic',
-    action:'Bonus Action', range:'Self', duration:'Instant (next hit)', hasPerils:true,
+    action:'Bonus Action', range:'Self', duration:'Instant (next hit)', hasPerils:false,
     desc:'Channel psychic energy through your Force weapon. The next hit this turn deals an additional 2d8 psychic damage. Against Chaos-aligned creatures and daemons: 3d8. Declare after seeing the attack roll. Does not trigger Perils of the Warp.'
   },
   {
@@ -439,7 +439,7 @@ const SPELLS = [
   },
   {
     id:'wrp_pyroclastic_shell', class:'librarian', tier:'rank2', tierLabel:'Rank II',
-    name:'Pyroclastic Shell', cost:8, costType:'WRP', damage:'1d8 fire + +1d6 fire + 3d8 fire',
+    name:'Pyroclastic Shell', cost:8, costType:'WRP', damage:'1d8 fire + 1d6 fire + 3d8 fire',
     action:'Action', range:'30ft', duration:'Conc. 1 min', hasPerils:true,
     desc:'Encase a willing ally in a shell of controlled warp-fire. While the shell persists: creatures that hit the target with melee attacks take 1d8 fire damage, and the target deals +1d6 fire damage on all melee attacks. As a bonus action, the target (or you) can erupt the shell — dealing 3d8 fire damage to all within 10ft (DEX save for half) and ending the effect. Warp-fire cannot be doused by mundane means.'
   },
@@ -958,14 +958,14 @@ const SPELLS = [
     desc:'Deliver a devastating verse condemning your enemies. All enemies within 20ft who can hear you make WIS saves. Failure: 2d8 thunder damage (the force of divine rhetoric) and Stunned until end of their next turn. Success: half, not Stunned. Creatures that cannot understand language are immune to the Stun but take full damage.'
   },
   {
-    id:'ebp_oath_of_enmity_new', class:'chaplain', tier:'dev1', tierLabel:'Devotion I',
-    name:'Oath of Enmity New', cost:4, costType:'EBP', damage:'—',
+    id:'ebp_oath_of_enmity', class:'chaplain', tier:'dev1', tierLabel:'Devotion I',
+    name:'Oath of Enmity', cost:4, costType:'EBP', damage:'—',
     action:'Bonus Action', range:'60ft', duration:'Conc. / Until slain', hasPerils:false,
     desc:'Speak a kill-oath against one visible enemy, declaring them your Oathbound Target. You have advantage on all attack rolls against that creature. When any ally slays the marked target, you may immediately speak a new Oath as a free action (no EBP cost). Only one target may be marked at a time — marking a new one ends the previous oath.'
   },
   {
-    id:'ebp_death_mask_new', class:'chaplain', tier:'dev1', tierLabel:'Devotion I',
-    name:'Death Mask New', cost:5, costType:'EBP', damage:'—',
+    id:'ebp_death_mask', class:'chaplain', tier:'dev1', tierLabel:'Devotion I',
+    name:'Death Mask', cost:5, costType:'EBP', damage:'—',
     action:'Reaction (enemy drops ally to 0 HP)', range:'60ft', duration:'1 min', hasPerils:false,
     desc:'When a creature within 60ft reduces an ally to 0 HP, invoke a mask of divine wrath as a reaction. The creature makes a WIS save. Failure: Frightened of you for 1 minute and must spend its first turn moving directly away from you. Failure by 5+ or more: also Stunned until end of its next turn. They will know what they have done.'
   },
@@ -1088,8 +1088,8 @@ const SPELLS = [
     desc:'Project an aura of divine protection. All allies within 20ft gain resistance to all damage types for the duration. The aura is visible as a shimmering golden field — enemies know their attacks are reduced. Moving outside the radius ends the resistance immediately. The aura moves with you, always centered on your position.'
   },
   {
-    id:'ebp_rites_of_battle_new', class:'chaplain', tier:'dev2', tierLabel:'Devotion II',
-    name:'Rites of Battle New', cost:8, costType:'EBP', damage:'—',
+    id:'ebp_rites_of_battle', class:'chaplain', tier:'dev2', tierLabel:'Devotion II',
+    name:'Rites of Battle', cost:8, costType:'EBP', damage:'—',
     action:'Action', range:'Self (30ft radius)', duration:'Conc. 1 min', hasPerils:false,
     desc:'Perform a sweeping blessing over the entire kill team before battle is joined. All allies within 30ft gain +1 to attack and damage rolls for the duration. Additionally, they may reroll any 1s rolled on attack dice once per attack, taking the new result. Does not stack with Bless\'s d4 bonus — but both effects may be active simultaneously on the same target.'
   },
@@ -1200,8 +1200,8 @@ const SPELLS = [
     desc:'Speak the True Name of the Emperor\'s Wrath. Every enemy within 120ft makes a WIS save. Failure: 8d10 radiant damage, Frightened 1 minute, and Chaos-aligned creatures additionally make a CHA save or be permanently Banished from this plane. Success: half, not Frightened. Allies within 120ft regain 3d10 HP. Usable once per session — not once per resupply. ✠ The Emperor\'s final word upon the battlefield'
   },
   {
-    id:'ebp_the_reckoning_new', class:'chaplain', tier:'dev3', tierLabel:'Devotion III',
-    name:'The Reckoning New', cost:14, costType:'EBP', damage:'2d8 radiant',
+    id:'ebp_the_reckoning', class:'chaplain', tier:'dev3', tierLabel:'Devotion III',
+    name:'The Reckoning', cost:14, costType:'EBP', damage:'2d8 radiant',
     action:'Bonus Action', range:'60ft', duration:'Conc. 1 min', hasPerils:false,
     desc:'Name one enemy and declare them a target of the Emperor\'s Final Reckoning. For the duration: all attacks against that target deal an additional 2d8 radiant damage, the target has disadvantage on all saving throws, and it cannot retreat — any attempt to move away from any ally reduces its speed to 0 for that turn. If reduced to 0 HP while Reckoned, it cannot be revived by any means. ✠ The Emperor passes sentence. You carry it out.'
   }
