@@ -15,7 +15,7 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
 .page::before{top:8px;left:8px;border-width:2px 0 0 2px;}.page::after{bottom:8px;right:8px;border-width:0 2px 2px 0;}
 @media screen{.print-bar{text-align:center;padding:.15in 0 .08in;}.print-btn{display:inline-block;padding:7px 28px;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);font-family:var(--font-label);font-size:10pt;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;transition:all .2s;}.print-btn:hover{background:var(--gold-dim);color:#000;}}
   .portal-link{display:inline-block;padding:7px 28px;margin-right:10px;background:transparent;border:1px solid var(--gold-dim);color:var(--gold);font-family:var(--font-label);text-decoration:none;letter-spacing:.25em;text-transform:uppercase;transition:all .2s;}.portal-link:hover{background:var(--gold-dim);color:#000;}
-@media print{@page{size:letter landscape;margin:0;}body{background:white;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.page{width:11in;margin:0;border:none;}.print-bar,.filter-bar,.prep-tracker{display:none!important;}}
+@media print{@page{size:letter landscape;margin:0;}body{background:white;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.page{width:11in;margin:0;border:none;}.print-bar,.filter-bar{display:none!important;}}
 .class-header{text-align:center;border-bottom:2px solid var(--gold-dim);padding-bottom:.15in;margin-bottom:.18in;}
 .class-header .aquila{font-size:13pt;color:var(--gold);letter-spacing:.5em;margin-bottom:6px;}
 .class-header h1{font-family:var(--font-head);font-size:22pt;color:var(--gold-light);letter-spacing:.04em;text-shadow:0 0 32px rgba(200,164,74,.3);line-height:1.1;margin-bottom:4px;}
@@ -91,7 +91,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
 .power-desc em{color:var(--text-dim);}
 .sacred-tag{display:inline-block;background:rgba(200,164,74,.12);border:1px solid rgba(200,164,74,.3);color:var(--gold-light);font-family:var(--font-label);font-size:7pt;letter-spacing:.15em;text-transform:uppercase;padding:1px 6px;margin-top:4px;}
 .new-tag{display:inline-block;background:rgba(96,192,128,.15);border:1px solid rgba(96,192,128,.5);color:#60c080;font-family:var(--font-label);font-size:7pt;letter-spacing:.15em;text-transform:uppercase;padding:1px 6px;margin-left:6px;vertical-align:middle;}
-.prep-check-wrap{display:none;}
 .page-footer{margin-top:.2in;border-top:1px solid var(--gold-dim);padding-top:.09in;font-family:var(--font-label);font-size:9pt;color:var(--text-dim);letter-spacing:.16em;text-align:center;text-transform:uppercase;}
 </style>
 </head>
@@ -235,7 +234,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action (on hit)</span></div><div class="meta-item">Range: <span>Self</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
     <div class="cat-tags"><span class="cat-tag damage">Damage</span></div>
     <div class="power-desc">Channel the Emperor's wrath through your Crozius. Declare after confirming a hit — the attack deals an additional <strong>2d8 radiant damage</strong>. Against daemons, heretics, and Chaos-aligned creatures: <strong>3d8</strong>. Declare after seeing the attack roll but before rolling damage.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_divsmite')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_bless" data-devotion="d1" data-cats="support">
@@ -243,7 +241,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Conc. 10 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag support">Support</span></div>
     <div class="power-desc">Call the Emperor's blessing upon up to <strong>3 willing allies</strong>. Blessed allies add <strong>1d4</strong> to all attack rolls and saving throws for the duration. One target may be yourself. Visible as a faint golden shimmer — enemies will know your allies are bolstered.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_bless')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_cure" data-devotion="d1" data-cats="healing">
@@ -251,7 +248,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Touch</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
     <div class="cat-tags"><span class="cat-tag healing">Healing</span></div>
     <div class="power-desc">Lay hands on a willing or incapacitated creature and channel healing light. Target regains <strong>2d8 + CHA modifier HP</strong>. Cannot target constructs or undead. May target yourself. At Level 11+, spending an additional 4 EBP increases healing to 4d8 + CHA modifier.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_cure')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_shield" data-devotion="d1" data-cats="protection">
@@ -259,7 +255,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Conc. 10 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag protection">Protection</span></div>
     <div class="power-desc">Surround one ally in a shimmering shield of divine energy. Target gains <strong>+2 to Armor Class</strong> for the duration. May target yourself. If the target is struck by a critical hit while shielded, they may reroll the damage dice and take the lower result.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_shield')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_command" data-devotion="d1" data-cats="control">
@@ -267,7 +262,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Until end of next turn</span></div></div>
     <div class="cat-tags"><span class="cat-tag control">Control</span></div>
     <div class="power-desc">Issue a one-word divine command to a creature that can hear you. Target makes a <strong>WIS save</strong>. Failure: obeys until end of their next turn. Valid: <strong>Halt</strong> (no movement/actions), <strong>Flee</strong> (move away), <strong>Submit</strong> (fall prone), <strong>Silence</strong> (no verbal abilities), <strong>Surrender</strong> (drop weapons). Undead, constructs, charm-immune creatures resist automatically.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_command')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_holyfervor" data-devotion="d1" data-cats="support">
@@ -275,7 +269,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Until end of next turn</span></div></div>
     <div class="cat-tags"><span class="cat-tag support">Support</span></div>
     <div class="power-desc">Ignite one ally with divine battle-rage. Target may immediately make <strong>one additional Attack action</strong> this turn (even if they have already taken their action). Each attack deals an additional <strong>1d6 radiant damage</strong>. Using on the same ally more than once per encounter risks 1 level of Exhaustion.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_holyfervor')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_battlehymn" data-devotion="d1" data-cats="support">
@@ -283,7 +276,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (30ft radius)</span></div><div class="meta-item">Duration: <span>Encounter</span></div></div>
     <div class="cat-tags"><span class="cat-tag support">Support</span></div>
     <div class="power-desc">Sing a verse of holy battle music. All allies within 30ft gain <strong>+2 to Initiative rolls</strong> for the rest of the encounter (applied retroactively if Initiative has already been rolled). Additionally, all allies who haven't yet taken a turn this combat may take it immediately if they wish. Usable only in the first 2 rounds.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_battlehymn')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_emperorsgrace" data-devotion="d1" data-cats="protection">
@@ -291,7 +283,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Reaction (ally takes damage)</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
     <div class="cat-tags"><span class="cat-tag protection">Protection</span></div>
     <div class="power-desc">When an ally within 60ft takes damage, reduce that damage by <strong>2d8 + CHA modifier</strong> as a reaction. Applied after the damage roll, before resistances or immunities. Can be used once per round regardless of how many reactions you have available from other sources.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_emperorsgrace')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_thunderrebuke" data-devotion="d1" data-cats="damage control">
@@ -299,7 +290,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (30ft cone)</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
     <div class="cat-tags"><span class="cat-tag damage">Damage</span><span class="cat-tag control">Control</span></div>
     <div class="power-desc">The Emperor's fury manifests as a thunderclap of divine force. All enemies in a 30ft cone make a <strong>CON save</strong>. Failure: <strong>3d8 thunder damage</strong> and pushed <strong>15ft</strong>. Success: half, no push. Structures and light vehicles take full damage automatically. Audible within 300ft — stealth broken.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_thunderrebuke')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_searingbrand" data-devotion="d1" data-cats="damage control">
@@ -307,7 +297,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag damage">Damage</span><span class="cat-tag control">Control</span></div>
     <div class="power-desc">Mark a target with a brand of holy fire. Any creature attacking you or an ally within <strong>15ft</strong> takes <strong>1d8 radiant damage</strong> at end of the attacker's turn (no save). The branded creature cannot become invisible while branded. The brand glows faintly — marked targets are visible at a distance.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_searingbrand')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_ironwill" data-devotion="d1" data-cats="protection">
@@ -315,7 +304,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>1 hour</span></div></div>
     <div class="cat-tags"><span class="cat-tag protection">Protection</span></div>
     <div class="power-desc">Fortify one ally's resolve against enemy attempts to disable them. The target gains immunity to one condition of your choice: <strong>Frightened, Charmed, Stunned, or Paralyzed</strong>. The chosen immunity lasts until resupply. Choose wisely — this cannot be changed once invoked.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_ironwill')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_protcorrupt" data-devotion="d1" data-cats="protection antichaos">
@@ -323,7 +311,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Conc. 1 hour</span></div></div>
     <div class="cat-tags"><span class="cat-tag protection">Protection</span><span class="cat-tag antichaos">Anti-Chaos</span></div>
     <div class="power-desc">Speak a ward against the Warp over up to <strong>3 allies</strong>. Targets gain advantage on saves against Corruption effects, psychic damage, daemonic possession, and warp-based conditions. Daemonic and Chaos-aligned entities have <strong>disadvantage on attack rolls</strong> against warded targets. The ward is invisible but psykers sense it.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_protcorrupt')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_consecrate" data-devotion="d1" data-cats="support damage">
@@ -331,7 +318,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>Touch</span></div><div class="meta-item">Duration: <span>10 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag support">Support</span><span class="cat-tag damage">Damage</span></div>
     <div class="power-desc">Consecrate one weapon with holy light. The weapon deals an additional <strong>1d6 radiant damage</strong> per hit and counts as magical. Against daemons and Chaos-aligned creatures: <strong>2d6 radiant</strong>. The weapon glows visibly while consecrated — stealth attacks are harder to conceal.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_consecrate')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_blasedammo" data-devotion="d1" data-cats="support damage">
@@ -339,7 +325,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Touch</span></div><div class="meta-item">Duration: <span>Until resupply</span></div></div>
     <div class="cat-tags"><span class="cat-tag support">Support</span><span class="cat-tag damage">Damage</span></div>
     <div class="power-desc">Consecrate one magazine or ammunition source with holy light. All ranged attacks using this ammunition deal an additional <strong>1d4 radiant damage</strong> per hit and count as magical. Against daemons and Chaos-aligned creatures: <strong>1d8 radiant</strong>. The ammunition glows faintly — note this when attempting stealth.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_blasedammo')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_penitent" data-devotion="d1" data-cats="support">
@@ -347,7 +332,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Until end of next turn</span></div></div>
     <div class="cat-tags"><span class="cat-tag support">Support</span></div>
     <div class="power-desc">Grant one ally who has taken damage this encounter the will to strike harder. For their <strong>next attack roll</strong>, they may add the total damage they have taken this combat as a bonus to damage (maximum <strong>+20</strong>). Pain transformed into purpose. Must be used before the start of your next turn.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_penitent')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_voicecmd" data-devotion="d1" data-cats="support">
@@ -355,7 +339,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
     <div class="cat-tags"><span class="cat-tag support">Support</span></div>
     <div class="power-desc">Grant one ally their reaction immediately — even if they have already used it this round. They may use it as <strong>any reaction ability they possess</strong>, not just reactions normally available as reactions. Represents the Chaplain's ability to unlock split-second heroism in battle-brothers at the critical moment.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_voicecmd')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_martyrresol" data-devotion="d1" data-cats="support healing">
@@ -363,7 +346,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Reaction (ally drops to 0 HP)</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>1 round</span></div></div>
     <div class="cat-tags"><span class="cat-tag support">Support</span><span class="cat-tag healing">Healing</span></div>
     <div class="power-desc">When an ally drops to exactly 0 HP (not killed outright), empower them with one final act of will. They remain standing at 0 HP, make no death saving throws, and take <strong>one full turn</strong> (action, bonus action, movement) before falling unconscious. Any action they take while on death's door deals <strong>maximum damage</strong>.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_martyrresol')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_aurapur" data-devotion="d1" data-cats="utility antichaos">
@@ -371,7 +353,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (15ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 10 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag utility">Utility</span><span class="cat-tag antichaos">Anti-Chaos</span></div>
     <div class="power-desc">Radiate a constant wave of purifying faith. Allies within the radius reduce their Corruption by 1 point at the end of each minute while present. Any ally gaining Corruption within the aura may immediately make a <strong>WIS save (DC 12)</strong> — success reduces the Corruption gain by 1. The aura does not suppress warp powers.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_aurapur')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_holybarrier" data-devotion="d1" data-cats="protection control">
@@ -379,7 +360,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Conc. 10 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag protection">Protection</span><span class="cat-tag control">Control</span></div>
     <div class="power-desc">Create an immovable wall of divine force — up to 20ft long, 10ft high, 1ft thick. The wall has <strong>AC 18, 60 HP</strong> and provides full cover. Daemons and undead cannot pass through — it is an impassable divine barrier to them. Chaos-aligned creatures that touch the wall take <strong>2d6 radiant damage</strong>.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_holybarrier')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_wrathsermon" data-devotion="d1" data-cats="damage control">
@@ -387,7 +367,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (20ft radius)</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
     <div class="cat-tags"><span class="cat-tag damage">Damage</span><span class="cat-tag control">Control</span></div>
     <div class="power-desc">Deliver a devastating verse condemning your enemies. All enemies within 20ft who can hear you make <strong>WIS saves</strong>. Failure: <strong>2d8 thunder damage</strong> (the force of divine rhetoric) and Stunned until end of their next turn. Success: half, not Stunned. Creatures that cannot understand language are immune to the Stun but take full damage.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_wrathsermon')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_oathenmity" data-devotion="d1" data-cats="support damage">
@@ -395,7 +374,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Conc. / Until slain</span></div></div>
     <div class="cat-tags"><span class="cat-tag support">Support</span><span class="cat-tag damage">Damage</span></div>
     <div class="power-desc">Speak a kill-oath against one visible enemy, declaring them your Oathbound Target. You have <strong>advantage on all attack rolls</strong> against that creature. When any ally slays the marked target, you may immediately speak a new Oath as a <strong>free action</strong> (no EBP cost). Only one target may be marked at a time — marking a new one ends the previous oath.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_oathenmity')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_deathmask" data-devotion="d1" data-cats="control">
@@ -403,7 +381,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Reaction (enemy drops ally to 0 HP)</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>1 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag control">Control</span></div>
     <div class="power-desc">When a creature within 60ft reduces an ally to 0 HP, invoke a mask of divine wrath as a reaction. The creature makes a <strong>WIS save</strong>. Failure: <strong>Frightened</strong> of you for 1 minute and must spend its first turn moving directly away from you. Failure by 5+ or more: also <strong>Stunned</strong> until end of its next turn. They will know what they have done.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_deathmask')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
 </div>
@@ -418,7 +395,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag support">Support</span><span class="cat-tag damage">Damage</span></div>
     <div class="power-desc">Summon a ghostly warrior clad in ancient Chapter armor — a spirit from the Chapter's storied past. Appears in any unoccupied space within 60ft. Has <strong>AC 16, 40 HP</strong>. On each of your turns (bonus action): makes one melee attack for <strong>2d8+4 radiant damage</strong>. Immune to psychic damage and conditions. Vanishes at 0 HP or if concentration breaks.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_spiritcrusader')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_silencewarp" data-devotion="d2" data-cats="control antichaos">
@@ -426,7 +402,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft (20ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 10 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag control">Control</span><span class="cat-tag antichaos">Anti-Chaos</span></div>
     <div class="power-desc">Create a zone of holy silence crushing psychic energies. Within the radius, <strong>no spells can be cast and no Warp Powers manifested</strong>. Daemons/warp entities have disadvantage on all attacks and saves. <em>This affects all psychic abilities regardless of source — including allied psykers. Plan accordingly.</em> Visible as a golden dome.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_silencewarp')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_holdline" data-devotion="d2" data-cats="control">
@@ -434,7 +409,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (20ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag control">Control</span></div>
     <div class="power-desc">The Emperor's will holds the ground. Any hostile creature attempting to enter the 20ft radius makes a <strong>STR save</strong>. Failure: movement ends at the boundary. Creatures within when activated must save to move out — failure means speed 0 for that turn. Creatures may reattempt at start of each turn.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_holdline')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_beacon" data-devotion="d2" data-cats="support healing">
@@ -442,7 +416,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>Self (30ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag support">Support</span><span class="cat-tag healing">Healing</span></div>
     <div class="power-desc">Illuminate the area with divine light. All <strong>healing effects within 30ft</strong> (from any source) are <strong>maximized</strong>. Allies within gain immunity to Frightened. Daemons within take <strong>2d6 radiant damage</strong> at start of each of their turns (no save). Bright as daylight while active.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_beacon')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_masscure" data-devotion="d2" data-cats="healing">
@@ -450,7 +423,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (30ft radius)</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
     <div class="cat-tags"><span class="cat-tag healing">Healing</span></div>
     <div class="power-desc">Spread the Emperor's healing through all who stand with you. All <strong>allies within 30ft</strong> regain <strong>2d8 + CHA modifier HP</strong>. If Beacon of Faith is active, each ally instead regains maximum possible HP (16 + CHA modifier). Cannot be combined with single-target Cure Wounds on the same turn.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_masscure')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_flamepurity" data-devotion="d2" data-cats="damage antichaos">
@@ -458,7 +430,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (60ft cone)</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
     <div class="cat-tags"><span class="cat-tag damage">Damage</span><span class="cat-tag antichaos">Anti-Chaos</span></div>
     <div class="power-desc">Channel the Emperor's purifying flame. All enemies in a 60ft cone make a <strong>DEX save</strong>. Failure: <strong>4d8 radiant damage</strong>. Success: half. The flame <strong>ignores all physical cover</strong> — it is divine. Heretics, daemons, and Chaos-aligned creatures have disadvantage on the save and take an additional 1d8 on failure.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_flamepurity')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_divinemantle" data-devotion="d2" data-cats="support damage">
@@ -466,7 +437,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (20ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag support">Support</span><span class="cat-tag damage">Damage</span></div>
     <div class="power-desc">Cloak your allies in holy radiance. All allies within 20ft deal an additional <strong>1d6 radiant damage</strong> on every melee hit. Enemies striking allies within the mantle make a <strong>CON save</strong> (DC = Holy Power Save DC) or are <strong>Blinded</strong> until end of their next turn. Visible as a golden aura around each ally.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_divinemantle')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_exorcism" data-devotion="d2" data-cats="antichaos">
@@ -474,7 +444,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
     <div class="cat-tags"><span class="cat-tag antichaos">Anti-Chaos</span></div>
     <div class="power-desc">Perform a focused exorcism against a daemonic, possessed, or Chaos-aligned entity. Target makes a <strong>CHA save</strong> at disadvantage. Failure: entity <strong>Banished to the Warp</strong> for 1 minute (returns to origin plane if not anchored). If the target is possessed, the possession ends — host survives at 1 HP. Success: <strong>4d10 radiant damage</strong>.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_exorcism')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_wordrecall" data-devotion="d2" data-cats="healing utility">
@@ -482,7 +451,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Reaction (ally drops to 0 HP)</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
     <div class="cat-tags"><span class="cat-tag healing">Healing</span><span class="cat-tag utility">Utility</span></div>
     <div class="power-desc">When an ally within 60ft drops to 0 HP, speak a word of protective power. They are <strong>teleported to within 5ft of you</strong>, stabilized at 0 HP, and cannot take further damage until start of your next turn. You then have your action to administer aid or continue fighting.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_wordrecall')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_warsermon" data-devotion="d2" data-cats="support">
@@ -490,7 +458,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (30ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag support">Support</span></div>
     <div class="power-desc">Deliver an ongoing sermon of divine warfare. While preaching you cannot use other bonus actions. Ally bonus scales with numbers present: <strong>1–2 allies: +1d4 damage</strong>. <strong>3–4 allies: +1d6 damage</strong>. <strong>5+ allies: +1d8 damage</strong> and advantage on saving throws. Your highest expression of battlefield leadership.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_warsermon')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_consecground" data-devotion="d2" data-cats="utility protection">
@@ -498,7 +465,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft (20ft radius)</span></div><div class="meta-item">Duration: <span>1 hour</span></div></div>
     <div class="cat-tags"><span class="cat-tag utility">Utility</span><span class="cat-tag protection">Protection</span></div>
     <div class="power-desc">Consecrate the ground in a 20ft radius. Within: all healing increased by 1d6, allies have advantage on saves against fear and Corruption, and enemies must make <strong>WIS saves</strong> to enter (failure: movement ends at boundary). Daemons and undead <strong>cannot enter at all</strong> — it is an absolute divine barrier to them.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_consecground')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_absolution" data-devotion="d2" data-cats="utility">
@@ -506,7 +472,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
     <div class="cat-tags"><span class="cat-tag utility">Utility</span></div>
     <div class="power-desc">Perform a rite of cleansing absolution on one willing ally. Reduce the target's <strong>Corruption score by 1d4</strong>. The Chaplain's unique ability to address the soul directly — not just the body. At Level 14+, this reduces Corruption by <strong>2d4</strong> instead. The most direct spiritual healing available in combat.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_absolution')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_crusadingcharge" data-devotion="d2" data-cats="support control">
@@ -514,7 +479,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (30ft radius)</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
     <div class="cat-tags"><span class="cat-tag support">Support</span><span class="cat-tag control">Control</span></div>
     <div class="power-desc">Bellow a war cry and lead a charge in the Emperor's name. All allies within 30ft may immediately <strong>move up to their full movement speed</strong> toward any enemy they can see (no opportunity attacks provoked). If they end adjacent to an enemy, they make <strong>one additional melee attack</strong>. This happens before your own action this turn.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_crusadingcharge')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_inquisitoreye" data-devotion="d2" data-cats="utility">
@@ -522,7 +486,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>10 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag utility">Utility</span></div>
     <div class="power-desc">Call upon the Emperor's discernment. For the duration: detect <strong>lies</strong> (speakers make CHA saves or you know they're lying), <strong>heresy</strong> (Chaos-aligned creatures glow faintly to your eyes), and <strong>hidden threats</strong> (automatic Perception checks vs all hidden creatures within 30ft). You cannot be deceived by illusions while active.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_inquisitoreye')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_unbreakable" data-devotion="d2" data-cats="protection">
@@ -530,7 +493,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Reaction (on lethal hit to ally)</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
     <div class="cat-tags"><span class="cat-tag protection">Protection</span></div>
     <div class="power-desc">When an ally within 60ft would be killed (reduced to 0 HP by damage that would kill them outright), declare them <strong>Unbreakable</strong>. The killing blow is reduced to leave them at exactly 1 HP — they survive. Usable once per ally per resupply. The Unbreakable warrior gains <strong>+2 to all rolls for 1 round</strong>, driven by survival instinct and faith.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_unbreakable')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_chainspenance" data-devotion="d2" data-cats="control damage">
@@ -538,7 +500,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag control">Control</span><span class="cat-tag damage">Damage</span></div>
     <div class="power-desc">Bind an enemy in divine chains of radiant energy. Target makes a <strong>STR save</strong>. Failure: <strong>Restrained</strong> and takes <strong>2d6 radiant damage</strong> at start of each of their turns. Cannot teleport or use warp movement while chained. STR save each turn to break free. Daemons have disadvantage on the save. Success: 2d6 damage only.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_chainspenance')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_holysunder" data-devotion="d2" data-cats="antichaos utility">
@@ -546,7 +507,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
     <div class="cat-tags"><span class="cat-tag antichaos">Anti-Chaos</span><span class="cat-tag utility">Utility</span></div>
     <div class="power-desc">Project the Emperor's authority to unmake heretical magic. Choose one: <strong>destroy one non-artifact magic item</strong> on an enemy (CHA save to resist), <strong>dispel all ongoing effects</strong> on a target, or <strong>destroy one summoned creature outright</strong> (CON save — fail: instant death, success: 8d10 radiant). Cannot affect items or effects of Imperial or divine origin.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_holysunder')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_lastsacrament" data-devotion="d2" data-cats="healing">
@@ -554,7 +514,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Until end of next turn</span></div></div>
     <div class="cat-tags"><span class="cat-tag healing">Healing</span></div>
     <div class="power-desc">Perform a swift sacrament over a critically wounded ally (at 25% HP or less). They are <strong>healed to full HP</strong> and become temporarily invulnerable — cannot be reduced below 1 HP by any means. When the invulnerability ends, they gain <strong>2 levels of Exhaustion</strong>. The body cannot sustain such grace without cost. A desperate measure.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_lastsacrament')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_fortressfaith" data-devotion="d2" data-cats="protection">
@@ -562,7 +521,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (20ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag protection">Protection</span></div>
     <div class="power-desc">Project an aura of divine protection. All allies within 20ft gain <strong>resistance to all damage types</strong> for the duration. The aura is visible as a shimmering golden field — enemies know their attacks are reduced. Moving outside the radius ends the resistance immediately. The aura moves with you, always centered on your position.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_fortressfaith')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_ritesbattle" data-devotion="d2" data-cats="support">
@@ -570,7 +528,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (30ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag support">Support</span></div>
     <div class="power-desc">Perform a sweeping blessing over the entire kill team before battle is joined. All allies within 30ft gain <strong>+1 to attack and damage rolls</strong> for the duration. Additionally, they may reroll any 1s rolled on attack dice once per attack, taking the new result. Does not stack with Bless's d4 bonus — but both effects may be active simultaneously on the same target.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_ritesbattle')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
 </div>
@@ -585,7 +542,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (30ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag protection">Protection</span><span class="cat-tag antichaos">Anti-Chaos</span></div>
     <div class="power-desc">Surround your kill team with an impenetrable holy barrier. All allies within 30ft gain <strong>immunity to psychic damage</strong> and advantage on all saves against Corruption effects. Warp-based effects targeting shielded allies automatically fail unless the caster succeeds on a CHA check vs your Holy Power Save DC. Visible as a golden dome of repelled warp energy.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_holyaegis')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_benediction" data-devotion="d3" data-cats="healing">
@@ -593,7 +549,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
     <div class="cat-tags"><span class="cat-tag healing">Healing</span></div>
     <div class="power-desc">Invoke the Emperor's mercy upon a fallen ally. One creature within 30ft dead for no more than <strong>1 minute</strong> is revived with HP equal to <strong>half their maximum</strong>. All conditions cleared; 2 levels of Exhaustion. Cannot revive creatures whose bodies are destroyed, consumed by the Warp, or claimed by Chaos.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_benediction')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_divretribution" data-devotion="d3" data-cats="damage protection">
@@ -601,7 +556,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (20ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag damage">Damage</span><span class="cat-tag protection">Protection</span></div>
     <div class="power-desc">Any creature attacking an ally within 20ft takes <strong>2d8 radiant damage</strong> after the attack resolves (no save). If the attack would reduce an ally to 0 HP, the attacker takes <strong>4d8 radiant damage</strong> instead of 2d8. Each triggering attack generates a visible bolt of golden energy striking back at the attacker.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_divretribution')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_thronsjudgment" data-devotion="d3" data-cats="damage">
@@ -609,7 +563,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>90ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
     <div class="cat-tags"><span class="cat-tag damage">Damage</span></div>
     <div class="power-desc">Pass divine judgment on a single creature. Target makes a <strong>CON save</strong>. Failure: <strong>10d10 radiant damage</strong>. Success: 5d10. If this reduces the target to 0 HP, they are <strong>instantly and irreversibly slain</strong> — no death saves, no revival. The Emperor has spoken. Cannot be used on Imperium-aligned or Light-aligned creatures.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_thronsjudgment')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_litanysacrifice" data-devotion="d3" data-cats="protection">
@@ -617,7 +570,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Reaction (ally would die)</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
     <div class="cat-tags"><span class="cat-tag protection">Protection</span></div>
     <div class="power-desc">When an ally within 60ft would be reduced to 0 HP, invoke this desperate prayer. The damage is <strong>redirected to you</strong> — your ally drops to 1 HP; you take the full amount. Make a <strong>CON save (DC 15)</strong> — success: halve the redirected damage. Failure: take it all. <em>Faith demands sacrifice.</em></div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_litanysacrifice')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_massbanish" data-devotion="d3" data-cats="antichaos">
@@ -625,7 +577,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (60ft radius)</span></div><div class="meta-item">Duration: <span>1 min (or permanent)</span></div></div>
     <div class="cat-tags"><span class="cat-tag antichaos">Anti-Chaos</span></div>
     <div class="power-desc">Speak the Great Litany of Banishment. All daemons, warp entities, and Chaos-aligned creatures within 60ft make a <strong>CHA save</strong>. Failure: Banished to the Warp immediately. Maintained for 1 full minute (concentration): banishment becomes <strong>permanent</strong> — the entity cannot return here for 100 years. Success: <strong>6d10 radiant damage</strong> instead.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_massbanish')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_resurrection" data-devotion="d3" data-cats="healing">
@@ -633,7 +584,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Touch</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
     <div class="cat-tags"><span class="cat-tag healing">Healing</span></div>
     <div class="power-desc">Perform the full Rites of Resurrection over a fallen warrior dead for no more than <strong>1 hour</strong>. Target is revived with <strong>full HP</strong>. Returns with all conditions cleared, 1 level of Exhaustion, and filled with certainty of the Emperor's will — <strong>advantage on all rolls for 1 minute</strong>. Cannot revive Chaos-tainted creatures or those claimed by the Warp.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_resurrection')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_sanctuary" data-devotion="d3" data-cats="control protection">
@@ -641,7 +591,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>30ft (30ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 10 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag control">Control</span><span class="cat-tag protection">Protection</span></div>
     <div class="power-desc">Create a 30ft radius zone of complete divine protection. No enemy may enter voluntarily — they make <strong>WIS saves</strong> or their movement ends at the threshold. Enemies <em>forced</em> into the sanctuary take <strong>4d10 radiant damage</strong> upon entry. Allies within gain advantage on all saving throws. Visible as a golden dome.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_sanctuary')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_crusadefaith" data-devotion="d3" data-cats="support">
@@ -649,7 +598,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (30ft radius)</span></div><div class="meta-item">Duration: <span>1 round</span></div></div>
     <div class="cat-tags"><span class="cat-tag support">Support</span></div>
     <div class="power-desc">Unleash a surge of holy power driving your allies beyond mortal limits. All allies within 30ft immediately gain <strong>one additional full turn</strong> — action, bonus action, reaction, movement — taken immediately after your turn ends. After these bonus turns complete, affected allies gain <strong>1 level of Exhaustion</strong>.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_crusadefaith')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_emperorshand" data-devotion="d3" data-cats="support">
@@ -657,7 +605,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>30ft</span></div><div class="meta-item">Duration: <span>1 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag support">Support</span></div>
     <div class="power-desc">Channel the Emperor's physical might directly into one ally. For 1 minute: their STR becomes 24, weapon attacks deal <strong>+3d8 radiant damage</strong>, they cannot be moved against their will, and they are immune to Stunned and Paralyzed. When the effect ends: <strong>2 levels of Exhaustion</strong> and Stunned until end of their next turn.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_emperorshand')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_wrathmperor" data-devotion="d3" data-cats="damage">
@@ -665,7 +612,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>120ft (10ft radius column)</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
     <div class="cat-tags"><span class="cat-tag damage">Damage</span></div>
     <div class="power-desc">Call down a pillar of holy fire — 10ft radius, 40ft tall. All within make a <strong>DEX save</strong>. Failure: <strong>8d8 radiant damage</strong>. Success: half. Heretics and daemons <strong>fail the save automatically</strong> and take an additional <strong>2d8 radiant</strong> at start of their next turn. Visible from miles away. <span class="sacred-tag">✠ The Emperor's wrath made manifest</span></div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_wrathmperor')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_stormright" data-devotion="d3" data-cats="damage healing">
@@ -673,7 +619,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>120ft (30ft radius)</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag damage">Damage</span><span class="cat-tag healing">Healing</span></div>
     <div class="power-desc">Conjure an ongoing storm of divine wrath. All <strong>enemies</strong> within the area take <strong>4d8 radiant damage</strong> at start of each of their turns (CON save for half). All <strong>allies</strong> within are healed for <strong>1d8 HP</strong> at start of each of their turns. Move the storm's center up to 20ft as a free action each of your turns.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_stormright')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_voiceemperor" data-devotion="d3" data-cats="control antichaos">
@@ -681,7 +626,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (60ft radius)</span></div><div class="meta-item">Duration: <span>Until end of round</span></div></div>
     <div class="cat-tags"><span class="cat-tag control">Control</span><span class="cat-tag antichaos">Anti-Chaos</span></div>
     <div class="power-desc">Speak with the Emperor's voice — literally. All enemies within 60ft who can hear you make a <strong>WIS save</strong>. Failure: <strong>Stunned</strong> until end of their next turn as divine authority overwhelms them. Daemons and Chaos-aligned creatures have disadvantage and on failure are also <strong>Frightened for 1 minute</strong>. Creatures with INT 4 or lower are immune.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_voiceemperor')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_thelongwatch" data-devotion="d3" data-cats="protection">
@@ -689,7 +633,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self (30ft radius)</span></div><div class="meta-item">Duration: <span>1 round</span></div></div>
     <div class="cat-tags"><span class="cat-tag protection">Protection</span></div>
     <div class="power-desc">Invoke the most protective invocation of the Chaplaincy. For 1 full round, no ally within 30ft can be killed — damage that would reduce them to 0 HP instead leaves them at 1 HP. Death saves are suspended. After the round ends, each such ally makes a <strong>CON save (DC 15)</strong> — success: stable at 1 HP. Failure: fall unconscious and begin dying.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_thelongwatch')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_martyrdom" data-devotion="d3" data-cats="protection">
@@ -697,7 +640,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>Self</span></div><div class="meta-item">Duration: <span>Until end of next turn</span></div></div>
     <div class="cat-tags"><span class="cat-tag protection">Protection</span></div>
     <div class="power-desc">Accept your own death to preserve your brothers. Until start of your next turn: you cannot die — any killing blow leaves you at 1 HP. Any damage dealt to any ally within 60ft may be <strong>automatically redirected to you</strong> instead (no action required). At start of your next turn if at 0 HP: Stabilized. Gain <strong>4 levels of Exhaustion</strong> when this power ends.</div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_martyrdom')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_avatarfaith" data-devotion="d3" data-cats="support">
@@ -705,7 +647,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>Self</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag support">Support</span></div>
     <div class="power-desc">The Emperor's power flows through you completely. For the duration: CHA becomes <strong>22</strong>, all Holy Powers cost <strong>half EBP</strong> (rounded down), Crozius deals <strong>+3d8 radiant</strong> per hit, immunity to all conditions, and allies within 30ft regain <strong>2d8 HP</strong> at start of each of your turns. When it ends: <strong>3 levels of Exhaustion</strong>. <span class="sacred-tag">✠ Use only when the mission demands everything</span></div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_avatarfaith')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_innomine" data-devotion="d3" data-cats="damage healing antichaos">
@@ -713,7 +654,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Action</span></div><div class="meta-item">Range: <span>120ft radius</span></div><div class="meta-item">Duration: <span>Instant</span></div></div>
     <div class="cat-tags"><span class="cat-tag damage">Damage</span><span class="cat-tag healing">Healing</span><span class="cat-tag antichaos">Anti-Chaos</span></div>
     <div class="power-desc">Speak the True Name of the Emperor's Wrath. Every enemy within 120ft makes a <strong>WIS save</strong>. Failure: <strong>8d10 radiant damage</strong>, Frightened 1 minute, and Chaos-aligned creatures additionally make a CHA save or be <strong>permanently Banished</strong> from this plane. Success: half, not Frightened. Allies within 120ft regain <strong>3d10 HP</strong>. <em>Usable once per session — not once per resupply.</em> <span class="sacred-tag">✠ The Emperor's final word upon the battlefield</span></div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_innomine')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
   <div class="power-card" id="hc_thereckoning" data-devotion="d3" data-cats="damage antichaos control">
@@ -721,7 +661,6 @@ body{background:#06080a;font-family:var(--font-body);color:var(--text);font-size
     <div class="power-meta"><div class="meta-item">Action: <span>Bonus Action</span></div><div class="meta-item">Range: <span>60ft</span></div><div class="meta-item">Duration: <span>Conc. 1 min</span></div></div>
     <div class="cat-tags"><span class="cat-tag damage">Damage</span><span class="cat-tag antichaos">Anti-Chaos</span><span class="cat-tag control">Control</span></div>
     <div class="power-desc">Name one enemy and declare them a target of the Emperor's Final Reckoning. For the duration: all attacks against that target deal an additional <strong>2d8 radiant damage</strong>, the target has <strong>disadvantage on all saving throws</strong>, and it cannot retreat — any attempt to move away from any ally reduces its speed to 0 for that turn. If reduced to 0 HP while Reckoned, <strong>it cannot be revived by any means</strong>. <span class="sacred-tag">✠ The Emperor passes sentence. You carry it out.</span></div>
-    <label class="prep-check-wrap"><input type="checkbox" class="prep-checkbox" onchange="togglePrep(this,'hc_thereckoning')"><span class="prep-check-label">Prepare this Power</span></label>
   </div>
 
 </div>
