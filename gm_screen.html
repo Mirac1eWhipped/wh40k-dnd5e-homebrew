@@ -141,7 +141,7 @@
       <tbody><tr><td>XP multiplier (compare the multiplied total against the budget)</td><td class="num">×1</td><td class="num">×1.5</td><td class="num">×2</td><td class="num">×2.5</td><td class="num">×3</td><td class="num">×4</td></tr></tbody>
     </table>
     </div>
-    <div class="note"><strong>Astartes doctrine:</strong> Deathwatch operatives punch above their weight compared to standard 5E characters — power armor, bolters, and homebrew class features run hot. Treat <strong>Hard</strong> as the baseline for a fair fight and <strong>Deadly</strong> as a genuine boss encounter; an Easy-budget wave is horde chaff. XP values per CR are listed with each creature chip below.</div>
+    <div class="note"><strong>Astartes doctrine:</strong> Deathwatch operatives punch above their weight compared to standard 5E characters — power armour, bolters, and homebrew class features run hot. Treat <strong>Hard</strong> as the baseline for a fair fight and <strong>Deadly</strong> as a genuine boss encounter; an Easy-budget wave is horde chaff. XP values per CR are listed with each creature chip below.</div>
   </div>
 
   <!-- ══════════ THREAT ARCHIVES ══════════ -->
@@ -286,7 +286,7 @@ async function loadArchives() {
         if (!name.trim()) return;
         const crTxt = ((entry.querySelector('.cr-badge') || {}).textContent || '').trim();
         const top = (entry.querySelector('.top-stats') || {}).textContent || '';
-        const ac = (top.match(/Armor Class\s+(\d+)/) || [])[1] || '?';
+        const ac = (top.match(/Armou?r Class\s+(\d+)/) || [])[1] || '?';
         const hp = (top.match(/Hit Points\s+(\d+)/) || [])[1] || '?';
         creatures.push({name: name.trim(), crTxt, cr: crNum(crTxt), ac, hp});
       });

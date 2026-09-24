@@ -1195,7 +1195,7 @@ function loadEnemyLib() {
         const ctype = ((sb.querySelector('.creature-type') || {}).textContent || '').trim();
         const cr    = ((sb.querySelector('.cr-badge') || {}).textContent || '').trim();
         const top   = ((sb.querySelector('.top-stats') || {}).textContent || '');
-        const acM   = top.match(/Armor Class\s*(\d+)/i);
+        const acM   = top.match(/Armou?r Class\s*(\d+)/i);
         const hpM   = top.match(/Hit Points\s*(\d+)/i);
         let dexMod  = 0;
         sb.querySelectorAll('.ability-grid > div').forEach(cell => {

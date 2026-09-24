@@ -173,7 +173,7 @@ const SPELLS = [
     id:'wrp_crushing_grasp', class:'librarian', tier:'rank1', tierLabel:'Rank I',
     name:'Crushing Grasp', cost:5, costType:'WRP', damage:'6d8 force',
     action:'Action', range:'60ft', duration:'Instant', hasPerils:false,
-    desc:'Compress air around a creature into a crushing telekinetic vice. Target makes a CON save. Failure: 6d8 force damage and Incapacitated until start of their next turn. Success: 3d8, not Incapacitated. Creatures in power armor have disadvantage — even ceramite yields to focused telekinesis.'
+    desc:'Compress air around a creature into a crushing telekinetic vice. Target makes a CON save. Failure: 6d8 force damage and Incapacitated until start of their next turn. Success: 3d8, not Incapacitated. Creatures in power armour have disadvantage — even ceramite yields to focused telekinesis.'
   },
   {
     id:'wrp_mindlink_network', class:'librarian', tier:'rank1', tierLabel:'Rank I',
@@ -363,7 +363,7 @@ const SPELLS = [
     id:'wrp_storm_of_the_emperor_s_wrath', class:'librarian', tier:'rank2', tierLabel:'Rank II',
     name:'Storm of the Emperor\'s Wrath', cost:10, costType:'WRP', damage:'5d8 lightning + 3d8 psychic',
     action:'Action', range:'Self (60ft cone)', duration:'Instant', hasPerils:true,
-    desc:'Call down crackling psychic lightning in a 60ft cone. Each creature makes a DEX save. Failure: 5d8 lightning + 3d8 psychic damage. Success: half. Metallic armor (power armor excluded) grants no protection — armored targets have disadvantage on the save.'
+    desc:'Call down crackling psychic lightning in a 60ft cone. Each creature makes a DEX save. Failure: 5d8 lightning + 3d8 psychic damage. Success: half. Metallic armour (power armour excluded) grants no protection — armoured targets have disadvantage on the save.'
   },
   {
     id:'wrp_null_storm', class:'librarian', tier:'rank2', tierLabel:'Rank II',
@@ -417,7 +417,7 @@ const SPELLS = [
     id:'wrp_reality_shear', class:'librarian', tier:'rank2', tierLabel:'Rank II',
     name:'Reality Shear', cost:12, costType:'WRP', damage:'8d8 force',
     action:'Action', range:'60ft', duration:'Instant', hasPerils:true,
-    desc:'Tear apart the quantum structure of reality around a target. Target makes a CON save. Failure: 8d8 force damage and one of their equipped items (weapons, armor, or key equipment — your choice) is permanently destroyed as molecular bonds are severed. Success: 4d8 damage, no item destruction. Ignores damage resistances and immunities.'
+    desc:'Tear apart the quantum structure of reality around a target. Target makes a CON save. Failure: 8d8 force damage and one of their equipped items (weapons, armour, or key equipment — your choice) is permanently destroyed as molecular bonds are severed. Success: 4d8 damage, no item destruction. Ignores damage resistances and immunities.'
   },
   {
     id:'wrp_gate_of_infinity_ii', class:'librarian', tier:'rank2', tierLabel:'Rank II',
@@ -625,7 +625,7 @@ const SPELLS = [
     id:'wrp_cataclysmic_pyrokinesis', class:'librarian', tier:'rank3', tierLabel:'Rank III',
     name:'Cataclysmic Pyrokinesis', cost:16, costType:'WRP', damage:'6d8 fire + 6d8 psychic',
     action:'Action', range:'120ft (40ft radius)', duration:'Conc. 1 min', hasPerils:true,
-    desc:'Unleash a catastrophic psychic inferno. All creatures in 40ft radius make DEX saves. Failure: 6d8 fire + 6d8 psychic and caught in warp-fire (2d8/turn). Success: half, no ongoing. Within the area: visibility 10ft, movement costs double, non-airtight armor users make CON saves each turn or gain 1 Exhaustion.'
+    desc:'Unleash a catastrophic psychic inferno. All creatures in 40ft radius make DEX saves. Failure: 6d8 fire + 6d8 psychic and caught in warp-fire (2d8/turn). Success: half, no ongoing. Within the area: visibility 10ft, movement costs double, non-airtight armour users make CON saves each turn or gain 1 Exhaustion.'
   },
   {
     id:'wrp_the_emperor_s_wrath', class:'librarian', tier:'rank3', tierLabel:'Rank III',
@@ -731,7 +731,7 @@ const SPELLS = [
     id:'wrp_entropy_field', class:'librarian', tier:'rank4', tierLabel:'Rank IV',
     name:'Entropy Field', cost:18, costType:'WRP', damage:'—',
     action:'Action', range:'60ft (20ft radius)', duration:'Conc. 1 min', hasPerils:true,
-    desc:'Project a field of accelerated entropy. All enemies in the radius make CON saves at start of each turn. Failure: equipment deteriorates — weapons deal -1d6 damage (cumulative), armor loses 1 AC (cumulative), and they take 3d8 necrotic. Success: 2d8 necrotic. After 3 failures, equipment is destroyed. Deterioration is permanent unless repaired.'
+    desc:'Project a field of accelerated entropy. All enemies in the radius make CON saves at start of each turn. Failure: equipment deteriorates — weapons deal -1d6 damage (cumulative), armour loses 1 AC (cumulative), and they take 3d8 necrotic. Success: 2d8 necrotic. After 3 failures, equipment is destroyed. Deterioration is permanent unless repaired.'
   },
   {
     id:'wrp_warp_siphon', class:'librarian', tier:'rank4', tierLabel:'Rank IV',
@@ -859,7 +859,7 @@ const SPELLS = [
     id:'ebp_shield_of_faith', class:'chaplain', tier:'dev1', tierLabel:'Devotion I',
     name:'Shield of Faith', cost:4, costType:'EBP', damage:'—',
     action:'Bonus Action', range:'30ft', duration:'Conc. 10 min', hasPerils:false,
-    desc:'Surround one ally in a shimmering shield of divine energy. Target gains +2 to Armor Class for the duration. May target yourself. If the target is struck by a critical hit while shielded, they may reroll the damage dice and take the lower result.'
+    desc:'Surround one ally in a shimmering shield of divine energy. Target gains +2 to Armour Class for the duration. May target yourself. If the target is struck by a critical hit while shielded, they may reroll the damage dice and take the lower result.'
   },
   {
     id:'ebp_command', class:'chaplain', tier:'dev1', tierLabel:'Devotion I',
@@ -977,7 +977,7 @@ const SPELLS = [
     id:'ebp_spiritual_crusader', class:'chaplain', tier:'dev2', tierLabel:'Devotion II',
     name:'Spiritual Crusader', cost:8, costType:'EBP', damage:'2d8+4 radiant',
     action:'Bonus Action', range:'60ft', duration:'Conc. 1 min', hasPerils:false,
-    desc:'Summon a ghostly warrior clad in ancient Chapter armor — a spirit from the Chapter\'s storied past. Appears in any unoccupied space within 60ft. Has AC 16, 40 HP. On each of your turns (bonus action): makes one melee attack for 2d8+4 radiant damage. Immune to psychic damage and conditions. Vanishes at 0 HP or if concentration breaks.'
+    desc:'Summon a ghostly warrior clad in ancient Chapter armour — a spirit from the Chapter\'s storied past. Appears in any unoccupied space within 60ft. Has AC 16, 40 HP. On each of your turns (bonus action): makes one melee attack for 2d8+4 radiant damage. Immune to psychic damage and conditions. Vanishes at 0 HP or if concentration breaks.'
   },
   {
     id:'ebp_silence_the_warp', class:'chaplain', tier:'dev2', tierLabel:'Devotion II',

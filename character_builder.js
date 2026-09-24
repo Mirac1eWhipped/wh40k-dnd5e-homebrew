@@ -564,7 +564,7 @@ function _bwStepClass() {
       '<div class="bw-card-stat">' + sig + '<span class="bw-tag dim">Choose ' + c.skills.count + ' skills</span></div></div>';
   }).join('');
   var h = '<div class="bw-h">Combat Specialty</div>' +
-    '<div class="bw-sub">Your class fixes your hit die, saving throws, and armor/weapon training (applied automatically). Skills, tools, and wargear choices follow in the next steps.</div>' +
+    '<div class="bw-sub">Your class fixes your hit die, saving throws, and armour/weapon training (applied automatically). Skills, tools, and wargear choices follow in the next steps.</div>' +
     '<div class="bw-grid">' + cards + '</div>' +
     '<div class="bw-sec">Starting Level</div>' +
     '<div class="bw-field"><input class="bw-inp small" type="number" min="1" max="20" value="' + _bw.level + '" oninput="_bwSetLevel(this.value)"> <span style="font-size:9pt;color:var(--text-dim);">Level 1 for a fresh induction; higher for a veteran joining mid-campaign (ASI milestones handled in the Advancement step).</span></div>';
@@ -578,7 +578,7 @@ function _bwStepClass() {
   if (_bw.cls && typeof CLASS_GRANTS !== 'undefined' && CLASS_GRANTS[_bw.cls]) {
     var g = CLASS_GRANTS[_bw.cls];
     h += '<div class="bw-sec">Granted automatically on induction</div><div class="bw-card locked"><div class="bw-card-stat">' +
-      '<strong style="color:var(--gold-light);">Armor:</strong> ' + _bwE((g.armor || []).join(', ')) + '<br>' +
+      '<strong style="color:var(--gold-light);">Armour:</strong> ' + _bwE((g.armor || []).join(', ')) + '<br>' +
       '<strong style="color:var(--gold-light);">Weapons:</strong> ' + _bwE((g.weapons || []).join(', ')) + '<br>' +
       '<strong style="color:var(--gold-light);">Tools:</strong> ' + _bwE((g.tools || []).join(', ')) +
       (g.skills ? '<br><strong style="color:var(--gold-light);">Signature skill:</strong> ' + _bwE(g.skills.map(function(s){ return _BW_SKILL_LABEL[s] || s; }).join(', ')) : '') +
@@ -781,7 +781,7 @@ function _bwStepKit() {
   var c = _bwCls();
   if (!c) return '<div class="bw-sub">Choose a class first.</div>';
   var h = '<div class="bw-h">Munitorum Loadout</div>' +
-    '<div class="bw-sub">The standard-issue kit for a ' + _bwE(_bw.cls) + '. Fixed issue is locked; make your choices where the Munitorum allows them. Weapons arrive with their ammunition crates filled to your armor\'s carrying capacity.</div>' +
+    '<div class="bw-sub">The standard-issue kit for a ' + _bwE(_bw.cls) + '. Fixed issue is locked; make your choices where the Munitorum allows them. Weapons arrive with their ammunition crates filled to your armour\'s carrying capacity.</div>' +
     _bwMeterHtml();
   c.kit.forEach(function(entry, i) {
     if (entry.item) {
@@ -1042,7 +1042,7 @@ function _bwStepReview() {
   }
   // Warnings
   if (_bw.cls === 'Terminator' && fin.str !== null && fin.str < 15) {
-    h += '<div class="bw-warn">Terminator Armor requires STR 15+ — this operative has STR ' + fin.str + '. The armor is still issued; resolve with your GM.</div>';
+    h += '<div class="bw-warn">Terminator Armour requires STR 15+ — this operative has STR ' + fin.str + '. The armour is still issued; resolve with your GM.</div>';
   }
   var capErr = _bwCapacityErr();
   if (capErr) h += '<div class="bw-warn">' + _bwE(capErr) + '</div>';
@@ -1064,7 +1064,7 @@ function _bwSetInput(id, val) {
   el.dispatchEvent(new Event('change'));
 }
 function _bwClearWargear() {
-  // Unequip everything through the sheet's own toggle (handles armor AC + speed mods)
+  // Unequip everything through the sheet's own toggle (handles armour AC + speed mods)
   (_wargearMeta || []).forEach(function(m, i) { if (m && m.equipped) { try { _toggleEquip(i); } catch(e) {} } });
   // Withdraw tool proficiencies that came from requisitioned kits (rows are going away)
   if (typeof _autoGrants === 'object' && _autoGrants.toolItems) {
@@ -1179,7 +1179,7 @@ function _builderCommit() {
   // 7. tool kit of choice
   if (st.toolKit) _bwAddItemRow(st.toolKit);
 
-  // 8. starting kit — data lists armor first, so ammo caps use the right pattern
+  // 8. starting kit — data lists armour first, so ammo caps use the right pattern
   if (c) {
     c.kit.forEach(function(entry, i) {
       if (entry.item)        _bwAddItemRow(entry.item, entry.qty);

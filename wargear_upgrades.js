@@ -125,7 +125,7 @@ const UPGRADE_TRAITS = [
   {id:'adaptive_camo', name:'Adaptive Camouflage Weave', slot:'armor', tier:3,
    desc:'If you have not moved since the start of your last turn, attacks against you are made with <strong>disadvantage</strong> until you move or take an action other than Ready.'},
 
-  // ── ARMOR PATTERN TRAITS (pattern-restricted) ─────────────────────
+  // ── ARMOUR PATTERN TRAITS (pattern-restricted) ─────────────────────
   {id:'umbral_weave', name:'Umbral Weave', slot:'armor', tier:1, pattern:'phobos',
    elig:'Phobos-pattern armour only.',
    desc:'You leave no tracks, scent trail, or other physical evidence of your passage, and creatures relying on non-visual senses (scent, vibration, tremorsense) cannot pinpoint your location.'},
@@ -197,7 +197,7 @@ function upgradeFamiliesOf(item) {
 }
 
 /* True if a catalog item can carry an upgrade track: any non-Relic weapon,
-   or an armor pattern (not shields — the +N applies to worn armour). */
+   or an armour pattern (not shields — the +N applies to worn armour). */
 function upgradeItemEligible(item) {
   if (!item) return false;
   if (item.cat === 'Armor') return !!item.armor_type;
@@ -215,7 +215,7 @@ function upgradeSlotOf(item) {
    takenIds: trait ids already installed on the item (no duplicates).
    Rules: trait tier ≤ slot tier; slot type must match; family traits need a
    matching family AND the weapon must lack the granted property; pattern
-   traits need the matching armor pattern; a trait with `requires` needs the
+   traits need the matching armour pattern; a trait with `requires` needs the
    weapon to already carry that property. The Modular Hardpoints bonus slot
    passes slotTier=1 with allowT1Only. */
 function upgradeEligibleTraits(item, slotTier, takenIds) {
