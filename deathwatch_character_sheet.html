@@ -1489,6 +1489,7 @@ try {
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script src="spells.js"></script>
+<script src="chapters.js"></script>
 <script src="classes.js"></script>
 <script src="feats.js"></script>
 <script src="req_items.js"></script>
@@ -5310,59 +5311,17 @@ function onProfChange(skId) {
 /* ══════════════════════════════════════════════════════
    LINEAGE — ADEPTUS ASTARTES TRAITS & CHAPTER HERITAGE
 ══════════════════════════════════════════════════════ */
-const ASTARTES_TRAITS = [
-  { badge:'Astartes', name:'Ability Score Increase',   body:'Your Strength and Constitution scores each increase by 1. One ability score of your choice — Wisdom or Intelligence — also increases by 1.' },
-  { badge:'Astartes', name:'Size',                     body:'You stand between 7 and 8 feet tall and weigh between 700 and 1,000 lbs in full armour. Your size is Medium, but you count as Large for carrying capacity, pushing, dragging, lifting, and grappling.' },
-  { badge:'Astartes', name:'Speed',                    body:'Your base walking speed is 35 feet.' },
-  { badge:'Astartes', name:'Occulobe',                 body:'<strong>Darkvision.</strong> You can see in dim light within 60 ft as if it were bright light, and in darkness as if it were dim light. You cannot discern colour in darkness, only shades of grey.' },
-  { badge:'Astartes', name:'Astartes Resilience',      body:'You have advantage on saving throws against disease and being poisoned, and resistance to poison damage. You can survive in a vacuum or airless environment for up to 10 minutes before suffering its effects.' },
-  { badge:'Astartes', name:'Transhuman Physiology',    body:'You recover from exhaustion twice as fast as normal creatures. A resupply requires only 2 hours rather than 8, granting the same benefits. Due to the Catalepsean node, you may also spend time on your resupply learning new skills or engaging in light activities, such as gear maintenance or creating ammunition. You require no food or water to survive, and you can breathe in toxic atmospheres and underwater without harm.' },
-  { badge:'Astartes', name:'Languages',                body:'You can speak, read, and write Low Gothic and Techna-Lingua.' }
-];
+// Derived from chapters.js (single source of truth) — do not edit here.
+const ASTARTES_TRAITS = DW_ASTARTES_TRAITS.map(function(t) { return Object.assign({}, t); });
 
-const CHAPTER_HERITAGE = {
-  'Dark Angels': [
-    { badge:'Heritage', name:'Grim Resolve',                    body:'Advantage on saving throws against fear and charm effects. You gain proficiency with the Deception and Insight skills. If you already possess those proficiencies, you gain expertise.' },
-    { badge:'Heritage', name:'Hunt the Fallen',                 uses:{n:1, per:'resupply'}, action:'Bonus Action', body:'Once per resupply, you mark a target in combat. You deal an additional 1d8 damage on attacks made to that creature until it dies.' },
-    { badge:'Heritage', name:'Abhor the Heretic, Purge the Xenos', body:'You gain advantage on Perception and Survival checks made to find heretical creatures. You gain advantage on the first attack you make against a Chaos-tainted creature per combat. This effect can trigger on each heretical creature once.' }
-  ],
-  'Space Wolves': [
-    { badge:'Heritage', name:'Feral Instincts', body:'You gain a climbing speed equal to your movement speed. You gain proficiency in Survival and Perception and have advantage on initiative rolls. If you already possess those proficiencies, you gain expertise.' },
-    { badge:'Heritage', name:'Nordic Rage',     body:'Once you drop below half your HP total, you enter a frenzied rage.<br><br><strong>Effects:</strong><ul><li>Advantage on Strength checks and Strength saving throws.</li><li>+3 bonus to damage rolls on melee attacks using Strength.</li></ul>This lasts without consequence for 1 minute. Each turn after that the rage persists, you gain 1 exhaustion. At 5 exhaustion you go feral, attacking any creature in range until stopped or incapacitated.' }
-  ],
-  'Salamanders': [
-    { badge:'Heritage', name:'Forge Born',       body:'You gain proficiency with Smith\'s tools and resistance to Fire damage. If you already possess that proficiency, you gain expertise. You can craft light bolter ammo, standard bolter ammo, and fuel canisters while deployed on missions (if necessary resources are available).' },
-    { badge:'Heritage', name:'Shield of Vulkan', uses:{n:'pb', per:'resupply'}, action:'Reaction', body:'When an ally within 10 ft is hit by an attack, you can use your reaction to impose disadvantage on the roll. This can be used a number of times equal to your proficiency modifier and resets on a resupply.' }
-  ],
-  'Ultramarines': [
-    { badge:'Heritage', name:'Commanding Voice', body:'You can use the Help action as a Bonus Action to grant a single ally advantage on their next attack once per turn.' },
-    { badge:'Heritage', name:'Son of Guilliman', body:'You gain proficiency with the Persuasion skill. If you already possess this proficiency, you gain expertise.' },
-    { badge:'Heritage', name:'March for Macragge', uses:{n:1, per:'resupply'}, action:'Action', body:'Once per resupply, you supply all allies with a 1d6 Inspiration die that can be used on any roll until the next resupply.' }
-  ],
-  'Blood Angels': [
-    { badge:'Heritage', name:'The Red Thirst', uses:{n:'pb', per:'resupply'}, atk:{stat:'str'}, dice:'Heals 1d8 + STR HP', action:'Action', body:'If you have less than half your HP total, you may use your action to perform a bite attack. On a hit, roll 1d8 + STR. You heal for the damage dealt. Can be used a number of times equal to your proficiency modifier; resets on a resupply.' },
-    { badge:'Heritage', name:'The Black Rage', uses:{n:1, per:'resupply'}, action:'Free', body:'Once per resupply, when reduced to 0 HP, you stay conscious and regain 1 HP. If you defeat an enemy in the following round, you regain 1d8 HP.' },
-    { badge:'Heritage', name:'Sanguinary Tradition', body:'You gain proficiency with the Medicine skill. If you already possess that proficiency, you gain expertise.' }
-  ],
-  'Raven Guard': [
-    { badge:'Heritage', name:'Shadow Masters',    body:'You gain proficiency with the Stealth skill. If you gain this proficiency from another source, you gain expertise instead. You have advantage on Stealth checks when in dim light or darkness.' },
-    { badge:'Heritage', name:'Guerilla Warfare',  body:'You gain a climbing speed equal to your movement speed. If you attack an opponent during a surprise round, you deal an additional 1d8 damage on all attacks.' }
-  ],
-  'White Scars': [
-    { badge:'Heritage', name:'Lightning Strike',      body:'You gain an additional 5 ft of movement and ignore difficult terrain. After successfully making a melee attack, you can move 10 ft without provoking opportunity attacks.' },
-    { badge:'Heritage', name:'Warrior of Chogoris',   body:'You gain proficiency with Vehicles (Land and Air). If you already possess that proficiency, you gain expertise.' },
-    { badge:'Heritage', name:'Tribal Inheritance',    body:'You may treat any melee weapon as though it has the Finesse trait, provided it does not require two hands and is not locked in.' }
-  ],
-  'Iron Hands': [
-    { badge:'Heritage', name:'The Flesh is Weak',       body:'While wearing Gravis or Terminator armour, bludgeoning, piercing, and slashing damage you take from nonmagical attacks is reduced by 2.' },
-    { badge:'Heritage', name:'Mechadendrite Interface', body:'You gain proficiency with servo-arms and mechadendrite arms. You gain a retractable mechadendrite arm that can manipulate tools. You have advantage on skill checks involving tools you are proficient with.' }
-  ],
-  'Imperial Fists': [
-    { badge:'Heritage', name:'Phalanx',            uses:{n:'pb', per:'resupply'}, action:'Reaction', dice:'1d6', body:'If a creature within 10 ft of you takes damage, you can use your reaction to move 10 ft and take the attack instead. Roll 1d6 and reduce the damage by that amount. Can be used a number of times equal to your proficiency modifier; resets on a resupply.' },
-    { badge:'Heritage', name:'Defend the Imperium', body:'You gain +1 AC if you have not moved on your turn (excluding Terminator Armour). You cannot be forcibly moved by any effect that moves you less than 10 ft. The Phalanx reaction movement does not affect this ability.' },
-    { badge:'Heritage', name:'Siege Masters', body:'You gain proficiency with the Demolitions Kit. If you already possess that proficiency, you gain expertise.' }
-  ]
-};
+const CHAPTER_HERITAGE = {};
+DW_CHAPTERS.forEach(function(c) {
+  CHAPTER_HERITAGE[c.name] = c.traits.map(function(t) {
+    var o = { badge: 'Heritage', name: t.name, body: t.body };
+    ['uses', 'action', 'atk', 'dice'].forEach(function(k) { if (t[k] !== undefined) o[k] = t[k]; });
+    return o;
+  });
+});
 
 function renderLineageTraits() {
   const chEl    = document.getElementById('char-chapter');
@@ -5394,17 +5353,8 @@ function renderLineageTraits() {
    automated (reserved for the future character builder). Grants fire on a
    USER chapter change, never at load: legacy saves restore with the current
    chapter as a no-op marker so manually-built sheets are never touched. */
-const CHAPTER_GRANTS = {
-  'Dark Angels':    { skills: ['deception', 'insight'] },
-  'Space Wolves':   { skills: ['survival', 'perception'] },
-  'Salamanders':    { tools: ["Smith's Tools"], resist: ['Fire'] },
-  'Ultramarines':   { skills: ['persuasion'] },
-  'Blood Angels':   { skills: ['medicine'] },
-  'Raven Guard':    { skills: ['stealth'] },
-  'White Scars':    { tools: ['Vehicles (Land · Air)'] },
-  'Iron Hands':     { tools: ['Servo-arms & Mechadendrites'] },
-  'Imperial Fists': { tools: ['Demolitions Kit'] }
-};
+const CHAPTER_GRANTS = {};
+DW_CHAPTERS.forEach(function(c) { CHAPTER_GRANTS[c.name] = c.grants || {}; });
 function _agDefaults() { return { chapter: '', skills: {}, tools: [], resist: [], toolItems: {}, cls: '', clsSkills: {}, clsSaves: {}, clsArmor: [], clsWeapons: [], clsTools: [], racial: false, speedMod: 0, armorResist: [], featPlus: {} }; }
 var _autoGrants = _agDefaults();
 function _profTA(which) {
@@ -5484,17 +5434,7 @@ function _applyChapterGrants() {
 
 /* ── Class guaranteed grants: armour / weapons / tools / saves / signature skills.
    Choose-from lists ("plus one tool kit of your choice", "Choose 3: …") stay manual. */
-const CLASS_GRANTS = {
-  'Tactical Operative':     { armor: ['Phobos Armour', 'Tacticus Armour'],                  weapons: ['Ranged Primary Weapons', 'Ranged Secondary Weapons', 'Physical Melee Weapons'],                                              tools: ["Auspex Operator's Kit"],                 saves: ['dex', 'wis'] },
-  'Close Combat Operative': { armor: ['Phobos Armour', 'Tacticus Armour', 'Gravis Armour'],  weapons: ['Ranged Secondary Weapons', 'Physical Melee Weapons', 'Power Melee Weapons (excl. Thunder Hammer)'],                        tools: ["Auspex Operator's Kit"],                 saves: ['str', 'con'] },
-  'Gravis Operative':       { armor: ['Gravis Armour'],                                    weapons: ['Ranged Primary Weapons', 'Ranged Secondary Weapons', 'Physical Melee Weapons', 'Power Melee (excl. Thunder Hammer & Lightning Claws)'], tools: ["Auspex Operator's Kit"], saves: ['str', 'con'] },
-  'Terminator':             { armor: ['Terminator Armour'],                                weapons: ['All Terminator Weapons', 'Ranged Primary & Secondary Weapons', 'Physical & Power Melee Weapons'],                          tools: ["Auspex Operator's Kit"],                 saves: ['str', 'con'] },
-  'Vanguard Operative':     { armor: ['Phobos Armour'],                                    weapons: ['Ranged Primary Weapons', 'Ranged Secondary Weapons', 'Physical Melee Weapons'],                                              tools: ["Auspex Operator's Kit"],                 saves: ['dex', 'wis'] },
-  'Apothecary':             { armor: ['Tacticus Armour', 'Gravis Armour'],                  weapons: ['Ranged Secondary Weapons', 'Physical Melee Weapons', 'Narthecium'],                                                          tools: ['Medicae Kit', "Auspex Operator's Kit"],  saves: ['wis', 'con'], skills: ['medicine'] },
-  'Chaplain':               { armor: ['Phobos Armour', 'Tacticus Armour'],                  weapons: ['Ranged Secondary Weapons', 'Physical Melee Weapons', 'Power Melee Weapons', 'Crozius Arcanum'],                              tools: ["Auspex Operator's Kit"],                 saves: ['wis', 'cha'], skills: ['religion'] },
-  'Librarian':              { armor: ['Phobos Armour', 'Tacticus Armour', 'Gravis Armour'],  weapons: ['Ranged Secondary Weapons', 'Physical Melee Weapons', 'Force Sword', 'Force Staff'],                                          tools: ["Auspex Operator's Kit"],                 saves: ['int', 'wis'], skills: ['arcana'] },
-  'Techmarine':             { armor: ['Tacticus Armour', 'Gravis Armour'],                  weapons: ['Ranged Primary & Secondary Weapons', 'Physical & Power Melee Weapons', 'Omnissian Power Axe', 'Servo-Arm', 'Mechadendrites'], tools: ["Artificer's Tools", "Auspex Operator's Kit"], saves: ['int', 'con'], skills: ['technology'] }
-};
+// CLASS_GRANTS moved to builder_data.js (2026-09-24) — loaded above, beside the builder's class mirror.
 function _saveGrant(ab) {
   var p = document.getElementById('save-' + ab + '-prof');
   if (!p || p.checked) return null;

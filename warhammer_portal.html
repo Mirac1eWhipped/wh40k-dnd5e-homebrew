@@ -1516,6 +1516,7 @@
 </footer>
 
 <!-- ════════════════════ JAVASCRIPT ════════════════════ -->
+<script src="chapters.js"></script>
 <script>
   function showSection(id, btn) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -1530,12 +1531,7 @@
   // KILL TEAM ROSTER v2  –  localStorage roster merged with Supabase characters
   // ═══════════════════════════════════════════════════════════════
 
-  var CHAPTERS_LIST = [
-    "— Select Chapter —",
-    "Blood Angels","Dark Angels","Imperial Fists",
-    "Iron Hands","Raven Guard","Salamanders",
-    "Space Wolves","Ultramarines","White Scars"
-  ];
+  var CHAPTERS_LIST = ['— Select Chapter —'].concat(DW_CHAPTERS.map(function(c) { return c.name; }).sort());
   var CLASSES_LIST = [
     "— Select Class —",
     "Tactical Operative","Vanguard Operative","Close Combat Operative",

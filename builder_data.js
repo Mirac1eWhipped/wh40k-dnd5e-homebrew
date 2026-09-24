@@ -149,3 +149,18 @@ const BUILDER_CHAPTER_THEME = {
   'Iron Hands':     'iron_hands',
   'Imperial Fists': 'imperial_fists'
 };
+
+/* ── CLASS_GRANTS — the sheet's guaranteed class grants (armour / weapons / tools / saves / signature skill).
+   Moved here from deathwatch_character_sheet.html on 2026-09-24 so the class mirror lives in one file.
+   Keep in sync with the nine class pages, like BUILDER_CLASSES above. */
+const CLASS_GRANTS = {
+  'Tactical Operative':     { armor: ['Phobos Armour', 'Tacticus Armour'],                  weapons: ['Ranged Primary Weapons', 'Ranged Secondary Weapons', 'Physical Melee Weapons'],                                              tools: ["Auspex Operator's Kit"],                 saves: ['dex', 'wis'] },
+  'Close Combat Operative': { armor: ['Phobos Armour', 'Tacticus Armour', 'Gravis Armour'],  weapons: ['Ranged Secondary Weapons', 'Physical Melee Weapons', 'Power Melee Weapons (excl. Thunder Hammer)'],                        tools: ["Auspex Operator's Kit"],                 saves: ['str', 'con'] },
+  'Gravis Operative':       { armor: ['Gravis Armour'],                                    weapons: ['Ranged Primary Weapons', 'Ranged Secondary Weapons', 'Physical Melee Weapons', 'Power Melee (excl. Thunder Hammer & Lightning Claws)'], tools: ["Auspex Operator's Kit"], saves: ['str', 'con'] },
+  'Terminator':             { armor: ['Terminator Armour'],                                weapons: ['All Terminator Weapons', 'Ranged Primary & Secondary Weapons', 'Physical & Power Melee Weapons'],                          tools: ["Auspex Operator's Kit"],                 saves: ['str', 'con'] },
+  'Vanguard Operative':     { armor: ['Phobos Armour'],                                    weapons: ['Ranged Primary Weapons', 'Ranged Secondary Weapons', 'Physical Melee Weapons'],                                              tools: ["Auspex Operator's Kit"],                 saves: ['dex', 'wis'] },
+  'Apothecary':             { armor: ['Tacticus Armour', 'Gravis Armour'],                  weapons: ['Ranged Secondary Weapons', 'Physical Melee Weapons', 'Narthecium'],                                                          tools: ['Medicae Kit', "Auspex Operator's Kit"],  saves: ['wis', 'con'], skills: ['medicine'] },
+  'Chaplain':               { armor: ['Phobos Armour', 'Tacticus Armour'],                  weapons: ['Ranged Secondary Weapons', 'Physical Melee Weapons', 'Power Melee Weapons', 'Crozius Arcanum'],                              tools: ["Auspex Operator's Kit"],                 saves: ['wis', 'cha'], skills: ['religion'] },
+  'Librarian':              { armor: ['Phobos Armour', 'Tacticus Armour', 'Gravis Armour'],  weapons: ['Ranged Secondary Weapons', 'Physical Melee Weapons', 'Force Sword', 'Force Staff'],                                          tools: ["Auspex Operator's Kit"],                 saves: ['int', 'wis'], skills: ['arcana'] },
+  'Techmarine':             { armor: ['Tacticus Armour', 'Gravis Armour'],                  weapons: ['Ranged Primary & Secondary Weapons', 'Physical & Power Melee Weapons', 'Omnissian Power Axe', 'Servo-Arm', 'Mechadendrites'], tools: ["Artificer's Tools", "Auspex Operator's Kit"], saves: ['int', 'con'], skills: ['technology'] }
+};
