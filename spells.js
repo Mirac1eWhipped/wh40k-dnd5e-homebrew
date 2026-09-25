@@ -943,7 +943,7 @@ const SPELLS = [
     id:'ebp_aura_of_purity', class:'chaplain', tier:'dev1', tierLabel:'Devotion I',
     name:'Aura of Purity', cost:5, costType:'EBP', damage:'—',
     action:'Action', range:'Self (15ft radius)', duration:'Conc. 10 min', hasPerils:false,
-    desc:'Radiate a constant wave of purifying faith. Allies within the radius reduce their Corruption by 1 point at the end of each minute while present. Any ally gaining Corruption within the aura may immediately make a WIS save (DC 12) — success reduces the Corruption gain by 1. The aura does not suppress warp powers.'
+    desc:'Radiate a constant wave of purifying faith. Allies within the radius reduce their Corruption by 1 point at the end of each minute while present. Any ally gaining Corruption within the aura may immediately make a WIS save (DC 12) — success reduces the Corruption gain by 1. The aura cannot reduce a score below its tier floor (3, 7 or 13; see the Corruption Index in the Rules Reference). The aura does not suppress warp powers.'
   },
   {
     id:'ebp_holy_barrier', class:'chaplain', tier:'dev1', tierLabel:'Devotion I',
@@ -1043,7 +1043,7 @@ const SPELLS = [
     id:'ebp_absolution', class:'chaplain', tier:'dev2', tierLabel:'Devotion II',
     name:'Absolution', cost:8, costType:'EBP', damage:'—',
     action:'Action', range:'30ft', duration:'Instant', hasPerils:false,
-    desc:'Perform a rite of cleansing absolution on one willing ally. Reduce the target\'s Corruption score by 1d4. The Chaplain\'s unique ability to address the soul directly — not just the body. At Level 14+, this reduces Corruption by 2d4 instead. The most direct spiritual healing available in combat.'
+    desc:'Perform a rite of cleansing absolution on one willing ally. Reduce the target\'s Corruption score by 1d4. The Chaplain\'s unique ability to address the soul directly — not just the body. At Level 14+, this reduces Corruption by 2d4 instead. Absolution is a Rite: it may carry the target below a tier floor. The most direct spiritual healing available in combat.'
   },
   {
     id:'ebp_crusading_charge', class:'chaplain', tier:'dev2', tierLabel:'Devotion II',
