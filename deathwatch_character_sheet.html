@@ -602,6 +602,12 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .dos-cond-box:not(.editing) .dos-mw-edit{display:none;}
 .corr-tier{margin-left:8px;font-family:var(--font-label);font-size:7pt;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-light);}
 .corr-tier[data-tier="P-3"],.corr-tier[data-tier="P-4"]{color:#e07070;}
+/* Speed / HP max breakdown (click the label; same panel styling as AC) */
+.stat-explain{cursor:pointer;}
+.stat-explain:hover{color:var(--gold-light);}
+.stat-explain.mw-pen{color:#e07070;}
+.stat-explain.mw-pen::after{content:" \25BC";font-size:6pt;vertical-align:middle;}
+@media print{#stat-explain-panel{display:none!important;}}
 /* ── Senses rows ── */
 .dos-sense-row{display:flex;align-items:center;gap:6px;padding:4px 6px;background:var(--panel2);border:1px solid var(--border2);border-top:none;margin-top:-1px;}
 .dos-sense-row:first-of-type{border-top:1px solid var(--border2);}
@@ -2353,6 +2359,7 @@ function _applySpeedMod(newMod) {
     }
   }
   _autoGrants.speedMod = newMod;
+  if (typeof _mwApplyPenalties === 'function') _mwApplyPenalties();   // wound halving depends on the armoured base
 }
 /* Armour trait resistances (Kinetic Diffusion / Thermal Core choices): light the
    matching Defenses chips while the armour is equipped; only chips WE lit are
@@ -4206,6 +4213,7 @@ async function _doSave() {
   if (_saving) { _schedSave(); return; }
   _saving = true;
   try {
+  if (_viewOnly) return;   // read-only view of another player: never write
   if (!_loggedIn()) { _status('offline'); return; }
   // Never write before a confirmed load — a failed load followed by one keystroke would
   // otherwise query the newest row and PATCH blank defaults over the real character
@@ -4239,7 +4247,7 @@ async function _doSave() {
   } catch(e) { _status('error', e.message || 'Save failed'); console.error('Save error:', e); }
   } finally { _saving = false; }
 }
-function _schedSave() { _dirty = true; _status('saving'); clearTimeout(_saveTimer); _saveTimer = setTimeout(_doSave, 800); }
+function _schedSave() { if (_viewOnly) return; _dirty = true; _status('saving'); clearTimeout(_saveTimer); _saveTimer = setTimeout(_doSave, 800); }
 /* ── A2: JSON backup / restore ─────────────────────────────────────────────
    Export shares _buildSavePayload with cloud saves; restore shares _applyRecord
    with cloud loads — neither path can drift from the live formats. */
@@ -4336,12 +4344,14 @@ function _toggleInspiration() {
 }
 /* ── Condition chip toggle ── */
 function _condToggle(chip) {
+  if (_viewOnly) return;
   chip.classList.toggle('active');
   _updateCondEmpty();
   _schedSave();
 }
 /* ── Defense chip toggle ── */
 function _defToggle(chip, type) {
+  if (_viewOnly) return;
   chip.classList.toggle(type);
   _updateDefEmpty();
   _schedSave();
@@ -4372,6 +4382,7 @@ function _mwBuild() {
     '<button type="button" class="dos-mw-btn dos-mw-edit" onclick="_mwAdj(1)" title="Add a wound">+</button>' +
     '<input type="text" class="dos-textarea dos-mw-inj dos-mw-edit" id="dos-mw-inj" placeholder="Injuries (d10 table): Broken Leg, Head Trauma\u2026" maxlength="200">';
   box.insertBefore(row, notes);
+  _statExplainWire();
   document.getElementById('dos-mw-inj').addEventListener('input', function() { _mw.inj = this.value; _mwRender(); _schedSave(); });
   _mwRender();
 }
@@ -4384,6 +4395,7 @@ function _mwRender() {
   var chip = document.getElementById('dos-mw-chip'), n = document.getElementById('dos-mw-n'), inj = document.getElementById('dos-mw-inj');
   if (!chip) return;
   var k = Math.max(0, Math.min(6, _mw.n | 0));
+  _mwApplyPenalties();
   chip.className = 'dos-cond-chip active dos-mw-chip';
   chip.style.display = k ? '' : 'none';
   chip.textContent = k ? ('Mortal Wounds \u00d7' + k + ' \u00b7 ' + _MW_TRACK[k] + (_mw.inj ? ' \u00b7 ' + _mw.inj : '')) : '';
@@ -4395,6 +4407,124 @@ function _mwLoad(ext) {
   var o = (ext && ext.mortal_wounds && typeof ext.mortal_wounds === 'object') ? ext.mortal_wounds : null;
   _mw = { n: o ? Math.max(0, Math.min(6, parseInt(o.n, 10) || 0)) : 0, inj: (o && typeof o.inj === 'string') ? o.inj.slice(0, 200) : '' };
   _mwRender();
+}
+/* ── Wound Track penalties: rewrite Speed and HP max in place (same delta pattern as the armour speed
+   modifier). Deltas persist in extra.auto_grants.mwSpeed / mwHp so reloads and armour swaps stay
+   consistent. Re-derived when the wound count changes, on load, and after _applySpeedMod. Known
+   limit: a manual edit to Speed or HP max while wounded is read as the wounded value until the
+   count next changes (the breakdown panel says so). ── */
+function _mwApplyPenalties() {
+  if (typeof _autoGrants === 'undefined' || !_autoGrants) return;
+  var n = Math.max(0, Math.min(6, _mw.n | 0));
+  var sp = document.getElementById('stat-speed');
+  if (sp) {
+    var cur = _autoGrants.mwSpeed || 0, m = (sp.value || '').match(/-?\d+/);
+    var have = m ? parseInt(m[0], 10) : null;
+    if (have === null && n > 0) { have = 35 + (_autoGrants.speedMod || 0); cur = 0; }   // blank: assume the Astartes 35 ft base + armour
+    if (have !== null) {
+      var base = have - cur;
+      var eff = base;
+      if (n >= 1) eff = base - 5;                            // Track 1: speed −5 ft
+      if (n >= 3) eff = Math.floor(Math.max(0, eff) / 2 / 5) * 5;   // Track 3: halved (rounded down to 5 ft)
+      eff = Math.max(0, eff);
+      var delta = eff - base;
+      if (delta !== cur || have !== eff) {
+        sp.value = m ? sp.value.replace(/-?\d+/, String(eff)) : (eff + ' ft');
+        _autoGrants.mwSpeed = delta;
+        sp.dispatchEvent(new Event('input')); sp.dispatchEvent(new Event('change'));
+      }
+    } else { _autoGrants.mwSpeed = 0; }
+  }
+  var hm = document.getElementById('hp-max');
+  if (hm) {
+    var curH = _autoGrants.mwHp || 0, v = parseInt(hm.value, 10);
+    if (!isNaN(v)) {
+      var baseH = v - curH;
+      var effH = n >= 4 ? Math.floor(baseH / 2) : baseH;   // Track 4: hit point maximum halved
+      var dH = effH - baseH;
+      if (dH !== curH || v !== effH) {
+        hm.value = String(effH); _autoGrants.mwHp = dH;
+        hm.dispatchEvent(new Event('input')); hm.dispatchEvent(new Event('change'));
+        var hc = document.getElementById('hp-cur'), c = hc ? parseInt(hc.value, 10) : NaN;
+        if (!isNaN(c) && c > effH) { hc.value = String(effH); hc.dispatchEvent(new Event('input')); hc.dispatchEvent(new Event('change')); }
+      }
+    } else { _autoGrants.mwHp = 0; }
+  }
+  var spL = document.querySelector('#stat-speed ~ .dos-stat-lbl'), hpL = document.querySelector('.dos-hp-max-grp .dos-hp-grp-lbl');
+  if (spL) spL.classList.toggle('mw-pen', !!(_autoGrants.mwSpeed));
+  if (hpL) hpL.classList.toggle('mw-pen', !!(_autoGrants.mwHp));
+}
+/* ── Click-to-explain for Speed and HP max (mirrors the AC breakdown panel) ── */
+function _equippedArmourName() {
+  var wgRows = document.querySelectorAll('.wg-equip-row');
+  for (var i = 0; i < _wargearMeta.length; i++) {
+    var m = _wargearMeta[i];
+    if (m && m.equipped && m.is_armor) return wgRows[i] ? ((wgRows[i].querySelectorAll('input')[0] || {}).value || '').trim() : '';
+  }
+  return '';
+}
+function _statExplainHtml(kind) {
+  function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+  function tag(t){ return ' <span class="acb-tag">' + t + '</span>'; }
+  function row(src, val, total){ return '<div class="acb-row' + (total ? ' acb-total' : '') + '"><span class="acb-src">' + src + '</span><span class="acb-val">' + val + '</span></div>'; }
+  function sg(x){ return (x > 0 ? '+' : '') + x; }
+  var n = Math.max(0, Math.min(6, _mw.n | 0)), rows = '', title, hint = '';
+  if (kind === 'speed') {
+    title = 'Speed';
+    var sp = document.getElementById('stat-speed'), m = ((sp || {}).value || '').match(/-?\d+/);
+    var eff = m ? parseInt(m[0], 10) : null, arm = _autoGrants.speedMod || 0, mw = _autoGrants.mwSpeed || 0;
+    if (eff === null) { rows += row('No speed entered', '\u2014'); }
+    else {
+      rows += row('Base speed' + tag('manual'), (eff - arm - mw) + ' ft');
+      if (arm) rows += row(esc(_equippedArmourName() || 'Armour') + tag('wargear'), sg(arm) + ' ft');
+      if (mw) rows += row('Mortal Wounds \u00d7' + n + ' <span class="acb-note">' + (n >= 3 ? '\u22125 ft, then halved' : '\u22125 ft') + '</span>' + tag('wounds'), sg(mw) + ' ft');
+      rows += row('Speed', eff + ' ft', true);
+    }
+  } else {
+    title = 'Hit point maximum';
+    var hm = document.getElementById('hp-max'), v = parseInt((hm || {}).value, 10), mh = _autoGrants.mwHp || 0;
+    if (isNaN(v)) { rows += row('No maximum entered', '\u2014'); }
+    else {
+      rows += row('Base maximum' + tag('manual'), String(v - mh));
+      if (mh) rows += row('Mortal Wounds \u00d7' + n + ' <span class="acb-note">halved</span>' + tag('wounds'), sg(mh));
+      rows += row('Hit point maximum', String(v), true);
+    }
+  }
+  if (n) hint = '<div class="armor-manual-hint" style="margin-top:8px;">Wound penalties re-apply when the wound count or armour changes. To change the base value, set it while unwounded or re-apply by adjusting the count. See Rules Reference \u2192 Mortal Wounds.</div>';
+  return '<div class="ac-panel-hdr"><span class="ac-panel-sec" style="margin:0;">' + title + ' breakdown</span><button type="button" class="ac-panel-close" onclick="_statExplainToggle()" title="Close">\u2715</button></div>' +
+         '<div class="ac-panel-sec">Contributing to ' + title.toLowerCase() + '</div>' + rows + hint;
+}
+function _statExplainToggle(e, kind) {
+  if (e && e.stopPropagation) e.stopPropagation();
+  var p = document.getElementById('stat-explain-panel');
+  if (!p) {
+    p = document.createElement('div'); p.id = 'stat-explain-panel'; p.className = 'ac-panel'; document.body.appendChild(p);
+    document.addEventListener('mousedown', function(ev) {
+      if (!p.classList.contains('open')) return;
+      if (p.contains(ev.target) || (p._anchor && p._anchor.contains(ev.target))) return;
+      p.classList.remove('open');
+    });
+    document.addEventListener('keydown', function(ev) { if (ev.key === 'Escape') p.classList.remove('open'); });
+  }
+  var open = !!kind && !(p.classList.contains('open') && p.dataset.kind === kind);
+  p.classList.toggle('open', open);
+  if (!open) return;
+  p.dataset.kind = kind; p._anchor = (e && e.currentTarget) || null;
+  p.innerHTML = _statExplainHtml(kind);
+  var a = p._anchor;
+  if (a) {
+    var r = a.getBoundingClientRect();
+    p.style.left = Math.max(8, Math.min(r.left, window.innerWidth - p.offsetWidth - 12)) + 'px';
+    p.style.top  = Math.max(8, Math.min(r.bottom + 8, window.innerHeight - p.offsetHeight - 12)) + 'px';
+  }
+}
+function _statExplainWire() {
+  var spL = document.querySelector('#stat-speed ~ .dos-stat-lbl'), hpL = document.querySelector('.dos-hp-max-grp .dos-hp-grp-lbl');
+  [[spL, 'speed'], [hpL, 'hp']].forEach(function(pair) {
+    var el = pair[0]; if (!el) return;
+    el.classList.add('stat-explain'); el.title = 'Click for breakdown';
+    el.addEventListener('click', function(ev) { _statExplainToggle(ev, pair[1]); });
+  });
 }
 /* ── Corruption tier badge (Corruption Index, 0–20): runtime label in the Corruption Score title ── */
 var _CORR_TIERS = [[0, 'P-0 Untainted'], [3, 'P-1 Whispered'], [7, 'P-2 Contaminated'], [13, 'P-3 Warp-Tainted'], [18, 'P-4 Fallen']];
@@ -4527,6 +4657,7 @@ function _doResupply() {
   _diceLog('<span class="de-label">Resupply</span>' + msg, 'heal', {label: 'Resupply', body: msg});
 }
 function _hpHeal() {
+  if (_viewOnly) return;
   var amt = parseInt(prompt('Heal amount:'));
   if (isNaN(amt) || amt <= 0) return;
   var cur = parseInt(document.getElementById('hp-cur').value) || 0;
@@ -4535,6 +4666,7 @@ function _hpHeal() {
   _schedSave();
 }
 function _hpDamage() {
+  if (_viewOnly) return;
   var amt = parseInt(prompt('Damage amount:'));
   if (isNaN(amt) || amt <= 0) return;
   var temp = parseInt(document.getElementById('hp-temp').value) || 0;
@@ -5292,61 +5424,13 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 /* ══ VIEW-ONLY MODE (viewing another player's sheet) ══ */
 async function _loadSheetForUser(uid) {
+  _viewOnly = true;   // flag first: nothing in the hydration path may schedule a write (_schedSave / _doSave check it)
   try {
     var rows = await _sfetch('/rest/v1/characters?user_id=eq.' + uid + '&sheet_type=in.(dw_dark,dw_light)&order=updated_at.desc&limit=1', {method:'GET'});
     if (!Array.isArray(rows) || !rows.length) { _status('loaded','No data found for this player'); return; }
-    var ff = _fields();
-    (rows[0].fields || []).forEach(function(v,i){ if(ff[i]) ff[i].value = v||''; });
-    var cc = _checkboxes();
-    (rows[0].checkboxes || []).forEach(function(v,i){ if(cc[i]) cc[i].checked = !!v; });
-    var ext = rows[0].extra || {};
-    // Render the viewed character in THEIR theme (mirror writes are disabled in this mode)
-    applyTheme(ext.theme || {id:'dw_dark', label:'Deathwatch Black'});
-    var clsSel = document.getElementById('cls-select');
-    var subSel = document.getElementById('sub-select');
-    var featLvl = document.getElementById('feat-level');
-    if (clsSel && ext.cls) clsSel.value = ext.cls;
-    if (featLvl && ext.feat_lvl) featLvl.value = ext.feat_lvl;
-    // Sync char-level header from feat-level
-    var _charLvEl2 = document.getElementById('char-level');
-    if (featLvl && _charLvEl2 && featLvl.value) _charLvEl2.value = featLvl.value;
-    updateSubclassOpts();
-    if (subSel && ext.sub) { subSel.value = ext.sub; renderFeatures(); }
-    renderLineageTraits();
-    _SKILLS.forEach(function(sk) {
-      var prof = document.getElementById('skill-'+sk.id+'-prof');
-      var exp  = document.getElementById('skill-'+sk.id+'-exp');
-      if (prof && prof.checked && exp) exp.disabled = false;
-    });
-    if (ext.expertise && Array.isArray(ext.expertise)) {
-      ext.expertise.forEach(function(skId) {
-        var exp = document.getElementById('skill-'+skId+'-exp');
-        if (exp) exp.checked = true;
-      });
-    }
-    _autoGrants = Object.assign(_agDefaults(), (ext.auto_grants && typeof ext.auto_grants === 'object') ? ext.auto_grants : {
-      chapter: (document.getElementById('char-chapter')||{}).value || '',
-      cls: (document.getElementById('cls-select')||{}).value || ''
-    });
-    if (ext.spellbook && Array.isArray(ext.spellbook)) _spellbook = ext.spellbook;
-    if (ext.pinned_spells && Array.isArray(ext.pinned_spells)) _pinnedSpells = ext.pinned_spells;
-    if (ext.wargear_meta && Array.isArray(ext.wargear_meta)) _wargearMeta = _metaLegacyFix(ext.wargear_meta);
-    if (ext.ammo_clips && typeof ext.ammo_clips === 'object') _ammoClips = ext.ammo_clips;
-    _mwLoad(ext); _corrTierRender();
-    _charFeats = (ext.feats && Array.isArray(ext.feats)) ? ext.feats : [];
-    _abilityUses = (ext.ability_uses && typeof ext.ability_uses === 'object') ? ext.ability_uses : {};
-    if (ext.asi && typeof ext.asi === 'object' && ext.asi.milestones) { _asiState = ext.asi; }
-    else { _asiSeedLegacy(); }
-    _featsRender();
-    _asiBadgeRefresh();
-    _powerCur = (typeof ext.power_cur === 'number') ? ext.power_cur : 0;
-    _powerMax = (typeof ext.power_max === 'number') ? ext.power_max : 0;
-    renderActivePowers();
-    _updatePowerTracker();
-    _syncPowerDisplay();
-    _syncPreparedDisplay();
-    STATS.forEach(function(s){ calcMod(s); });
-    syncQuickActionsFromWargear();
+    // Same hydration as the owner's load — one routine, so the GM view can no longer drift behind it
+    // (it used to skip Conditions/Defences chips, notes, inspiration, equipped-wargear buttons, the ammo tracker and calcAC).
+    _applyRecord(rows[0]);
     _status('loaded', 'Viewing ' + (rows[0].name || 'player') + '\'s sheet');
   } catch(e) { _status('error','Could not load player sheet'); }
 }
@@ -5435,7 +5519,7 @@ function renderLineageTraits() {
    chapter as a no-op marker so manually-built sheets are never touched. */
 const CHAPTER_GRANTS = {};
 DW_CHAPTERS.forEach(function(c) { CHAPTER_GRANTS[c.name] = c.grants || {}; });
-function _agDefaults() { return { chapter: '', skills: {}, tools: [], resist: [], toolItems: {}, cls: '', clsSkills: {}, clsSaves: {}, clsArmor: [], clsWeapons: [], clsTools: [], racial: false, speedMod: 0, armorResist: [], featPlus: {} }; }
+function _agDefaults() { return { chapter: '', skills: {}, tools: [], resist: [], toolItems: {}, cls: '', clsSkills: {}, clsSaves: {}, clsArmor: [], clsWeapons: [], clsTools: [], racial: false, speedMod: 0, armorResist: [], featPlus: {}, mwSpeed: 0, mwHp: 0 }; }
 var _autoGrants = _agDefaults();
 function _profTA(which) {
   var tas = document.querySelectorAll('.dos-prof-ta');
