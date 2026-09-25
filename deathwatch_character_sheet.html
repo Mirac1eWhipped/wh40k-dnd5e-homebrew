@@ -591,6 +591,17 @@ textarea.lined:focus{border-color:var(--gold);outline:none;}
 .dos-cond-chip{font-family:var(--font-label);font-size:7pt;letter-spacing:.06em;text-transform:uppercase;padding:3px 6px;border:1px solid var(--border2);color:var(--text-dim);background:transparent;cursor:pointer;border-radius:2px;transition:all .15s;user-select:none;}
 .dos-cond-chip:hover{border-color:rgba(139,26,26,.6);color:#cc8080;}
 .dos-cond-chip.active{background:rgba(139,26,26,.28);border-color:var(--red);color:#e07070;}
+/* ── Mortal Wound tracker (runtime-built; Codex: Mortal Wounds) ── */
+.dos-mw-row{display:flex;flex-wrap:wrap;align-items:center;gap:4px;margin:2px 0 4px;}
+.dos-mw-lbl{font-family:var(--font-label);font-size:7pt;letter-spacing:.1em;text-transform:uppercase;color:var(--silver-dim);}
+.dos-mw-btn{background:transparent;border:1px solid var(--border2);color:var(--silver-dim);font-family:var(--font-label);font-size:10pt;line-height:1;width:22px;height:22px;cursor:pointer;padding:0;}
+.dos-mw-btn:hover{border-color:var(--red);color:#e07070;}
+.dos-mw-n{font-family:var(--font-label);font-size:9pt;color:var(--gold-light);min-width:14px;text-align:center;}
+.dos-mw-inj{flex:1 1 140px;min-width:0;width:auto;margin-top:0;font-size:9pt;padding:3px 6px;}
+.dos-mw-chip{cursor:default;}
+.dos-cond-box:not(.editing) .dos-mw-edit{display:none;}
+.corr-tier{margin-left:8px;font-family:var(--font-label);font-size:7pt;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-light);}
+.corr-tier[data-tier="P-3"],.corr-tier[data-tier="P-4"]{color:#e07070;}
 /* ── Senses rows ── */
 .dos-sense-row{display:flex;align-items:center;gap:6px;padding:4px 6px;background:var(--panel2);border:1px solid var(--border2);border-top:none;margin-top:-1px;}
 .dos-sense-row:first-of-type{border-top:1px solid var(--border2);}
@@ -1412,7 +1423,7 @@ try {
             <div class="sec-title">Corruption Score</div>
             <div class="g3">
               <div class="field-group"><label>Current</label><input type="number" placeholder="0"></div>
-              <div class="field-group"><label>Threshold</label><input type="number" placeholder="10"></div>
+              <div class="field-group"><label>Threshold</label><input type="number" placeholder="3"></div>
               <div class="field-group"><label>Cleansed</label><input type="number" placeholder="0"></div>
             </div>
           </div>
@@ -4182,6 +4193,7 @@ function _buildSavePayload() {
       notes:  (document.getElementById('defenses-notes') || {value:''}).value
     }
     ,theme: _themeSpec
+    ,mortal_wounds: { n: _mw.n | 0, inj: _mw.inj || '' }
   };
   // Layout stamp — lets a future load detect positional drift (fields restore by DOM order)
   extra.fmt = {v: 1, f: vals.length, c: chks.length, at: new Date().toISOString()};
@@ -4259,6 +4271,7 @@ function _resetSheetState() {
   _powerCur = 0; _powerMax = 0; _inspiration = false;
   var inspBox = document.getElementById('insp-box'); if (inspBox) inspBox.classList.remove('active');
   _autoGrants = _agDefaults();
+  _mw = { n: 0, inj: '' }; _mwRender(); _corrTierRender();
   var clsSel = document.getElementById('cls-select'); if (clsSel) clsSel.value = '';
   var subSel = document.getElementById('sub-select'); if (subSel) subSel.value = '';
 }
@@ -4337,9 +4350,72 @@ function _defToggle(chip, type) {
 function _toggleStatusEdit(boxId, emptyId) {
   document.getElementById(boxId).classList.toggle('editing');
 }
+/* ── Mortal Wound tracker (Codex: Mortal Wounds) ──
+   Built at runtime AFTER _wireFields() has memoised the positional caches, so its input can
+   never enter the save format. State lives in extra.mortal_wounds = {n, inj} (id-based).
+   Display only: the Wound Track penalty is shown on a chip, not applied to Speed / HP max. */
+var _mw = { n: 0, inj: '' };
+var _MW_TRACK = ['', '\u22125 ft speed', '\u22125 ft speed \u00b7 disadv. STR/DEX checks',
+  'speed halved \u00b7 disadv. attacks & STR/DEX checks', 'speed & HP max halved \u00b7 disadv. attacks \u00b7 no Dash',
+  'unconscious \u2014 stabilise within 1 hour', 'slain'];
+function _mwBuild() {
+  if (document.getElementById('dos-mw-row')) return;
+  _fields(); _checkboxes();   // caches memoised before any new input exists (belt and braces)
+  var box = document.getElementById('dos-cond-box'), notes = document.getElementById('conditions-notes');
+  if (!box || !notes) return;
+  var row = document.createElement('div'); row.className = 'dos-mw-row'; row.id = 'dos-mw-row';
+  row.innerHTML =
+    '<span class="dos-cond-chip active dos-mw-chip" id="dos-mw-chip" title="Codex: Mortal Wounds \u2014 Wound Track"></span>' +
+    '<span class="dos-mw-lbl dos-mw-edit">Mortal Wounds</span>' +
+    '<button type="button" class="dos-mw-btn dos-mw-edit" onclick="_mwAdj(-1)" title="Remove a wound">\u2212</button>' +
+    '<span class="dos-mw-n dos-mw-edit" id="dos-mw-n">0</span>' +
+    '<button type="button" class="dos-mw-btn dos-mw-edit" onclick="_mwAdj(1)" title="Add a wound">+</button>' +
+    '<input type="text" class="dos-textarea dos-mw-inj dos-mw-edit" id="dos-mw-inj" placeholder="Injuries (d10 table): Broken Leg, Head Trauma\u2026" maxlength="200">';
+  box.insertBefore(row, notes);
+  document.getElementById('dos-mw-inj').addEventListener('input', function() { _mw.inj = this.value; _mwRender(); _schedSave(); });
+  _mwRender();
+}
+function _mwAdj(d) {
+  if (_viewOnly) return;
+  _mw.n = Math.max(0, Math.min(6, (_mw.n | 0) + d));
+  _mwRender(); _schedSave();
+}
+function _mwRender() {
+  var chip = document.getElementById('dos-mw-chip'), n = document.getElementById('dos-mw-n'), inj = document.getElementById('dos-mw-inj');
+  if (!chip) return;
+  var k = Math.max(0, Math.min(6, _mw.n | 0));
+  chip.className = 'dos-cond-chip active dos-mw-chip';
+  chip.style.display = k ? '' : 'none';
+  chip.textContent = k ? ('Mortal Wounds \u00d7' + k + ' \u00b7 ' + _MW_TRACK[k] + (_mw.inj ? ' \u00b7 ' + _mw.inj : '')) : '';
+  if (n) n.textContent = String(k);
+  if (inj) { if (inj.value !== _mw.inj) inj.value = _mw.inj; inj.readOnly = !!_viewOnly; }
+  _updateCondEmpty();
+}
+function _mwLoad(ext) {
+  var o = (ext && ext.mortal_wounds && typeof ext.mortal_wounds === 'object') ? ext.mortal_wounds : null;
+  _mw = { n: o ? Math.max(0, Math.min(6, parseInt(o.n, 10) || 0)) : 0, inj: (o && typeof o.inj === 'string') ? o.inj.slice(0, 200) : '' };
+  _mwRender();
+}
+/* ── Corruption tier badge (Corruption Index, 0–20): runtime label in the Corruption Score title ── */
+var _CORR_TIERS = [[0, 'P-0 Untainted'], [3, 'P-1 Whispered'], [7, 'P-2 Contaminated'], [13, 'P-3 Warp-Tainted'], [18, 'P-4 Fallen']];
+function _corrTierRender() {
+  var title = Array.from(document.querySelectorAll('.sec-title')).find(function(e) { return e.textContent.trim().indexOf('Corruption Score') === 0; });
+  var inp = title ? title.parentElement.querySelector('input[type=number]') : null;
+  if (!inp) return;
+  var badge = document.getElementById('corr-tier');
+  if (!badge) {
+    badge = document.createElement('span'); badge.id = 'corr-tier'; badge.className = 'corr-tier';
+    title.appendChild(badge);
+    inp.addEventListener('input', _corrTierRender);
+  }
+  var v = parseInt(inp.value, 10);
+  if (isNaN(v)) { badge.textContent = ''; badge.dataset.tier = ''; return; }
+  var tier = _CORR_TIERS[0]; _CORR_TIERS.forEach(function(t) { if (v >= t[0]) tier = t; });
+  badge.textContent = tier[1]; badge.dataset.tier = tier[1].slice(0, 3);
+}
 /* ── Empty-state helpers ── */
 function _updateCondEmpty() {
-  var any = document.querySelector('#cond-chips .dos-cond-chip.active');
+  var any = document.querySelector('#cond-chips .dos-cond-chip.active') || (_mw.n | 0) > 0;
   var el = document.getElementById('cond-empty');
   if (el) el.style.display = any ? 'none' : '';
 }
@@ -4610,6 +4686,7 @@ function _applyRecord(row) {
       if (dnEl && def.notes) dnEl.value = def.notes;
       _updateDefEmpty();
     }
+    _mwLoad(ext); _corrTierRender();
     if (ext.spellbook && Array.isArray(ext.spellbook)) _spellbook = ext.spellbook;
     if (ext.pinned_spells && Array.isArray(ext.pinned_spells)) _pinnedSpells = ext.pinned_spells;
     _charFeats = (ext.feats && Array.isArray(ext.feats)) ? ext.feats : [];
@@ -5130,6 +5207,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   STATS.forEach(s => calcMod(s));
   _wireFields();
   _mountAcPanel();
+  _mwBuild(); _corrTierRender();
 
   // Silently refresh an expired token before proceeding
   if (_loggedIn() && _tokenExpired()) {
@@ -5254,6 +5332,7 @@ async function _loadSheetForUser(uid) {
     if (ext.pinned_spells && Array.isArray(ext.pinned_spells)) _pinnedSpells = ext.pinned_spells;
     if (ext.wargear_meta && Array.isArray(ext.wargear_meta)) _wargearMeta = _metaLegacyFix(ext.wargear_meta);
     if (ext.ammo_clips && typeof ext.ammo_clips === 'object') _ammoClips = ext.ammo_clips;
+    _mwLoad(ext); _corrTierRender();
     _charFeats = (ext.feats && Array.isArray(ext.feats)) ? ext.feats : [];
     _abilityUses = (ext.ability_uses && typeof ext.ability_uses === 'object') ? ext.ability_uses : {};
     if (ext.asi && typeof ext.asi === 'object' && ext.asi.milestones) { _asiState = ext.asi; }
@@ -5285,6 +5364,7 @@ function _setViewOnly() {
   if (afBtn) afBtn.style.display = 'none';
   _fields().forEach(function(f){ f.readOnly = true; f.style.cursor='default'; });
   _checkboxes().forEach(function(c){ c.disabled = true; });
+  _mwRender();
   var bar = document.createElement('div');
   bar.style.cssText = 'position:fixed;top:38px;left:0;right:0;padding:5px;text-align:center;background:rgba(var(--gold-rgb),.12);border-bottom:1px solid var(--gold-dim);font-family:var(--font-label);font-size:9pt;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);z-index:150;';
   bar.textContent = '++ Read-Only — Viewing Another Player\'s Sheet ++';
